@@ -6,7 +6,7 @@
       </div>
     </div>
     <div class="col-md-4 col-xs-12"
-      *ngIf="currentUser.UserName == 'dpd' || currentUser.RoleName == 'SDP' || currentUser.UserName == 'so.toqeer'">
+      *ngIf="currentUser.UserName == 'dpd' || currentUser.RoleName == 'SDP' || currentUser.RoleName == 'Senior Data Processor' || currentUser.UserName == 'so.toqeer'">
       <div class="top-controls">
         <button kendoButton [primary]="true" [look]="'outline'" (click)="openWindow()">Add Profile to Pool</button>
         <button kendoButton class="mr-2" [primary]="true" *ngIf="currentUser.UserName == 'so.toqeer'"
@@ -856,7 +856,7 @@
           </kendo-grid>
         </div>
         <div class="col-md-12"
-          *ngIf="currentUser?.RoleName == 'SDP' || currentUser?.RoleName == 'Chief Executive Officer' || currentUser?.RoleName == 'Districts'|| currentUser?.RoleName == 'PHFMC Admin' || currentUser?.RoleName == 'South Punjab'">
+          *ngIf="currentUser?.RoleName == 'SDP' || currentUser?.RoleName == 'Senior Data Processor' || currentUser?.RoleName == 'Chief Executive Officer' || currentUser?.RoleName == 'Districts'|| currentUser?.RoleName == 'PHFMC Admin' || currentUser?.RoleName == 'South Punjab'">
           <h6 class="p-2 text-center animated fadeIn dashboard-table-heading-custom">Primary Health Facilities</h6>
           <kendo-grid [data]="records" style="width: 100%;" [resizable]="true">
             <kendo-grid-column field="AreaName" [locked]="true"
@@ -2013,7 +2013,7 @@
       </kendo-grid-column> -->
     </kendo-grid>
   </tab>
-  <tab heading="User Activity" *ngIf="currentUser.RoleName == 'SDP' || currentUser.RoleName == 'PHFMC Admin'">
+  <tab heading="User Activity" *ngIf="currentUser.RoleName == 'SDP'|| currentUser.RoleName == 'Senior Data Processor' || currentUser.RoleName == 'PHFMC Admin'">
     <div class="row">
       <div class="col-md-12">
         <div class="grid-top-header-custom animated fadeIn" *ngIf="kGrid.totalRecords > 0">
@@ -2065,10 +2065,10 @@
                 </div>
               </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column *ngIf="currentUser.RoleName == 'SDP'" [width]="80" field="Param1" title="..."
+            <kendo-grid-column *ngIf="currentUser.RoleName == 'SDP' || currentUser.RoleName == 'Senior Data Processor'" [width]="80" field="Param1" title="..."
               [headerClass]="'grid-header-text'">
             </kendo-grid-column>
-            <kendo-grid-column *ngIf="currentUser.RoleName == 'SDP'" [width]="80" field="Param2" title="..."
+            <kendo-grid-column *ngIf="currentUser.RoleName == 'SDP' || currentUser.RoleName == 'Senior Data Processor'" [width]="80" field="Param2" title="..."
               [headerClass]="'grid-header-text'">
             </kendo-grid-column>
             <kendo-grid-column *ngIf="currentUser.RoleName == 'PHFMC Admin'" [width]="80" field="HFName" title="..."

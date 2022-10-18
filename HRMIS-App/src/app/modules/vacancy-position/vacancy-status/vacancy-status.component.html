@@ -83,7 +83,7 @@
             [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
             <ng-template kendoGridCellTemplate let-dataItem>
               <button kendoButton class="mr-2" [primary]="true" look="outline"
-                *ngIf="currentUser.RoleName == 'Hisdu Order Team' || currentUser.UserName == 'ordercell' || currentUser.UserName == 'dpd'"
+                *ngIf="currentUser.RoleName == 'Hisdu Order Team' || currentUser.RoleName == 'Order Generation' || currentUser.UserName == 'ordercell' || currentUser.UserName == 'dpd'"
                 (click)="openHolderWindow(dataItem)">Update</button>
             </ng-template>
           </kendo-grid-column>

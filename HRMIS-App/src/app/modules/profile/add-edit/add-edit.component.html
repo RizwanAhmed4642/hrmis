@@ -8,7 +8,7 @@
 
   <div class="row">
     <div class="col-md-5 offset-md-2 col-sm-12 pb-2">
-      <label class="k-form-field" *ngIf="currentUser.RoleName == 'SDP' && 2 + 2 == 5">
+      <label class="k-form-field" *ngIf="(currentUser.RoleName == 'SDP' ||currentUser.RoleName == 'Senior Data Processor') && 2 + 2 == 5">
         <span>Is Focal Person IT?</span>
         <kendo-switch [(ngModel)]="isFocalPerson" (valueChange)="focalPersonValueChange()" [onLabel]="'ON'"
           [offLabel]="'OFF'"></kendo-switch>

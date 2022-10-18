@@ -12,7 +12,7 @@ export class UserModuleGuard implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         let userName: string = this._authService.getUser().UserName.toLowerCase();
         let roleName: string = this._authService.getUser().RoleName.toLowerCase();
-        if (userName && (userName.startsWith('sdp') || userName == 'dpd' || userName == 'phfmcadmin')) {
+        if (userName && (userName.startsWith('sdp') || roleName=='Senior Data Processor' || userName == 'dpd' || userName == 'phfmcadmin')) {
             return true;
         } else {
             this._authService.unauthorizedPage();

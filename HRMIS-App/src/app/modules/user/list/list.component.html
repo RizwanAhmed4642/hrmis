@@ -5,7 +5,7 @@
       User</button>
     <button kendoButton [primary]="true" *ngIf="currenUser.UserName == 'dpd'" routerLink="/user/roles"
       [look]="'outline'" class="pull-right mr-1">Roles</button>
-      <button kendoButton [primary]="true" *ngIf="currenUser.UserName == 'dpd' || currenUser.RoleName == 'SDP'" routerLink="/user/officer"
+      <button kendoButton [primary]="true" *ngIf="currenUser.UserName == 'dpd' || currenUser.RoleName == 'SDP' || currenUser.RoleName == 'Senior Data Processor'" routerLink="/user/officer"
         [look]="'outline'" class="pull-right mr-1">Officers</button>
   </h3>
   <div class="row">

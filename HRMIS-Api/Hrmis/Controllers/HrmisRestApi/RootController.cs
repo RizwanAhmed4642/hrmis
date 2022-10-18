@@ -345,6 +345,8 @@ namespace Hrmis.Controllers.HrmisRestApi
                  User.IsInRole("Chief Executive Officer") ? "Chief Executive Officer" :
                  //Added New role  District Against Chief Executive Officer
                  User.IsInRole("Districts") ? "Districts" :
+                 User.IsInRole("Order Generation") ? "Order Generation" :
+
                  User.IsInRole("Hisdu Order Team") ? "Hisdu Order Team" : "";
 
 
@@ -415,6 +417,8 @@ namespace Hrmis.Controllers.HrmisRestApi
                  User.IsInRole("Chief Executive Officer") ? "Chief Executive Officer" :
                  //Added New role  District Against Chief Executive Officer
                  User.IsInRole("Districts") ? "Districts" :
+                 User.IsInRole("Order Generation") ? "Order Generation" :
+
                  User.IsInRole("Hisdu Order Team") ? "Hisdu Order Team" : "";
 
 
@@ -1873,7 +1877,10 @@ namespace Hrmis.Controllers.HrmisRestApi
                     User.IsInRole("Chief Executive Officer") ? "Chief Executive Officer" :
                     //Added New role  District Against Chief Executive Officer
                     User.IsInRole("Districts") ? "Districts" :
+                    User.IsInRole("Order Generation") ? "Order Generation" :
+
                     User.IsInRole("Hisdu Order Team") ? "Hisdu Order Team" : "";
+
                 return Ok(_rootService.Search(searchQuery.Query, User.Identity.GetUserId(), role, User.Identity.GetUserName()));
             }
             catch (Exception ex)
@@ -2269,6 +2276,8 @@ namespace Hrmis.Controllers.HrmisRestApi
                    User.IsInRole("Chief Executive Officer") ? "Chief Executive Officer" :
                  //Added New role  District Against Chief Executive Officer
                  User.IsInRole("Districts") ? "Districts" :
+                 User.IsInRole("Order Generation") ? "Order Generation" :
+
                    User.IsInRole("Hisdu Order Team") ? "Hisdu Order Team" : "";
                 IQueryable<HrDesignationView> query = _db.HrDesignationViews.Where(x => x.IsActive == true).AsQueryable(); ;
                 var count = query.Count();

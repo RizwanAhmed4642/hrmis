@@ -16,6 +16,7 @@ export class AdhocAdminGuard implements CanActivate {
             (roleName == 'adhocscrutiny'
                 || userName == 'pshd'
                 || userName.startsWith('sdp')
+                || roleName=='Senior Data Processor'
                 || userName == 'dpd')) {
             return true;
         } else {

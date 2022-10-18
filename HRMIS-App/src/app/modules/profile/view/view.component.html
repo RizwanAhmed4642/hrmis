@@ -17,7 +17,7 @@
           *ngIf="currentUser.RoleName == 'Deputy Secretary' && currentUser.UserName == 'ordercell' && currentUser.RoleName != 'HRView'"
           type="button" kendoButton [primary]="true" [look]="'outline'" class="ml-2"
           [routerLink]="'/profile/' + profile.CNIC + '/edit'">Edit</button>
-        <button *ngIf="currentUser.UserName == 'dpd' || currentUser.UserName == 'ordercell' || currentUser.RoleName == 'Hisdu Order Team' || currentUser.RoleName == 'Chief Executive Officer' || currentUser.RoleName == 'Districts' || 
+        <button *ngIf="currentUser.UserName == 'dpd' || currentUser.UserName == 'ordercell' || currentUser.RoleName == 'Hisdu Order Team' || currentUser.RoleName == 'Order Generation' || currentUser.RoleName == 'Chief Executive Officer' || currentUser.RoleName == 'Districts' || 
           ((currentUser.RoleName == 'PHFMC' || currentUser.RoleName == 'PHFMC Admin') && orderRequest.IsApproved)"
           type="button" kendoButton [primary]="true" [look]="'outline'" class="ml-2"
           (click)="openOrderWindow()">Generate Order</button>
@@ -77,7 +77,7 @@
       <app-profile-service-record [profile]="profile"></app-profile-service-record>
     </tab>
     <tab heading="Duplication"
-      *ngIf="(currentUser?.UserName == 'dpd' || currentUser?.RoleName == 'SDP' ) && duplicateprofile.length > 1">
+      *ngIf="(currentUser?.UserName == 'dpd' || currentUser?.RoleName == 'SDP' || currentUser?.RoleName == 'Senior Data Processor' ) && duplicateprofile.length > 1">
       <app-profile-duplication [duplicateprofile]="duplicateprofile"></app-profile-duplication>
     </tab>
     <!-- 

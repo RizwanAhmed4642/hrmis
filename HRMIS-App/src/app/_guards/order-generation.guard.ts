@@ -14,6 +14,7 @@ export class OrderGenerationGuard implements CanActivate {
         let roleName: string = this._authService.getUser().RoleName.toLowerCase();
         if (userName && roleName &&
             (roleName == 'hisdu order team'
+                || roleName == 'Order Generation'
                 || roleName == 'chief executive officer'
                 || roleName == 'Districts'
                 || roleName == 'phfmc'
@@ -26,6 +27,7 @@ export class OrderGenerationGuard implements CanActivate {
                 || userName == 'sc1'
                 || userName == 'a.system'
                 || userName.startsWith('sdp')
+                || roleName=='Senior Data Processor'
                 || userName == 'dpd')) {
             return true;
         } else {

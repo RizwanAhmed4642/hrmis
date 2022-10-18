@@ -141,7 +141,7 @@
       </div>
       <div id="container-floating"
         *ngIf="user?.UserName == 'og1' || user?.UserName == 'south.ordercell' || user?.UserName == 'ordercell' 
-        || user?.RoleName == 'Hisdu Order Team' || user?.RoleName == 'Chief Executive Officer' || user?.RoleName == 'Districts' || user?.RoleName == 'DG Health'|| user?.RoleName == 'PHFMC Admin' || user?.RoleName == 'PHFMC' ">
+        || user?.RoleName == 'Hisdu Order Team' || user?.RoleName == 'Order Generation' || user?.RoleName == 'Chief Executive Officer' || user?.RoleName == 'Districts' || user?.RoleName == 'DG Health'|| user?.RoleName == 'PHFMC Admin' || user?.RoleName == 'PHFMC' ">
         <div id="floating-button" data-toggle="tooltip" data-placement="left" data-original-title="Create"
           (click)="newDialog('order')">
           <p class="plus">+</p>
@@ -160,7 +160,7 @@
         </div>
       </div>
       <div id="container-floating"
-        *ngIf="user?.UserName && (user?.RoleName == 'Deputy Secretary' || user?.RoleName == 'Administrative Office') && user?.UserName != 'pshd' && user?.UserName != 'ordercell' && user?.RoleName != 'Hisdu Order Team'">
+        *ngIf="user?.UserName && (user?.RoleName == 'Deputy Secretary' || user?.RoleName == 'Administrative Office') && user?.UserName != 'pshd' && user?.UserName != 'ordercell' && user?.RoleName != 'Hisdu Order Team' && user?.RoleName != 'Order Generation'">
         <div id="floating-button" data-toggle="tooltip" data-placement="left" data-original-title="Create"
           routerLink="/ri/new-document">
           <p class="plus">+</p>

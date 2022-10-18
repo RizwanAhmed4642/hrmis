@@ -31,7 +31,7 @@ public partial class C_Role
 
     public string Name { get; set; }
 
-    public bool IsActive { get; set; }
+    public Nullable<bool> IsActive { get; set; }
 
 
 

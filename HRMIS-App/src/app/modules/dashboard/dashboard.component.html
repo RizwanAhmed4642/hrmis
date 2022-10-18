@@ -34,7 +34,7 @@
   <app-hrmis-citizen-portal *ngIf="currentUser?.RoleName == 'Citizen Portal'">
   </app-hrmis-citizen-portal>
   <app-hrmis-dashboardhrmis
-    *ngIf="(currentUser?.RoleName == 'Administrator' || currentUser?.RoleName == 'SDP' || currentUser?.RoleName == 'Chief Executive Officer' || currentUser?.RoleName == 'Districts' || currentUser?.RoleName == 'Primary' || currentUser?.RoleName == 'Secondary' || currentUser?.RoleName == 'PHFMC Admin') && currentUser?.UserName != 'managerfc' || currentUser?.RoleName == 'South Punjab'"
+    *ngIf="(currentUser?.RoleName == 'Administrator' || currentUser?.RoleName == 'SDP' || currentUser?.RoleName == 'Senior Data Processor' || currentUser?.RoleName == 'Chief Executive Officer' || currentUser?.RoleName == 'Districts' || currentUser?.RoleName == 'Primary' || currentUser?.RoleName == 'Secondary' || currentUser?.RoleName == 'PHFMC Admin') && currentUser?.UserName != 'managerfc' || currentUser?.RoleName == 'South Punjab'"
     [currentUser]="currentUser">
   </app-hrmis-dashboardhrmis>
   <app-adhoc-scrutiny-dashboard *ngIf="(currentUser?.RoleName == 'AdhocScrutiny')">

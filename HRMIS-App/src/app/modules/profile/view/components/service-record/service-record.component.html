@@ -1,6 +1,6 @@
 <div class="content-heading mb-2" id="deptInfo">
   Service Record <button kendoButton primary="true" class="animated fadeIn pull-right ml-2"
-    (click)="lockServiceHistory()" *ngIf="currentUser.UserName == 'dpd' || currentUser.RoleName == 'SDP'"><i class="fa"
+    (click)="lockServiceHistory()" *ngIf="currentUser.UserName == 'dpd' || currentUser.RoleName == 'SDP' || currentUser.RoleName == 'Senior Data Processor'"><i class="fa"
       [ngClass]="profile?.Tenure == 'Completed' ? 'fa-lock' : 'fa-unlock'"></i>&nbsp;{{profile?.Tenure == 'Completed' ? 'Unlock' : 'Lock'}}</button>
   <button
     *ngIf="profile?.Tenure != 'Completed' && currentUser.RoleName != 'Section Officer' && currentUser.RoleName != 'Deputy Secretary'"

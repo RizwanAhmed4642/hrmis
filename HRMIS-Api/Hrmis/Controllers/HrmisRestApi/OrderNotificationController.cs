@@ -1,4 +1,5 @@
-﻿using Hrmis.Models.Common;
+﻿using FCM.Net;
+using Hrmis.Models.Common;
 using Hrmis.Models.CustomModels;
 using Hrmis.Models.DbModel;
 using Hrmis.Models.Services;
@@ -125,7 +126,7 @@ namespace Hrmis.Controllers.HrmisRestApi
                             return Ok(false);
                         }
                     }
-                    else if (userName.StartsWith("sdp") || User.IsInRole("SDP"))
+                    else if (userName.StartsWith("sdp") || User.IsInRole("SDP") || User.IsInRole("Senior Data Processor"))
                     {
                         if (transferTypeId == 0)
                         {

@@ -83,7 +83,7 @@
           </Key>
           <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
-          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsActive" Type="bit" />
         </EntityType>
         <EntityType Name="_SessionLog">
           <Key>
@@ -29518,7 +29518,7 @@ warning 6002: The table/view 'HR_System.dbo.VPProfileView' does not have a prima
           <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="C_User" Relationship="HR_SystemModel.C_UserRole" FromRole="C_Role" ToRole="C_User" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" />
         </EntityType>
         <EntityType Name="C_SessionLog">
           <Key>

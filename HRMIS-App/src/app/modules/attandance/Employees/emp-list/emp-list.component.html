@@ -4,7 +4,7 @@
     </div>
     <div class="col-md-6 col-xs-12">
       <div class="top-controls"
-        *ngIf="currentUser?.RoleName != 'Deputy Secretary' &&  currentUser?.RoleName != 'Hisdu Order Team'">
+        *ngIf="currentUser?.RoleName != 'Deputy Secretary' &&  currentUser?.RoleName != 'Hisdu Order Team'&&  currentUser?.RoleName != 'Order Generation'">
         <button kendoButton [primary]="true" [look]="'outline'" class="ml-2" *ngIf="!isInactive"
           routerLink="/attandance/new">Add
           New</button>
@@ -15,7 +15,7 @@
           to List</button>
       </div>
       <div class="top-controls"
-        *ngIf="currentUser?.UserName == 'ordercell' || currentUser?.RoleName == 'Hisdu Order Team'">
+        *ngIf="currentUser?.UserName == 'ordercell' || currentUser?.RoleName == 'Hisdu Order Team'|| currentUser?.RoleName == 'Order Generation'">
         <button kendoButton [primary]="true" [look]="'outline'" *ngIf="!isInactive" class="ml-2"
           routerLink="/attandance/new">Add
           New</button>

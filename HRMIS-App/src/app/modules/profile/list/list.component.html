@@ -10,7 +10,7 @@
     <div class="col-md-6 col-xs-12 animated fadeIn"
       *ngIf="currentUser.RoleName != 'HRView' && currentUser.RoleName != 'Section Officer' && !retirementInOneYear && !retirementAlerted">
       <div class="top-controls"
-        *ngIf="currentUser?.RoleName != 'Deputy Secretary' && currentUser?.RoleName != 'Hisdu Order Team' && currentUser?.RoleName != 'PACP'">
+        *ngIf="currentUser?.RoleName != 'Deputy Secretary' && currentUser?.RoleName != 'Hisdu Order Team' && currentUser?.RoleName != 'Order Generation' && currentUser?.RoleName != 'PACP'">
         <button kendoButton [primary]="true" [look]="'outline'" *ngIf="!isPool" class="ml-2"
           routerLink="/profile/new">Add
           New</button>
@@ -35,7 +35,7 @@
         to List</button>
     </div>
       <div class="top-controls"
-        *ngIf="currentUser?.UserName == 'ordercell' || currentUser?.RoleName == 'Hisdu Order Team'">
+        *ngIf="currentUser?.UserName == 'ordercell' || currentUser?.RoleName == 'Hisdu Order Team' || currentUser?.RoleName == 'Order Generation'">
         <button kendoButton [primary]="true" [look]="'outline'" *ngIf="!isPool" class="ml-2"
           routerLink="/profile/new">Add
           New</button>

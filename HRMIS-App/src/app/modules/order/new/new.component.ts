@@ -366,7 +366,7 @@ export class NewComponent implements OnInit, OnDestroy {
   public authenticateUser = () => {
     console.log(this.user);
 
-    if (this.user.HfmisCode == '0' && (this.user.RoleName == 'Administrator' || this.user.RoleName == 'Hisdu Order Team' || this.user.UserName == 'ordercell')) {
+    if (this.user.HfmisCode == '0' && (this.user.RoleName == 'Administrator' || this.user.RoleName == 'Hisdu Order Team' || this.user.RoleName == 'Order Generation' || this.user.UserName == 'ordercell')) {
       this.isHisduAdmin = true;
     }
     if (this.user.RoleName == 'PHFMC Admin') {

@@ -735,7 +735,7 @@
     class="animated fadeIn">
     <kendo-buttongroup [width]="'100%'" style="padding: 10px 15px !important;">
       <button kendoButton ladda style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;"
-        *ngIf="!currentUser.UserName.toLowerCase().startsWith('ceo.') && currentUser.RoleName != 'Deputy Secretary' && currentUser.RoleName != 'Facilitation Centre' && currentUser.RoleName != 'Hisdu Order Team' && (!userRight || (userRight && userRight.AddVacancy)) && !saving"
+        *ngIf="!currentUser.UserName.toLowerCase().startsWith('ceo.') && currentUser.RoleName != 'Deputy Secretary' && currentUser.RoleName != 'Facilitation Centre' && currentUser.RoleName != 'Hisdu Order Team' && currentUser.RoleName != 'Order Generation' && (!userRight || (userRight && userRight.AddVacancy)) && !saving"
         class="action-btn-success" primary="true" (click)="saveVacancy()"><i class="fa fa-save"></i>
         Save</button>
       <button kendoButton ladda style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;"

@@ -23,7 +23,7 @@ namespace Hrmis.Models.Services
             currentUser = _userService.GetUser(userId);
             SearchProfile(query, roleName);
             SearchHealthFacility(query, roleName);
-            if (roleName.Equals("Deputy Secretary") || roleName.Equals("Hisdu Order Team") || roleName.Equals("Chief Executive Officer") || roleName.Equals("Districts") || roleName.Equals("Administrator"))// new role "Districts" added by Adnan 17/10/2022
+            if (roleName.Equals("Deputy Secretary") || roleName.Equals("Hisdu Order Team") || roleName.Equals("Order Generation") || roleName.Equals("Chief Executive Officer") || roleName.Equals("Districts") || roleName.Equals("Administrator"))// new role "Districts" added by Adnan 17/10/2022
             {
                 if (roleName.Equals("Deputy Secretary") && userName.Equals("ordercell"))
                 {

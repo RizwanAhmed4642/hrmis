@@ -74,7 +74,7 @@ export class HrmisDashboardComponent implements OnInit, OnDestroy {
     this.getAdhocCounts();
     this.getAdhocApplicantCounts();
     this.initializeProps();
-    if (this.currentUser.RoleName == 'SDP' || this.currentUser.RoleName == 'PHFMC Admin') {
+    if (this.currentUser.RoleName == 'SDP'|| this.currentUser.RoleName == 'Senior Data Processor'  || this.currentUser.RoleName == 'PHFMC Admin') {
       this.handleSearchEvents();
       this.getUserAcitiy();
     }

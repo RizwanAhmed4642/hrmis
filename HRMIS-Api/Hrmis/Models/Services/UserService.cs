@@ -428,7 +428,7 @@ namespace Hrmis.Models.Services
                     allowedRoutes.Add((int)AngularRoutesNav.SCANNEDFILES);
                     allowedRoutes.Add((int)AngularRoutesNav.SEARCHTRACKING);
                 }
-                else if (userName.StartsWith("sdp"))
+                else if (userName.StartsWith("sdp") || roleName.Equals("Senior Data Processor"))
                 {
                     allowedRoutes.Add((int)AngularRoutesNav.DASHBAORD);
                     allowedRoutes.Add((int)AngularRoutesNav.HEALTHFACILITY);
@@ -442,7 +442,7 @@ namespace Hrmis.Models.Services
                     allowedRoutes.Add((int)AngularRoutesNav.SENIORITYLIST);
                     allowedRoutes.Add((int)AngularRoutesNav.DAILYWAGERPROFILE);
                 }
-                else if (userName.StartsWith("ri."))
+                else if (userName.StartsWith("ri.") || roleName.Equals("Online Dairy Cell"))
                 {
                     allowedRoutes.Add((int)AngularRoutesNav.DASHBAORD);
                     allowedRoutes.Add((int)AngularRoutesNav.RIBRANCH);
@@ -497,7 +497,7 @@ namespace Hrmis.Models.Services
                     allowedRoutes.Add((int)AngularRoutesNav.DAILYWAGERPROFILE);
 
                 }
-                else if (userName.Equals("ordercell") || userName.Equals("og1") || roleName.StartsWith("Hisdu Order Team"))
+                else if (userName.Equals("ordercell") || userName.Equals("og1") || roleName.StartsWith("Hisdu Order Team") || roleName.StartsWith("Order Generation"))
                 {
                     allowedRoutes.Add((int)AngularRoutesNav.DASHBAORD);
                     allowedRoutes.Add((int)AngularRoutesNav.INBOX);

@@ -4,10 +4,10 @@
     <div class="control-col-st" [ngClass]="mutualTransfer ? 'col-md-4' : 'col-md-8'">
       <label class="k-form-field">
         <span>CNIC </span><span
-          *ngIf="currentUser.RoleName == 'Hisdu Order Team' || currentUser.RoleName == 'Chief Executive Officer' || currentUser.RoleName == 'Districts' || currentUser.RoleName == 'DG Health' || currentUser.UserName == 'dpd' || currentUser.UserName == 'ordercell'"
+          *ngIf="currentUser.RoleName == 'Hisdu Order Team' || currentUser.RoleName == 'Order Generation'  || currentUser.RoleName == 'Chief Executive Officer' || currentUser.RoleName == 'Districts' || currentUser.RoleName == 'DG Health' || currentUser.UserName == 'dpd' || currentUser.UserName == 'ordercell'"
           class="pull-right cursor-p text-primary" (click)="combineOrder('/order/combine/4')">combine order</span>
         <span
-          *ngIf="currentUser.RoleName == 'Hisdu Order Team' || currentUser.RoleName == 'Chief Executive Officer' || currentUser.RoleName == 'Districts' || currentUser.RoleName == 'DG Health' || currentUser.UserName == 'dpd' || currentUser.UserName == 'ordercell'"
+          *ngIf="currentUser.RoleName == 'Hisdu Order Team' || currentUser.RoleName == 'Order Generation' || currentUser.RoleName == 'Chief Executive Officer' || currentUser.RoleName == 'Districts' || currentUser.RoleName == 'DG Health' || currentUser.UserName == 'dpd' || currentUser.UserName == 'ordercell'"
           class="pull-right cursor-p text-primary"
           (click)="mutualTransfer = !mutualTransfer">{{mutualTransfer ? 'single order' : 'mutual transfer'}}&nbsp;|&nbsp;</span>
         <kendo-maskedtextbox [mask]="cnicMask" (input)="cnicValueChange()" (keyup.enter)="getProfileByCNIC()"

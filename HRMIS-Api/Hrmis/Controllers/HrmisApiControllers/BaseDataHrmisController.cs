@@ -260,6 +260,8 @@ namespace Hrmis.Controllers.HrmisApiControllers
                   User.IsInRole("Chief Executive Officer") ? "Chief Executive Officer" :
                   // new role added by adnan 17/10/2022
                   User.IsInRole("Districts") ? "Districts" :
+                  User.IsInRole("Order Generation") ? "Order Generation" :
+
                   User.IsInRole("Hisdu Order Team") ? "Hisdu Order Team" : "";
                 IQueryable<HrDesignationView> query = db.HrDesignationViews.Where(x => x.IsActive == true).AsQueryable();
                 if (role.Equals("PHFMC") || role.Equals("PHFMC Admin"))
