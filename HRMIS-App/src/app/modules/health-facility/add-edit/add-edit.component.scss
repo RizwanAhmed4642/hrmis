@@ -1,0 +1,15 @@
+.photo-thumb {
+  width: 100px;
+  height: 100px;
+  background: white;
+  outline: dotted black;
+  padding: 12px 28px;
+  font-size: 3rem;
+  color: black;
+  font-family: "Roboto-Light";
+  cursor: pointer;
+}
+.photo-thumb:hover {
+  outline: dotted #46a23f;
+  color: #46a23f;
+}

@@ -1,0 +1,57 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12 col-xs-12">
+      <div class="top-h3">
+        Application Documents
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-5">
+      <div class="row">
+        <div class="col-md-8 col-sm-12 control-col-st">
+          <label class="k-form-field">
+            <span>Name <span class="text-danger">*</span></span>
+            <input type="text" [(ngModel)]="applicationDocument.Name" kendoTextBox>
+          </label>
+        </div>
+        <div class="col-md-4 col-sm-12 control-col-end">
+          <label class="k-form-field">
+            <span>&nbsp;</span>
+            <button kendoButton (click)="addDocument()" [disabled]="applicationDocument.Name?.length < 3"
+              data-style="zoom-in" [ladda]="addingDocument" class="btn-block" type="button" [primary]="true">
+              Submit
+            </button>
+          </label>
+        </div>
+      </div>
+    </div>
+   
+  </div>
+  <div class="row row-panel">
+    <div class="col-md-12">
+      <div class="grid-wrapper">
+        <kendo-grid [data]="dropDowns.applicationDocuments">
+          <kendo-grid-column [width]="6" field="asd" title="Sr.">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p class="m-0">{{(rowIndex + 1)}}</p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="94" field="Name" title="Documet Name">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p class="m-0">{{dataItem.Name}}</p>
+            </ng-template>
+          </kendo-grid-column>
+          <!--   <kendo-grid-column [width]="20" field="asd" title="Action" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <button style="height: 30px !important;padding: 0px 8px !important;" (click)="removeApplication(dataItem)"
+                class="ml-2 animated fadeIn btn btn-danger"><i class="fa fa-times"></i></button>
+            </ng-template>
+          </kendo-grid-column> -->
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="kGrid.loading" class="k-i-loading"></div>
+</div>

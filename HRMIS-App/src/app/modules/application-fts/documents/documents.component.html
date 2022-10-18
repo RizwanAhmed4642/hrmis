@@ -1,0 +1,84 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12 col-xs-12">
+      <div class="top-h3">
+        Application Documents
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-5">
+      <div class="row">
+        <div class="col-md-8 col-sm-12 control-col-st">
+          <label class="k-form-field">
+            <span>Name <span class="text-danger">*</span></span>
+            <input type="text" [(ngModel)]="applicationDocument.Name" kendoTextBox>
+          </label>
+        </div>
+        <div class="col-md-4 col-sm-12 control-col-end">
+          <label class="k-form-field">
+            <span>&nbsp;</span>
+            <button kendoButton (click)="addDocument()" [disabled]="applicationDocument.Name?.length < 3"
+              data-style="zoom-in" [ladda]="addingDocument" class="btn-block" type="button" [primary]="true">
+              Submit
+            </button>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7">
+      <div class="row">
+        <div class="col-md-5 col-sm-12 control-col">
+          <label class="k-form-field"><span>Application Type <span class="text-danger">*</span></span>
+            <kendo-dropdownlist [data]="dropDowns.applicationTypes" [textField]="'Name'" [valueField]="'Id'"
+              [valuePrimitive]="true" [(ngModel)]="applicationDocumentType.ApplicationType_Id"
+              [defaultItem]="dropDowns.defultFiltersModel.applicationType">
+            </kendo-dropdownlist>
+          </label>
+        </div>
+        <div class="col-md-5 col-sm-12 control-col">
+          <label class="k-form-field"><span>Document <span class="text-danger">*</span></span>
+            <kendo-dropdownlist [data]="dropDowns.applicationDocuments" [textField]="'Name'" [valueField]="'Id'"
+              [valuePrimitive]="true" [(ngModel)]="applicationDocumentType.Document_Id"
+              [defaultItem]="dropDowns.defultFiltersModel.applicationDocument">
+            </kendo-dropdownlist>
+          </label>
+        </div>
+        <div class="col-md-2 mt-1 col-sm-12 control-col-end">
+          <button kendoButton (click)="addDocumentType()"
+            [disabled]="!applicationDocumentType.ApplicationType_Id || !applicationDocumentType.Document_Id"
+            data-style="zoom-in" [ladda]="addingDocumentType" class="btn-align-v btn-block" type="button"
+            [primary]="true">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row row-panel">
+    <div class="col-md-12">
+      <div class="grid-wrapper">
+        <kendo-grid [data]="dropDowns.applicationDocuments">
+          <kendo-grid-column [width]="6" field="asd" title="Sr.">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p class="m-0">{{(rowIndex + 1)}}</p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="94" field="Name" title="Documet Name">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p class="m-0">{{dataItem.Name}}</p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="20" field="asd" title="Required" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <kendo-switch (valueChange)="switchValChange(dataItem)" [(ngModel)]="dataItem.IsRequired" [onLabel]="'ON'"
+                [offLabel]="'OFF'"></kendo-switch>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="kGrid.loading" class="k-i-loading"></div>
+</div>

@@ -1,0 +1,129 @@
+<div class="animated fadeIn" *ngIf="!loading && vpMaster">
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3">
+        New Vacancy
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" routerLink="/vacancy-position" [look]="'outline'">Back</button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-sm-12 control-col-st">
+      <label class="k-form-field">
+        <span>Health Facility <span class="text-danger">*</span></span>
+        <kendo-autocomplete [data]="hfsList" [valueField]="'FullName'"
+          (valueChange)="dropdownValueChanged($event, 'hfs')" [filterable]="true" [disabled]="healthFacility"
+          (filterChange)="searchEvent.next({ event: $event, filter: 'hfs'})"
+          [value]="healthFacility ? healthFacility.FullName : ''" placeholder="Search Health Facility"
+          class="k-autocomplete-form">
+          <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+            <div class="search-list-item">
+              {{ dataItem.FullName }}</div>
+          </ng-template>
+        </kendo-autocomplete>
+      </label>
+    </div>
+    <div class="col-md-6 control-col-end col-sm-12">
+      <label class="k-form-field">
+        <span>Post Type <span class="text-danger">*</span></span>
+        <kendo-dropdownlist [data]="dropDowns.postTypesData" [textField]="'Name'" [valueField]="'Id'"
+          (valueChange)="dropdownValueChanged($event, 'postType')" [value]="dropDowns.selectedFiltersModel.postType"
+          [defaultItem]="dropDowns.defultFiltersModel.postType">
+        </kendo-dropdownlist>
+      </label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-5 col-sm-12 control-col-st">
+      <label class="k-form-field">
+        <span>Post Name <span class="text-danger">*</span></span>
+        <kendo-dropdownlist [data]="dropDowns.designationsData" [textField]="'Name'" [valueField]="'Id'"
+          (valueChange)="dropdownValueChanged($event, 'post')" [value]="dropDowns.selectedFiltersModel.post"
+          [defaultItem]="dropDowns.defultFiltersModel.post">
+        </kendo-dropdownlist>
+      </label>
+    </div>
+    <div class="col-md-5 col-sm-12 control-col">
+      <label class="k-form-field">
+        <span>Cadre <span class="text-danger">*</span></span>
+        <input type="text" [value]="vpMaster.CadreName" kendoTextBox disabled>
+      </label>
+    </div>
+    <div class="col-md-2 col-sm-12 control-col-end">
+      <label class="k-form-field">
+        <span>Scale <span class="text-danger">*</span></span>
+        <input type="text" [value]="vpMaster.BPS" kendoTextBox disabled>
+      </label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3 col-sm-12 control-col-st">
+      <label class="k-form-field">
+        <span>Total Sanctioned <span class="text-danger">*</span></span>
+        <input type="number" min="0" [(ngModel)]="vpMaster.TotalSanctioned"
+          (input)="searchEvent.next({ event: vpMaster.TotalSanctioned, filter: 'TotalSanctioned'})" kendoTextBox>
+      </label>
+    </div>
+    <div class="col-md-3 col-sm-12 control-col">
+      <label class="k-form-field">
+        <span>Filled <span class="text-danger">*</span></span>
+        <input type="number" min="0" disabled [value]="vpMaster.TotalWorking"
+          (input)="searchEvent.next({ event: vpMaster.TotalSanctioned, filter: 'TotalSanctioned'})" kendoTextBox>
+      </label>
+    </div>
+    <div class="col-md-3 col-sm-12 control-col">
+      <label class="k-form-field">
+        <span>Vacant <span class="text-danger">*</span></span>
+        <input type="number" min="0" disabled [value]="(vpMaster.TotalSanctioned - vpMaster.TotalWorking)"
+          (input)="searchEvent.next({ event: vpMaster.TotalSanctioned, filter: 'TotalSanctioned'})" kendoTextBox>
+      </label>
+    </div>
+    <div class="col-md-3 col-sm-12 control-col-end">
+      <label class="k-form-field">
+        <span>Profiles</span>
+        <input type="number" min="0" disabled [value]="vpMaster.Profiles"
+          (input)="searchEvent.next({ event: vpMaster.TotalSanctioned, filter: 'TotalSanctioned'})" kendoTextBox>
+      </label>
+    </div>
+  </div>
+  <div class="animated fadeIn"
+    *ngIf="vpMaster.HF_Id > 0 && vpMaster.TotalSanctioned > 0 && vpMaster.Desg_Id > 0 && vpMaster.PostType_Id > 0">
+    <hr>
+    <div class="content-heading mb-2" id="deptInfo">
+      Employement mode of {{vpMaster.TotalSanctioned}} {{vpMaster.DsgName}}
+    </div>
+
+    <div class="row">
+      <div class="col-md-3 col-sm-12" *ngFor="let employementMode of dropDowns.employementModesData; let i = index;"
+        [ngClass]="i % 4 === 0 ? 'control-col-st' : i % 4 === 1 || i % 4 === 2 ? 'control-col' : i % 4 === 3 ? 'control-col-end' : ''">
+        <label class="k-form-field">
+          <strong class="p-strong">{{employementMode.Name}}</strong>
+          <input type="number" min="0" [(ngModel)]="employementMode.totalWorking"
+            [ngClass]="(filledExceed && (employementMode.totalWorking && employementMode.totalWorking > 0)) || employementMode.totalWorking < 0 ? 'ng-invalid-only' : ''"
+            (input)="searchEvent.next({ event: $event, filter: 'employementMode', Id: employementMode.Id})"
+            kendoTextBox>
+        </label>
+      </div>
+    </div>
+    <div class="animated fadeIn">
+      <hr>
+      <div *ngIf="vpMaster.TotalWorking && filledExceed" class="text-danger animated fadeIn">* cannot fill
+        {{vpMaster.TotalWorking + ' '
+        + vpMaster.DsgName + ' against ' + vpMaster.TotalSanctioned + ' sanctioned posts'}}</div>
+      <div *ngIf="duplicate" class="text-danger animated fadeIn">{{duplicateString}}</div>
+      <div class="row mt-3" *ngIf="!filledExceed">
+        <div class="col-md-2 col-sm-6 col-xs-6 control-col-st">
+          <button kendoButton class="btn-block" [ladda]="saving" data-style="zoom-in" (click)="saveVacancy()"
+            [primary]="true">Save</button>
+        </div>
+        <div class="col-md-2 col-sm-6 col-xs-6 control-col">
+          <button kendoButton [primary]="true" ladda routerLink="../" class="btn-block" [look]="'outline'">Back</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,174 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-6 col-xs-12">
+      <div class="top-h3">
+        Leave Details
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" [look]="'outline'" class="ml-2" routerLink="/attandance/leaveform">
+          Add Leave</button>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-sm-12 control-col-st">
+      <label class="k-form-field"> <span><b>From Date</b></span></label>
+      <kendo-datepicker name="LeaveFrom" placeholder="Starting from" [format]="'dd/MM/yyyy'"
+        [(ngModel)]="leaveList.LeaveFrom" #LeaveFrom="ngModel"></kendo-datepicker>
+    </div>
+    <div class="col-md-3 col-sm-12 control-col-st">
+      <label class="k-form-field"> <span><b>To Date</b></span></label>
+      <kendo-datepicker name="LeaveTo" placeholder="End date" [format]="'dd/MM/yyyy'" [(ngModel)]="leaveList.LeaveTo"
+        #LeaveTo="ngModel">
+      </kendo-datepicker>
+    </div>
+    <div class="col-md-3 col-sm-12 control-col-st">
+      <label class="k-form-field">
+        <span><b>Search by Name</b></span> </label>
+      <input type="text" name="EmployeeName" [(ngModel)]="leaveList.EmployeeName" placeholder="Type Name"
+        #EmployeeName="ngModel" kendoTextBox>
+
+    </div>
+    <div class="col-md-3 col-sm-12 control-col-st">
+      <label class="k-form-field">
+        <button kendoButton class="btn-block btn-align-v" style="margin-top:35px !important" [ladda]="loading"
+          data-style="zoom-in" (click)="onSearch()" [primary]="true">SEARCH</button>
+      </label>
+    </div>
+
+    <div class="row row-panel">
+      <div class="col-md-12">
+        <div class="grid-wrapper">
+          <kendo-grid [data]="gridView" [sortable]="{
+            allowUnsort: allowUnsort,
+            mode: multiple ? 'multiple' : 'single'
+          }" [selectable]="true" [sort]="sort" (sortChange)="sortChange($event)" [(pageSize)]="pageSize" [skip]="skip"
+            [pageable]="true" (pageChange)="pageChange($event)" [scrollable]="false">
+
+            <kendo-grid-column [width]="7" field="asd" title="No." [headerClass]="'grid-header-custom'" [style]="{
+              'background-color': '#fff',
+              color: '#000',
+              'border-bottom': '1px solid #c8ced3'
+            }">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                {{ rowIndex + 1 }}
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column [width]="'23'" field="Employee Name" title="EmployeeName"
+              [headerClass]="'grid-header-custom'" [style]="{
+              'background-color': '#fff',
+              color: '#000',
+              'border-bottom': '1px solid #c8ced3'
+            }">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <!-- {{ dataItem.LeaveEnterDate | date : 'dd/MM/yyyy' }} -->
+                {{  dataItem.EmployeeName }}<br>
+                <span style="color:gray;size: .5em;">{{  dataItem.DName}}</span>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column [width]="'15'" field="Designation_Name" title="Designation"
+              [headerClass]="'grid-header-custom'" [style]="{
+              'background-color': '#fff',
+              color: '#000',
+              'border-bottom': '1px solid #c8ced3'
+            }">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                {{  dataItem.Designation_Name }}<br>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column [width]="'15'" field="LeaveType" title="Leave Type" [headerClass]="'grid-header-custom'"
+              [style]="{
+            'background-color': '#fff',
+            color: '#000',
+            'border-bottom': '1px solid #c8ced3'
+          }">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+
+                {{ dataItem.LeaveType }}
+
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column [width]="15" field="Leave From" title="LeaveFrom" [headerClass]="'grid-header-custom'"
+              [style]="{
+            'background-color': '#fff',
+            color: '#000',
+            'border-bottom': '1px solid #c8ced3'
+          }">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                {{ dataItem.LeaveFrom }}
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column [width]="15" field="Leave To" title="LeaveTo" [headerClass]="'grid-header-custom'"
+              [style]="{
+          'background-color': '#fff',
+          color: '#000',
+          'border-bottom': '1px solid #c8ced3'
+        }">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                {{ dataItem.LeaveTo }}
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column [width]="15" field="Total Days" title="Days" [headerClass]="'grid-header-custom'"
+              [style]="{
+          'background-color': '#fff',
+          color: '#000',
+          'border-bottom': '1px solid #c8ced3'
+        }">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                {{ dataItem.TotalDays }}
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- <kendo-grid-column
+      [width]="'15'"
+      field="Status"
+      title="StatusName"
+      [headerClass]="'grid-header-custom'"
+      [style]="{
+        'background-color': '#fff',
+        color: '#000',
+        'border-bottom': '1px solid #c8ced3'
+      }"
+    >
+      <ng-template
+        kendoGridCellTemplate
+        let-dataItem
+        let-rowIndex="rowIndex"
+      >
+     
+        {{ dataItem.StatusName }}
+     
+      </ng-template>
+    </kendo-grid-column> -->
+            <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+              <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+              <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+              <kendo-pager-next-buttons></kendo-pager-next-buttons>
+              <div class="pager-rows-number">
+                <select #select (change)="changePagesize(select.value)">
+                  <option *ngIf="showInitialPageSize" [value]="pageSize">{{
+                  pageSize
+                }}</option>
+                  <option *ngFor="let page of pageSizes" [value]="page"
+                    [selected]="page === pageSize ? true : undefined">
+                    {{ page }}
+                  </option>
+                </select>
+                &nbsp; items per page
+              </div>
+              <kendo-pager-info></kendo-pager-info>
+            </ng-template>
+          </kendo-grid>
+        </div>
+      </div>
+    </div>
+
+  </div>

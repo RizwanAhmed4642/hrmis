@@ -1,0 +1,67 @@
+<div *ngIf="!applicant.Id" class="k-i-loading"></div>
+
+<div class="animated fadeIn" *ngIf="applicant.Id">
+  <div class="row">
+    <div class="col-md-10 offset-md-1">
+      <div class="row">
+        <div class="col-md-4 col-sm-12 mt-2 control-col-st">
+          <div>
+            <img *ngIf="photoSrc" class="animated fadeIn" style="width:100px;height:100px;border:1px solid;"
+              [src]="photoSrc" onError="this.src='../../../assets/img/notfound.png'" alt="">
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-12 mt-2 control-col">
+          <h4 class="m-0"><span class="p-strong">Name:</span> {{ applicant.Name}}</h4>
+          <p class="m-0"><span class="p-strong">Father Name:</span> {{ applicant.FatherName}}</p>
+          <p class="m-0"><span class="p-strong">CNIC:</span> {{ dashifyCNIC(applicant.CNIC)}}</p>
+          <p class="m-0"><span class="p-strong">Designation:</span> {{ applicant.DesignationName}}</p>
+          <p class="m-0"><span class="p-strong">Contact: </span> {{ applicant.MobileNumber}}</p>
+
+        </div>
+        <div class="col-md-4 col-sm-12 mt-2 control-col-end">
+          <p class="m-0"><span class="p-strong">Domicile:</span> {{ applicant.DomicileName}}</p>
+
+        </div>
+      </div>
+      <hr *ngIf="applications.length > 0">
+      <div class="row" *ngIf="applications.length > 0">
+        <div class="col-md-12">
+          <h4 class="mb-2"><span class="p-strong">Applications:</span> {{ applications.length}}</h4>
+          <kendo-grid [data]="applications">
+            <kendo-grid-column [width]="7" field="asd" title="No." [headerClass]="'grid-header-custom'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                {{(rowIndex + 1)}}.
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="93" field="DesignationName" title="Post"
+              [headerClass]="'grid-header-custom'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                {{dataItem.DesignationName}} - {{dataItem.HFName}}
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+          <kendo-grid-column [width]="7" field="asd" title="No." [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            {{(rowIndex + 1)}}.
+          </ng-template>
+        </kendo-grid-column>
+          <h4 class="m-0" *ngIf="applications.length == 0">
+            No Applications
+          </h4>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+
+    </div>
+    <div class="col-md-3 control-col-end">
+      <button type="button" class="btn btn-secondary btn-block btn-lg" routerLink="/job">Logout</button>
+    </div>
+  </div>
+</div>

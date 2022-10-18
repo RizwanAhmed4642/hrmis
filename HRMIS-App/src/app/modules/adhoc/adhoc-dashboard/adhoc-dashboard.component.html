@@ -1,0 +1,641 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-8 col-xs-12">
+            <div class="top-h3">
+                Adhoc Dashboard
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <div class="card animated fadeIn"  style="margin-top: 0px !important">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="callout callout-info" routerLink="/item">Total Applicants<br>
+                    <strong class="h4">{{applicantsSummary[0].TotalApplicant}}</strong>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="callout callout-danger" routerLink="/item/issued-products">
+                    Total Applications
+                    <br><strong class="h4">{{applicantsSummary[0].Total_Application}}</strong>
+                </div>
+            </div>
+            <div class="md-4">
+                <div class="callout callout-warning" routerLink="/item/issued-products">
+                    Total Preferences<br>
+                    <strong class="h4">{{applicantsSummary[0].Total_Preference}}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+
+<div class="row row-panel">
+    <div class="col-md-12">
+        <div class="content-heading">Applications</div>
+        <div class="grid-wrapper">
+            <kendo-grid [data]="applicationsDesig">
+                <kendo-grid-column [width]="10" field="asd" title="No." [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        {{(rowIndex + 1)}}.
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="70" field="Designation" title="Designation"
+                    [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0 cursor-p hover-success p-strong">
+                            {{dataItem.Designation ? dataItem.Designation : ''}}</p>
+                        <small><span class="cursor-p hover-success">Scrutiny Minutes</span>&nbsp;|&nbsp;<span
+                                class="cursor-p hover-success"
+                                (click)="openWithDesignation(dataItem.Designation)">Grievance Minutes</span></small>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column="column">
+                        <p class="p-strong" style="padding: 5px">Total
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="30" field="Total" title="Total Applications"
+                    [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0 p-strong cursor-p hover-success"
+                            (click)="openInNewTab('adhoc-applications/applications/' + dataItem.Designation_Id + '/2')">
+                            {{(dataItem.New ? dataItem.New : 0) + (dataItem.Submitted ? dataItem.Submitted : 0) + (dataItem.Approved ? dataItem.Approved : 0) + (dataItem.Rejected ? dataItem.Rejected : 0) | number}}
+                        </p>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column="column">
+                        <p class="p-strong" style="padding: 5px">
+                            {{(totalSum.New ? totalSum.New : 0) + (totalSum.Submitted ? totalSum.Submitted : 0) + (totalSum.Approved ? totalSum.Approved : 0) + (totalSum.Rejected ? totalSum.Rejected : 0) | number}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="30" field="New" title="Incomplete" [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0 p-strong cursor-p hover-success"
+                            (click)="openInNewTab('adhoc-applications/applications/' + dataItem.Designation_Id + '/2')">
+                            {{(dataItem.New ? dataItem.New : 0) | number}} </p>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column="column">
+                        <p class="p-strong" style="padding: 5px">
+                            {{(totalSum.New ? totalSum.New : 0) | number}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="30" field="New" title="Completed" [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0 p-strong cursor-p hover-success"
+                            (click)="openInNewTab('adhoc-applications/applications/' + dataItem.Designation_Id + '/2')">
+                            {{(dataItem.Approved ? dataItem.Approved : 0) + (dataItem.Rejected ? dataItem.Rejected : 0) + (dataItem.Submitted ? dataItem.Submitted : 0) | number}}
+                        </p>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column="column">
+                        <p class="p-strong" style="padding: 5px">
+                            {{(totalSum.Approved ? totalSum.Approved : 0) + (totalSum.Rejected ? totalSum.Rejected : 0) + (totalSum.Submitted ? totalSum.Submitted : 0) | number}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="30" field="Approved" title="Approved" [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0 p-strong cursor-p hover-success text-success"
+                            (click)="openInNewTab('adhoc-applications/applications/' + dataItem.Designation_Id + '/2')">
+                            {{(dataItem.Approved ? dataItem.Approved : 0) | number}} </p>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column="column">
+                        <p class="p-strong text-success" style="padding: 5px">
+                            {{(totalSum.Approved ? totalSum.Approved : 0) | number}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+
+                <kendo-grid-column [width]="30" field="Rejected" title="Rejected" [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0 p-strong cursor-p hover-success text-danger"
+                            (click)="openInNewTab('adhoc-applications/applications/' + dataItem.Designation_Id + '/3')">
+                            {{(dataItem.Rejected ? dataItem.Rejected : 0) + (dataItem.Submitted ? dataItem.Submitted : 0) | number}}
+                        </p>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column="column">
+                        <p class="p-strong text-danger" style="padding: 5px">
+                            {{(totalSum.Rejected ? totalSum.Rejected : 0) + (totalSum.Submitted ? totalSum.Submitted : 0) | number}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="30" field="Submitted" title="Total Grievance"
+                    [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p (click)="openInNewTab('adhoc-applications/applications/' + dataItem.Designation_Id + '/4')"
+                            class="m-0 p-strong cursor-p hover-success" style="padding: 5px">
+                            {{dataItem.Grievance.Total_Greivance | number}}
+                        </p>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column="column">
+                        <p class="p-strong" style="padding: 5px">
+                            {{(totalSum.TotalGrievance ? totalSum.TotalGrievance : 0) | number}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="30" field="Submitted" title="Approved Grievance"
+                    [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p (click)="openInNewTab('adhoc-applications/applications/' + dataItem.Designation_Id + '/4')"
+                            class="m-0 p-strong cursor-p hover-success" style="padding: 5px">
+                            {{dataItem.Grievance.Approved | number}}
+                        </p>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column="column">
+                        <p class="p-strong" style="padding: 5px">
+                            {{(totalSum.ApprovedGrievance ? totalSum.ApprovedGrievance : 0) | number}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="30" field="Submitted" title="Rejected Grievance"
+                    [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p (click)="openInNewTab('adhoc-applications/applications/' + dataItem.Designation_Id + '/4')"
+                            class="m-0 p-strong cursor-p hover-success" style="padding: 5px">
+                            {{dataItem.Grievance.Rejected | number}}
+                        </p>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column="column">
+                        <p class="p-strong" style="padding: 5px">
+                            {{(totalSum.RejectedGrievance ? totalSum.RejectedGrievance : 0) | number}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <!--     <kendo-grid-column [width]="30" field="Approved" title="Approved" [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <div class="employee-info">
+                            <p class="m-0">{{dataItem.Approved ? dataItem.Approved : 0}} </p>
+                        </div>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column="column">
+                        <p class="p-strong" style="padding: 10px">{{total["Approved"].sum | number}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="30" field="Rejected" title="Rejected" [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <div class="employee-info">
+                            <p class="m-0">{{dataItem.Rejected ? dataItem.Rejected : 0}} </p>
+                        </div>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column="column">
+                        <p class="p-strong" style="padding: 10px">{{total["Rejected"].sum | number}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column> -->
+            </kendo-grid>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-12">
+        <div class="content-heading">Pendency</div>
+        <div class="grid-wrapper">
+            <kendo-grid [data]="adhocPendencySummary">
+                <kendo-grid-column [width]="10" field="asd" title="No." [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        {{(rowIndex + 1)}}.
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="30" field="DistrictName" title="District"
+                    [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p style="padding: 5px">
+                            {{dataItem.DistrictName}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <!--    <kendo-grid-column [width]="30" field="New" title="New" [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="p-strong cursor-p hover-success" style="padding: 5px">
+                            {{dataItem.New ? dataItem.New : 0}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column> -->
+                <kendo-grid-column [width]="30" field="Approved" title="Approved" [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="p-strong cursor-p hover-success" style="padding: 5px">
+                            {{dataItem.Approved ? dataItem.Approved : 0}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="30" field="Rejected" title="Rejected" [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="p-strong cursor-p hover-success" style="padding: 5px">
+                            {{dataItem.Rejected ? dataItem.Rejected : 0}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="30" field="Submitted" title="Pendency" [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="p-strong cursor-p hover-success" style="padding: 5px">
+                            <!-- {{dataItem.Submitted ? dataItem.Submitted : 0}} -->
+                            0
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+
+            </kendo-grid>
+        </div>
+    </div>
+</div>
+
+<div class="row" *ngIf="2 + 2 == 0">
+    <div class="col-md-12">
+        <div class="content-heading">Scrutiny</div>
+        <div class="grid-wrapper">
+            <kendo-grid [data]="applicationsDesig">
+                <kendo-grid-column [width]="10" field="asd" title="No." [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        {{(rowIndex + 1)}}.
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="70" field="Designation" title="Designation"
+                    [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <p routerLink="/adhoc-applications/applications" class="m-0 cursor-p hover-success">
+                            {{dataItem.Designation ? dataItem.Designation : ''}}</p>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column="column">
+                        <p class="p-strong" style="padding: 5px">Total
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="30" field="Submitted" title="Applications"
+                    [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p routerLink="/adhoc-applications/applications" class="p-strong cursor-p hover-success"
+                            style="padding: 5px">
+                            {{dataItem.Submitted ? dataItem.Submitted : 0}}
+                        </p>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column="column">
+                        <p class="p-strong" style="padding: 5px">{{total["Submitted"].sum | number}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="30" field="Approved" title="Approved" [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{dataItem.Approved ? dataItem.Approved : 0}} </p>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column="column">
+                        <p class="p-strong" style="padding: 5px">{{total["Approved"].sum | number}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="30" field="Rejected" title="Rejected" [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{dataItem.Rejected ? dataItem.Rejected : 0}} </p>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column="column">
+                        <p class="p-strong" style="padding: 5px">{{total["Rejected"].sum | number}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="30" field="Rejected" title="Pending" [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">
+                            {{(dataItem.Submitted ? dataItem.Submitted : 0) - ((dataItem.Approved ? dataItem.Approved : 0) + (dataItem.Rejected ? dataItem.Rejected : 0))}}
+                        </p>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column="column">
+                        <p class="p-strong" style="padding: 5px">{{total["Rejected"].sum | number}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="30" field="Rejected" title="Scrutiny Download"
+                    [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <button class="animated fadeIn" [disabled]="2 + 2 == 5" [ladda]="dataItem.loading"
+                            data-style="zoom-in" (click)="getAdhocApplication(dataItem)" class="btn btn-sm" kendoButton
+                            primary="true"><i class="fa fa-download"></i>
+                            Print Minutes</button>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column="column">
+                        <p class="p-strong" style="padding: 5px">
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="30" field="Rejected" title="Scrutiny Upload"
+                    [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <button class="animated fadeIn" ladda [disabled]="2 + 2 == 4" class="btn btn-sm" kendoButton
+                            primary="true"><i class="fa fa-upload"></i>
+                            Upload Minutes</button>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column="column">
+                        <p class="p-strong" style="padding: 5px">
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <!--   <kendo-grid-column [width]="30" field="Rejected" title="Grievance Minutes"
+                    [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <button class="animated fadeIn" [disabled]="2 + 2 == 4" class="btn btn-sm" kendoButton
+                            primary="true"><i class="fa fa-search"></i>
+                            View Minutes</button>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column="column">
+                        <p class="p-strong" style="padding: 5px">
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="30" field="Rejected" title="Merit List" [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <button class="animated fadeIn" [disabled]="2 + 2 == 4" class="btn btn-sm" kendoButton
+                            primary="true"><i class="fa fa-search"></i>
+                            View Merit List</button>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column="column">
+                        <p class="p-strong" style="padding: 5px">
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="30" field="Rejected" title="Schedule Interview"
+                    [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <button class="animated fadeIn" [disabled]="2 + 2 == 4" class="btn btn-sm" kendoButton
+                            primary="true"><i class="fa fa-clock-o"></i>
+                            Schedule Interview</button>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column="column">
+                        <p class="p-strong" style="padding: 5px">
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="30" field="Rejected" title="Attendance" [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <button class="animated fadeIn" [disabled]="2 + 2 == 4" class="btn btn-sm" kendoButton
+                            primary="true"><i class="fa fa-graduation-cap"></i>
+                            View Merit List</button>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column="column">
+                        <p class="p-strong" style="padding: 5px">
+                        </p>
+                    </ng-template>
+                </kendo-grid-column> -->
+            </kendo-grid>
+        </div>
+    </div>
+</div>
+
+
+<div class="page preview-order p-4" id="phfmchr" hidden>
+    <div class="page preview-order p-4">
+        <div>
+
+            <table class="doc" style="border:none !important;">
+                <tr>
+                    <td style="width:10%; border:none !important;">
+
+                        <img src="https://hrmis.pshealthpunjab.gov.pk/assets/img/brand/govlogoUpdated.png" width="50px"
+                            alt="">
+
+                    </td>
+                    <td style="width:90%; border:none !important;">
+
+                        <p style="text-align: justify;"><strong class="p-strong"><u>
+                                    MINUTES OF SCRUTINY COMMITTEE MEETING HELD TO SCRUTINIZE THE APPLICATIONS RECIEVED
+                                    AGAINST THE RECRUITMENT OF ADHOC BASIS</u>
+                            </strong></p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <br>
+        <p>
+            <span style="margin-left: 65px;">The Meeting of Scrutiny Committee consituted through the Notification No.
+                (123) dated (DD-MM-Year) held
+                on dated (dd-MM-yyyy) to scrutinize the applications received against the recruitment on adhoc basis in
+                district (districtname).
+                <br>The detailed recommendation of Scrutiny Committee is as under:-</span>
+        </p>
+
+
+
+    </div>
+
+    <table class="doc">
+        <tr>
+            <th>Sr.</th>
+            <th>Name</th>
+            <th>Father Name</th>
+            <th>CNIC</th>
+            <th>Short Listed Remarks</th>
+        </tr>
+        <tr *ngFor="let doc of documents;let i = index;">
+            <td>{{(i + 1)}} </td>
+            <td>{{doc.Name}} </td>
+            <td>{{doc.FatherName}}</td>
+            <td>{{dashifyCNIC(doc.CNIC)}}</td>
+            <td>{{doc.Status_Id == 2 ? 'Shorlisted' : doc.Status_Id == 3 ? 'Not Shorlisted' : ''}}
+            </td>
+        </tr>
+    </table>
+    <p>
+        <br><br>
+        <table class="doc" style="border:none !important;">
+
+            <tr>
+                <td style="border:none !important;">
+                    <p class="m-0">(Name)</p>
+                    <p class="m-0">Medical Superintendent,</p>
+
+                    <p class="m-0"> District Headquarter Hospital Member</p>
+
+                    <p class="m-0">Member</p>
+
+                </td>
+                <td style="border:none !important;">
+
+                    <p class="m-0">(Name)</p>
+                    <p class="m-0">District Focal Person</p>
+
+                    <p class="m-0">Member</p>
+                </td>
+                <td style="border:none !important;">
+                    <p class="m-0">(Name)</p>
+                    <p class="m-0">District Health Officer (HRM & MIS)</p>
+
+
+                    <p class="m-0">Member</p>
+
+                </td>
+            </tr>
+        </table>
+        <!--  <div class="row">
+            <div class="col-md-6">
+                <p>
+                    <span style="margin-left:100px; font-weight: bold">Chief Executive Officer</span><br />
+                    <span style="margin-left:90px; font-weight: bold">District Health Authority</span><br />
+                    <span style="margin-left:100px; font-weight: bold">Khushab (Member)</span><br />
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p>
+                    <span style="margin-left:100px; font-weight: bold">Additional Deputy Commissioner (F &
+                        P),</span><br />
+                    <span style="margin-left:200px; font-weight: bold">Khushab (Member)</span><br />
+                </p>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <p>
+                    <span style="margin-left:100px; font-weight: bold">District Health Officer (MIS&HRM)</span><br />
+                    <span style="margin-left:100px; font-weight: bold">District Health Authority Khushab/</span><br />
+                    <span style="margin-left:80px; font-weight: bold">Rep. of Govt. of Punjab, P&SHC Deptt.</span><br />
+                    <span style="margin-left:150px; font-weight: bold">Lahore (Member)</span><br />
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p>
+                    <span style="margin-left:200px; font-weight: bold">Principle</span><br />
+                    <span style="margin-left:100px; font-weight: bold">General Nusring School Khushab</span><br />
+                    <span style="margin-left:150px; font-weight: bold">(Female Officer Member)</span><br />
+                </p>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <p>
+                    <span class="offset-4" style="font-weight: bold">Deputy Commisioner /</span><br />
+                    <span style="margin-left:450px; font-weight: bold">Administrator District Health
+                        Authority</span><br />
+                    <span class="offset-4" style="font-weight: bold">Khushab (Chairman)</span><br />
+                </p>
+            </div>
+        </div> -->
+</div>
+
+<!-- <div class="row row-panel">
+    <div class="col-md-12">
+        <div class="grid-top-header-custom animated fadeIn" *ngIf="kGrid.totalRecords > 0">
+            <div class="pager-rows-number">
+                <span>
+                    {{(kGrid.skip + 1) + ' - ' + (kGrid.pageSize <= kGrid.totalRecords ? (kGrid.pageSize + kGrid.skip) :
+                    kGrid.totalRecords) + ' of ' + kGrid.numberWithCommas(kGrid.totalRecords) + ' items ' }} </span>
+                <span class="ml-4"><span *ngFor="let sum of summary" class="ml-4"><strong class="p-strong">
+                            {{sum.Name}}:
+                        </strong> <u>{{sum.Count | number}}</u></span> </span>
+                <span class="pull-right">
+                    Show &nbsp; <select #select (change)="changePagesize(select.value)">
+                        <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}
+                        </option>
+                        <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+                            [selected]="page === kGrid.pageSize ? true : undefined">
+                            {{page}}
+                        </option>
+                    </select>
+                    &nbsp; items per page
+                </span>
+            </div>
+        </div>
+        <div class="grid-wrapper">
+            <kendo-grid [data]="kGrid.gridView" [sortable]="{
+                  allowUnsort: kGrid.allowUnsort,
+                  mode: kGrid.multiple ? 'multiple' : 'single'
+                  }" [scrollable]="false" [sort]="kGrid.sort" (sortChange)="sortChange($event)"
+                [(pageSize)]="kGrid.pageSize" [skip]="kGrid.skip" [pageable]="true" (pageChange)="pageChange($event)">
+                <kendo-grid-column [width]="6" field="asd" title="No." [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        {{(rowIndex + 1)}}.
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="32" field="EmployeeName" title="Candidate"
+                    [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <div class="employee-info">
+                            <p class="m-0"><strong class="p-strong"> Name: </strong>
+                                {{dataItem.Name ? dataItem.Name : ''}}</p>
+                            <p class="m-0"><strong class="p-strong"> Father Name: </strong>
+                                {{dataItem.FatherName ? dataItem.FatherName : ''}}</p>
+                            <p class="m-0"><strong class="p-strong"> CNIC: </strong> {{dashifyCNIC(dataItem.CNIC)}}
+                            </p>
+                        </div>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="31" field="TrackingNumber" title="Application Info"
+                    [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <div class="application-info">
+                            <p class="m-0"><strong class="p-strong"> Merit # </strong> {{dataItem.MeritNumber}}
+                            </p>
+                            <p class="m-0"><strong class="p-strong"> Application # </strong>
+                                {{dataItem.ApplicationNumber}}
+                            </p>
+                            <p class="m-0"><strong class="p-strong"> PMDC # </strong> {{dataItem.PMDCNumber}}</p>
+                        </div>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="31" field="asd" title="Action" [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <div class="application-info">
+                            <p class="m-0"><strong class="p-strong">Status: </strong>{{dataItem.Status}}</p>
+                            <p class="m-0">{{dataItem.DesignationName}}</p>
+                            <button kendoButton [primary]="true"
+                                [look]="'outline'" class="btn-sm mr-2"
+                                [routerLink]="['/ppsc/profile-entry/' + dataItem.Id]">Edit</button>
+                        </div>
+                    </ng-template>
+                </kendo-grid-column>
+                <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+                    <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+                    <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+                    <kendo-pager-next-buttons></kendo-pager-next-buttons>
+                    <div class="pager-rows-number">
+                        <select #select (change)="changePagesize(select.value)">
+                            <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}
+                            </option>
+                            <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+                                [selected]="page === kGrid.pageSize ? true : undefined">
+                                {{page}}
+                            </option>
+                        </select> &nbsp; items per page
+                    </div>
+                    <kendo-pager-info></kendo-pager-info>
+                </ng-template>
+            </kendo-grid>
+            <div *ngIf="kGrid.loading" class="k-i-loading"></div>
+        </div>
+    </div>
+</div> -->

@@ -1,0 +1,608 @@
+<div class="animated fadeIn p-4 p-4" [ngClass]="adhocInterview.Status_Id != 5 ? 'print' : ''">
+  <div class="animated fadeIn print">
+    <div class="row">
+      <div class="col-md-6 col-sm-12 animated fadeIn control-col-st">
+        <label class="k-form-field">
+          <span class="p-strong animated fadeIn">Division</span>
+          <kendo-dropdownlist [data]="dropDowns.divisions" [textField]="'Name'" [valueField]="'Id'"
+            (valueChange)="dropdownValueChanged($event, 'division')" [value]="dropDowns.selectedFiltersModel.division"
+            [defaultItem]="dropDowns.defultFiltersModel.division">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-6 col-sm-12 animated fadeIn control-col-end">
+        <label class="k-form-field">
+          <span class="p-strong animated fadeIn">Designation</span>
+          <kendo-dropdownlist [data]="dropDowns.adhocJobsData" [textField]="'Name'" [valueField]="'Id'"
+            (valueChange)="dropdownValueChanged($event, 'designation')"
+            [value]="dropDowns.selectedFiltersModel.designation"
+            [defaultItem]="dropDowns.defultFiltersModel.designation">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 col-sm-12 animated fadeIn control-col-st">
+        <label class="k-form-field">
+          <span class="p-strong animated fadeIn">Mode</span>
+          <kendo-dropdownlist [data]="dropDowns.postingModes" [textField]="'Name'" [valueField]="'Id'"
+            (valueChange)="dropdownValueChanged($event, 'postingMode')"
+            [value]="dropDowns.selectedFiltersModel.postingMode"
+            [defaultItem]="dropDowns.defultFiltersModel.postingMode">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-4 col-sm-12 animated fadeIn control-col">
+        <label class="k-form-field">
+          <span class="p-strong animated fadeIn">Status</span>
+          <kendo-dropdownlist
+            [data]="[{Id: 5, Name: 'Pending'}, {Id: 4, Name: 'Locked by Applicant'}, {Id: 1, Name: 'Accepted by SDP'}, {Id: 2, Name: 'Reopened by SDP'}, {Id: 3, Name: 'Locked by SDP'}]"
+            [textField]="'Name'" [valueField]="'Id'" (valueChange)="dropdownValueChanged($event, 'applicationStatus')"
+            [value]="{Id: 0, Name: 'Select Status'}" [defaultItem]="{Id: 0, Name: 'Select Status'}">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-4 col-sm-12 animated fadeIn control-col-end">
+        <label class="k-form-field">
+          <span>&nbsp;</span>
+          <button [disabled]="!filters.CategoryId" (click)="getNewSeniorityList()" [ladda]="runningPP || calculating"
+            class="btn btn-secondary btn-block" data-style="zoom-in">Seniority
+            List&nbsp;<small>({{(kGrid.dataOrigional ? kGrid.dataOrigional.length : 0) | number}})</small></button>
+        </label>
+      </div>
+    </div>
+
+    <!-- <pre>{{adhocInterview | json}}</pre> -->
+    <hr class="print">
+    <div class="animated fadeIn" *ngIf="!loading">
+      <div class="animated fadeIn" id="listt">
+        <!-- <div class="row animated fadeIn">
+          <div class="col-md-3">
+            <img alt="Punjab Government Log"
+              src="https://hrmis.pshealthpunjab.gov.pk/assets/img/brand/govlogoUpdated.png"
+              style="display:inline-block; width:134px" />
+          </div>
+          <div class="col-md-3"></div>
+          <div class="col-md-6">
+            <div style="display:inline-block;text-align:center;">
+              <p style="font-size: 18px;margin-right: 125px !important;"><strong class=" p-strong">No.
+                  SO(P)P&SH/3/17/2022<br />GOVERNMENT OF THE PUNJAB<br />PRIMARY
+                  &amp; SECONDARY HEALTHCARE DEPARTMENT </strong></p>
+            </div>
+          </div>
+        </div> -->
+        <!-- TENTATIVE SENIORITY LIST OF CONSULTANT (BS-18)&nbsp; -->
+
+        <!--  <div>
+          <p class="p-strong pull-right m-0">
+            <span class="text-success cursor-p"
+              (click)="filterVerifiedSeniorityList(true)">{{verifiedCount | number}}</span>&nbsp;/&nbsp;<span
+              class="text-danger" (click)="filterVerifiedSeniorityList(false)">{{notVerifiedCount | number}}</span>
+          </p>
+        </div>
+        <br> -->
+        <table border="0" *ngIf="!loading" style="width:100% !important;" cellpadding="0" cellspacing="0" id="sheet0"
+          class="animated fadeIn sheet0 table-striped gridlines mt-2"
+          [ngClass]="fontSize == 8 ? 'f8' : fontSize == 10 ? 'f10' : fontSize == 11 ? 'f11' : fontSize == 12 ? 'f12' : ''">
+          <thead>
+            <tr class="row0">
+              <!-- <td class="p-strong">#</td> -->
+              <td class="p-strong">STY NO.</td>
+              <td class="p-strong">NAME OF DOCTOR</td>
+              <td class="p-strong">FATHER NAME</td>
+              <td class="p-strong">DATE OF BIRTH</td>
+              <td class="p-strong">DOMICILE</td>
+              <td class="p-strong">SPECIALITY</td>
+              <td class="p-strong">PRESENT PLACE OF POSTING</td>
+              <td class="p-strong">MODE WITH JOINING DATE</td>
+              <!-- <td class="p-strong" *ngIf="isSdp">ACTION</td> -->
+              <!--   <td class="p-strong">LAST PROMOTION DATE</td>
+            <td class="p-strong">DATE OF ENTRY INTO AS REGULAR MO/CONSULTANT</td>
+            <td class="p-strong">DATE OF JOINING ON REGULAR BASIS AS CONSULTANT</td>
+            <td class="p-strong">DATE OF CONTRACT APPOINTMENT</td>
+            <td class="p-strong">MERIT NO.</td> -->
+            </tr>
+          </thead>
+          <tfoot style="display: table-footer-group !important;border:none !important;">
+            <tr style="border:none !important;">
+              <td colspan="8" style="border:none !important;">
+                <div class="row">
+                  <div style="margin-top: 30px !important;margin-bottom: 30px !important;" class="col-md-4 text-center"
+                    *ngFor="let c of adhocInterview.AdhocInterviewBatchCommittees">
+                    <p class="m-0 text-center">
+                      ({{c.Name}})</p>
+                    <p class="m-0 text-center">{{c.Designation}}</p>
+                    <p class="m-0 text-center">{{c.Role}}</p>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tfoot>
+          <tr class="row3 cursor-p" *ngFor="let dataItem of kGrid.data;let i=index;"
+            [ngClass]="dataItem ? dataItem.color == 'promotion' ? 'bg-success-c' : dataItem.color == 'ppsc' ? 'bg-primary-c' : dataItem.color == 'contract' ? 'bg-danger-c' : '' : ''">
+            <!-- (click)="openDialog(dataItem)"> -->
+            <!--  (click)="viewApplicantMerit(dataItem)" -->
+            <td (click)="openDialog(dataItem.CNIC)"><i *ngIf="dataItem.IsLocked" class="fa"
+                [ngClass]="[dataItem.IsLocked ? 'fa-lock' : '', dataItem.ApplicationStatus_Id && dataItem.ApplicationStatus_Id == 3 ? 'text-success' : '']"></i>&nbsp;{{(i + 1)}}
+              <span *ngIf="dataItem.ApplicationStatus_Id == 2" class="text-danger"><i class="fa fa-refresh"></i></span>
+            </td>
+            <!-- <td (click)="openDialog(dataItem.CNIC)">{{dataItem.SeniorityNumber}}</td> -->
+            <!-- <td>{{dataItem.OldSeniorityNumber}}</td> -->
+            <td (click)="openDialog(dataItem.CNIC)">{{dataItem ? dataItem.EmployeeName : '-'}}</td>
+            <td (click)="openDialog(dataItem.CNIC)">{{dataItem ? dataItem.FatherName : '-'}}</td>
+            <td (click)="openDialog(dataItem.CNIC)">
+              {{dataItem ? (dataItem.DateOfBirth | date:'dd/MM/yyyy') : '-'}}</td>
+            <td (click)="openDialog(dataItem.CNIC)">{{dataItem ? dataItem.Domicile_Name : '-'}}</td>
+            <td (click)="openDialog(dataItem.CNIC)">{{dataItem ? dataItem.Designation_Name : '-'}}</td>
+            <td (click)="openDialog(dataItem.CNIC)">
+              <p class="m-0">
+                {{dataItem.StatusName ? dataItem.StatusName : '-'}}
+              </p>
+              <p class="m-0"
+                *ngIf="dataItem.HealthFacility && dataItem.HealthFacility != 'Primary and Secondary Healthcare Department'">
+                {{dataItem.HealthFacility + ', ' + dataItem.Tehsil + ', ' + dataItem.District}}
+              </p>
+            </td>
+            <td (click)="openDialog(dataItem.CNIC)">
+              <!-- [ngClass]="dataItem ? dataItem.ModeId == 1 ? 'text-danger' : dataItem.ModeId == 2 ? 'text-primary' : dataItem.ModeId == 3 ? 'text-success' : '' : ''" -->
+              <p class="m-0">
+                <span
+                  class="p-strong">{{(dataItem && (dataItem.ModeId == 1 || dataItem.PromotionJoiningDate != null)) ? 'Promotion' : dataItem.ModeName}}</span>
+              </p>
+              <p class="m-0" *ngIf="dataItem && (dataItem.ModeId == 1 || dataItem.PromotionJoiningDate != null)">
+                Date of Promotion:
+                {{dataItem.LastPromotionDate ? (dataItem.LastPromotionDate | date:'dd/MM/yyyy') : '??'}}
+              </p>
+              <p class="m-0" *ngIf="dataItem && (dataItem.ModeId == 1 || dataItem.PromotionJoiningDate != null)">
+                Date of Joining after Promotion:
+                {{dataItem.JoiningDate ? (dataItem.JoiningDate | date:'dd/MM/yyyy') : '??'}}
+              </p>
+              <p class="m-0" *ngIf="dataItem && (dataItem.ModeId == 2) && dataItem.PromotionJoiningDate == null">
+                PPSC Merit Number: {{dataItem.PPSCMeritNumber ? (dataItem.PPSCMeritNumber) : '??'}}
+              </p>
+              <p class="m-0"
+                *ngIf="dataItem && (dataItem.ModeId == 2 || dataItem.ModeId == 4 || dataItem.ModeId == 5 || dataItem.ModeId == 13) && dataItem.PromotionJoiningDate == null">
+                Date of Regularization:
+                {{dataItem.DateOfRegularization ? (dataItem.DateOfRegularization | date:'dd/MM/yyyy') : '??'}}
+              </p>
+              <p class="m-0"
+                *ngIf="dataItem && (dataItem.ModeId == 2 || dataItem.ModeId == 4 || dataItem.ModeId == 5 || dataItem.ModeId == 13) && dataItem.PromotionJoiningDate == null">
+                Date of Joining: {{dataItem.JoiningDate ? (dataItem.JoiningDate | date:'dd/MM/yyyy') : '??'}}
+              </p>
+              <p class="m-0"
+                *ngIf="dataItem && (dataItem.ModeId == 3 || dataItem.ModeId == 6 || dataItem.ModeId == 11 || dataItem.ModeId == 12) && dataItem.PromotionJoiningDate == null">
+                Contract Start Date:
+                {{dataItem.ContractStartDate ? (dataItem.ContractStartDate | date:'dd/MM/yyyy') : '??'}}
+              </p>
+              <p class="m-0"
+                *ngIf="dataItem && (dataItem.ModeId == 3 || dataItem.ModeId == 6 || dataItem.ModeId == 11 || dataItem.ModeId == 12)">
+                Date of Regularization:
+                {{dataItem.DateOfRegularization ? (dataItem.DateOfRegularization | date:'dd/MM/yyyy') : '??'}}
+              </p>
+              <p class="m-0"
+                *ngIf="dataItem && (dataItem.ModeId == 3 || dataItem.ModeId == 6 || dataItem.ModeId == 11 || dataItem.ModeId == 12)">
+                Date of Joining on Contract:
+                {{dataItem.JoiningDate ? (dataItem.JoiningDate | date:'dd/MM/yyyy') : '??'}}
+              </p>
+            </td>
+            <!-- <td *ngIf="isSdp">
+              <p class="m-0 cursor-p text-success" *ngIf="!dataItem.IsVerified" (click)="verify(dataItem)">
+                Verify
+              </p>
+
+              <p class="m-0" *ngIf="dataItem.IsVerified">
+                Verified by: {{dataItem.VerifiedBy}}
+              </p>
+              <p class="m-0" *ngIf="dataItem.IsVerified">
+                Datetime: {{dataItem.VerifiedDatetime | date:'dd/MM/yyyy hh:mm a'}}
+              </p>
+            </td> -->
+            <!--  <td>
+              <p class="m-0 cursor-p text-success" *ngIf="!dataItem.IsLocked">
+                UnLocked
+              </p>
+
+              <p class="m-0 text-danger" *ngIf="dataItem.IsLocked">
+                Locked
+              </p>
+            
+            </td> -->
+          </tr>
+        </table>
+        <div class="divFooter" style="position: fixed;
+    bottom: 0px;
+    width: 84%;
+    text-align: center;
+    color: rgb(227, 227, 227);
+    user-select: auto;
+    margin: 0 auto;">
+          <p class="m-0 text-center">Powered by Health Information and
+            Service Delivery Unit</p>
+        </div>
+      </div>
+
+    </div>
+    <div *ngIf="loading" style="width: 100%;font-size: 24px;" class="shine p-1 mt-4 text-center text-muted">
+      {{messageLoading}}</div>
+  </div>
+
+  <kendo-dialog [title]="'Application'" [height]="'550'" *ngIf="meritVerificationDialog" (close)="closeMeritDialog()"
+    [width]="'1200'">
+    <div class="k-i-loading" *ngIf="loadingApplication"></div>
+    <div class="animated fadeIn" *ngIf="seniorityApplication && seniorityApplication.application">
+      <div class="card card-accent-success animated fadeIn">
+        <div class="card-header animated fadeIn">
+          <h5 class="m-0"><span (click)="showPassword = !showPassword">PERSONAL INFORMATION</span> <span
+              class="pull-right"
+              *ngIf="showPassword && seniorityApplication && seniorityApplication.Password">{{seniorityApplication.Password}}</span>
+          </h5>
+        </div>
+        <div class="card-body animated fadeIn">
+          <div class="row">
+            <div class="col-md-4">
+              <label class="k-form-field mb-0 p-strong">Name</label>
+              <label class="k-form-field">{{seniorityApplication.application.EmployeeName}}</label>
+              <label class="k-form-field mb-0 p-strong">Date of Birth</label>
+              <label class="k-form-field">{{seniorityApplication.application.DateOfBirth | date:'dd-MM-yyyy'}}</label>
+              <label class="k-form-field mb-0 p-strong">Marital Status</label>
+              <label class="k-form-field">{{seniorityApplication.application.MaritalStatus}}</label>
+            </div>
+            <div class="col-md-4">
+              <label class="k-form-field mb-0 p-strong">Father Name</label>
+              <label class="k-form-field">{{seniorityApplication.application.FatherName}}</label>
+              <label class="k-form-field mb-0 p-strong">Gender</label>
+              <label class="k-form-field">{{seniorityApplication.application.Gender}}</label>
+              <label class="k-form-field mb-0 p-strong">Mobile Number</label>
+              <label class="k-form-field">{{seniorityApplication.application.MobileNo}}</label>
+
+            </div>
+            <div class="col-md-4">
+              <div class="row">
+                <div class="col-md-5 animated fadeIn">
+                  <label class="k-form-field mb-0 p-strong">CNIC</label>
+                  <label class="k-form-field">{{dashifyCNIC(seniorityApplication.application.CNIC)}}</label>
+                </div>
+                <div class="col-md-7 animated fadeIn">
+                  <img class="pic-shadow pull-right zoom position-absolute cursor-p" style="margin-left: 48%;"
+                    width="90" height="50" (click)="openInNewTab(seniorityApplication.application.CNIC_FilePath)"
+                    onError="this.src='../../../../assets/img/notfound.png'"
+                    [src]="seniorityApplication.application.CNIC_FilePath && seniorityApplication.application.CNIC_FilePath.toLowerCase().endsWith('.pdf') ? '../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + seniorityApplication.application.CNIC_FilePath"
+                    [alt]="seniorityApplication.application.CNIC_FileName">
+                </div>
+              </div>
+              <label class="k-form-field mb-0 p-strong">Domicile</label>
+              <label class="k-form-field">{{seniorityApplication.application.Domicile_Name}}</label>
+              <label class="k-form-field mb-0 p-strong">E-mail</label>
+              <label class="k-form-field">{{seniorityApplication.application.EMaiL}}</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8">
+              <label class="k-form-field mb-0 p-strong">Permanent Address</label>
+              <label class="k-form-field">{{seniorityApplication.application.PermanentAddress}}</label>
+            </div>
+            <div class="col-md-4">
+              <label class="k-form-field mb-0 p-strong">&nbsp;</label>
+              <button kendoButton primary="true" look="outline"
+                (click)="openInNewTab('/profile/' + seniorityApplication.application.CNIC)">View
+                Profile</button>
+                <button class="ml-2" kendoButton primary="true" look="outline" *ngIf="user && !user.UserName.startsWith('acr')"
+                (click)="openInNewTab('/p/profile/' + seniorityApplication.application.CNIC)">Edit
+                </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-accent-success animated fadeIn">
+        <div class="card-header animated fadeIn">
+          <h5 class="m-0">POSTING DETAIL
+          </h5>
+        </div>
+        <div class="card-body animated fadeIn">
+          <div class="row">
+            <div class="col-md-4">
+              <label class="k-form-field mb-0 p-strong">Current Status</label>
+              <label class="k-form-field">{{seniorityApplication.application.StatusName}}</label>
+              <label class="k-form-field mb-0 p-strong">District</label>
+              <label class="k-form-field">{{seniorityApplication.application.District}}</label>
+            </div>
+            <div class="col-md-4">
+              <label class="k-form-field mb-0 p-strong">Department</label>
+              <label class="k-form-field">{{seniorityApplication.application.Department_Name}}</label>
+              <label class="k-form-field mb-0 p-strong">Health Facility</label>
+              <label
+                class="k-form-field">{{seniorityApplication.application.HealthFacility ? seniorityApplication.application.HealthFacility + ', ' + (seniorityApplication.application.Tehsil == seniorityApplication.application.District ? seniorityApplication.application.Tehsil : seniorityApplication.application.Tehsil + ', ' + seniorityApplication.application.District) : ''}}</label>
+            </div>
+            <div class="col-md-4">
+              <label class="k-form-field mb-0 p-strong">&nbsp;</label>
+              <label class="k-form-field">&nbsp;</label>
+              <label class="k-form-field mb-0 p-strong">Designation</label>
+              <label class="k-form-field">{{seniorityApplication.application.Designation_Name}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-accent-success animated fadeIn">
+        <div class="card-header animated fadeIn">
+          <h5 class="m-0">MODE OF APPOINTMENT
+          </h5>
+        </div>
+        <div class="card-body animated fadeIn">
+          <div class="row">
+            <div class="col-md-4">
+              <label class="k-form-field mb-0 p-strong">Entry in Service</label>
+              <label class="k-form-field">{{seniorityApplication.application.ModeName}}</label>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="seniorityApplication.application.ModeId == 1">
+            <div class="col-md-4">
+              <label class="k-form-field mb-0 p-strong">Promotion Order Number</label>
+              <label class="k-form-field">{{seniorityApplication.application.PromotionOrderNumber}}</label>
+            </div>
+            <div class="col-md-4">
+              <label class="k-form-field mb-0 p-strong">Promotion Order Date</label>
+              <label
+                class="k-form-field">{{seniorityApplication.application.LastPromotionDate | date: 'dd/MM/yyyy'}}</label>
+            </div>
+            
+            <div class="col-md-4">
+              <label class="k-form-field mb-0 p-strong">Joining Date after Promotion</label>
+              <label
+                class="k-form-field">{{seniorityApplication.application.PromotionJoiningDate | date: 'dd/MM/yyyy'}}</label>
+            </div>
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4">
+              <label class="k-form-field">
+                <span class="p-strong">Promotion Order Copy</span>
+                <div style="width:100%;">
+                  <img (click)="openInNewTab(seniorityApplication.application.PromotionCopy_FilePath)"
+                    class="cursor-p zoom"
+                    [src]="seniorityApplication.application.PromotionCopy_FilePath && seniorityApplication.application.PromotionCopy_FilePath.toLowerCase().endsWith('.pdf') ? '../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + seniorityApplication.application.PromotionCopy_FilePath"
+                    onError="this.src='../../../../assets/img/notfound.png'"
+                    [alt]="seniorityApplication.application.PromotionCopy_FileName"
+                    style="height: 60px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                </div>
+              </label>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col">
+              <label class="k-form-field">
+                <span>Charge Report</span>
+                <div style="width:100%;">
+                  <img (click)="openInNewTab(seniorityApplication.application.AssumptionReport_FilePath)"
+                    class="cursor-p zoom"
+                    [src]="seniorityApplication.application.AssumptionReport_FilePath && seniorityApplication.application.AssumptionReport_FilePath.toLowerCase().endsWith('.pdf') ? '../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + seniorityApplication.application.AssumptionReport_FilePath"
+                    onError="this.src='../../../../assets/img/notfound.png'"
+                    [alt]="seniorityApplication.application.AssumptionReport_FileName"
+                    style="height: 60px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                </div>
+              </label>
+            </div>
+          </div>
+          <div *ngIf="seniorityApplication.application.ModeId == 3 && seniorityApplication.application.entry == 101">
+            <div class="row">
+              <div class="col-md-4 animated fadeIn">
+                <label class="k-form-field mb-0 p-strong">Contract Order Number</label>
+                <label class="k-form-field">{{seniorityApplication.application.ContractOrderNumber}}</label>
+              </div>
+              <div class="col-md-4 animated fadeIn">
+                <label class="k-form-field mb-0 p-strong">Contract Order Date</label>
+                <label
+                  class="k-form-field">{{seniorityApplication.application.ContractStartDate | date:'dd/MM/yyyy'}}</label>
+              </div>
+              <div class="col-md-4 animated fadeIn">
+                <label class="k-form-field mb-0 p-strong">Contract Joining date</label>
+                <label
+                  class="k-form-field">{{seniorityApplication.application.ContractOrderDate | date:'dd/MM/yyyy'}}</label>
+              </div>
+              <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col">
+              </div>
+              <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col">
+                <label class="k-form-field">
+                  <span>Contract Order Copy</span>
+                  <div style="width:100%;">
+                    <img (click)="openInNewTab(seniorityApplication.application.ContractOrderCopy_FilePath)"
+                      class="cursor-p zoom"
+                      [src]="seniorityApplication.application.ContractOrderCopy_FilePath && seniorityApplication.application.ContractOrderCopy_FilePath.toLowerCase().endsWith('.pdf') ? '../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + seniorityApplication.application.ContractOrderCopy_FilePath"
+                      onError="this.src='../../../../assets/img/notfound.png'"
+                      [alt]="seniorityApplication.application.ContractOrderCopy_FileName"
+                      style="height: 60px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                  </div>
+                </label>
+              </div>
+
+              <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col">
+                <label class="k-form-field">
+                  <span>Contract Joining</span>
+                  <div style="width:100%;">
+                    <img (click)="openInNewTab(seniorityApplication.application.ContractJoining_FilePath)"
+                      class="cursor-p zoom"
+                      [src]="seniorityApplication.application.ContractJoining_FilePath && seniorityApplication.application.ContractJoining_FilePath.toLowerCase().endsWith('.pdf') ? '../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + seniorityApplication.application.ContractJoining_FilePath"
+                      onError="this.src='../../../../assets/img/notfound.png'"
+                      [alt]="seniorityApplication.application.ContractJoining_FileName"
+                      style="height: 60px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                  </div>
+                </label>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-md-4 animated fadeIn">
+                <label class="k-form-field mb-0 p-strong">Posting Order Number of Regularization</label>
+                <label class="k-form-field">{{seniorityApplication.application.RegularOrderNumber}}</label>
+              </div>
+              <div class="col-md-4 animated fadeIn">
+                <label class="k-form-field mb-0 p-strong">Posting Order Date of Regularization</label>
+                <label
+                  class="k-form-field">{{seniorityApplication.application.DateOfRegularization | date:'dd/MM/yyyy'}}</label>
+              </div>
+              <div class="col-md-4 animated fadeIn">
+                <label class="k-form-field mb-0 p-strong">Date of Joining after Regularization</label>
+                <label
+                  class="k-form-field">{{seniorityApplication.application.FirstJoiningDate | date:'dd/MM/yyyy'}}</label>
+              </div>
+              <div class="col-md-4 col-sm-6 col-xs-12 mt-2">
+              </div>
+              <div class="col-md-4 col-sm-6 col-xs-12 mt-2">
+                <label class="k-form-field">
+                  <span>Posting Order</span>
+                  <div style="width:100%;">
+                    <img (click)="openInNewTab(seniorityApplication.application.OrderCopy_FilePath)"
+                      class="cursor-p zoom" onError="this.src='../../../../assets/img/notfound.png'"
+                      [src]="seniorityApplication.application.OrderCopy_FileName && seniorityApplication.application.OrderCopy_FileName.toLowerCase().endsWith('.pdf') ? '../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + seniorityApplication.application.OrderCopy_FilePath"
+                      [alt]="seniorityApplication.application.OrderCopy_FileName"
+                      style="height: 60px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                  </div>
+                </label>
+              </div>
+              <div class="col-md-4 col-sm-6 col-xs-12 mt-2">
+                <label class="k-form-field">
+                  <span>Charge Report</span>
+                  <div style="width:100%;">
+                    <img (click)="openInNewTab(seniorityApplication.application.AssumptionReport_FilePath)"
+                      class="cursor-p zoom" onError="this.src='../../../../assets/img/notfound.png'"
+                      [src]="seniorityApplication.application.AssumptionReport_FilePath && seniorityApplication.application.AssumptionReport_FilePath.toLowerCase().endsWith('.pdf') ? '../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + seniorityApplication.application.AssumptionReport_FilePath"
+                      [alt]="seniorityApplication.application.AssumptionReport_FileName"
+                      style="height: 60px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="seniorityApplication.application.ModeId == 5">
+            <div class="col-md-4 animated fadeIn">
+              <label class="k-form-field mb-0 p-strong">Posting Order Number of Regularization</label>
+              <label class="k-form-field">{{seniorityApplication.application.RegularOrderNumber}}</label>
+            </div>
+
+            <div class="col-md-4 animated fadeIn">
+              <label class="k-form-field mb-0 p-strong">Posting Order Date of Regularization</label>
+              <label
+                class="k-form-field">{{seniorityApplication.application.DateOfRegularization | date:'dd/MM/yyyy'}}</label>
+            </div>
+
+            <div class="col-md-4">
+              <label class="k-form-field mb-0 p-strong">Joining Date</label>
+              <label
+                class="k-form-field">{{seniorityApplication.application.FirstJoiningDate | date:'dd/MM/yyyy'}}</label>
+            </div>
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col">
+              <label class="k-form-field">
+                <span>Posting Order</span>
+
+                <div style="width:100%;">
+                  <img (click)="openInNewTab(seniorityApplication.application.OrderCopy_FilePath)" class="cursor-p zoom"
+                    [src]="seniorityApplication.application.OrderCopy_FilePath && seniorityApplication.application.OrderCopy_FilePath.toLowerCase().endsWith('.pdf') ? '../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + seniorityApplication.application.OrderCopy_FilePath"
+                    onError="this.src='../../../../assets/img/notfound.png'"
+                    [alt]="seniorityApplication.application.OrderCopy_FileName"
+                    style="height: 60px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                </div>
+              </label>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col">
+              <label class="k-form-field">
+                <span>Charge Report</span>
+
+                <div style="width:100%;">
+                  <img (click)="openInNewTab(seniorityApplication.application.AssumptionReport_FilePath)"
+                    class="cursor-p zoom" onError="this.src='../../../../assets/img/notfound.png'"
+                    [src]="seniorityApplication.application.AssumptionReport_FilePath && seniorityApplication.application.AssumptionReport_FilePath.toLowerCase().endsWith('.pdf') ? '../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + seniorityApplication.application.AssumptionReport_FilePath"
+                    [alt]="seniorityApplication.application.AssumptionReport_FileName"
+                    style="height: 60px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                </div>
+              </label>
+            </div>
+          </div>
+          <div class="row"
+            *ngIf="seniorityApplication.application.ModeId == 2 && seniorityApplication.application.entry == 101">
+            <div class="col-md-3 animated fadeIn">
+              <label class="k-form-field mb-0 p-strong">Posting Order Number of Regularization</label>
+              <label class="k-form-field">{{seniorityApplication.application.RegularOrderNumber}}</label>
+            </div>
+            <div class="col-md-3 animated fadeIn">
+              <label class="k-form-field mb-0 p-strong">Posting Order Date of Regularization</label>
+              <label
+                class="k-form-field">{{seniorityApplication.application.DateOfRegularization | date:'dd/MM/yyyy'}}</label>
+            </div>
+            <div class="col-md-3 animated fadeIn">
+              <label class="k-form-field mb-0 p-strong">Joining Date</label>
+              <label
+                class="k-form-field">{{seniorityApplication.application.FirstJoiningDate | date:'dd/MM/yyyy'}}</label>
+            </div>
+            <div class="col-md-3 animated fadeIn">
+              <label class="k-form-field mb-0 p-strong">PPSC Merit Number</label>
+              <label class="k-form-field">{{seniorityApplication.application.PPSCMeritNumber}}</label>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12 mt-2">
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12 mt-2">
+              <label class="k-form-field">
+                <span>Posting Order</span>
+
+                <div style="width:100%;">
+                  <img (click)="openInNewTab(seniorityApplication.application.OrderCopy_FilePath)" class="cursor-p zoom"
+                    [src]="seniorityApplication.application.OrderCopy_FilePath && seniorityApplication.application.OrderCopy_FilePath.toLowerCase().endsWith('.pdf') ? '../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + seniorityApplication.application.OrderCopy_FilePath"
+                    onError="this.src='../../../../assets/img/notfound.png'"
+                    [alt]="seniorityApplication.application.OrderCopy_FileName"
+                    style="height: 60px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                </div>
+              </label>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12 mt-2">
+              <label class="k-form-field">
+                <span>Charge Report</span>
+
+                <div style="width:100%;">
+                  <img (click)="openInNewTab(seniorityApplication.application.AssumptionReport_FilePath)"
+                    class="cursor-p zoom"
+                    [src]="seniorityApplication.application.AssumptionReport_FilePath && seniorityApplication.application.AssumptionReport_FilePath.toLowerCase().endsWith('.pdf') ? '../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + seniorityApplication.application.AssumptionReport_FilePath"
+                    onError="this.src='../../../../assets/img/notfound.png'"
+                    [alt]="seniorityApplication.application.AssumptionReport_FileName"
+                    style="height: 60px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                </div>
+              </label>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12 mt-2">
+              <label class="k-form-field">
+                <span>PPSC Merit List&nbsp;<span class="text-danger">*</span><span class="clearfix"></span></span>
+                <div style="width:100%;">
+                  <img (click)="openInNewTab(seniorityApplication.application.MeritList_FilePath)" class="cursor-p zoom"
+                    [src]="seniorityApplication.application.MeritList_FilePath && seniorityApplication.application.MeritList_FilePath.toLowerCase().endsWith('.pdf') ? '../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + seniorityApplication.application.MeritList_FilePath"
+                    onError="this.src='../../../../assets/img/notfound.png'"
+                    [alt]="seniorityApplication.application.MeritList_FileName"
+                    style="height: 60px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <kendo-dialog-actions class="animated fadeIn">
+      <kendo-buttongroup [width]="'100%'" style="padding: 10px 15px !important;">
+        <button kendoButton [ladda]="accepting" data-style="zoom-in"
+          *ngIf="seniorityApplication.application && seniorityApplication.application.IsLocked && (!seniorityApplication.application.ApplicationStatus_Id || (seniorityApplication.application.ApplicationStatus_Id != 1 && seniorityApplication.application.ApplicationStatus_Id != 3))"
+          style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;" class="action-btn-success"
+          primary="true" (click)="changeStatus(1, seniorityApplication.application)"><i class="fa fa-check"></i>
+          Accept Application</button>
+        <button kendoButton [ladda]="locking" data-style="zoom-in"
+          *ngIf="seniorityApplication.application && seniorityApplication.application.IsLocked && seniorityApplication.application.ApplicationStatus_Id == 1"
+          style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;" class="action-btn-success"
+          primary="true" (click)="changeStatus(3, seniorityApplication.application)"><i class="fa fa-check"></i>
+          Lock Application</button>
+        <button
+          *ngIf="seniorityApplication.application && seniorityApplication.application.IsLocked && seniorityApplication.application.ApplicationStatus_Id != 3 && seniorityApplication.application.ApplicationStatus_Id != 1"
+          kendoButton [ladda]="rejecting" data-style="zoom-in"
+          style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;" class="action-btn-danger"
+          (click)="changeStatus(2, seniorityApplication.application)"><i class="fa fa-times"></i> Re-Open
+          Application</button>
+        <button kendoButton style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;"
+          class="action-btn-secondary" ladda (click)="closeMeritDialog()"><i class="fa fa-times"></i>
+          Close</button>
+      </kendo-buttongroup>
+    </kendo-dialog-actions>
+  </kendo-dialog>

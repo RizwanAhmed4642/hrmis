@@ -1,0 +1,167 @@
+.application-page {
+  font-family: -apple-system, BlinkMacSystemFont,
+    'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif !important;
+}
+
+
+.watermark-hisdu {
+  text-align: center;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  opacity: 0.25;
+}
+
+.watermark-hisdu img {
+  display: inline-block;
+}
+
+table.header-pshealth,
+.applicant-information,
+.application-type-detail-preview,
+.attached-document,
+.remarks-preview,
+.info-application-preview,
+table.pshealth {
+  border-color: transparent !important;
+  width: 100%;
+}
+
+table.header-pshealth td {
+  border-color: transparent !important;
+}
+
+table.header-pshealth td.gop-logo-a4-header {
+  text-align: left;
+}
+
+table.header-pshealth td.gop-logo-a4-header img {
+  display: inline-block;
+  width: 134px;
+}
+
+table.header-pshealth td.pshealth-right-a4-td-header {
+  text-align: right;
+}
+
+table.header-pshealth td.pshealth-right-a4-td-header .pshealth-right-a4-text-header {
+  display: inline-block;
+  text-align: center;
+}
+
+table.header-pshealth td.app-type-preview {
+  text-align: left;
+  width: 100%;
+}
+
+/* Applicant Information */
+
+table.applicant-information {
+  border-color: transparent !important;
+  width: 100%;
+}
+
+table.applicant-information td.applicant-info-heading,
+table.application-type-detail-preview td.application-type-detail-preview-heading,
+table.remarks-preview td.remarks-heading,
+table.info-application-preview td.info-application-preview-heading,
+table.attached-document td.attached-document-heading {
+  text-align: center;
+  border: 1px solid black;
+}
+
+table.applicant-information td.applicant-info-detail-1 {
+  width: 20% !important;
+}
+
+table.applicant-information td.applicant-info-detail-2 {
+  width: 40% !important;
+}
+
+table.applicant-information td.applicant-info-detail-3 {
+  width: 10% !important;
+}
+
+table.applicant-information td.applicant-info-detail-4 {
+  width: 30% !important;
+}
+table.applicant-information td.applicant-info-detail-5 {
+  width: 15% !important;
+}
+
+table.applicant-information td.applicant-info-detail-6 {
+  width: 30% !important;
+}
+
+table.applicant-information td.applicant-info-detail-7 {
+  width: 20% !important;
+}
+
+table.applicant-information td.applicant-info-detail-8 {
+  width: 35% !important;
+}
+table.info-application-preview td.info-application-preview-left {
+  border-left: 1px solid black;
+}
+
+table.info-application-preview td.info-application-preview-right {
+  text-align: center;
+  border-right: 1px solid black;
+  border-left: 1px solid black;
+}
+
+table.application-route-detail {
+  border-color: transparent !important;
+  width: 100% !important;
+  text-align: center;
+}
+
+table.application-route-detail td.application-route-detail-header {
+  width: 50% !important;
+  border: 1px solid black;
+}
+
+table.application-route-detail-doc {
+  border-color: transparent !important;
+  width: 100% !important;
+  text-align: center;
+}
+
+table.application-route-detail-doc td.application-route-detail-header-doc {
+  width: 25% !important;
+  border: 1px solid black;
+}
+
+table.application-route-detail-doc td.application-route-detail-header-track {
+  width: 75% !important;
+  border: 1px solid black;
+}
+
+.w-20 {
+  width: 20% !important;
+}
+
+.w-30 {
+  width: 30% !important;
+}
+
+.w-50 {
+  width: 50% !important;
+}
+
+.w-70 {
+  width: 70% !important;
+}
+
+.w-80 {
+  width: 80% !important;
+}
+
+.mt-10 {
+  margin-top: 10px !important;
+}
+
+.mt-30 {
+  margin-top: 30px !important;
+}

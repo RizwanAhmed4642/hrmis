@@ -1,0 +1,40 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    text-indent: 0;
+}
+
+.s1 {
+    color: black;
+    font-family: "Franklin Gothic Medium", sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: none;
+    font-size: 11pt;
+}
+
+p {
+    color: black;
+    font-family: "Franklin Gothic Medium", sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: none;
+    font-size: 11pt;
+    margin: 0pt;
+}
+
+.s2 {
+    color: black;
+    font-family: "Franklin Gothic Medium", sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: underline;
+    font-size: 11pt;
+}
+
+table,
+tbody {
+    vertical-align: top;
+    overflow: visible;
+}

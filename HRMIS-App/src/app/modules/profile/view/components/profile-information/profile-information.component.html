@@ -1,0 +1,219 @@
+<div *ngIf="!profile" class="k-i-loading"></div>
+<div class="animated fadeIn" *ngIf="profile">
+
+  <div class="card card-accent-success animated fadeIn">
+    <div class="card-header animated fadeIn">
+      <h5 class="m-0">PERSONAL INFORMATION</h5>
+    </div>
+    <div class="card-body animated fadeIn">
+      <div class="row">
+        <div class="col-md-4">
+          <label class="k-form-field mb-0 p-strong">Name</label>
+          <label class="k-form-field">{{profile.EmployeeName}}</label>
+          <label class="k-form-field mb-0 p-strong">Date of Birth</label>
+          <label class="k-form-field">{{profile.DateOfBirth | date:'dd-MM-yyyy'}}</label>
+          <label class="k-form-field mb-0 p-strong">Marital Status</label>
+          <label class="k-form-field">{{profile.MaritalStatus}}</label>
+          <label class="k-form-field mb-0 p-strong">Mother Tongue</label>
+          <label class="k-form-field">{{profile.Language_Name}}</label>
+          <label class="k-form-field mb-0 p-strong">Landline Number</label>
+          <label class="k-form-field">{{profile.LandlineNo}}</label>
+        </div>
+        <div class="col-md-4">
+          <label class="k-form-field mb-0 p-strong">Father Name</label>
+          <label class="k-form-field">{{profile.FatherName}}</label>
+          <label class="k-form-field mb-0 p-strong">Gender</label>
+          <label class="k-form-field">{{profile.Gender}}</label>
+          <label class="k-form-field mb-0 p-strong">Bloodgroup</label>
+          <label class="k-form-field">{{profile.BloodGroup}}</label>
+          <label class="k-form-field mb-0 p-strong">Mobile Number</label>
+          <label class="k-form-field">{{profile.MobileNo}}</label>
+          <label class="k-form-field mb-0 p-strong">Permanent Address</label>
+          <label class="k-form-field">{{profile.PermanentAddress}}</label>
+        </div>
+        <div class="col-md-4">
+          <div class="row">
+            <div class="col-md-5 animated fadeIn">
+
+              <label class="k-form-field mb-0 p-strong">CNIC</label>
+              <label class="k-form-field">{{dashifyCNIC(profile.CNIC)}}</label>
+            </div>
+            <div class="col-md-7 animated fadeIn">
+              <img class="pic-shadow pull-right zoom position-absolute cursor-p" style="margin-left: 48%;" width="90"
+                height="90" [src]="profile.psrc" onError="this.src='../../../assets/img/notfound.png'" alt="">
+            </div>
+          </div>
+          <label class="k-form-field mb-0 p-strong">Domicile</label>
+          <label class="k-form-field">{{profile.Domicile_Name}}</label>
+          <label class="k-form-field mb-0 p-strong">Religion</label>
+          <label class="k-form-field">{{profile.Religion_Name}}</label>
+          <label class="k-form-field mb-0 p-strong">E-mail</label>
+          <label class="k-form-field">{{profile.EMaiL}}</label>
+          <label class="k-form-field mb-0 p-strong">Correspondence Address</label>
+          <label class="k-form-field">{{profile.CorrespondenceAddress}}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card card-accent-success animated fadeIn">
+    <div class="card-header animated fadeIn">
+      <h5 class="m-0">POSTING DETAIL <span
+          class="pull-right">Status:&nbsp;<small><u>{{profile.StatusName}}</u></small></span>
+      </h5>
+    </div>
+    <div class="card-body animated fadeIn">
+      <div class="row">
+        <div class="col-md-3">
+          <label class="k-form-field mb-0 p-strong">Date of First Appointment</label>
+          <label class="k-form-field">{{profile.DateOfFirstAppointment | date:'dd-MM-yyyy'}}</label>
+          <label class="k-form-field mb-0 p-strong">Actual Designation</label>
+          <label class="k-form-field">{{profile.Designation_Name}}</label>
+          <label class="k-form-field mb-0 p-strong">Present Posting Order Number</label>
+          <label class="k-form-field">{{profile.PresentPostingOrderNo}}</label>
+          <label class="k-form-field mb-0 p-strong">Health Facility Type</label>
+          <label class="k-form-field">{{profile.HFTypeName}}</label>
+        </div>
+        <div class="col-md-3">
+          <label class="k-form-field mb-0 p-strong">First Appointment Order Number</label>
+          <label class="k-form-field">{{profile.FirstOrderNumber}}</label>
+          <label class="k-form-field mb-0 p-strong">Working Designation</label>
+          <label class="k-form-field">{{profile.WDesignation_Name}}</label>
+          <label class="k-form-field mb-0 p-strong">Present Posting Order Date</label>
+          <label class="k-form-field">{{profile.PresentPostingDate | date:'dd-MM-yyyy'}}</label>
+          <label class="k-form-field mb-0 p-strong">Health Facility</label>
+          <label
+            class="k-form-field">{{profile.HealthFacility ? profile.HealthFacility + ', ' + (profile.Tehsil == profile.District ? profile.Tehsil : profile.Tehsil + ', ' + profile.District) : ''}}</label>
+        </div>
+        <div class="col-md-3">
+          <label class="k-form-field mb-0 p-strong">Joining Grade</label>
+          <label class="k-form-field">(BS-{{profile.JoiningGradeBPS}})</label>
+          <label class="k-form-field mb-0 p-strong">Sanctioned Grade of Working Designation</label>
+          <label class="k-form-field">(BS-{{profile.WDesignation_HrScale_Id}})</label>
+          <label class="k-form-field mb-0 p-strong">Present Joining Date</label>
+          <label class="k-form-field">{{profile.PresentJoiningDate | date:'dd-MM-yyyy'}}</label>
+          <label class="k-form-field mb-0 p-strong">Parent Department</label>
+          <label class="k-form-field">{{profile.Department_Name}}</label>
+        </div>
+        <div class="col-md-3">
+          <label class="k-form-field mb-0 p-strong">Joining Designation</label>
+          <label class="k-form-field">{{profile.JDesignation_Name}}</label>
+          <label class="k-form-field mb-0 p-strong">Additional Charge</label>
+          <label class="k-form-field">{{profile.AdditionalCharge}}</label>
+          <label class="k-form-field mb-0 p-strong">Current Grade</label>
+          <label class="k-form-field">(BS-{{profile.CurrentGradeBPS}})</label>
+          <label class="k-form-field mb-0 p-strong">Post Type</label>
+          <label class="k-form-field">{{profile.PostType_Name}}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card card-accent-success animated fadeIn">
+    <div class="card-header animated fadeIn">
+      <h5 class="m-0">MODE OF APPOINTMENT <span class="pull-right"><small><u>{{profile.EmpMode_Name}}</u></small></span>
+      </h5>
+    </div>
+    <div class="card-body animated fadeIn">
+      <div class="row">
+        <div class="col-md-6">
+          <label class="k-form-field mb-0"><span class="p-strong">Entry in Government as</span></label>
+          <label class="k-form-field">{{profile.EmpMode_Name}}</label>
+        </div>
+        <div class="col-md-6">
+          <label class="k-form-field mb-0"><span class="p-strong">Mode</span></label>
+          <label class="k-form-field">{{profile.ModeName}}</label>
+        </div>
+      </div>
+      <hr>
+      <div class="row animated fadeIn" *ngIf="profile.EmpMode_Id == 3 
+      || profile.EmpMode_Id == 6
+      || profile.EmpMode_Id == 8
+      || profile.EmpMode_Id == 12
+      || profile.EmpMode_Id == 15
+      || profile.EmpMode_Id == 16
+      || profile.EmpMode_Id == 18
+      || profile.EmpMode_Id == 19
+      || profile.ModeId == 3
+      || profile.ModeId == 6
+      || profile.ModeId == 7
+      || profile.ModeId == 8
+      || profile.ModeId == 9
+      || profile.ModeId == 10
+      || profile.ModeId == 11
+      || profile.ModeId == 12
+      || profile.ModeId == 3">
+        <div class="col-md-3 animated fadeIn" *ngIf="profile.ModeId == 10">
+          <label class="k-form-field mb-0"><span class="p-strong animated fadeIn">Other Contract Type </span>
+          </label>
+          <label class="k-form-field">{{profile.OtherContract}}</label>
+        </div>
+        <div class="col-md-3 animated fadeIn">
+          <label class="k-form-field mb-0"><span class="p-strong animated fadeIn">Contract Order Number </span></label>
+          <label class="k-form-field">{{profile.ContractOrderNumber}}</label>
+        </div>
+        <div class="col-md-3 animated fadeIn">
+          <label class="k-form-field mb-0"><span class="p-strong animated fadeIn">Contract Order Date</span>
+          </label>
+          <label class="k-form-field">{{profile.ContractStartDate | date:'dd-MM-yyyy'}}</label>
+        </div>
+        <div class="col-md-3 animated fadeIn">
+          <label class="k-form-field mb-0"><span class="p-strong animated fadeIn">Contract Joining date</span>
+          </label>
+          <label class="k-form-field">{{profile.ContractOrderDate | date:'dd-MM-yyyy'}}</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3 animated fadeIn" *ngIf="profile.ModeId == 2">
+          <label class="k-form-field mb-0"><span class="p-strong">PPSC Merit Number</span>
+          </label>
+          <label class="k-form-field">{{profile.PPSCMeritNumber}}</label>
+        </div>
+        <div class="col-md-3">
+          <label class="k-form-field mb-0"><span class="p-strong">{{
+            profile.ModeId == 3 ? 'Posting Order Number of Regularization' : 'Posting Order Number'}}
+            </span></label>
+          <label class="k-form-field">{{profile.RegularOrderNumber}}</label>
+        </div>
+        <div class="col-md-3">
+          <label class="k-form-field mb-0"><span class="p-strong">{{
+            profile.ModeId == 3 ? 'Posting Order Date of Regularization' : 'Posting Order Date'}}</span>
+
+          </label>
+          <label class="k-form-field">{{profile.DateOfRegularization | date:'dd-MM-yyyy'}}</label>
+        </div>
+        <div class="col-md-3">
+          <label class="k-form-field mb-0"><span class="p-strong">Joining date</span>
+          </label>
+          <label class="k-form-field">{{profile.FirstJoiningDate | date:'dd-MM-yyyy'}}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card card-accent-success animated fadeIn">
+    <div class="card-header animated fadeIn">
+      <h5 class="m-0">PROMOTION STATUS
+      </h5>
+    </div>
+    <div class="card-body animated fadeIn">
+      <div class="row">
+        <div class="col-md-3">
+          <label class="k-form-field mb-0"><span class="p-strong">Promotion Order Date</span> </label>
+          <label class="k-form-field">{{profile.LastPromotionDate | date:'dd-MM-yyyy'}}</label>
+        </div>
+        <div class="col-md-3">
+          <label class="k-form-field mb-0"><span class="p-strong">Promotion Order Number</span></label>
+          <label class="k-form-field">{{profile.PromotionOrderNumber}}</label>
+        </div>
+        <div class="col-md-3">
+          <label class="k-form-field mb-0"><span class="p-strong">Seniority Number</span>
+          </label>
+          <label class="k-form-field">{{profile.SeniorityNo}}</label>
+        </div>
+        <div class="col-md-3">
+          <label class="k-form-field mb-0"><span class="p-strong">Joining Date after Promotion</span>
+          </label>
+          <label class="k-form-field">{{profile.PromotionJoiningDate | date:'dd-MM-yyyy'}}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

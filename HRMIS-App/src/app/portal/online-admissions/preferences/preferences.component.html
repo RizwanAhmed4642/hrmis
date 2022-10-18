@@ -1,0 +1,172 @@
+<div class="row mb-2 animated fadeIn" *ngIf="alreadyApplied">
+    <div class="col-md-2 control-col-st">
+        <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/adhoc/home"><i
+                class="fa fa-envelope"></i>
+            Inbox</button>
+    </div>
+    <div class="col-md-2 control-col">
+        <button kendoButton primary="true" look="outline" class="btn-block" [disabled]="2 + 2 == 4"><i
+                class="fa fa-plus-circle"></i>
+            New Application</button>
+    </div>
+    <div class="col-md-2 control-col">
+        <button kendoButton primary="true" look="outline" class="btn-block" [disabled]="2 + 2 == 4"><i
+                class="fa fa-user"></i>
+            My Profile</button>
+    </div>
+    <div class="col-md-2 control-col">
+        <button kendoButton primary="true" look="outline" class="btn-block" [disabled]="2 + 2 == 4"><i
+                class="fa fa-institution"></i>
+            My Qualification</button>
+    </div>
+    <div class="col-md-2 control-col-end">
+        <button kendoButton primary="true" look="outline" class="btn-block" [disabled]="2 + 2 == 4"><i
+                class="fa fa-medkit"></i>
+            My Experience</button>
+    </div>
+    <div class="col-md-2 control-col">
+        <button kendoButton primary="true" look="outline" class="btn-block" [disabled]="2 + 2 == 4"
+            routerLink="/adhoc/grievance"><i class="fa fa-resistance"></i>
+            Grievance</button>
+    </div>
+</div>
+<div class="animated fadeIn" *ngIf="!alreadyApplied">
+    <div class="row mb-2">
+        <div class="col-md-2 control-col-st">
+            <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/adhoc/apply">1 - <i
+                    class="fa fa-graduation-cap"></i>
+                Select Post</button>
+        </div>
+        <div class="col-md-2 control-col">
+            <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/adhoc/profile">2 - <i
+                    class="fa fa-user"></i>
+                Profile</button>
+        </div>
+        <div class="col-md-2 control-col">
+            <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/adhoc/qualification">3 - <i
+                    class="fa fa-file"></i>
+                Qualification</button>
+        </div>
+        <div class="col-md-2 control-col">
+            <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/adhoc/experience">4 - <i
+                    class="fa fa-medkit"></i>
+                Experience</button>
+        </div>
+        <div class="col-md-2 control-col">
+            <button kendoButton primary="true" class="btn-block" routerLink="/adhoc/preferences">5 - <i
+                    class="fa fa-building-o"></i>
+                Preferences</button>
+        </div>
+        <div class="col-md-2 control-col-end">
+            <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/adhoc/apply-now/1">6 - <i
+                    class="fa fa-print"></i>
+                Finalize & Print!</button>
+        </div>
+    </div>
+    <hr>
+</div>
+
+<div class="animated fadeIn row">
+    <div class="col-md-6">
+        <p style="margin-top: 16px;">
+            <span class="my-3 font-2xl m-0">
+                {{urdu.infoeng}}
+            </span>
+        </p>
+    </div>
+    <div class="col-md-6">
+        <p>
+            <span class="urdu-text my-3 font-4xl m-0 p-strong pull-right">
+                {{urdu.info}}
+            </span>
+        </p>
+    </div>
+</div>
+
+<div class="animated fadeIn mb-3">
+    <div class="row">
+        <div class="col-md-12">
+            <kendo-grid [data]="applicant.Preferences">
+                <kendo-grid-column [width]="8" field="asd" title="No." [headerClass]="'grid-header-text'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{(rowIndex + 1)}}.</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="60" field="FullName" title="Preference" [headerClass]="'grid-header-text'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{dataItem.HFName}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+
+                <kendo-grid-column *ngIf="2 + 2 == 5" [width]="22" field="FullName" title="Change Order"
+                    [headerClass]="'grid-header-text'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <div class="row" style="margin-left: 1px;">
+                            <div class="col-md-4">
+                                <input type="number" kendoTextBox [(ngModel)]="dataItem.PreferenceOrder">
+                            </div>
+                            <div class="col-md-8 animated fadeIn" *ngIf="dataItem.PreferenceOrder != dataItem.Pref">
+                                <button kendoButton primary="true" [ladda]="dataItem.loading" data-style="zoom-in"
+                                    (click)="changePreferenceOrder(dataItem)">Change
+                                    Order</button>
+                            </div>
+                        </div>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="20" field="FullName" title="DateTime" [headerClass]="'grid-header-text'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{dataItem.CreatedDate | date: 'dd/MM/yyyy hh:mm a'}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column *ngIf="2 + 2 == 5" [width]="10" field="FullName" title="Action"
+                    [headerClass]="'grid-header-text'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <button class="btn btn-danger" [ladda]="dataItem.loading" data-style="zoom-in"
+                            (click)="removeHF(dataItem)"><i class="fa fa-times"></i></button>
+                    </ng-template>
+                </kendo-grid-column>
+            </kendo-grid>
+            <!--  <p class="m-0" *ngIf="selectedApplicant.applications?.length == 0">
+          No Preferences
+        </p> -->
+        </div>
+    </div>
+
+
+
+</div>
+<hr>
+<div class="row mt-3" *ngIf="!alreadyApplied">
+    <div class="col-md-12">
+        <p class="p-strong font-2xl m-0">
+            <input type="checkbox" [(ngModel)]="application.Agree"> <i>I hereby declare that the documents and
+                information provided is true and correct</i>
+        </p>
+        <p class="p-strong font-2xl">
+            <i>I also understand that any willful dishonesty may render for refusal of this application</i>
+        </p>
+    </div>
+    <div class="col-md-6">
+        <button style="margin: 0 auto;" [disabled]="!application.Agree || applicant.Preferences?.length == 0"
+            routerLink="/adhoc/apply-now/1" class="btn-block btn-lg" kendoButton primary="true" look="outline">Submit
+            Application & Print</button>
+    </div>
+    <div class="col-md-3 control-col-end">
+        <button type="button" class="btn btn-secondary btn-block btn-lg" routerLink="/adhoc">Logout</button>
+    </div>
+</div>
+
+<div class="row mt-3" *ngIf="alreadyApplied">
+    <div class="col-md-3 offset-md-6">
+        <button style="margin: 0 auto;" routerLink="/adhoc/home" class="btn-block btn-lg" kendoButton primary="true"
+            look="outline">Go Back</button>
+    </div>
+    <div class="col-md-3">
+        <button type="button" class="btn btn-secondary btn-block btn-lg" routerLink="/adhoc">Logout</button>
+    </div>
+</div>

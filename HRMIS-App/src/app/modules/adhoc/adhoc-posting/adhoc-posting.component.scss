@@ -1,0 +1,196 @@
+.table-merits {
+  width: 100%;
+}
+
+.table-merits th,
+.table-merits td {
+  border: 1px solid grey;
+  margin-left: 4px;
+  padding: 4px;
+  font-family: 'Roboto-Bold';
+  font-weight: 100;
+}
+
+.k-grid-content {
+  overflow-y: auto !important;
+}
+
+.k-dropdown {
+  font-size: 18px;
+}
+
+.table-merits td .regul-text {
+  font-family: 'Roboto-Regular' !important;
+}
+
+.image--cover {
+  width: 150px;
+  height: 150px;
+
+}
+
+.table td {
+  border: none !important;
+}
+
+.table.border-c tr {
+  border-bottom: 1px solid grey !important;
+}
+
+.zoom {
+  transition: transform .2s;
+  border: 1px solid black;
+  /* Animation */
+}
+
+.zoom:hover {
+  transform: scale(1.08);
+  box-shadow: 0px 0px 5px black !important;
+  /* (150% zoom)*/
+}
+
+.nav-justified .nav-item.disabled {
+  cursor: pointer;
+  color: rgb(194, 194, 194) !important;
+}
+
+.info-custom-box {
+  font-size: 20px;
+  padding: 10px;
+  background: white;
+  border-radius: 15px;
+  list-style: none;
+  box-shadow: 0px 0px 2px grey;
+}
+
+table {
+  page-break-inside: auto
+}
+
+tr {
+  page-break-inside: avoid;
+  page-break-after: auto
+}
+
+thead {
+  display: table-header-group
+}
+
+tfoot {
+  display: table-footer-group
+}
+
+p {
+  margin: 0px !important;
+}
+
+p.heading {
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+p.normalPara {
+  margin-left: 5px;
+  font-family: sans-serif, Arial, Verdana, "Trebuchet MS";
+  font-weight: bold;
+}
+
+p.normalPara u {
+  font-weight: 100 !important;
+}
+
+p.normalPara span.left {
+  float: left;
+}
+
+p.normalPara span.right {
+  float: right;
+}
+
+.candidate-photo {
+  width: 150px;
+  height: 175px;
+}
+
+.candidate-photo img {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #000000;
+}
+
+table.info {
+  font-family: sans-serif, Arial, Verdana, "Trebuchet MS";
+  width: 100%;
+}
+
+table.info td {
+  border: none;
+}
+
+table.info th {
+  border: none;
+  font-size: 14px !important;
+}
+
+table.doc {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table.doc td {
+  border: 1px solid #000000;
+  text-align: center;
+  padding: 8px;
+  font-size: 12px !important;
+}
+
+table.doc th {
+  border: 1px solid #000000;
+  text-align: center;
+  padding: 8px;
+}
+
+button.print {
+  padding: 10px 40px;
+  font-size: 21px;
+  position: absolute;
+  margin-left: 40%;
+  background: #424242;
+  background-image: linear-gradient(rgba(63, 162, 79, 0), rgba(63, 162, 79, 0.2));
+  cursor: pointer;
+  border: none;
+  color: #ffffff;
+  z-index: 9999;
+}
+
+
+.pr-5 {
+  padding-right: 3rem !important;
+}
+
+.pr-3 {
+  padding-right: 1rem !important;
+}
+
+.pr-2 {
+  padding-right: 0.5rem !important;
+}
+
+.pl-2 {
+  padding-left: 0.5rem !important;
+}
+
+.m-0 {
+  margin: 0px !important;
+}
+
+@media print {
+  .page {
+    padding: 40px !important;
+  }
+
+  button.print {
+    display: none;
+  }
+}

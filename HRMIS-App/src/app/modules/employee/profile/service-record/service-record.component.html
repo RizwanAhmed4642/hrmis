@@ -1,0 +1,228 @@
+<hr>
+<div class="content-heading mb-2" id="deptInfo">
+    Service Record <button kendoButton primary="true" class="pull-right" (click)="addNew = !addNew">Add New</button>
+</div>
+<hr>
+<div *ngIf="addNew" class="row animated fadeIn p-2" style="background: #e9e9e9;color: black;border-radius: 9px;">
+    <div class="col-md-4 control-col-st">
+        <label class="k-form-field">
+            <span>Order Number </span>
+            <input kendoTextBox type="text" [(ngModel)]="serviceHistory.OrderNumber" />
+        </label>
+    </div>
+    <div class="col-md-8 control-col-end">
+        <label class="k-form-field">
+            <span>Facility / Office / Institute</span>
+            <kendo-autocomplete [data]="hfsList" [valueField]="'FullName'" (valueChange)="searchClicked($event, 'hfs')"
+                required [filterable]="true" (filterChange)="searchEvent.next({ event: $event, filter: 'hfs'})"
+                [value]="hfValue" placeholder="Search Health Facility" class="k-autocomplete-form">
+                <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                    <div class="search-list-item">
+                        {{ dataItem.FullName }}</div>
+                </ng-template>
+            </kendo-autocomplete>
+        </label>
+    </div>
+    <div class="col-md-2 control-col-st">
+        <label class="k-form-field">
+            <span>Service From</span>
+            <kendo-datepicker [format]="'dd/MM/yyyy'" [(ngModel)]="serviceHistory.From_Date"></kendo-datepicker>
+        </label>
+    </div>
+    <div class="col-md-2 control-col">
+        <label class="k-form-field">
+            <span>Service To</span>
+            <kendo-datepicker [format]="'dd/MM/yyyy'" [(ngModel)]="serviceHistory.To_Date"></kendo-datepicker>
+        </label>
+    </div>
+    <div class="col-md-2 control-col">
+        <div class="k-form-field" style="margin-top: 26px;">
+            <input type="checkbox" id="continued" class="k-checkbox" [(ngModel)]="serviceHistory.Continued" />
+            <label class="k-checkbox-label" for="continued">Continued</label>
+        </div>
+    </div>
+    <div class="col-md-2 control-col">
+        <label class="k-form-field">
+            <span>Order Date</span>
+            <kendo-datepicker [format]="'dd/MM/yyyy'" [(ngModel)]="serviceHistory.OrderDate"></kendo-datepicker>
+        </label>
+    </div>
+    <div class="col-md-4 control-col-end">
+        <label class="k-form-field">
+            <span>{{photoFile.length == 0 ? 'Order Copy' : photoFile[0].name}}</span>
+            <input type="file" accept="image/jpg, image/jpeg, image/png, application/pdf"
+                (change)="readUrl($event, 'pic')">
+            <!--   <button kendoButton type="button" [primary]="true" (click)="uploadBtn('pic')" class="btn-sm btn-block"
+              [ngClass]="photoFile.length == 0 ? 'mt-0' : 'mt-2'" style="cursor:pointer;" [ladda]="uploadingFile"
+              data-style="expand-right"> <i class="fa fa-paperclip"></i> Choose
+              {{photoFile.length == 0 ? 'File' : 'Another File'}}</button> -->
+        </label>
+    </div>
+    <div class="col-md-6 control-col-st">
+        <label class="k-form-field">
+            <span>Designation <span class="text-danger">*</span></span>
+            <kendo-dropdownlist [data]="dropDowns.designationsData" [textField]="'Name'" [valueField]="'Id'" required
+                (valueChange)="dropdownValueChanged($event, 'designation')"
+                (filterChange)="handleFilter($event, 'designation')" [filterable]="true"
+                [value]="dropDowns.selectedFiltersModel.designation"
+                [defaultItem]="dropDowns.defultFiltersModel.designation">
+            </kendo-dropdownlist>
+        </label>
+    </div>
+    <div class="col-md-4 control-col">
+        <label class="k-form-field">
+            <span>Employment Mode <span class="text-danger">*</span></span>
+            <kendo-dropdownlist [data]="dropDowns.employementModesData" [textField]="'Name'" [valueField]="'Id'"
+                required (valueChange)="dropdownValueChanged($event, 'employementMode')"
+                (filterChange)="handleFilter($event, 'employementMode')" [filterable]="true"
+                [value]="dropDowns.selectedFiltersModel.employementMode"
+                [defaultItem]="dropDowns.defultFiltersModel.employementMode">
+            </kendo-dropdownlist>
+        </label>
+    </div>
+    <div class="col-md-2 control-col-end">
+        <label class="k-form-field mt-1">
+            <button kendoButton primary="true" [ladda]="saving" data-style="zoom-in"
+                [disabled]="!serviceHistory.From_Date || (!serviceHistory.To_Date && !serviceHistory.Continued) || !serviceHistory.OrderDate || !serviceHistory.Designation_Id || !serviceHistory.HF_Id || !serviceHistory.EmpMode_Id"
+                (click)="submitServiceHistory()" class="btn-align-v btn-block">Save</button>
+        </label>
+    </div>
+</div>
+<hr *ngIf="addNew">
+
+<div class="row row-panel" *ngIf="profile.DateOfBirth && profile.DateOfFirstAppointment && 2 + 2 == 5">
+    <div class="col-md-12">
+        <div class="grid-wrapper">
+            <kendo-grid [data]="serviceTotalHistroy">
+                <kendo-grid-column field="asd" title="No." [width]="'7'" [headerClass]="'grid-header-custom'"
+                    [class]="{'grid-cell-custom': true}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <p>{{(rowIndex + 1)}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+
+                <kendo-grid-column field="Name" title="Year" [width]="'8'" [headerClass]="'grid-header-custom'"
+                    [class]="{'grid-cell-custom': true}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <p>{{dataItem.From_Date | date:'yyyy'}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="Name" title="Period" [width]="'30'" [headerClass]="'grid-header-custom'"
+                    [class]="{'grid-cell-custom': true}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <p>{{dataItem.From_Date | date:'dd.MM.yyyy'}} - {{dataItem.To_Date | date:'dd.MM.yyyy'}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="Name" title="Status" [width]="'10'" [headerClass]="'grid-header-custom'"
+                    [class]="{'grid-cell-custom': true}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <p><span class="badge" [ngClass]="dataItem.Id == 0 ? 'badge-danger' : 'badge-success'" style="font-family: 'Roboto-Bold';
+              font-weight: 100;">{{dataItem.Id
+                  == 0 ? 'Missing' : 'OK'}}</span>
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="Name" title="Document Type" [width]="'30'"
+                    [headerClass]="'grid-header-custom'" [class]="{'grid-cell-custom': true}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <p>{{dataItem.Remarks}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <!--   <kendo-grid-column field="asd" title="Action" [width]="'10'"
+            [headerClass]="'grid-header-custom grid-header-actions-custom'" [class]="{'grid-cell-custom': true}">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <p class="text-danger" *ngIf="dataItem.Id != 0" (click)="removeDDSDetail(dataItem.Id)"
+                style="cursor: pointer;">Remove</p>
+            </ng-template>
+          </kendo-grid-column> -->
+                <!--   <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+            <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+            <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+            <kendo-pager-next-buttons></kendo-pager-next-buttons>
+            <div class="pager-rows-number">
+              <select #select (change)="changePagesize(select.value)">
+                <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}</option>
+                <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+                  [selected]="page === kGrid.pageSize ? true : undefined">
+                  {{page}}
+                </option>
+              </select>
+              &nbsp; items per page
+            </div>
+            <kendo-pager-info></kendo-pager-info>
+          </ng-template> -->
+            </kendo-grid>
+        </div>
+    </div>
+</div>
+
+<kendo-grid [data]="serviceHistories" *ngIf="!loading">
+    <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-custom'"
+        [class]="{ 'grid-cell-custom': true }">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="m-0">{{(rowIndex + 1)}}.
+            </p>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Name" [title]="'Place of Posting'" width="55
+    " [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <div class="row">
+                <div class="col-md-3" style="overflow: hidden;" [ngClass]="dataItem.OrderFilePath ? 'cursor-p' : ''"
+                    (click)="dataItem.OrderFilePath && openInNewTab(dataItem.OrderFilePath.toLowerCase().startsWith('http') ? dataItem.OrderFilePath : '/' + dataItem.OrderFilePath)">
+                    <button kendoButton primary="true" class="btn-block" *ngIf="dataItem.uploadingFile"
+                        [ladda]="dataItem.uploadingFile" data-style="zoom-in"></button>
+                    <input *ngIf="!dataItem.OrderFilePath && !dataItem.uploadingFile && profile?.Tenure != 'Completed'"
+                        type="file" accept="image/jpg, image/jpeg, image/png, application/pdf"
+                        (change)="readUrlAndUpload($event, dataItem)">
+                    <img *ngIf="dataItem.OrderFilePath && !dataItem.uploadingFile" width="50px"
+                        [src]="dataItem.OrderFilePath?.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : dataItem.OrderFilePath?.toLowerCase().startsWith('http') ? dataItem.OrderFilePath : '/' + dataItem.OrderFilePath"
+                        draggable="false" alt="">
+                </div>
+                <div class="col-md-9">
+                    <p class="m-0">{{dataItem.FullName}}
+                    </p>
+                    <p class="m-0" *ngIf="dataItem.DesignationName">{{dataItem.DesignationName}}<span
+                            *ngIf="dataItem.EmpModeName">{{' - ' + dataItem.EmpModeName}}</span></p>
+                    <p class="m-0"><strong class="p-strong">Order Number:</strong>
+                        {{dataItem.OrderNumber ? dataItem.OrderNumber : 'N/A'}} - <strong
+                            class="p-strong">Dated:</strong>
+                        {{dataItem.OrderDate ? (dataItem.OrderDate |  date:'dd/MM/yyyy') : 'N/A'}}</p>
+                </div>
+            </div>
+
+
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="FromDate" [title]="'Period'" width="25" [headerClass]="'grid-header-custom'"
+        [class]="{ 'grid-cell-custom': true }">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <div class="animated fadeIn">
+                <p class="m-0"><strong class="p-strong">From</strong>
+                    {{dataItem.From_Date | date:'dd/MM/yyyy'}}<span *ngIf="dataItem.Continued"> - <span
+                            class="text-success cursor-p" (click)="dataItem.contEdit = true">Continue</span></span></p>
+                <p class="m-0" *ngIf="dataItem.To_Date && !dataItem.Continued"><strong class="p-strong">Date To</strong>
+                    {{dataItem.To_Date | date:'dd/MM/yyyy'}}</p>
+                <p class="m-0" *ngIf="dataItem.TotalDays">{{dataItem.TotalDays}} Day<span
+                        *ngIf="dataItem.TotalDays > 1">s</span>
+                </p>
+            </div>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column *ngIf="2 + 2 == 4" field="References" [title]="'Action'" width="15"
+        [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+
+          
+
+            <button *ngIf="profile?.Tenure != 'Completed'" class="btn btn-sm btn-danger animated fadeIn"
+                (click)="removeServiceHistory(dataItem)" [ladda]="dataItem.removing"
+                data-style="zoom-in">Remove</button>
+        </ng-template>
+    </kendo-grid-column>
+
+</kendo-grid>

@@ -1,0 +1,288 @@
+<div class="animated fadeIn" *ngIf="loading">
+  <div class="row print-not">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3">
+        Generate New Barcode
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" [look]="'outline'" routerLink="../">Back To List</button>
+      </div>
+    </div>
+  </div>
+  <div class="p-4" style="background: #e9e9e9;color: black;border-radius: 9px;">
+    <div class="content-heading mb-2 print-not">
+      Document / File Information
+    </div>
+    <div class="row print-not" id="applicantInfo">
+      <div class="col-md-5 col-sm-6 col-xs-12 control-col-st">
+        <label class="k-form-field">
+          <span>Type</span>&nbsp;
+          <span class="text-danger">*</span>
+          <kendo-dropdownlist [data]="applicationTypes" [textField]="'Name'" [valueField]="'Id'"
+            (valueChange)="dropdownValueChanged($event, 'applicationType')"
+            [value]="dropDowns.selectedFiltersModel.applicationType">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-7 col-sm-6 col-xs-12 control-col-end">
+        <label class="k-form-field">
+          <span>File Number</span>&nbsp;<span class="text-danger">*</span>
+          <input kendoTextBox placeholder="File Number" type="text" [(ngModel)]="application.DispatchNumber">
+        </label>
+
+      </div>
+      <div class="col-md-12 col-sm-6 col-xs-12">
+        <label class="k-form-field">
+          <span>Subject / Title</span>&nbsp;<span class="text-danger">*</span>
+          <textarea placeholder="Title of File / Document" kendoTextArea [(ngModel)]="application.DispatchSubject"
+            rows="4"></textarea>
+        </label>
+      </div>
+
+
+      <!--   <div class="col-md-3 col-sm-6 col-xs-12 control-col">
+        <label class="k-form-field">
+          <span>Dated</span>&nbsp;<span class="text-danger">*</span>
+          <kendo-datepicker placeholder="Dispatch Date" [format]="'dd/MM/yyyy'" [(ngModel)]="application.DispatchDated">
+          </kendo-datepicker>
+        </label>
+      </div> -->
+      <!--  <div class="col-md-5 col-sm-6 col-xs-12 control-col">
+        <label class="k-form-field">
+          <span>Responsible Unit / Wing</span>&nbsp;<span class="text-danger">*</span>
+          <kendo-dropdownlist [data]="officersData" [textField]="'DesignationName'" [valueField]="'Id'"
+            (valueChange)="dropdownValueChanged($event, 'responsibleOffice')"
+            [value]="dropDowns.selectedFiltersModel.officer" (filterChange)="handleFilter($event, 'markingOfficer')"
+            [filterable]="true" [defaultItem]="dropDowns.selectedFiltersModel.officer">
+          </kendo-dropdownlist>
+        </label>
+      </div> -->
+      <!--  <div class="col-md-3 col-sm-6 col-xs-12 control-col">
+        <label class="k-form-field">
+          <span>Scanned Copy</span>
+          <input #photoRef type="file" accept="image/jpg, image/jpeg, application/pdf" multiple="multiple"
+            (change)="readUrl($event)">
+        </label>
+      </div> -->
+    </div>
+    <hr class="print-not">
+    <div class="content-heading mb-2 print-not">
+      Office Information
+    </div>
+    <div class="row print-not">
+      <!--   <div class="col-md-5 col-sm-6 col-xs-12 control-col-st">
+        <label class="k-form-field">
+          <span>Initiated By</span>&nbsp;<span class="text-danger">*</span>
+          <kendo-dropdownlist [data]="officersInitiatedData" [textField]="'DesignationName'" [valueField]="'Id'"
+            (valueChange)="dropdownValueChanged($event, 'responsibleOffice')"
+            [value]="dropDowns.selectedFiltersModel.officer" (filterChange)="handleFilter($event, 'initiatedOfficer')"
+            [filterable]="true" [defaultItem]="dropDowns.selectedFiltersModel.officer">
+          </kendo-dropdownlist>
+        </label>
+      </div> -->
+      <div class="col-md-5 col-sm-6 col-xs-12 control-col-st">
+        <label class="k-form-field">
+          <span>Mark To</span>&nbsp;<span class="text-danger">*</span>
+          <kendo-dropdownlist [data]="officersData" [textField]="'DesignationName'" [valueField]="'Id'"
+            (valueChange)="dropdownValueChanged($event, 'office')" [value]="dropDowns.selectedFiltersModel.officer"
+            (filterChange)="handleFilter($event, 'markingOfficer')" [filterable]="true"
+            [defaultItem]="dropDowns.selectedFiltersModel.officer">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-2 col-sm-6 col-xs-12 control-col">
+        <label class="k-form-field">
+          <span>&nbsp;</span>
+          <button kendoButton [ladda]="savingApplication" data-style="zoom-in" (click)="onSubmit()" [primary]="true"
+            [disabled]="!application.DispatchSubject || !application.DispatchNumber || !application.ForwardingOfficer_Id || application.barcode"
+            class="btn-block btn-lg">Submit
+          </button>
+        </label>
+
+      </div>
+      <div *ngIf="application.Id" class="col-md-2 col-sm-6 col-xs-12 control-col">
+        <label class="k-form-field">
+          <span>&nbsp;</span>
+          <button kendoButton (click)="clear()" class="btn-block btn-lg" [primary]="true" ladda look="outline"><i
+              class="fa fa-refresh"></i>&nbsp;Clear
+          </button>
+        </label>
+      </div>
+    </div>
+    <hr class="print-not">
+    <div *ngIf="application.barcode && !savingApplication">
+      <div class="content-heading mb-2 print-not">
+        Tracking #
+      </div>
+      <div class="row animated fadeIn print-not">
+        <div class="col-md-2">
+          <div style="width:100%;">
+            <img [src]="barcodeSrc()" class="animated fadeIn" *ngIf="application.barcode" alt="">
+            <label
+              style="display: block;margin-top:4px;width:77px;text-align: center;">{{application.TrackingNumber}}</label>
+          </div>
+          <div id="barcodeFileBars" style="margin: 0 !important" hidden>
+            <img [src]="barcodeSrc()" alt="">
+            <label
+              style="display: block;margin-top:4px;width:77px;text-align: center;">{{application.TrackingNumber}}</label>
+          </div>
+          <button kendoButton type="button" [primary]="true" [look]="'outline'" (click)="printBarcode()">
+            <i class="fa fa-print"></i>&nbsp;Print</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="content-heading my-2 print-not">
+  Scanned Files
+</div>
+<hr>
+<div class="row">
+
+  <div class="col-md-4 col-sm-12 control-col-st">
+    <label class="k-form-field">
+      <span>Search by Tracking Number / Subject / File Number</span>
+      <input type="text" #searchRef (input)="inputChange.next(searchRef.value)"
+        placeholder="Tracking Number, Name, CNIC" kendoTextBox>
+    </label>
+  </div>
+  <div class="col-md-3 col-sm-12 control-col">
+    <label class="k-form-field">
+      <span>Application Type</span>
+      <kendo-dropdownlist [data]="applicationTypes" [textField]="'Name'" [valueField]="'Id'"
+        (valueChange)="dropdownValueChanged($event, 'types')" [value]="dropDowns.selectedFiltersModel.applicationType"
+        [defaultItem]="dropDowns.defultFiltersModel.applicationType">
+      </kendo-dropdownlist>
+    </label>
+  </div>
+  <div class="col-md-3 col-sm-12 control-col">
+    <label class="k-form-field">
+      <span>Application Status</span>
+      <kendo-dropdownlist [data]="dropDowns.applicationStatusData" [textField]="'Name'" [valueField]="'Id'"
+        (valueChange)="dropdownValueChanged($event, 'status')"
+        [value]="dropDowns.selectedFiltersModel.applicationStatus"
+        [defaultItem]="dropDowns.defultFiltersModel.applicationStatus">
+      </kendo-dropdownlist>
+    </label>
+  </div>
+
+  <div class="col-md-2 col-sm-12 mt-1 control-col-end">
+    <label class="k-form-field">
+      <button kendoButton class="btn-block btn-align-v" (click)="getApplications()" [primary]="true">SEARCH</button>
+    </label>
+  </div>
+
+</div>
+<div class="row row-panel">
+  <div class="col-md-12">
+    <div class="grid-top-header-custom animated fadeIn" *ngIf="kGrid.totalRecords">
+      <div class="pager-rows-number">
+        <span>
+          {{(kGrid.skip + 1) + ' - ' + (kGrid.pageSize <= kGrid.totalRecords ? (kGrid.pageSize + kGrid.skip) :
+            kGrid.totalRecords) + ' of ' + kGrid.numberWithCommas(kGrid.totalRecords) + ' items ' }} </span>
+        <span class="pull-right">
+          Show &nbsp; <select #select (change)="changePagesize(select.value)">
+            <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}</option>
+            <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+              [selected]="page === kGrid.pageSize ? true : undefined">
+              {{page}}
+            </option>
+          </select>
+          &nbsp; items per page
+        </span>
+
+      </div>
+    </div>
+    <div class="grid-wrapper">
+      <kendo-grid [data]="kGrid.gridView" [(pageSize)]="kGrid.pageSize" [skip]="kGrid.skip" [pageable]="true"
+        (pageChange)="pageChange($event)" [scrollable]="false">
+        <kendo-grid-column [width]="5" field="asd" title="No." [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            {{(rowIndex + 1)}}.
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="10" field="TrackingNumber" title="Barcode" [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <img width="75px" height="75px" [src]="barcodesssssSrc(dataItem.barcodeImgSrc)" alt="">
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="30" field="EmployeeName" title="Applicant" [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="employee-info" *ngIf="dataItem.ApplicationSource_Id == 10">
+              <p class="m-0"><strong class="p-strong">FileNumber:
+                </strong>{{dataItem.DispatchNumber}}</p>
+              <p class="m-0"><strong class="p-strong">Subject / Title:
+                </strong>{{dataItem.DispatchSubject}}</p>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="25" field="TrackingNumber" title="Application" [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="application-info">
+              <p class="m-0" *ngIf="dataItem.ApplicationTypeName"><strong class="p-strong"> Type: </strong>
+                {{dataItem.ApplicationTypeName}}</p>
+              <p class="m-0"><strong class="p-strong"> Tracking # </strong> <span
+                  [ngClass]="dataItem.Limit >= 3 && dataItem.Limit <= 6  ? 'text-gold' : dataItem.Limit >= 7 ? 'text-red' : ''">{{dataItem.TrackingNumber}}</span>
+                &nbsp;<i class="fa fa-barcode"></i></p>
+              <p class="m-0"><u> {{dataItem.ApplicationSourceName}}</u></p>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <!--     <kendo-grid-column [width]="80" field="PandSOfficerName" title="Current Office" [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="application-info">
+              <p class="m-0"><strong class="p-strong">{{dataItem.PandSOfficerName}}</strong> </p>
+              <p class="m-0"><strong class="p-strong"> Status: </strong> <u
+                [ngClass]="dataItem.Limit >= 3 && dataItem.Limit <= 6  ? 'text-gold' : dataItem.Limit >= 7 ? 'text-red' : ''">{{dataItem.StatusName}}</u> </p>
+              <p class="m-0"><strong class="p-strong">Forward Time:</strong> {{dataItem.ForwardTime | date:'d/M/yy, h:mm a'}}</p>
+            </div>
+          </ng-template>
+        </kendo-grid-column> -->
+        <kendo-grid-column [width]="30" field="ToOfficerName" title="Recieving Office"
+          [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="application-info">
+              <p class="m-0">
+                <strong
+                  class="p-strong">{{dataItem.ToOfficerName ? dataItem.ToOfficerName : dataItem.PandSOfficerName}}</strong>
+              </p>
+              <p class="m-0"><u>{{dataItem.IsPending ? 'Not Recieved Yet' : 'Recieved and Acknowledged'}}</u> </p>
+              <p class="m-0" *ngIf="!dataItem.IsPending"><strong class="p-strong">Recieve Time:</strong> {{dataItem.RecieveTime |
+                date:'d/M/yy, h:mm a'}}</p>
+              <p class="m-0"><strong class="p-strong"> Status: </strong> <u
+                  [ngClass]="dataItem.Limit >= 3 && dataItem.Limit <= 6  ? 'text-gold' : dataItem.Limit >= 7 ? 'text-red' : ''">{{dataItem.StatusName}}</u>
+              </p>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+          <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+          <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+          <kendo-pager-next-buttons></kendo-pager-next-buttons>
+          <div class="pager-rows-number">
+            <select #select (change)="changePagesize(select.value)">
+              <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}</option>
+              <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+                [selected]="page === kGrid.pageSize ? true : undefined">
+                {{page}}
+              </option>
+            </select>
+            &nbsp; items per page
+          </div>
+          <kendo-pager-info></kendo-pager-info>
+        </ng-template>
+      </kendo-grid>
+      <div *ngIf="kGrid.loading" class="k-i-loading"></div>
+    </div>
+  </div>
+</div>

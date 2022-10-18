@@ -1,0 +1,67 @@
+<!-- <div *ngIf="navigating == true" [ngStyle]="{'width' : loadBarWidth + '%'}" class="loading-bar"></div> -->
+<app-header [fixed]="true" [navbarBrandFull]="{src: 'assets/img/brand/logo-punjab.png', alt: 'Unity Platform Logo'}"
+  [navbarBrandMinimized]="{src: 'assets/img/brand/logo-punjab.png', alt: 'Unity Platform Logo'}" [sidebarToggler]="'lg'"
+  [asideMenuToggler]="false" [mobileAsideMenuToggler]="false">
+  <ul class="nav navbar-nav ml-auto hide-mobile">
+    <li class="nav-item">
+      <h3 *ngIf="!searchOn" class="header-title text-white animated fadeIn">Human Resource Management Information
+        System</h3>
+      <div class="example-wrapper animated fadeIn" *ngIf="searchOn">
+        <kendo-autocomplete [data]="listItems" [valueField]="'Name'" (valueChange)="searchClicked($event)" [filterable]="true"
+          (filterChange)="searchEvent.next($event)" placeholder="Search Health Facility, Employee, File, Order, Application"
+          class="search-auto-complete">
+          <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+            <div class="search-list-item">
+              <i class="fa" [ngClass]="dataItem.Type == 1 ? 'fa-building-o' : dataItem.Type == 2 ? 'fa-user-circle' : dataItem.Type == 3 ? 'fa-file-text-o' : 'fa-search'"></i>
+              &nbsp;{{ dataItem.Name }} - <strong>{{ dataItem.ResultType }}</strong></div>
+          </ng-template>
+        </kendo-autocomplete>
+      </div>
+    </li>
+    <li class="nav-item">
+      <button class="btn btn-search-success" (click)="searchOn = !searchOn"><i class="fa fa-search"></i></button>
+    </li>
+  </ul>
+</app-header>
+<div class="app-body">
+  <app-sidebar [display]="'lg'" [fixed]="true" *ngIf="navItems.length > 0">
+    <app-sidebar-header>
+      <li class="nav-item" ng-reflect-ng-class="nav-item" style="list-style: none;border: none !important;">
+        <div style="width: 100%; display: table;">
+          <div style="display: table-row; cursor: pointer;">
+            <div style="width: 40px; display: table-cell;vertical-align: middle;">
+              <img src="assets/img/avatars/adminavatar.png" class="img-avatar" alt="">
+            </div>
+            <!--   <div class="avatar"><img alt="admin@bootstrapmaster.com" class="img-avatar" src="assets/img/avatars/5.jpg"><span
+                class="avatar-status badge-success"></span></div> -->
+            <div style="display: table-cell;padding-left: 7px;font-size: 14px;vertical-align: middle;text-align: left;line-height: 1;">
+              <strong> Welcome {{user?.UserName}}</strong>
+            <!--   <br>
+              <small style="color: #46a23f;">{{user?.RoleName}}</small> -->
+            </div>
+          </div>
+        </div>
+      </li>
+    </app-sidebar-header>
+
+    <app-sidebar-nav *ngIf="navItems && navItems.length > 0" [navItems]="navItems" [perfectScrollbar] [disabled]="sidebarMinimized"></app-sidebar-nav>
+
+    <app-sidebar-footer>
+      <a class="nav-link" (click)="logout()"><i class="fa fa-sign-out"></i> LOGOUT</a>
+    </app-sidebar-footer>
+  </app-sidebar>
+  <!-- Main content -->
+  <main class="main cssanimations csstransforms">
+    <app-notification></app-notification>
+    <div class="container-fluid" style="margin-bottom: 50px;">
+      <router-outlet></router-outlet>
+    </div><!-- /.container-fluid -->
+  </main>
+</div>
+<app-footer>
+  <span style="width: 100%;">
+    <h6 class="footer-text">Government of The Punjab<br>
+      &copy; 2018 <u>HISDU</u>. All rights reserved.
+    </h6>
+  </span>
+</app-footer>

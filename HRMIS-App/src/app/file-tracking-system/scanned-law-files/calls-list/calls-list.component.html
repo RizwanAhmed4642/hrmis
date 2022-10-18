@@ -1,0 +1,175 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-6 col-xs-12">
+      <div class="top-h3">
+        New Call List
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" [look]="'outline'" class="ml-2"
+          routerLink="/fts/daily-calls-list">Back</button>
+      </div>
+    </div>
+  </div>
+  <div class="row animated fadeIn" *ngIf="!loadingDDsFile">
+    <div class="col-md-6 offset-md-1">
+      <label class="k-form-field" id="generalInfo">
+        <span> W.P Number / Case Number
+        </span>
+        <input kendoTextBox type="text" [(ngModel)]="file.CaseNumber" required />
+      </label>
+      <label class="k-form-field" id="generalInfo">
+        <span>Case Title</span>
+        <input kendoTextBox type="text" [(ngModel)]="file.CaseTitle" required />
+      </label>
+      <label class="k-form-field" id="generalInfo">
+        <span>Court Name / Honourable Justice Mr./Mrs.
+        </span>
+        <input kendoTextBox type="text" [(ngModel)]="file.CourtName" required />
+      </label>
+      <div class="row">
+        <div class="col-md-6 control-col-st">
+          <label class="k-form-field" id="generalInfo">
+            <span>Last Date
+            </span>
+            <kendo-datepicker [(ngModel)]="file.LastDate" [format]="'dd/MM/yyyy'"></kendo-datepicker>
+          </label>
+        </div>
+        <div class="col-md-6 control-col-end">
+          <label class="k-form-field" id="generalInfo">
+            <span>Next Date
+            </span>
+            <kendo-datepicker [(ngModel)]="file.NextDate" [format]="'dd/MM/yyyy'"></kendo-datepicker>
+          </label>
+        </div>
+      </div>
+      <label class="k-form-field" id="generalInfo">
+        <span>Section
+        </span>
+        <kendo-dropdownlist [data]="sectionOfficersData" [textField]="'DesignationName'" [valueField]="'Id'"
+          (valueChange)="dropdownValueChanged($event, 'office')" [value]="dropDowns.selectedFiltersModel.officer"
+          (filterChange)="handleFilter($event, 'office')" [filterable]="true"
+          [defaultItem]="dropDowns.selectedFiltersModel.officer">
+        </kendo-dropdownlist>
+      </label>
+      <label class="k-form-field" id="generalInfo">
+        <span>Dealing Officer
+        </span>
+        <kendo-dropdownlist [data]="lawOfficers" [(ngModel)]="file.DealingOfficer"
+          [defaultItem]="'Select Dealing Officer'">
+        </kendo-dropdownlist>
+      </label>
+      <label class="k-form-field" id="generalInfo">
+        <span>Concerned Officers</span>
+        <kendo-autocomplete [data]="sectionOfficersData" [valueField]="'DesignationName'"
+          (valueChange)="searchClicked($event, 'concernedOfficers')" required [filterable]="true"
+          (filterChange)="searchEvent.next({ event: $event, filter: 'concernedOfficers'})" placeholder="Search Officers"
+          class="k-autocomplete-form">
+          <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+            <div class="search-list-item">
+              {{dataItem.DesignationName}}
+            </div>
+          </ng-template>
+        </kendo-autocomplete>
+      </label>
+      <ul *ngIf="file.concernedOfficers">
+        <li class="pr-4 pl-1 success-hover" *ngFor="let p of file.concernedOfficers;let i = index;">
+          {{p.DesignationName}}<span class="text-danger pull-right" (click)="removeSelected(i, 'concernedOfficers')"><i
+              class="fa fa-times cursor-p"></i></span></li>
+      </ul>
+      <label class="k-form-field" id="generalInfo">
+        <span>Proceedings
+        </span>
+        <textarea kendoTextArea [(ngModel)]="file.Proceedings" required></textarea>
+      </label>
+      <label class="k-form-field" id="generalInfo">
+        <span>Status / Remarks
+        </span>
+        <textarea kendoTextArea [(ngModel)]="file.Remarks" required></textarea>
+      </label>
+      <hr>
+      <div class="row">
+        <div class="col-md-4 control-col-st">
+          <button kendoButton class="btn-block" [ladda]="addingFile" data-style="zoom-in" [primary]="true"
+            (click)="submitFile()"><i class="fa fa-plus"></i> Add</button>
+        </div>
+        <div class="col-md-4" [ngClass]="file.ID ? 'control-col' : 'control-col-end'">
+          <button kendoButton class="btn-block" ladda [look]="'outline'" [primary]="true"
+            routerLink="/fts/scanned-files">Go
+            Back</button>
+        </div>
+        <div class="col-md-4 control-col-end" *ngIf="file.ID">
+          <button kendoButton class="btn-block btn-danger" ladda (click)="removeLawFile(file.ID)">Remove</button>
+        </div>
+      </div>
+      <div class="row animated fadeIn" *ngIf="barcodeImgSrc">
+        <div class="col-md-4">
+          <label class="k-form-field">
+            <span>Barcode <span class="text-success"><i class="fa fa-check-circle"></i></span></span>
+            <div style="width:100%;">
+              <img [src]="barcodeSrc()" class="animated fadeIn" *ngIf="barcodeImgSrc" alt="">
+              <label style="display: block;margin-top:4px;width:77px;text-align: center;">* {{file.ID}} *</label>
+            </div>
+            <button kendoButton primary="true" [look]="'outline'" class="btn-sm" (click)="printBarcode()"><i
+                class="fa fa-print"></i>&nbsp;
+              Print</button>
+          </label>
+          <div id="barcodeFileBars" hidden>
+            <img [src]="barcodeSrc()" *ngIf="barcodeImgSrc" alt="">
+            <label style="display: block;margin-top:4px;width:77px;text-align: center;">* {{file.ID}} *</label>
+          </div>
+        </div>
+      </div>
+      <hr>
+
+
+    </div>
+    <!--  <div class="col-md-5">
+      <pre>{{file | json}}</pre>
+    </div> -->
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col-md-12">
+      <button class="pull-right" kendoButton primary="true" (click)="printApplication()"><i class="fa fa-print"></i>
+        Print</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12" id="applicationPrint">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th class="p-strong">Sr.</th>
+            <th class="p-strong">W.P No. / Case No.</th>
+            <th class="p-strong">Case Title</th>
+            <th class="p-strong">Court Name / Honourable Justice Mr./Mrs.</th>
+            <th class="p-strong">Last Date</th>
+            <th class="p-strong">Proceedings</th>
+            <th class="p-strong">Next Date</th>
+            <th class="p-strong">Section</th>
+            <th class="p-strong">Dealing Officer</th>
+            <th class="p-strong">Status / Remarks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let rpt of lawWingReport;let i = index;">
+            <td>{{(i + 1)}}</td>
+            <td>{{rpt.CaseNumber}}</td>
+            <td>{{rpt.CaseTitle}}</td>
+            <td>{{rpt.CourtName}}</td>
+            <td>{{rpt.LastDate | date: 'dd/MM/yyyy'}}</td>
+            <td>{{rpt.Proceedings}}</td>
+            <td>{{rpt.NextDate | date: 'dd/MM/yyyy'}}</td>
+            <td>{{rpt.DesignationName}}</td>
+            <td>{{rpt.DealingOfficer}}</td>
+            <td>{{rpt.Remarks}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

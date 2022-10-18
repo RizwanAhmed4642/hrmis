@@ -1,0 +1,129 @@
+<div *ngIf="!kGrid.gridView" class="k-i-loading"></div>
+<div class="animated fadeIn" *ngIf="kGrid.gridView">
+  <div class="row">
+    <div class="col-md-6 col-xs-12">
+      <div class="top-h3">
+        DB.Designations
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" routerLink="../">Back</button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 col-sm-12 control-col-st">
+      <label class="k-form-field"><span>Designation Name <span class="text-danger">*</span></span>
+        <input kendoTextBox type="text" name="DesigName" [(ngModel)]="designation.Name" #DesigName="ngModel" />
+      </label>
+    </div>
+    <div class="col-md-3 col-sm-12 control-col">
+      <label class="k-form-field"><span>Cadre <span class="text-danger">*</span></span>
+        <kendo-dropdownlist [data]="dropDowns.cadres" [textField]="'Name'" [valueField]="'Id'" [valuePrimitive]="true"
+          [(ngModel)]="designation.Cadre_Id" [defaultItem]="dropDowns.defultFiltersModel.cadre">
+        </kendo-dropdownlist>
+      </label>
+    </div>
+    <div class="col-md-3 col-sm-12 control-col">
+      <label class="k-form-field"><span>Scale <span class="text-danger">*</span></span>
+        <kendo-dropdownlist [data]="dropDowns.scales" [textField]="'Name'" [valueField]="'Id'" [valuePrimitive]="true"
+          [(ngModel)]="designation.HrScale_Id" [defaultItem]="dropDowns.defultFiltersModel.ScaleDefault">
+        </kendo-dropdownlist>
+      </label>
+    </div>
+    <div class="col-md-2 mt-1 col-sm-12 control-col-end">
+      <button kendoButton (click)="addDesignation()" [disabled]="
+          !designation.HrScale_Id || !designation.Cadre_Id || !designation?.Name
+        " data-style="zoom-in" [ladda]="addingDesig" class="btn-align-v btn-block" type="button" [primary]="true">
+        Submit
+      </button>
+    </div>
+  </div>
+  <div class="row row-panel">
+    <div class="col-md-12">
+      <div class="grid-wrapper">
+        <kendo-grid #grid [data]="kGrid.gridView" [sortable]="{
+            allowUnsort: kGrid.allowUnsort,
+            mode: 'single'
+          }" [selectable]="false" [data]="gridView" [sort]="kGrid.sort" (sortChange)="sortChange($event)"
+          [(pageSize)]="kGrid.pageSize" [skip]="kGrid.skip" [pageable]="true" (pageChange)="pageChange($event)"
+          [scrollable]="false">
+          <kendo-grid-column field="asd" title="No." [width]="'7'" [headerClass]="'grid-header-custom'"
+            [class]="{ 'grid-cell-custom': true }">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              {{ rowIndex + 1 }}.
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column field="Name" title="Name" [width]="'38'" [headerClass]="'grid-header-custom'"
+            [class]="{ 'grid-cell-custom': true }">
+          </kendo-grid-column>
+          <kendo-grid-column field="Cadre_Name" [width]="'35'" title="Cadre" [headerClass]="'grid-header-custom'"
+            [class]="{ 'grid-cell-custom': true }">
+          </kendo-grid-column>
+          <kendo-grid-column field="Scale" title="Scale" [width]="'10'" [headerClass]="'grid-header-custom'"
+            [class]="{ 'grid-cell-custom': true }">
+          </kendo-grid-column>
+          <kendo-grid-column field="asd" title="Actions" [width]="'10'"
+            [headerClass]="'grid-header-custom grid-header-actions-custom'" [class]="{ 'grid-cell-custom': true }">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <button class="btn-sm" (click)="openDesigWindow(dataItem)" primary="true" look="outline" kendoButton>
+                Edit
+              </button>
+            </ng-template>
+          </kendo-grid-column>
+          <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+            <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+            <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+            <kendo-pager-next-buttons></kendo-pager-next-buttons>
+            <div class="pager-rows-number">
+              <select #select (change)="changePagesize(select.value)">
+                <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{ kGrid.pageSize }}</option>
+                <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+                  [selected]="page === kGrid.pageSize ? true : undefined">
+                  {{ page }}
+                </option>
+              </select>
+              &nbsp; items per page
+            </div>
+            <kendo-pager-info></kendo-pager-info>
+          </ng-template>
+        </kendo-grid>
+        <div *ngIf="kGrid.loading" class="k-i-loading"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<kendo-dialog [title]="'Edit Designation'" *ngIf="DesigDialogOpened && selectedDesig" (close)="closeDesigWindow()"
+  [minWidth]="250" [width]="450">
+  <div class="row animated fadeIn">
+    <div class="col-md-10 offset-md-1 col-sm-12  col-xs-12 pb-2">
+      <div *ngIf="editDialogOpened">
+        <label class="k-form-field" id="generalInfo">
+          <span><strong>Name</strong></span>
+          <input kendoTextBox type="text" name="DesigName" [(ngModel)]="selectedDesig.Name" #DesigName="ngModel" />
+        </label>
+        <label class="k-form-field" id="generalInfo">
+          <span><strong>Cadre</strong></span>
+
+          <kendo-dropdownlist [data]="dropDowns.cadres" [textField]="'Name'" [valueField]="'Id'"
+            [(ngModel)]="selectedDesig.Cadre_Id" [valuePrimitive]="true"
+            [defaultItem]="dropDowns.defultFiltersModel.cadreVal">
+          </kendo-dropdownlist>
+        </label>
+        <label class="k-form-field" id="generalInfo">
+          <span><strong>Scale</strong></span>
+          <kendo-dropdownlist [data]="dropDowns.scales" [(ngModel)]="selectedDesig.Scale" [textField]="'Name'"
+            [valueField]="'Id'" [valuePrimitive]="true" [defaultItem]="dropDowns.defultFiltersModel.scale">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+    </div>
+  </div>
+  <kendo-dialog-actions *ngIf="editDialogOpened" class="animated fadeIn">
+    <button kendoButton (click)="editDesig()" primary="true">Update</button>
+    <button kendoButton (click)="removeDesig()" class="k-danger">Remove</button>
+    <button kendoButton (click)="closeDesigWindow()">Cancel</button>
+  </kendo-dialog-actions>
+</kendo-dialog>

@@ -1,0 +1,233 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-8 col-sm-12 offset-md-2">
+      <div class="content-heading">
+        Review Profile Information
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="animated fadeIn">
+    <div *ngIf="!profile" class="k-i-loading"></div>
+    <div class="animated fadeIn" *ngIf="profile">
+      <div class="row">
+        <div class="col-md-8 col-sm-12 offset-md-2">
+          <table class="table table-50 view-table" style="background: transparent;">
+            <tbody>
+              <tr>
+                <td><strong class="p-strong">Photo</strong></td>
+                <td>
+                  <img class="pic-shadow" width="100" height="100"
+                    [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + profile.CNIC + '_23.jpg?v=' + radnom"
+                    onError="this.src='../../../assets/img/notfound.png'" alt="">
+                </td>
+              </tr>
+              <tr *ngIf="profile.EmployeeName">
+                <td><strong class="p-strong">First Name</strong></td>
+                <td>{{profile.EmployeeName}}</td>
+              </tr>
+              <tr *ngIf="profile.FatherName">
+                <td><strong class="p-strong">Last Name</strong></td>
+                <td>{{profile.FatherName}}</td>
+              </tr>
+              <tr *ngIf="profile.CNIC">
+                <td><strong class="p-strong">CNIC</strong></td>
+                <td>{{dashifyCNIC(profile.CNIC)}}</td>
+              </tr>
+              <tr *ngIf="profile.DateOfBirth">
+                <td><strong class="p-strong">D.O.B</strong></td>
+                <td>{{profile.DateOfBirth | date:'dd-MM-yyyy'}}</td>
+              </tr>
+              <tr *ngIf="profile.Gender">
+                <td><strong class="p-strong">Gender</strong></td>
+                <td>{{profile.Gender}}</td>
+              </tr>
+              <tr *ngIf="profile.Domicile_Name">
+                <td><strong class="p-strong">Domicile</strong></td>
+                <td>{{profile.Domicile_Name}}</td>
+              </tr>
+              <tr *ngIf="profile.MaritalStatus">
+                <td><strong class="p-strong">Marital Status</strong></td>
+                <td>{{profile.MaritalStatus}}</td>
+              </tr>
+              <tr *ngIf="profile.BloodGroup">
+                <td><strong class="p-strong">Bloodgroup</strong></td>
+                <td>{{profile.BloodGroup}}</td>
+              </tr>
+              <tr *ngIf="profile.Religion_Name">
+                <td><strong class="p-strong">Religion</strong></td>
+                <td>{{profile.Religion_Name}}</td>
+              </tr>
+              <tr *ngIf="profile.Language_Name">
+                <td><strong class="p-strong">Mother Tongue</strong></td>
+                <td>{{profile.Language_Name}}</td>
+              </tr>
+              <tr *ngIf="profile.MobileNo">
+                <td><strong class="p-strong">Mobile Number</strong></td>
+                <td>{{profile.MobileNo}}</td>
+              </tr>
+              <tr *ngIf="profile.EMaiL">
+                <td><strong class="p-strong">E-mail</strong></td>
+                <td>{{profile.EMaiL}}</td>
+              </tr>
+              <!--   <tr *ngIf="profile.LandlineNo">
+                    <td><strong class="p-strong">Landline Number</strong></td>
+                    <td>{{profile.LandlineNo}}</td>
+                  </tr>
+                   <tr *ngIf="profile.Faxno">
+                    <td><strong class="p-strong">Fax Number</strong></td>
+                    <td>{{profile.Faxno}}</td>
+                  </tr> -->
+              <tr *ngIf="profile.PermanentAddress">
+                <td><strong class="p-strong">Permanent Address</strong></td>
+                <td>{{profile.PermanentAddress}}</td>
+              </tr>
+
+
+              <!--    <tr *ngIf="profile.CorrespondenceAddress">
+                    <td><strong class="p-strong">Correspondence
+                        Address</strong></td>
+                    <td>{{profile.CorrespondenceAddress}}</td>
+                  </tr> -->
+              <!--   <tr *ngIf="profile.Department_Name">
+              <td><strong class="p-strong">Department</strong></td>
+              <td>{{profile.Department_Name}}</td>
+            </tr>
+             <tr *ngIf="profile.PostType_Name">
+              <td><strong class="p-strong">Post Type</strong></td>
+              <td>{{profile.PostType_Name}}</td>
+            </tr> -->
+              <tr *ngIf="profile.HealthFacility">
+                <td><strong class="p-strong">Place of Posting</strong></td>
+                <td>{{profile.HealthFacility ? profile.HealthFacility
+                  + ', ' + (profile.Tehsil == profile.District ? profile.Tehsil : profile.Tehsil + ', ' +
+                  profile.District) : ''}}</td>
+              </tr>
+              <!--  <tr *ngIf="profile.WorkingHealthFacility" [routerLink]="'/health-facility/' + profile.WorkingHFMISCode">
+                <td><strong class="p-strong">Working Health Facility</strong></td>
+                <td>{{profile.WorkingHealthFacility
+                  + ', ' + (profile.WorkingTehsil == profile.WorkingDistrict ? profile.WorkingTehsil : profile.WorkingTehsil + ', ' +
+                  profile.WorkingDistrict)}}</td>
+              </tr>
+               <tr *ngIf="profile.LastPromotionDate">
+                <td><strong class="p-strong">Actual Designation</strong></td>
+                <td>{{profile.Designation_Name}}</td>
+              </tr> -->
+              <tr *ngIf="profile.WDesignation_Name">
+                <td><strong class="p-strong">Designation</strong></td>
+                <td>{{profile.WDesignation_Name}}</td>
+              </tr>
+              <!--   <tr *ngIf="profile.AdditionalCharge">
+                <td><strong class="p-strong">Additional Charge</strong></td>
+                <td>{{profile.AdditionalCharge}}</td>
+              </tr>
+              <tr *ngIf="profile.HoD == 1">
+                <td><strong class="p-strong">Head of Department</strong></td>
+                <td>Yes</td>
+              </tr> -->
+              <tr *ngIf="profile.CurrentGradeBPS">
+                <td><strong class="p-strong">Current Grade BPS</strong></td>
+                <td>{{profile.CurrentGradeBPS}}</td>
+              </tr>
+              <!--   <tr *ngIf="profile.LastPromotionDate">
+                <td><strong class="p-strong">Joining Grade BPS</strong></td>
+                <td>{{profile.JoiningGradeBPS}}</td>
+              </tr>
+               <tr *ngIf="profile.LastPromotionDate">
+                <td><strong class="p-strong">Post Sanctioned with Scale</strong></td>
+                <td>{{profile.Postaanctionedwithscale}}</td>
+              </tr>
+               <tr *ngIf="profile.LastPromotionDate">
+                <td><strong class="p-strong">Private Practice</strong></td>
+                <td>{{profile.PrivatePractice}}</td>
+              </tr> -->
+              <tr *ngIf="profile.StatusName">
+                <td><strong class="p-strong">Status</strong></td>
+                <td>{{profile.StatusName}}</td>
+              </tr>
+              <tr *ngIf="profile.SeniorityNo">
+                <td><strong class="p-strong">Seniority Number</strong></td>
+                <td>{{profile.SeniorityNo}}</td>
+              </tr>
+              <!--  <tr *ngIf="profile.PersonnelNo">
+                <td><strong class="p-strong">Personnel Number</strong></td>
+                <td>{{profile.PersonnelNo}}</td>
+              </tr> -->
+
+              <!--   <tr *ngIf="profile.PresentPostingOrderNo">
+                <td><strong class="p-strong">Present Posting Order No</strong></td>
+                <td>{{profile.PresentPostingOrderNo}}</td>
+              </tr>
+               <tr *ngIf="profile.PresentPostingDate">
+                <td><strong class="p-strong">Present Posting Order Date</strong></td>
+                <td>{{profile.PresentPostingDate | date:'dd-MM-yyyy'}}</td>
+              </tr> -->
+              <tr *ngIf="profile.PresentPostingDate">
+                <td><strong class="p-strong">Present Posting Order Date</strong></td>
+                <td>{{profile.PresentPostingDate | date:'dd-MM-yyyy'}}</td>
+              </tr>
+              <!--  <tr *ngIf="profile.PresentStationLengthOfService">
+                <td><strong class="p-strong">Present Joining Date</strong></td>
+                <td>{{profile.PresentStationLengthOfService | date:'dd-MM-yyyy'}}</td>
+              </tr> -->
+
+
+              <tr *ngIf="profile.Cadre_Name">
+                <td><strong class="p-strong">Cadre</strong></td>
+                <td>{{profile.Cadre_Name}}</td>
+              </tr>
+              <tr *ngIf="profile.EmpMode_Name">
+                <td><strong class="p-strong">Employment Mode</strong></td>
+                <td>{{profile.EmpMode_Name}}</td>
+              </tr>
+              <tr *ngIf="profile.LengthOfService">
+                <td><strong class="p-strong">Length of Service</strong></td>
+                <td>{{profile.LengthOfService}}</td>
+              </tr>
+              <tr *ngIf="profile.QualificationName">
+                <td><strong class="p-strong">Qualification</strong></td>
+                <td>{{profile.QualificationName}}</td>
+              </tr>
+              <tr *ngIf="profile.AdditionalQualification">
+                <td><strong class="p-strong">Additional Qualification</strong></td>
+                <td>{{profile.AdditionalQualification}}</td>
+              </tr>
+              <tr *ngIf="profile.DateOfFirstAppointment">
+                <td><strong class="p-strong">Date of First Appointment</strong></td>
+                <td>{{profile.DateOfFirstAppointment | date:'dd-MM-yyyy'}}</td>
+              </tr>
+              <tr *ngIf="profile.DateOfRegularization">
+                <td><strong class="p-strong">Date of Regularization</strong></td>
+                <td>{{profile.DateOfRegularization | date:'dd-MM-yyyy'}}</td>
+              </tr>
+              <tr *ngIf="profile.SuperAnnuationDate">
+                <td><strong class="p-strong">Superannuation Date</strong></td>
+                <td>{{profile.SuperAnnuationDate | date:'dd-MM-yyyy'}}</td>
+              </tr>
+              <!--   <tr *ngIf="profile.ContractStartDate">
+                  <td><strong class="p-strong">Contract Start Date</strong></td>
+                  <td>{{profile.ContractStartDate | date:'dd-MM-yyyy'}}</td>
+                </tr>
+                 <tr *ngIf="profile.ContractEndDate">
+                  <td><strong class="p-strong">Contract End Date</strong></td>
+                  <td>{{profile.ContractEndDate | date:'dd-MM-yyyy'}}</td>
+                </tr> -->
+              <tr *ngIf="profile.LastPromotionDate">
+                <td><strong class="p-strong">Last Promotion Date</strong></td>
+                <td>{{profile.LastPromotionDate | date:'dd-MM-yyyy'}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <hr>
+
+          <button kendoButton [primary]="true" look="outline" class="btn-block btn-lg"
+            [routerLink]="'/online-application/verify/' + profile.CNIC + '/' + profile.Id"><i
+              class="fa fa-check-circle-o"></i>&nbsp;Continue to Apply</button>
+        </div>
+        <!--  <div class="col-md-6 col-sm-12 control-col-end">
+              <app-profile-departmental-info [profile]="profile"></app-profile-departmental-info>
+            </div> -->
+      </div>
+    </div>
+  </div>
+</div>

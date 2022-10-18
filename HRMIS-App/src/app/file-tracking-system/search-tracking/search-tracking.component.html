@@ -1,0 +1,34 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-6 col-xs-12">
+      <div class="top-h3">
+        Search Tracking
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-12">
+      <div class="top-controls">
+        <!--   <button kendoButton [primary]="true" [look]="'outline'" class="ml-2" (click)="openWindow('')">New
+              Application</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3 col-sm-12 control-col-st">
+    <label class="k-form-field">
+      <span>Enter Tracking No.</span>
+      <input type="text" #trackingSearchRef kendoTextBox (input)="showTrackingDetail = false"
+        (input)="trackingSearchRef.value?.length == 6 && searchApplication(trackingSearchRef.value)"
+        (keyup.enter)="searchApplication(trackingSearchRef.value)">
+    </label>
+  </div>
+  <div class="col-md-3 col-sm-12 control-col-end">
+    <label class="k-form-field mt-1">
+      <button kendoButton class="btn-block btn-align-v" [ladda]="searchingTrack" data-style="zoom-in"
+        (click)="searchApplication(trackingSearchRef.value)" [primary]="true">SEARCH</button>
+    </label>
+  </div>
+
+</div>
+<hr>
+<app-application-details *ngIf="showTrackingDetail" [trackingNo]="trackingNumber"></app-application-details>

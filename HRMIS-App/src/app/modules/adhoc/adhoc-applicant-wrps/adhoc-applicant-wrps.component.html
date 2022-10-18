@@ -1,0 +1,576 @@
+<!-- <button (click)="printApplication()" kendoButton primary="true" class="print">Print</button>
+<button kendoButton primary="true" *ngFor="let b of interviewBatches" (click)="selectBatch(b)"
+  class="print">{{b.BatchNo}}</button>
+ -->
+<div *ngIf="interviewBatch.Id && !interviewBatch.loaded" style="width: 100%;font-size: 24px;"
+  class="shine p-1 mt-4 text-center text-muted"><i class="fa fa-print"></i> Loading Applications&nbsp;<span
+    *ngIf="count > 0">{{count}}/{{interviewBatch.Applications.length}}</span>&nbsp; please wait...</div>
+<div *ngIf="interviewBatch.loaded" class="animated fadeIn">
+  <div class="print" style="margin: 10px auto;width: 28%;">
+    <button (click)="printApplication()" kendoButton primary="true" class="btn-lg mx-2">Print</button>
+    <button [routerLink]="'/applicant-working-paper/' + adhocInterview.Designation_Id + '/' + interviewBatch.Id"
+      kendoButton primary="true" class="btn-lg mx-2">Working Paper</button>
+    <button [routerLink]="'/applicant-working-papers/' + adhocInterview.Designation_Id + '/' + interviewBatch.Id"
+      kendoButton primary="true" class="btn-lg mx-2">List</button>
+  </div>
+  <div *ngFor="let app of interviewBatch.Applications;let i = index;">
+    <div class="animated fadeIn mt-4 page a4w p-4">
+      <table class="table table-sm border-c mt-4 animated fadeIn">
+        <tr class="animated fadeIn">
+          <td>
+            <small class="m-0">
+                SR # {{i+1}}&nbsp;<i class="fa fa-barcode"></i>&nbsp;Application #&nbsp;{{app.application.Id}}
+              </small>
+          </td>
+          <td colspan="3" class="p-strong text-center h3 mt-4 animated fadeIn">{{app.application.DesignationName}}</td>
+          <td>
+            <small class="m-0 pull-right">
+              <i class="fa fa-clock-o"></i>&nbsp;{{app.application.CreatedDate | date: 'dd/MM/yyyy hh:mm a'}}
+            </small>
+          </td>
+        </tr>
+        <tr>
+          <td rowspan="7" style="width: 215px;">
+            <img onError="this.src='../../../assets/img/notfound.png'"
+              class="image--cover d-block cursor-p zoom animated fadeIn ml-2 mt-3"
+              [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/AdhocApplicants/Photo/' + app.applicant.CNIC + '_23.jpg'">
+          </td>
+          <td class="p-strong">Name</td>
+          <td>{{app.applicant.Name}}</td>
+          <td class="p-strong">S/D/W of</td>
+          <td>{{app.applicant.FatherName}}</td>
+        </tr>
+        <tr>
+          <td class="p-strong">CNIC</td>
+          <td>{{dashifyCNIC(app.applicant.CNIC)}}</td>
+          <td class="p-strong">Mobile No.</td>
+          <td>{{app.applicant.MobileNumber}}</td>
+        </tr>
+        <tr>
+          <td class="p-strong">Date of Birth</td>
+          <td>{{app.applicant.DOB | date: 'dd/MM/yyyy'}}</td>
+          <td class="p-strong">Email</td>
+          <td>{{app.applicant.Email}}</td>
+        </tr>
+        <tr>
+          <td class="p-strong">Gender</td>
+          <td>{{app.applicant.Gender}}</td>
+          <td class="p-strong">Marital Status</td>
+          <td>{{app.applicant.MaritalStatus}}</td>
+        </tr>
+        <tr>
+          <td class="p-strong">Domicile</td>
+          <td>{{app.applicant.DomicileName}}</td>
+          <td class="p-strong">PMC Registration</td>
+          <td>{{app.applicant.PMDCRegDate | date: 'dd/MM/yyyy'}}</td>
+        </tr>
+        <tr>
+          <td class="p-strong">PMC Number</td>
+          <td>{{app.applicant.PMDCNumber}}</td>
+          <td class="p-strong">PMC Valid Upto</td>
+          <td>{{app.applicant.PMDCValidUpto | date: 'dd/MM/yyyy'}}</td>
+        </tr>
+        <tr>
+          <td class="p-strong">Address</td>
+          <td colspan="3">{{app.applicant.Address}}</td>
+        </tr>
+      </table>
+      <table class="table table-sm border-c my-1 animated fadeIn">
+        <tr>
+          <td colspan="5" class="p-strong h3 animated fadeIn">Qualification</td>
+        </tr>
+        <tr>
+          <td class="p-strong">Year</td>
+          <td class="p-strong">Qualification</td>
+          <td class="p-strong">Marks</td>
+          <td class="p-strong">Institute</td>
+        </tr>
+        <tr *ngFor="let qualification of app.applicant.Qualifications">
+          <td>{{qualification.PassingYear | date:'yyyy'}}</td>
+          <td>{{qualification.DegreeName}}</td>
+          <td>{{qualification.ObtainedMarks}}/{{qualification.TotalMarks}}</td>
+          <td>{{qualification.Institute}}</td>
+        </tr>
+      </table>
+      <table class="table table-sm border-c my-1 animated fadeIn">
+        <tr>
+          <td colspan="5" class="p-strong h3 animated fadeIn">Experience</td>
+        </tr>
+        <tr>
+          <td class="p-strong">Job Title</td>
+          <td class="p-strong">Health Facility</td>
+          <td class="p-strong">Duration</td>
+          <td class="p-strong">Sector</td>
+          <td class="p-strong">Type</td>
+        </tr>
+        <tr *ngFor="let exp of app.applicant.ApplicantExperiences">
+          <td>{{exp.JobTitle}}</td>
+          <td>{{exp.Organization}}</td>
+          <td><span class="p-strong">From: </span>{{exp.FromDate | date:'dd/MM/yyyy'}}&nbsp;<span
+              *ngIf="!exp.IsContinued"><span class="p-strong">To:
+              </span>{{exp.ToDate | date:'dd/MM/yyyy'}}</span><span *ngIf="exp.IsContinued">continued</span></td>
+          <td>{{exp.Sector}}</td>
+          <td>{{exp.Type}}</td>
+        </tr>
+      </table>
+      <table class="table table-sm border-c my-1 animated fadeIn">
+        <tr>
+          <td colspan="5" class="p-strong h3 animated fadeIn">Interview</td>
+        </tr>
+        <!--  <tr *ngFor="let m of application.marks" (click)="openEditDialog(m, 'Merit')">
+     <td [ngClass]="m.MarksName == 'Total' ? 'p-strong' : ''">{{m.MarksName}}</td>
+     <td [ngClass]="m.MarksName == 'Total' ? 'p-strong' : ''">{{m.Marks}}</td>
+     <td [ngClass]="m.MarksName == 'Total' ? 'p-strong' : ''"><span
+         *ngIf="m.Marks_Id >= 1 && m.Marks_Id <= 5">{{m.Percentage.toFixed()}}%
+         {{m.Percentage.toFixed() >= 60 ? '1st' : (m.Percentage.toFixed() >= 45 && m.Percentage.toFixed() < 60) ? '2nd' :  m.Percentage.toFixed() < 45 ? '3rd' : ''}}
+         Division
+       </span></td>
+   </tr> -->
+        <tr>
+          <td>Interview Marks</td>
+          <td><i class="fa fa-square-o font-2xl"></i></td>
+        </tr>
+      </table>
+      <div class="row">
+        <div class="col-md-4 text-center" style="margin-top: 30px !important;margin-bottom: 30px !important;"
+          *ngFor="let c of interviewBatch.AdhocInterviewBatchCommittees">
+          <p class="m-0 text-center">
+            ({{c.Name}})</p>
+          <p class="m-0 text-center">{{c.Designation}}</p>
+          <p class="m-0 text-center">{{c.Role}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="pagebreak"> </div>
+  </div>
+</div>
+<kendo-dialog [title]="applicant.Name + (!decision ? ' - src: www.pmc.gov.pk' : '')" *ngIf="scrutinyDialog && applicant"
+  (close)="closeScrutinyDialog()" [minWidth]="'450'" [width]="decision == 'Accepted' ? '400' : '1000'">
+  <div *ngIf="!decision">
+    <!--  <pre>{{pmcVerification | json}}</pre>
+   <pre>{{pmcQualification | json}}</pre> -->
+    <div class="row">
+      <div class="col-md-7">
+        <div id="doctorDataDiv" class="box-shoadow-div" style="border-radius: 5px;"
+          *ngFor="let data of pmcVerification.data">
+          <h3 class="fontBold"
+            style="background-color: #0c65a0; color: white; padding:4px; margin-top: 0;border-top-left-radius: 5px; border-top-right-radius:5px ;">
+            Doctor Details
+          </h3>
+          <div style="padding: 10px;">
+            <div style="display: flex;">
+              <div class="fontBold" style="flex: 1;">
+                <p>Registration No.</p>
+              </div>
+              <div class="fontLight" style="flex: 1;">
+                <p id="reg_no">{{data.RegistrationNo}}</p>
+              </div>
+            </div>
+            <div style="display: flex;">
+              <div class="fontBold" style="flex: 1;">
+                <p>Full Name</p>
+              </div>
+              <div class="fontLight" style="flex: 1;">
+                <p id="full_name">{{data.Name}}</p>
+              </div>
+            </div>
+            <div style="display: flex;">
+              <div class="fontBold" style="flex: 1;">
+                <p>Father Name</p>
+              </div>
+              <div class="fontLight" style="flex: 1;">
+                <p id="father_name">{{data.FatherName}}</p>
+              </div>
+            </div>
+            <div style="display: flex;">
+              <div class="fontBold" style="flex: 1;">
+                <p>Registration Type</p>
+              </div>
+              <div class="fontLight" style="flex: 1;">
+                <p id="reg_type"
+                  [ngClass]="data.RegistrationType != 'PERMANENT' && data.RegistrationType != 'Permanent' ? 'text-danger p-strong' : 'text-success'">
+                  <i class="fa fa-check-circle-o"
+                    *ngIf="data.RegistrationType == 'PERMANENT' || data.RegistrationType == 'Permanent'"></i>&nbsp;{{data.RegistrationType}}
+                </p>
+              </div>
+            </div>
+            <div style="display: flex;">
+              <div class="fontBold" style="flex: 1;">
+                <p>Status</p>
+              </div>
+              <div class="fontLight" style="flex: 1;">
+                <p id="status">{{data.Status}}</p>
+              </div>
+            </div>
+            <div style="display: flex;">
+              <div class="fontBold" style="flex: 1;">
+                <p>Issue Date</p>
+              </div>
+              <div class="fontLight" style="flex: 1;">
+                <p id="registration_date">{{data.RegistrationDate}}</p>
+              </div>
+            </div>
+            <div style="display: flex;">
+              <div class="fontBold" style="flex: 1;">
+                <p>License Valid Upto</p>
+              </div>
+              <div class="fontLight" style="flex: 1;">
+                <p id="license_valid">{{data.ValidUpto}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="box-shoadow-div" style="border-radius: 5px;" *ngIf="pmcQualification && pmcQualification.data">
+          <h3 class="fontBold"
+            style="background-color: #0c65a0; color: white; padding:10px; margin-top: 0;border-top-left-radius: 5px; border-top-right-radius:5px ;">
+            Qualification
+          </h3>
+          <div style="padding: 10px;">
+            <div class="table-responsive">
+              <!-- <div id="quali_div"> -->
+
+              <table style="" class="table table-responsive table-bordered">
+                <thead>
+                  <tr>
+                    <th>Sr No</th>
+                    <th>Qualification</th>
+                    <th>Speciality</th>
+                    <th>University</th>
+                    <th>Passing Year</th>
+                  </tr>
+                </thead>
+                <tbody class="fontLight" id="tBody">
+                  <tr *ngFor="let data of pmcQualification.data.Qualifications;let i = index;">
+                    <td>{{(i + 1)}}</td>
+                    <td>{{data.Degree}}</td>
+                    <td>{{data.Speciality}}</td>
+                    <td>{{data.University}}</td>
+                    <td>{{data.PassingYear}}</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <!-- </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <img style="width: 100%;" class="d-block cursor-p animated fadeIn"
+          [src]="applicant.PMDCDoc && applicant.PMDCDoc.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + applicant.PMDCDoc"
+          (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + applicant.PMDCDoc)" draggable="false" alt="">
+      </div>
+    </div>
+
+  </div>
+  <div *ngIf="decision == 'AcceptedFinal'">
+    <div class="p-4">
+      <h4 class="text-success text-center"><i class="fa fa-check-circle-o"></i> Shortlisting Completed! The
+        Candidate is Found
+        Eligible for Interview</h4>
+    </div>
+    <div class="animated fadeIn">
+      <div class="d-flex flex-wrap">
+        <div class="mx-3 mb-3 hover-success"
+          (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + applicant.CNICDoc)">
+          <img width="100px" height="100px" onError="this.src='../../../assets/img/notfound.png'"
+            class="d-block cursor-p zoom animated fadeIn"
+            [src]="applicant.CNICDoc && applicant.CNICDoc.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + applicant.CNICDoc"
+            draggable="false" alt="">
+          <p class="m-0 text-center cursor-p"><small>CNIC</small></p>
+        </div>
+        <div class="mx-3 mb-3 hover-success"
+          (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + applicant.DomicileDoc)">
+          <img width="100px" height="100px" onError="this.src='../../../assets/img/notfound.png'"
+            class="d-block cursor-p zoom animated fadeIn"
+            [src]="applicant.DomicileDoc && applicant.DomicileDoc.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + applicant.DomicileDoc"
+            draggable="false" alt="">
+          <p class="m-0 text-center cursor-p"><small>Domicile: <u>{{applicant.DomicileName}}</u>&nbsp;<i
+                class="fa fa-check text-success"></i></small></p>
+        </div>
+        <div class="mx-3 mb-3 hover-success" *ngIf="applicant.Hafiz"
+          (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + applicant.HifzDocument)">
+          <img width="100px" height="100px" onError="this.src='../../../assets/img/notfound.png'"
+            class="d-block cursor-p zoom animated fadeIn"
+            [src]="applicant.HifzDocument && applicant.HifzDocument.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + applicant.HifzDocument"
+            draggable="false" alt="">
+          <p class="m-0 text-center cursor-p"><small>Hafiz-e-Quran&nbsp;<i class="fa fa-check text-success"></i></small>
+          </p>
+        </div>
+        <div class="mx-3 mb-3 hover-success"
+          (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + applicant.PMDCDoc)">
+          <img width="100px" height="100px" onError="this.src='../../../assets/img/notfound.png'"
+            class="d-block cursor-p zoom animated fadeIn"
+            [src]="applicant.PMDCDoc && applicant.PMDCDoc.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + applicant.PMDCDoc"
+            draggable="false" alt="">
+          <p class="m-0 text-center cursor-p"><small>PMC # {{applicant.PMDCNumber}}</small>&nbsp;<i
+              class="fa fa-check text-success"></i></p>
+        </div>
+        <div class="mx-3 mb-3 hover-success" *ngFor="let q of applicant.Qualifications"
+          (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + q.UploadPath)">
+          <img width="100px" height="100px" class="d-block cursor-p zoom animated fadeIn"
+            [src]="q.UploadPath && q.UploadPath.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + q.UploadPath"
+            (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + q.UploadPath)" draggable="false" alt="">
+          <p class="m-0 text-center cursor-p">
+            <small>{{q.DegreeName}}&nbsp;{{q.ObtainedMarks}}/{{q.TotalMarks}}</small>&nbsp;<i
+              class="fa fa-check text-success"></i>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div *ngIf="decision == 'RejectedFinal'">
+    <div class="p-4">
+      <h4 class="text-danger text-center"><i class="fa fa-check-circle-o"></i> Shortlisting Completed! The
+        Candidate is Found
+        Not Eligible for Interview</h4>
+    </div>
+    <div class="animated fadeIn">
+      <h4>Application is rejected on the basis of following reasons:
+      </h4>
+      <div class="d-flex flex-wrap">
+        <div class="mx-3 mb-3 hover-success" *ngFor="let scrutiny of applicant.AdhocScrutiniesRejected"
+          (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + scrutiny.UploadPath)">
+          <div style="height:115px;">
+            <img width="100px" height="100px" onError="this.src='../../../assets/img/notfound.png'"
+              class="d-block cursor-p zoom animated fadeIn"
+              [src]="scrutiny.UploadPath && scrutiny.UploadPath.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + scrutiny.UploadPath"
+              draggable="false" alt="">
+          </div>
+          <p class="my-1 text-center cursor-p p-hoverable"><span
+              class="p-strong">{{scrutiny.DocName}}:</span>&nbsp;{{scrutiny.ReasonDetail}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="decision == 'Accepted'">
+    <!-- <div class="p-4">
+     <h1 class="text-success text-center p-4 font-4xl"><i class="fa fa-check-circle-o"></i></h1>
+   </div> -->
+    <div class="row p-4">
+      <div class="col-md-10 offset-md-1" style="font-size: 20px !important;">
+        <p class="p-strong font-2xl m-0 hover-success cursor-p">
+          <i class="fa fa-check-circle-o"></i> I confirm that the document is verified
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="animated fadeIn" *ngIf="decision == 'Rejected'">
+    <!--   <div class="p-4">
+     <h1 class="text-danger text-center p-4 font-4xl"><i class="fa fa-times-circle-o"></i></h1>
+   </div> -->
+    <!--  <div class="row p-4">
+     <div class="col-md-10 offset-md-1" style="font-size: 20px !important;">
+       <label class="k-form-field p-strong">Select Reason For Rejection</label>
+       <p class="p-strong m-0 hover-success cursor-p" *ngFor="let reason of scrutinyReasons;let i = index;">
+         <label> <input type="checkbox" (onchange)="changeReason($event" [(ngModel)]="reason.Selected">
+           {{reason.Detail}}
+         </label>
+       </p>
+     </div>
+   </div> -->
+    <div class="animated fadeIn">
+      <div class="row">
+        <div class="col-md-12">
+          <label class="k-form-field p-strong">Select Reason For Rejection
+            <kendo-dropdownlist [data]="scrutinyReasons" [textField]="'Detail'" [valueField]="'Id'"
+              (valueChange)="dropValueChanged('reason', $event)" [defaultItem]="{ Id: 0, Detail: 'Select...' }">
+            </kendo-dropdownlist>
+          </label>
+        </div>
+      </div>
+      <!--  <div class="row animated fadeIn" *ngIf="applicationLog.ReasonId == 3 || applicationLog.ReasonId == 4">
+       <div class="col-md-8 offset-md-2">
+         <label class="k-form-field p-strong">Select Record&nbsp;<span class="text-danger">*</span>
+           <kendo-dropdownlist [data]="applicationLog.ReasonId == 3 ? applicant.Qualifications : []"
+             (valueChange)="dropValueChanged('reasonSpecific', $event)"
+             [textField]="applicationLog.ReasonId == 3 ? 'DegreeName' : 'JobTitle'" [valueField]="'Id'">
+             <ng-template kendoDropDownListItemTemplate let-dataItem>
+               <span class="" *ngIf="applicationLog.ReasonId == 3">{{ dataItem.DegreeName }}</span>
+               <span class="" *ngIf="applicationLog.ReasonId == 4">{{ dataItem.JobTitle }}</span>
+             </ng-template>
+           </kendo-dropdownlist>
+         </label>
+       </div>
+     </div> -->
+      <div class="row animated fadeIn mb-2">
+        <div class="col-md-12">
+          <label class="k-form-field p-strong">Remarks&nbsp;<span class="text-danger">*</span>
+            <textarea type="text" [(ngModel)]="adhocScrutiny.Remarks"
+              style="width: 100%;border: 1px solid #f2f2f2;"></textarea>
+          </label>
+        </div>
+      </div>
+      <!-- <div class="row animated fadeIn" *ngIf="applicationLog.Remarks && applicationLog.ReasonId">
+       <div class="col-md-12" style="font-size: 20px !important;">
+         <p class="p-strong m-0 hover-danger cursor-p">
+           <label> <input type="checkbox" [(ngModel)]="application.Agree">
+             Documents and information provided by the applicant is not correct
+           </label>
+         </p>
+         <p class="p-strong hover-danger cursor-p">
+           <label> <input type="checkbox" [(ngModel)]="application.Agree2">
+             Applicant is not eligible for interview
+           </label>
+         </p>
+       </div>
+     </div> -->
+
+    </div>
+  </div>
+  <kendo-dialog-actions
+    *ngIf="scrutinyDialog && applicant && decision && applicant.Status_Id != 3 && applicant.Status_Id != 2"
+    class="animated fadeIn">
+    <kendo-buttongroup [width]="'100%'" style="padding: 10px 15px !important;">
+      <button kendoButton primary="true" *ngIf="decision == 'Accepted'" class="btn-lg"
+        (click)="saveAdhocScrutiny(true)"><i class="fa fa-check"></i>
+        Confirm Accept</button>
+      <button kendoButton style="color: #f86c6b !important;" [disabled]="!adhocScrutiny.Remarks"
+        *ngIf="decision == 'Rejected'" class="btn-lg" (click)="saveAdhocScrutiny(false)"><i class="fa fa-times"></i>
+        Confirm Reject</button>
+      <button (click)="changeApplicationStatus(2)"
+        *ngIf="decision == 'AcceptedFinal' && !scrutinyRejected && scrutinyComplete && application.Status_Id != 2 && application.Status_Id != 3"
+        class="animated fadeIn" kendoButton primary="true" [ladda]="changingStatus" data-style="zoom-in"><i
+          class="fa fa-check"></i>
+        Shortlist Cadidate for Interview</button>
+      <button kendoButton style="color: #f86c6b !important;"
+        *ngIf="decision == 'RejectedFinal' && scrutinyRejected && scrutinyComplete && application.Status_Id != 2 && application.Status_Id != 3"
+        class="btn-lg" (click)="changeApplicationStatus(3)"><i class="fa fa-times"></i>
+        Reject Application</button>
+    </kendo-buttongroup>
+  </kendo-dialog-actions>
+</kendo-dialog>
+
+
+
+<kendo-dialog [title]="selectedValue.T" *ngIf="editDialog && selectedValue" (close)="closeEditDialog()"
+  [minWidth]="'450'" [width]="'750'">
+
+
+  <div *ngIf="selectedValue.T == 'Merit'" class="row animated fadeIn p-2">
+    <div class="col-md-3 control-col-st">
+      <label class="k-form-field">
+        <span>Merit</span>
+        <input kendoTextBox type="text" disabled [(ngModel)]="selectedValue.MarksName" />
+      </label>
+    </div>
+    <div class="col-md-2 control-col">
+      <label class="k-form-field">
+        <span>Marks</span>
+        <input kendoTextBox type="text" [(ngModel)]="selectedValue.Marks" />
+      </label>
+    </div>
+  </div>
+
+  <div *ngIf="selectedValue.T == 'Qualification'" class="row animated fadeIn p-2">
+    <div class="col-md-5 control-col-st">
+      <label class="k-form-field">
+        <span>Degree / Certificate</span>
+        <input kendoTextBox type="text" disabled [(ngModel)]="selectedValue.DegreeName" />
+      </label>
+    </div>
+    <div class="col-md-7 control-col-end">
+      <label class="k-form-field">
+        <span>Institute / University / Board</span>
+        <input kendoTextBox type="text" disabled [(ngModel)]="selectedValue.Institute" />
+      </label>
+    </div>
+    <div class="col-md-3 control-col-st">
+      <label class="k-form-field">
+        <span>Degree From</span>
+        <input kendoTextBox type="text" disabled [(ngModel)]="selectedValue.DegreeType" />
+      </label>
+    </div>
+    <div class="col-md-3 control-col">
+      <label class="k-form-field">
+        <span>Total Marks<span class="animated fadeIn" *ngIf="selectedValue.DegreeType == 'Foreign'">/CGPA</span></span>
+        <input kendoTextBox type="text" [(ngModel)]="selectedValue.TotalMarks" />
+      </label>
+    </div>
+    <div class="col-md-3 control-col">
+      <label class="k-form-field">
+        <span>Obtained Marks<span class="animated fadeIn"
+            *ngIf="selectedValue.DegreeType == 'Foreign'">/CGPA</span></span>
+        <input kendoTextBox type="text" [(ngModel)]="selectedValue.ObtainedMarks" />
+      </label>
+    </div>
+    <div class="col-md-2 control-col-st animated fadeIn" *ngIf="selectedValue.Required_Degree_Id == 124">
+      <label class="k-form-field">
+        <span>Health Facility</span>
+        <input kendoTextBox type="text" [(ngModel)]="selectedValue.HealthFacility" />
+      </label>
+    </div>
+    <div class="col-md-2 control-col-st animated fadeIn" *ngIf="selectedValue.Required_Degree_Id == 124">
+      <label class="k-form-field">
+        <span>Experience From</span>
+        <kendo-datepicker [format]="'dd/MM/yyyy'" [(ngModel)]="selectedValue.ExpFrom"></kendo-datepicker>
+      </label>
+    </div>
+    <div class="col-md-2 control-col animated fadeIn" *ngIf="selectedValue.Required_Degree_Id == 124">
+      <label class="k-form-field">
+        <span>Experience To</span>
+        <kendo-datepicker [format]="'dd/MM/yyyy'" [(ngModel)]="selectedValue.ExpTo"></kendo-datepicker>
+      </label>
+    </div>
+    <div class="col-md-3 control-col-end">
+      <label class="k-form-field">
+        <span>Passing Year</span>
+        <kendo-datepicker [format]="'yyyy'" [bottomView]="'year'" [(ngModel)]="selectedValue.PassingYear">
+        </kendo-datepicker>
+      </label>
+    </div>
+  </div>
+
+  <div *ngIf="selectedValue.T == 'Experience'" class="row animated fadeIn p-2">
+    <div class="col-md-5 control-col-st">
+      <label class="k-form-field">
+        <span>Job Title</span>
+        <input kendoTextBox type="text" disabled [(ngModel)]="selectedValue.JobTitle" />
+      </label>
+    </div>
+    <div class="col-md-7 control-col-end">
+      <label class="k-form-field">
+        <span>Health Facility</span>
+        <input kendoTextBox type="text" disabled [(ngModel)]="selectedValue.Organization" />
+      </label>
+    </div>
+    <div class="col-md-3 control-col-st">
+      <label class="k-form-field">
+        <span>Sector</span>
+        <input kendoTextBox type="text" disabled [(ngModel)]="selectedValue.Sector" />
+      </label>
+    </div>
+    <div class="col-md-3 control-col">
+      <label class="k-form-field">
+        <span>Experience Type</span>
+        <input kendoTextBox type="text" disabled [(ngModel)]="selectedValue.Type" />
+      </label>
+    </div>
+    <div class="col-md-3 control-col">
+      <label class="k-form-field">
+        <span>Duration (from)</span>
+        <kendo-datepicker [format]="'dd/MM/yyyy'" [(ngModel)]="selectedValue.FromDate"></kendo-datepicker>
+      </label>
+    </div>
+    <div class="col-md-3 control-col-end">
+      <label class="k-form-field">
+        <span>Duration (to)</span>
+        <kendo-datepicker [format]="'dd/MM/yyyy'" [(ngModel)]="selectedValue.ToDate"></kendo-datepicker>
+      </label>
+    </div>
+  </div>
+
+
+  <kendo-dialog-actions *ngIf="editDialog" class="animated fadeIn">
+    <kendo-buttongroup [width]="'100%'" style="padding: 10px 15px !important;">
+      <button (click)="changeApplicationStatus(2)" class="animated fadeIn" kendoButton primary="true"
+        [ladda]="changingStatus" data-style="zoom-in"><i class="fa fa-check"></i> Save</button>
+      <button kendoButton primary="true" look="outline" (click)="changeApplicationStatus(3)" [ladda]="changingStatus"
+        data-style="zoom-in"><i class="fa fa-times"></i>
+        Reject</button>
+    </kendo-buttongroup>
+  </kendo-dialog-actions>
+</kendo-dialog>

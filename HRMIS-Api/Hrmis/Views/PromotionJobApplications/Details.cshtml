@@ -1,0 +1,203 @@
+﻿@model Hrmis.Models.DbModel.PromotionJobApplication
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>PromotionJobApplication</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.RequestedAs)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RequestedAs)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CNIC)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CNIC)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FatherName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FatherName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MobileNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MobileNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DistrictOfDomicile)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DistrictOfDomicile)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HFMIS)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HFMIS)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PromotionToCurrentScale)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PromotionToCurrentScale)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SeniorityNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SeniorityNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CertificateOfWorkingFilepath)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CertificateOfWorkingFilepath)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NoEnquiryCeritificateFilepath)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NoEnquiryCeritificateFilepath)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MatricFScMbbsDegreeFilepath)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MatricFScMbbsDegreeFilepath)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PostgraduateDegreeFilepath)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PostgraduateDegreeFilepath)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PmdcFilepath)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PmdcFilepath)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NoEnquiryCertifcateAttestedFilepath)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NoEnquiryCertifcateAttestedFilepath)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceStatementFirst)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceStatementFirst)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceStatementSecond)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceStatementSecond)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceStatementThird)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceStatementThird)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedOn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedOn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HrDesignation.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HrDesignation.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HrProfile.EmployeeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HrProfile.EmployeeName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

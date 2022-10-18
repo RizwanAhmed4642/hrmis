@@ -1,0 +1,151 @@
+<div class="limiter animated fadeIn">
+  <div class="container-login1001 animated fadeIn">
+    <div class="wrap-login100">
+      <img src="../../../assets/img/brand/mobilelogo.png" alt="IMG"> <span
+        class="login1001-form-title animated fadeIn p-strong" style="margin-top: 12px;font-size: 24px;">
+        Promotion of Consultant Doctors (BS-18/Regular)
+      </span>
+
+      <div class="row mb-2 animated fadeIn" *ngIf="!hideInfo">
+        <div class="col-md-10 offset-md-1 p-1">
+          <p class="animated fadeIn text-center p-strong text-danger">"This web portal is
+            specifically only for the
+            Promotion of Consultant Doctors (BS-18/Regular) working in Primary & Secondary Healthcare Department and
+            Specialized Healthcare & Medical Education Department"</p>
+        </div>
+      </div>
+
+      <hr>
+      <div class="row animated fadeIn" *ngIf="!hideInfo">
+        <div class="col-md-12 p-1">
+          <p class="urdu-text font-3xl p-strong pull-right animated fadeIn">{{urdu.desc1}}</p>
+        </div>
+      </div>
+      <div class="row"
+        [ngStyle]="{'width': userExists == null ? '50%' : '100%', 'margin': userExists == null ? '0 auto' : ''}"
+        style="background: #e3e3e3;border-radius: 3px;box-shadow: 0px 0px 4px #767676;padding: 10px;">
+        <div class="col-md-5">
+          <form *ngIf="!registering && !forgetPassword" class="login100-form validate-form animated fadeIn p-0"
+            name="loginForm" #loginForm="ngForm" (ngSubmit)="loginForm.form.valid && login()">
+            <div class="row">
+              <div class="wrap-input100 validate-input" data-validate="Username is required"
+                style="display: inline-block;">
+                <label class="k-form-field mt-2">
+                  <span class="p-strong">Enter your CNIC Number</span><span class="animated fadeIn lds-ellipsis"
+                    *ngIf="checkingUser">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </span>
+                  <kendo-maskedtextbox [mask]="CnicMask" (input)="checkUSer()" required #Cnic="ngModel" name="Cnic"
+                    [(ngModel)]="user.Cnic" required>
+                  </kendo-maskedtextbox>
+                </label>
+              </div>
+            </div>
+            <div *ngIf="userExists && user.Cnic[12] != ' '" class="wrap-input100 validate-input animated fadeIn p-0"
+              data-validate="Password is required">
+              <label class="k-form-field mt-2">
+                <span>Password</span>
+                <input kendoTextBox type="password" required #Password="ngModel" name="Password" (keyup.enter)="login()"
+                  [(ngModel)]="user.password">
+              </label>
+              <small *ngIf="this.loginError != ''" class="text-danger text-center">
+                {{this.loginError}}
+              </small>
+            </div>
+            <div *ngIf="userExists && user.Cnic[12] != ' '" class="container-login100-form-btn p-0">
+              <p class="m-0 text-success pull-left cursor-p" (click)="forgetPassword = true">Forgot Password?</p>
+              <button class="login100-form-btn" [disabled]="!loginForm.form.valid" type="submit" [ladda]="sigingin"
+                data-style="zoom-in">
+                Login
+              </button>
+            </div>
+          </form>
+          <form *ngIf="registering && !forgetPassword" class="login100-form validate-form animated fadeIn p-0"
+            name="register" #register="ngForm" (ngSubmit)="register.form.valid && getPassword()">
+            <label class="k-form-field mt-2">
+              <span class="p-strong">CNIC</span>
+              <input kendoTextBox type="text" required name="Cnic" placeholder="Cnic" [value]="user.Cnic" disabled>
+            </label>
+            <label class="k-form-field mt-2">
+              <span class="p-strong">Mobile Number</span>
+              <kendo-maskedtextbox [mask]="mobileMask" required #PhoneNumber="ngModel" name="PhoneNumber"
+                [(ngModel)]="user.PhoneNumber" required>
+              </kendo-maskedtextbox>
+            </label>
+            <label class="k-form-field mt-2">
+              <span class="p-strong">Email</span>
+              <input kendoTextBox type="text" [(ngModel)]="user.Email" required #Email="ngModel" name="Email"
+                pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?">
+            </label>
+            <hr>
+            <div class="container-login100-form-btn p-0">
+              <button class="login100-form-btn" [disabled]="!register.form.valid || portalClosed" type="submit"
+                [ladda]="generatingPassword" data-style="zoom-in">
+                {{portalClosed ? 'Portal is Closed' : 'Register Account'}}
+              </button>
+              <p class="mt-1 cursor-p" (click)="goBack()"><i class="fa fa-arrow-left"></i> back</p>
+            </div>
+          </form>
+          <div class="row animated fadeIn" *ngIf="!registering && forgetPassword">
+            <div class="col-md-8">
+              <p><i class="fa fa-user"></i><strong class="p-strong">&nbsp;CNIC:</strong> {{user.Cnic}}</p>
+              <p><i class="fa fa-mobile"></i><strong class="p-strong">&nbsp;Mobile:</strong>
+                <span>{{user.PhoneNumber && user.PhoneNumber.length == 11 ? user.PhoneNumber[0] + user.PhoneNumber[1] + user.PhoneNumber[2] + user.PhoneNumber[3] + '*****' + user.PhoneNumber[9] + user.PhoneNumber[10] : user.PhoneNumber}}</span>
+              </p>
+              <p><i class="fa fa-envelope"></i><strong class="p-strong">&nbsp;Email:</strong> {{user.Email}}</p>
+            </div>
+            <div class="container-login100-form-btn">
+              <button class="login100-form-btn p-0" (click)="getPassword()" [ladda]="generatingPassword"
+                data-style="zoom-in">
+                Generate New Password
+              </button>
+              <p class="mt-1 cursor-p" (click)="goBack()"><i class="fa fa-arrow-left"></i> back</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-7">
+         <!--  <p class="urdu-text font-2xl m-0 p-strong animated fadeIn" *ngIf="userExists == null">
+            {{urdu.first}}
+          </p> -->
+          <p class="m-0 animated p-1 fadeIn" style="font-size: 18px;" *ngIf="userExists == true && !forgetPassword">
+            {{urdu.secondeng}}
+          </p>
+          <p class="m-0 animated p-1 fadeIn border" style="font-size: 18px;"
+            *ngIf="userExists == true && forgetPassword">
+            {{urdu.fiftheng}}
+          </p>
+          <p class="urdu-text font-2xl m-0 p-strong pull-right animated fadeIn border" style="font-size: 18px;"
+            *ngIf="userExists == true && forgetPassword">
+            {{urdu.fifth}}
+          </p>
+          <p class="m-0 animated p-1 fadeIn" style="font-size: 18px;" *ngIf="userExists == false">
+            {{urdu.thirdeng}}
+          </p>
+        </div>
+      </div>
+      <hr>
+      <div class="row mt-3 animated fadeIn" style="width: 100%;" *ngIf="!hideInfo">
+        <div class="col-md-12">
+          <p class="animated fadeIn p-1 mb-0 text-center">
+            In case of any difficulty to login the portal, you are requested to call at 042-99206173
+          </p>
+          <p class="animated fadeIn p-1 text-center">
+            From 10 AM to 4 PM - Monday to Friday
+          </p>
+        </div>
+      </div>
+      <hr *ngIf="userExists == null">
+
+      <div class="text-center p-t-136" style="width: 100vw">
+        <span class="txt2 text-muted">
+          Powered by Health Information and Service Delivery Unit (HISDU), Primary & Secondary Healthcare Department,
+          Punjab
+          Government of The Punjab © 2022 All rights reserved
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

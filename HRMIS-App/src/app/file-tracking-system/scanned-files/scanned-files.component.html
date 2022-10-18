@@ -1,0 +1,326 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-6 col-xs-12">
+      <div class="top-h3">
+        Scanned Files
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-12"
+      *ngIf="currentUser && (currentUser.RoleName == 'Central Record Room' || currentUser.RoleName == 'ACR Room' || currentUser.UserName.startsWith('so.conf'))">
+      <div class="top-controls">
+        <button kendoButton *ngIf="currentUser.RoleName == 'ACR Room' || currentUser.UserName.startsWith('so.conf')"
+          [primary]="true" [look]="'outline'" class="ml-2" routerLink="/fts/scanned-files-new/1">Add
+          New ACR</button>
+        <button kendoButton *ngIf="currentUser.RoleName == 'Central Record Room'" [primary]="true" [look]="'outline'"
+          class="ml-2" routerLink="/fts/scanned-files-new">Add
+          New File</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row row-panel">
+  <div class="col-md-12">
+
+    <div class="grid-top-header-custom animated fadeIn" *ngIf="kGrid.totalRecords > 0">
+      <div class="pager-rows-number">
+        <span>
+          {{(kGrid.skip + 1) + ' - ' + (kGrid.pageSize <= kGrid.totalRecords ? (kGrid.pageSize + kGrid.skip) :
+            kGrid.totalRecords) + ' of ' + kGrid.numberWithCommas(kGrid.totalRecords) + ' items ' }}
+        </span>
+        <span class="pull-right"><button class="btn btn-sm btn-outline-success"><i class="fa fa-refresh"
+              (click)="getFiles()"></i></button>&nbsp;
+          Show &nbsp;
+          <select #select (change)="changePagesize(select.value)">
+            <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}</option>
+            <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+              [selected]="page === kGrid.pageSize ? true : undefined">
+              {{page}}
+            </option>
+          </select>
+          &nbsp; items per page
+        </span>
+      </div>
+    </div>
+
+    <div class="grid-top-header-custom animated fadeIn" style="border-bottom:1px solid rgba(0, 0, 0, 0.08);">
+      <div class="pager-rows-number">
+        <label class="k-form-field">
+          <span>Search File by Barcode / Name / CNIC / Section / Designation / Batch</span>
+          <input type="text" #searchRef (input)="searchEvent.next({ event: searchRef.value, filter: 'files'})"
+            placeholder="Type Barcode / Name / CNIC / Section / Designation / Batch" kendoTextBox>
+        </label>
+      </div>
+    </div>
+    <div class="grid-wrapper">
+      <kendo-grid [data]="kGrid.gridView" [sortable]="{
+                  allowUnsort: kGrid.allowUnsort,
+                  mode: kGrid.multiple ? 'multiple' : 'single'
+                  }" [sort]="false" (sortChange)="sortChange($event)" [(pageSize)]="kGrid.pageSize" [skip]="kGrid.skip"
+        [pageable]="true" (pageChange)="pageChange($event)" [scrollable]="false">
+
+        <kendo-grid-column [width]="'9'" field="asd" title="No." [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            {{(rowIndex + 1)}}.
+          </ng-template>
+        </kendo-grid-column>
+        <!--  <kendo-grid-column [width]="'11'" field="Name" title="Scanned File" [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div style="cursor: pointer;" (click)="openScannedFileDialog(dataItem)">
+              <img *ngIf="dataItem.F_FileType_Id == 1" class="animated fadeIn"
+                style="width:75px;height:75px;border: 1px solid grey;"
+                [src]="'https://fts.pshealth.punjab.gov.pk/Uploads/Files/ACRFiles/' + dataItem.Id + '.jpeg'"
+                onError="this.src='../../../assets/img/notfound.png'" alt="">
+              <img *ngIf="!dataItem.F_FileType_Id || dataItem.F_FileType_Id == 0" class="animated fadeIn"
+                style="width:75px;height:75px;border: 1px solid grey;"
+                [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/CRRFiles/' + dataItem.RequestId + '-23.jpg'"
+                onError="this.src='../../../assets/img/notfound.png'" alt="">
+            </div>
+          </ng-template>
+        </kendo-grid-column> -->
+        <kendo-grid-column [width]="'35'" field="Name" title="Name" [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="employee-info">
+              <p style="margin-bottom: 0px;">
+                {{dataItem.Subject ? dataItem.Subject : dataItem.F_Name ? dataItem.F_Name : dataItem.Subject ?
+                    dataItem.Subject : dataItem.EmployeeName ? dataItem.EmployeeName : dataItem.SName && dataItem.SName !=
+                    'Central Record Room' ? dataItem.SName : '-'}}
+                <!--   {{dataItem.F_Name ? dataItem.F_Name : ''}} -->
+              </p>
+              <p style="margin-bottom: 0px;" *ngIf="dataItem.F_CNIC">
+                <strong> CNIC: </strong>{{dashifyCNIC(dataItem.F_CNIC)}}
+              </p>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="'30'" field="FileNumber" title="File Number" [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="application-info">
+              <p style="margin-bottom: 0px;">
+                <!-- {{dataItem.F_FileNumber ? dataItem.F_FileNumber : ''}} -->
+                {{dataItem.DiaryNo ? dataItem.DiaryNo : dataItem.FileNumber ?
+                    dataItem.FileNumber : dataItem.UpdatedFileNumber}}
+                <span class="badge badge-success" style="font-family: 'Roboto-Bold';
+                font-weight: 100;" *ngIf="dataItem.F_FileType_Id == 1">ACR</span>
+              </p>
+              <p style="margin-bottom: 0px;">
+                {{dataItem.F_Rack ? dataItem.F_Rack : dataItem.UpdatedFileRack ? dataItem.UpdatedFileRack :
+                    dataItem.Rack}} <strong>-</strong>
+                {{dataItem.F_Shelf ? dataItem.F_Shelf : dataItem.UpdatedFileShelf ? dataItem.UpdatedFileShelf :
+                    dataItem.Shelf}}
+              </p>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="'15'" field="asd" title="Action" [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <button
+              *ngIf="currentUser.RoleName != 'Central Record Room' && currentUser.RoleName != 'ACR Room' && currentUser.UserName != 'rr.south'"
+              kendoButton kendoButton [look]="'outline'" [primary]="true" class="animated fadeIn btn-block"
+              (click)="openRequestDialog(dataItem)">
+              Request File
+            </button>
+            <button
+              *ngIf="currentUser.RoleName == 'Central Record Room' || currentUser.RoleName == 'ACR Room' || currentUser.UserName == 'rr.south' || (currentUser.UserName.startsWith('so.conf')  && dataItem.F_FileType_Id == 1 && dataItem.F_Created_By.startsWith('so.conf'))"
+              kendoButton kendoButton [look]="'outline'" [primary]="true" class="animated fadeIn btn-block"
+              (click)="openInNewTab('/fts/scanned-files-new/' + (dataItem.F_FileType_Id ? dataItem.F_FileType_Id : '0') + '/' + dataItem.Id + '/edit')">
+              Edit
+            </button>
+            <button *ngIf="currentUser.RoleName == 'Central Record Room'" kendoButton kendoButton [primary]="true"
+              [ladda]="dataItem.saving" data-style="zoom-in" class="animated fadeIn btn-block"
+              (click)="ddsSouth(dataItem)">
+              Shift to South
+            </button>
+            <button *ngIf="currentUser.UserName == 'rr.south' && dataItem.FileType_Id == 3" kendoButton kendoButton
+              [primary]="true" [ladda]="dataItem.saving" data-style="zoom-in" class="animated fadeIn btn-block"
+              (click)="ddsPSHD(dataItem)">
+              Shift to PSHD
+            </button>
+            <button *ngIf="currentUser.UserName == 'crr.incharge'" kendoButton kendoButton [primary]="true"
+              [ladda]="dataItem.saving" data-style="zoom-in" class="animated fadeIn btn-block"
+              (click)="hideDuplicationFile(dataItem)">
+              Hide
+            </button>
+          </ng-template>
+        </kendo-grid-column>
+
+        <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+          <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+          <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+          <kendo-pager-next-buttons></kendo-pager-next-buttons>
+          <div class="pager-rows-number">
+            <select #select (change)="changePagesize(select.value)">
+              <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}</option>
+              <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+                [selected]="page === kGrid.pageSize ? true : undefined">
+                {{page}}
+              </option>
+            </select>
+            &nbsp; items per page
+          </div>
+          <kendo-pager-info></kendo-pager-info>
+        </ng-template>
+
+      </kendo-grid>
+      <div *ngIf="kGrid.loading" class="k-i-loading"></div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<kendo-dialog [title]="'Scanned File'" *ngIf="scannedFileDialogOpened" [minWidth]="'450'" [width]="'950'"
+  (close)="closeScannedFileDialog()">
+  <div class="row">
+    <div class="col-md-12">
+      <ngx-image-zoom [thumbImage]="imagePath" [fullImage]="imagePath" [magnification]="'1.5'" [zoomMode]="'toggle'">
+      </ngx-image-zoom>
+    </div>
+  </div>
+</kendo-dialog>
+
+<kendo-dialog [title]="'Request File - ' + selectedFile.Subject ? selectedFile.Subject : selectedFile.F_Name ? selectedFile.F_Name : selectedFile.Subject ?
+selectedFile.Subject : selectedFile.EmployeeName ? selectedFile.EmployeeName : selectedFile.SName && selectedFile.SName !=
+'Central Record Room' ? selectedFile.SName : '-'" *ngIf="requestDialogOpened && selectedFile"
+  (close)="closeRequestDialog()" [width]="700">
+  <!-- <div class="row">
+      <div class="col-md-4 text-right">
+        <strong>Application Tracking Number</strong>
+      </div>
+      <div class="col-md-7">
+        <input type="number" #trackingRef placeholder="Provide Application Tracking Number" kendoTextBox>
+      </div>
+    </div> -->
+  <div class="row">
+    <div class="col-md-4 text-right">
+      <p><strong class="p-strong">File Name</strong></p>
+    </div>
+    <div class="col-md-7">
+      {{selectedFile.Subject ? selectedFile.Subject : selectedFile.F_Name ? selectedFile.F_Name : selectedFile.Subject ?
+          selectedFile.Subject : selectedFile.EmployeeName ? selectedFile.EmployeeName : selectedFile.SName && selectedFile.SName !=
+          'Central Record Room' ? selectedFile.SName : '-'}}
+    </div>
+  </div>
+  <div class="row mt-1">
+    <div class="col-md-4 text-right">
+      <p><strong class="p-strong">File No.</strong></p>
+    </div>
+    <div class="col-md-7">
+      {{selectedFile.DiaryNo ? selectedFile.DiaryNo : selectedFile.FileNumber ?
+          selectedFile.FileNumber : selectedFile.UpdatedFileNumber}}
+    </div>
+  </div>
+  <div class="row mt-1">
+    <div class="col-md-4 text-right control-col-st">
+      <p class="p-strong m-0">Tracking Number <span class="text-danger">*</span></p>
+      <small class="text-muted">(tracking number is required for file requisition)</small>
+    </div>
+    <div class="col-md-7 control-col-end">
+      <input kendoTextBox type="number" min="0" [(ngModel)]="trackingNumber">
+    </div>
+  </div>
+  <div class="row mt-1">
+    <div class="col-md-4 text-right control-col-st">
+      <p class="p-strong">File Request Reason <span class="text-danger">*</span></p>
+      <small class="text-muted">(reason is required for file requisition)</small>
+    </div>
+    <div class="col-md-7 control-col-end">
+      <textarea #reason kendoTextArea></textarea>
+    </div>
+  </div>
+  <hr>
+
+  <div class="row">
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-10">
+      <p *ngIf="fileNotAvailable" class="p-strong">File request
+        already made by
+        {{fileRequstedBy}}</p>
+      <p *ngIf="fileshifted" class="p-strong">{{fileshiftedTo}}</p>
+    </div>
+  </div>
+  <hr *ngIf="fileNotAvailable || fileshifted">
+  <div class="row" *ngIf="!fileNotAvailable && !fileIssued">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-7">
+      <button *ngIf="!fileNotAvailable && !fileIssued"
+        [disabled]="!trackingNumber || !reason.value || +trackingNumber < 175000" [ladda]="requestingFile"
+        data-style="zoom-in" kendoButton class="btn-lg btn-block"
+        (click)="sendFileRequest(reason.value, selectedFile.Id, trackingNumber)" primary="true">Request</button>
+    </div>
+  </div>
+  <div class="row" *ngIf="fileIssued">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-8">
+      <button *ngIf="fileIssued" kendoButton disabled="disabled" primary="true">File not available (already
+        issued)</button>
+    </div>
+  </div>
+</kendo-dialog>
+<!-- <div class="animated fadeIn" *ngIf="!healthFacility">
+        <div class="row">
+          <div class="col-md-7 col-xs-12">
+            <div class="shine shim-controls top-h3"></div>
+          </div>
+          <div class="col-md-2 col-xs-12 control-col-st">
+            <div class="top-controls">
+              <div class="shine shim-controls"></div>
+            </div>
+          </div>
+          <div class="col-md-1 col-xs-12 control-col">
+            <div class="top-controls">
+              <div class="shine shim-controls"></div>
+            </div>
+          </div>
+          <div class="col-md-2 col-xs-12 control-col-end">
+            <div class="top-controls">
+              <div class="shine shim-controls"></div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2 control-col-st">
+            <div class="shine shim-controls btn-align-v"></div>
+          </div>
+          <div class="col-md-2 control-col">
+            <div class="shine shim-controls btn-align-v"></div>
+          </div>
+          <div class="col-md-2 control-col">
+            <div class="shine shim-controls btn-align-v"></div>
+          </div>
+          <div class="col-md-2 control-col">
+            <div class="shine shim-controls btn-align-v"></div>
+          </div>
+          <div class="col-md-2 control-col">
+            <div class="shine shim-controls btn-align-v"></div>
+          </div>
+          <div class="col-md-1 control-col">
+            <div class="shine shim-controls btn-align-v"></div>
+          </div>
+          <div class="col-md-1 control-col-end">
+            <div class="shine shim-controls btn-align-v"></div>
+          </div>
+        </div>
+      </div>
+      <div class="animated fadeIn" *ngIf="!healthFacility">
+        <div class="row row-panel">
+          <div class="col-md-7 control-col-st">
+            <div class="shine shim-thumb-lg"></div>
+          </div>
+          <div class="col-md-5 control-col-end">
+            <div class="shine shim-thumb"></div>
+            <div class="shine shim-thumb mt-4"></div>
+          </div>
+        </div>
+      </div> -->

@@ -1,0 +1,75 @@
+<div class="animated fadeIn">
+  <div class="row print-not">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3">
+        New Advertisements
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" [look]="'outline'" routerLink="/ceo-application/adhoc">Back</button>
+      </div>
+    </div>
+  </div>
+  <div class="animated fadeIn" *ngIf="!saved">
+    <div class="row">
+      <div class="col-md-12 col-sm-6 pb-2">
+        <label class="k-form-field">
+          <span>Post(s) <span class="text-danger">*</span></span>
+          <kendo-multiselect #statusList [data]="dropDowns.designationsData" [valuePrimitive]="true"
+            [(ngModel)]="selectedDesignations" [filterable]="true" textField="Name" valueField="Id"
+            placeholder="Select Post" (filterChange)="handleFilter($event, 'designation')">
+          </kendo-multiselect>
+        </label>
+      </div>
+      <div class="col-md-4 col-sm-6 pb-2 control-col-st">
+        <label class="k-form-field">
+          <span>Min Age <span class="text-danger">*</span></span>
+          <input type="number" kendoTextBox [(ngModel)]="newAd.MinAge">
+        </label>
+      </div>
+      <div class="col-md-4 col-sm-6 pb-2 control-col">
+        <label class="k-form-field">
+          <span>Max Age <span class="text-danger">*</span></span>
+          <input type="number" kendoTextBox [(ngModel)]="newAd.MaxAge">
+        </label>
+      </div>
+      <div class="col-md-4 col-sm-6 pb-2 control-col-end">
+        <label class="k-form-field">
+          <span>Minimum Experience <span class="text-danger">*</span></span>
+          <input type="number" kendoTextBox [(ngModel)]="newAd.MinExperience">
+        </label>
+      </div>
+      <div class="col-md-4 col-sm-6 pb-2 control-col-st">
+        <label class="k-form-field">
+          <span>Advertisement Date <span class="text-danger">*</span></span>
+          <kendo-datepicker placeholder="Advertisement Date" [format]="'dd/MM/yyyy'" [(ngModel)]="newAd.AdvertDate">
+          </kendo-datepicker>
+        </label>
+      </div>
+      <div class="col-md-4 col-sm-6 pb-2 control-col">
+        <label class="k-form-field">
+          <span>Closing Date <span class="text-danger">*</span></span>
+          <kendo-datepicker placeholder="Closing Date" [format]="'dd/MM/yyyy'" [(ngModel)]="newAd.CloseDate">
+          </kendo-datepicker>
+        </label>
+      </div>
+      <div class="col-md-4 col-sm-6 pb-2 control-col-end">
+        <label class="k-form-field">
+          <span>Interview Date <span class="text-danger">*</span></span>
+          <kendo-datepicker placeholder="Interview Date" [format]="'dd/MM/yyyy'" [(ngModel)]="newAd.InterviewDate">
+          </kendo-datepicker>
+        </label>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-md-3 offset-md-9">
+        <button kendoButton primary="true" class="btn-block" (click)="saved = !saved">Submit</button>
+      </div>
+    </div>
+  </div>
+  <div class="animated fadeIn" *ngIf="saved">
+    <img src="../../../../assets/img/adhocad.jpg" alt="">
+  </div>
+</div>

@@ -1,0 +1,54 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12 col-xs-12">
+      <div class="top-h3">
+        Order / Notification - Upload
+      </div>
+    </div>
+  </div>
+  <div class="p-4" style="background: #e9e9e9;color: black;border-radius: 9px;">
+    <div class="row print-not" id="applicantInfo">
+      <div class="col-md-6 col-sm-6 col-xs-12 control-col-st">
+        <label class="k-form-field">
+          <span>Subject</span>&nbsp;<span class="text-danger">*</span>
+          <input kendoTextBox type="text" [(ngModel)]="order.DispatchSubject">
+        </label>
+      </div>
+      <div class="col-md-2 col-sm-6 col-xs-12 control-col">
+        <label class="k-form-field">
+          <span>Dispatch Number</span>&nbsp;<span class="text-danger">*</span>
+          <input kendoTextBox type="text" [(ngModel)]="order.DispatchNumber">
+        </label>
+      </div>
+      <div class="col-md-4 col-sm-6 col-xs-12 control-col-end">
+        <label class="k-form-field">
+          <span>Dated</span>&nbsp;<span class="text-danger">*</span>
+          <kendo-datepicker placeholder="Dispatch Date" [format]="'dd/MM/yyyy'" [(ngModel)]="order.DispatchDated">
+          </kendo-datepicker>
+        </label>
+      </div>
+      <div class="col-md-6 col-sm-6 col-xs-12 control-col-st">
+        <label class="k-form-field">
+          <span>From</span>&nbsp;<span class="text-muted">(address)</span>&nbsp;<span class="text-danger">*</span>
+          <input kendoTextBox type="text" [(ngModel)]="order.DispatchFrom">
+        </label>
+      </div>
+      <div class="col-md-3 col-sm-6 col-xs-12 control-col">
+        <label class="k-form-field">
+          <span>CNIC</span>&nbsp;
+          <!-- <span class="text-danger">*</span> -->
+          <kendo-maskedtextbox [mask]="cnicMask" name="CNIC" [(ngModel)]="order.CNIC">
+          </kendo-maskedtextbox>
+        </label>
+      </div>
+      <div class="col-md-3 col-sm-6 col-xs-12 control-col-end">
+        <label class="k-form-field">
+          <span>Contact No.</span>&nbsp;
+          <!-- <span class="text-danger">*</span> -->
+          <kendo-maskedtextbox [mask]="mobileMask" name="MobileNo" [(ngModel)]="order.MobileNo">
+          </kendo-maskedtextbox>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>

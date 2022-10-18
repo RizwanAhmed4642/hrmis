@@ -1,0 +1,156 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12 col-xs-12">
+      <div class="top-h3">
+        Online Transfer Applications
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-10 col-sm-12 control-col-st">
+    <label class="k-form-field">
+      <span>Name / CNIC / Tracking Number</span>
+      <input type="text" #searchRef (input)="inputChange.next(searchRef.value)"
+        placeholder="Tracking Number, Name, CNIC" kendoTextBox>
+    </label>
+  </div>
+  <div class="col-md-2 col-sm-12 mt-1 control-col-end">
+    <label class="k-form-field">
+      <button kendoButton class="btn-block btn-align-v" [ladda]="kGrid.loading" data-style="zoom-in"
+        (click)="getApplications()" [primary]="true">SEARCH</button>
+    </label>
+  </div>
+</div>
+<div class="row row-panel">
+  <div class="col-md-12">
+    <div class="grid-top-header-custom animated fadeIn" *ngIf="kGrid.totalRecords > 0">
+      <div class="pager-rows-number">
+        <span>
+          {{(kGrid.skip + 1) + ' - ' + (kGrid.pageSize <= kGrid.totalRecords ? (kGrid.pageSize + kGrid.skip) :
+                  kGrid.totalRecords) + ' of ' + kGrid.numberWithCommas(kGrid.totalRecords) + ' items ' }} </span>
+        <span class="pull-right">
+          Show &nbsp; <select #select (change)="changePagesize(select.value)">
+            <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}</option>
+            <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+              [selected]="page === kGrid.pageSize ? true : undefined">
+              {{page}}
+            </option>
+          </select>
+          &nbsp; items per page
+        </span>
+      </div>
+    </div>
+    <div class="grid-wrapper">
+      <kendo-grid [data]="kGrid.gridView" [sortable]="{
+                allowUnsort: kGrid.allowUnsort,
+                mode: kGrid.multiple ? 'multiple' : 'single'
+                }" [scrollable]="false" [sort]="kGrid.sort" (sortChange)="sortChange($event)"
+        [(pageSize)]="kGrid.pageSize" [skip]="kGrid.skip" [pageable]="true" (pageChange)="pageChange($event)">
+        <kendo-grid-column [width]="20" field="asd" title="No." [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            {{(rowIndex + 1)}}.
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="80" field="EmployeeName" title="Applicant" [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="employee-info">
+              <p class="m-0"><strong class="p-strong"> Name: </strong>
+                {{dataItem.Name ? dataItem.Name : ''}}</p>
+              <p class="m-0"><strong class="p-strong"> Father Name: </strong>
+                {{dataItem.FatherName ? dataItem.FatherName : ''}}</p>
+              <p class="m-0"><strong class="p-strong"> CNIC: </strong> {{dashifyCNIC(dataItem.CNIC)}}</p>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="80" field="TrackingNumber" title="Application" [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="application-info">
+              <p class="m-0"><strong class="p-strong"> Merit # </strong>
+                {{dataItem.MeritNumber}}</p>
+              <p class="m-0"><strong class="p-strong"> Application # </strong>
+                {{dataItem.ApplicationNumber}}</p>
+              <p class="m-0"><strong class="p-strong"> PMDC # </strong> {{dataItem.PMDCNumber}}</p>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="80" field="asd" title="Download" [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="application-info">
+              <p class="m-0"><strong class="p-strong">Status: </strong>{{dataItem.Status}}</p>
+
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+          <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+          <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+          <kendo-pager-next-buttons></kendo-pager-next-buttons>
+          <div class="pager-rows-number">
+            <select #select (change)="changePagesize(select.value)">
+              <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}
+              </option>
+              <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+                [selected]="page === kGrid.pageSize ? true : undefined">
+                {{page}}
+              </option>
+            </select>
+            &nbsp; items per page
+          </div>
+          <kendo-pager-info></kendo-pager-info>
+        </ng-template>
+      </kendo-grid>
+      <div *ngIf="kGrid.loading" class="k-i-loading"></div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<kendo-dialog [title]="selectedMerit.Name + ' - ' + selectedMerit.MeritNumber"
+  *ngIf="preferencesWindow && selectedMerit" (close)="closePreferencesWindow()" [minWidth]="'450'" [height]="'485'"
+  [width]="'700'">
+
+  <div class="row mt-3">
+    <div class="col-md-3">
+      <img class="animated fadeIn" style="width:100px;height:100px;border:1px solid;"
+        [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/MeritPhotos/' + selectedMerit.CNIC + '_23.jpg'"
+        onError="this.src='../../../assets/img/notfound.png'" alt="">
+    </div>
+    <div class="col-md-4">
+      <p class="m-0"><strong class="p-strong"> Name: </strong>
+        {{selectedMerit.Name ? selectedMerit.Name : ''}}</p>
+      <p class="m-0"><strong class="p-strong"> Father Name: </strong>
+        {{selectedMerit.FatherName ? selectedMerit.FatherName : ''}}</p>
+      <p class="m-0"><strong class="p-strong"> CNIC: </strong> {{dashifyCNIC(selectedMerit.CNIC)}}</p>
+    </div>
+    <div class="col-md-4">
+      <p class="m-0"><strong class="p-strong"> Merit # </strong>
+        {{selectedMerit.MeritNumber}}</p>
+      <p class="m-0"><strong class="p-strong"> Application # </strong> {{selectedMerit.ApplicationNumber}}</p>
+      <p class="m-0"><strong class="p-strong"> PMDC # </strong> {{selectedMerit.PMDCNumber}}</p>
+    </div>
+  </div>
+  <hr>
+  <div class="k-i-loading" *ngIf="loadingPreferences"></div>
+  <div class="row" *ngIf="selectedMeritPreferences.length > 0">
+    <div class="col-md-10 offset-md-1" *ngIf="selectedMeritPreferences.length > 0">
+      <div *ngFor="let pref of selectedMeritPreferences; let i = index;">
+        <h4 class="m-0" style="cursor: pointer;">
+          {{(i + 1)}}. {{pref.Prefrence}}
+        </h4>
+
+      </div>
+    </div>
+    <div class="col-md-10 offset-md-1" *ngIf="selectedMeritPreferences.length == 0">
+      <h4 class="m-0">
+        No Preferences
+      </h4>
+    </div>
+  </div>
+</kendo-dialog>

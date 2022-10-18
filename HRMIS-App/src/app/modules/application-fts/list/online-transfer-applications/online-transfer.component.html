@@ -1,0 +1,705 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-7 col-xs-12">
+      <div class="top-h3">
+        E-Transfer Applications
+      </div>
+    </div>
+    <div class="col-md-5 col-xs-12">
+      <div class="top-controls">
+        <!--  <button kendoButton [primary]="true" *ngIf="viewStep != 1"
+          (click)="viewStep == 3 ? fetchDesignations(hfId, hfName) : viewStep == 2 ? getAllApplications() : ''">Back</button> -->
+        <button kendoButton [primary]="true" class="mr-2" [look]="'outline'"
+          *ngIf="viewStep == 3 && hrMarks && currentUser.UserName == 'dpd'"
+          (click)="step = step == 1 ? 2 : 1">View</button>
+      </div>
+    </div>
+  </div>
+  <div class="row animated fadeIn" *ngIf="step == 2 && hrMarks">
+    <div class="col-md-3 control-col-st">
+      <div class="content-heading">
+        Max Days ({{hrMarks.MaxServiceDays}})
+        <label class="k-form-field">
+          <input kendoTextBox type="number" [(ngModel)]="hrMarks.MaxServiceDays">
+        </label>
+      </div>
+      <div class="content-heading">
+        Service ({{hrMarks.Service}})
+        <label class="k-form-field">
+          <input kendoTextBox type="number" [(ngModel)]="hrMarks.Service">
+        </label>
+      </div>
+      <div class="row m-0 bg-white border">
+        <div class="col-md-12">
+          <label class="k-form-field">
+            <span>Current Posting</span>
+            <input kendoTextBox type="number" [(ngModel)]="hrMarks.ServiceCurrent">
+          </label>
+        </div>
+        <div class="col-md-12">
+          <label class="k-form-field">
+            <span>Total Service</span>
+            <input kendoTextBox type="number" [(ngModel)]="hrMarks.ServiceTotal">
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 control-col">
+      <div class="content-heading">
+        Distance ({{hrMarks.Distance}})
+        <label class="k-form-field">
+          <input kendoTextBox type="number" [(ngModel)]="hrMarks.Distance">
+        </label>
+      </div>
+      <div class="row m-0 bg-white border">
+        <div class="col-md-4 control-col-st">
+          <label class="k-form-field">
+            <span>Point to Point</span>
+            <input kendoTextBox type="number" [(ngModel)]="hrMarks.P2P">
+          </label>
+        </div>
+        <div class="col-md-4 control-col">
+          <label class="k-form-field">
+            <span>Preferred District</span>
+            <input kendoTextBox type="number" [(ngModel)]="hrMarks.PreferredDistrict">
+          </label>
+        </div>
+        <div class="col-md-4 control-col-end">
+          <label class="k-form-field">
+            <span>Main City Distance</span>
+            <input kendoTextBox type="number" [(ngModel)]="hrMarks.MainCity">
+          </label>
+        </div>
+        <div class="col-md-4 control-col-st">
+          <label class="k-form-field">
+            <span>From Lahore</span>
+            <input kendoTextBox type="number" [(ngModel)]="hrMarks.FromLahoreCity">
+          </label>
+
+        </div>
+        <div class="col-md-4 control-col">
+          <label class="k-form-field">
+            <span>Nearest DHQ</span>
+            <input kendoTextBox type="number" [(ngModel)]="hrMarks.NearDHQ">
+          </label>
+        </div>
+        <div class="col-md-4 control-col-end">
+          <label class="k-form-field">
+            <span>Nearest THQ</span>
+            <input kendoTextBox type="number" [(ngModel)]="hrMarks.NearTHQ">
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 control-col-end">
+      <div class="content-heading">
+        &nbsp;
+        <label class="k-form-field">
+          &nbsp;
+        </label>
+      </div>
+      <div class="row m-0 bg-white border">
+        <div class="col-md-12">
+          <label class="k-form-field">
+            <span>Apply</span>
+            <button kendoButton (click)="saveHrMarkings()" data-style="zoom-in" [ladda]="savingMarking" primary="true"
+              class="btn-block"><i class="fa fa-refresh"></i> Save / Refresh</button>
+          </label>
+        </div>
+        <div class="col-md-12">
+          <label class="k-form-field">
+            <span>&nbsp;</span>
+            <button kendoButton primary="true" class="btn-block" look="outline"
+              (click)="step = step == 1 ? 2 : 1">Close</button>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="col-md-4 control-col-end">
+      <div class="content-heading mb-2">
+        Vacancy ({{hrMarks.Vacancy}})
+        <input kendoTextBox type="number" [(ngModel)]="hrMarks.Vacancy">
+      </div>
+      <div class="row m-0 bg-white border">
+        <div class="col-md-6 control-col-st">
+          <label class="k-form-field">
+            <span>From</span>
+            <input kendoTextBox type="number" [(ngModel)]="hrMarks.VacancyFrom">
+          </label>
+        </div>
+        <div class="col-md-6 control-col-end">
+          <label class="k-form-field">
+            <span>To</span>
+            <input kendoTextBox type="number" [(ngModel)]="hrMarks.VacancyTo">
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="content-heading mb-2">
+        Extra Score
+      </div>
+    </div> 
+    <div class="col-md-6 control-col-st" *ngIf="isBHU">
+      <div class="row m-0 bg-white border">
+        <div class="col-md-6 control-col-st">
+          <label class="k-form-field">
+            <span>Male (only for BHU)</span>
+            <input kendoTextBox type="number" [(ngModel)]="hrMarks.Male">
+          </label>
+        </div>
+        <div class="col-md-6 control-col-end">
+          <label class="k-form-field">
+            <span>Female (only for BHU)</span>
+            <input kendoTextBox type="number" [(ngModel)]="hrMarks.Female">
+          </label>
+        </div>
+        <div class="col-md-12">
+          <label class="k-form-field">
+            <span>BHU was more vacant</span>
+            <input kendoTextBox type="number" [(ngModel)]="hrMarks.BhuMoreVacant">
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 control-col-st">
+      <div class="content-heading mb-2">
+        Disability
+      </div>
+      <div class="row m-0 bg-white border">
+        <div class="col-md-6 control-col-st">
+          <label class="k-form-field">
+            <span>Type A</span>
+            <input kendoTextBox type="number" [(ngModel)]="hrMarks.Disability">
+          </label>
+        </div>
+      </div>
+    </div>-->
+  </div>
+  <hr *ngIf="step == 2">
+  <div *ngIf="!loading" class="row">
+    <div class="col-md-12 mb-2 animated fadeIn" *ngIf="viewStep == 3">
+      <div class="content-heading" *ngIf="viewStep == 3">
+        {{hfName ? hfName : '' + designationName ? ' - ' + designationName : ''}}
+      </div>
+      <div class="row" hidden>
+        <div class="col-md-4 control-col-st">
+          <label class="k-form-field">
+            <span class="p-strong">Sanctioned</span>
+            <input kendoTextBox disabled type="number" [value]="vpMaster.TotalSanctioned">
+          </label>
+        </div>
+        <div class="col-md-4 control-col">
+          <label class="k-form-field">
+            <span class="p-strong">Filled</span>
+            <input kendoTextBox type="number" (input)="calculateVacancy()" [(ngModel)]="vpMaster.TotalWorking">
+          </label>
+        </div>
+        <div class="col-md-4 control-col-end">
+          <label class="k-form-field">
+            <span class="p-strong">Vacant</span>
+            <input kendoTextBox disabled type="number" [value]="vpMaster.Vacant">
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="animated fadeIn">
+        <!--   <div class="content-heading" *ngIf="viewStep == 3">
+          {{hfName ? hfName : '' + designationName ? ' - ' + designationName : ''}}&nbsp;<small *ngIf="isBHU"
+            class="pull-right">{{hfTenure.percentage}}%</small>
+        </div> -->
+        <kendo-grid *ngIf="viewStep != 3" [data]="applicationFacilities" [resizable]="true">
+          <kendo-grid-column field="asd" title="No." [width]="5" [headerClass]="'grid-header-text'"
+            [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p style="margin: 0;">{{(rowIndex + 1)}}.</p>
+            </ng-template>
+          </kendo-grid-column>
+          <!--   <kendo-grid-column width="8" field="asd" title="Photo" [headerClass]="'grid-header-text'"
+            [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <img class="pic-shadow" width="55" height="55"
+                [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + dataItem.application?.CNIC + '_23.jpg'"
+                onError="this.src='../../../assets/img/notfound.png'" alt="">
+            </ng-template>
+          </kendo-grid-column> -->
+          <kendo-grid-column field="Name" [width]="70" [title]="viewStep == 1 ? 'Health Facility' : 'Posts'"
+            [headerClass]="'grid-header-text'"
+            [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+              <p (click)="viewStep == 1 ? fetchDesignations(dataItem.Id, dataItem.Name) : viewStep == 2 ? fetchApplications(dataItem.DsgId, dataItem.DsgName) : ''"
+                class="m-0 cursor-p"><span>{{ dataItem.DsgName ? dataItem.DsgName : dataItem.Name}}</span>
+              </p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="Count" title="Applications" [width]="25" [headerClass]="'grid-header-text'"
+            [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p style="margin: 0;">
+                {{dataItem.ApplicationCount ? dataItem.ApplicationCount : dataItem.Count ? dataItem.Count : 0}}</p>
+            </ng-template>
+          </kendo-grid-column>
+          <!--  <kendo-grid-column field="ToStatus" width="10" title=".." [headerClass]="'grid-header-text'"
+            [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+              <p class="m-0 cursor-p" [routerLink]="'/fts/application/' + dataItem.Id + '/' + dataItem.TrackingNumber">
+                <i class="fa fa-eye"></i>&nbsp;View
+              </p>
+            </ng-template>
+          </kendo-grid-column> -->
+        </kendo-grid>
+        <div class="row animated fadeIn" *ngIf="viewStep == 3">
+          <div class="col-md-12">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <td class="p-strong text-center">Sr.</td>
+                  <td class="p-strong">Applicant Info</td>
+                  <td class="p-strong text-center">Service <small class="text-muted">{{hrMarks.Service * 100}}%</small>
+                  </td>
+                  <td class="p-strong text-center">Distance <small
+                      class="text-muted">{{hrMarks.Distance * 100}}%</small></td>
+                  <td class="p-strong text-center bg-light">Final Score</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let dataItem of kGrid.gridView.data; index as i">
+                  <td style="vertical-align: middle" class="h4 text-center">{{(i + 1)}}</td>
+                  <td>
+                    <div class="d-flex">
+                      <div>
+                        <a [routerLink]="'/profile/' + dataItem.application?.CNIC"> <img class="pic-shadow" width="65"
+                            height="65"
+                            [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + dataItem.application?.CNIC + '_23.jpg'"
+                            onError="this.src='../../../assets/img/notfound.png'" alt=""></a>
+                        <p class="m-0">
+                          {{dataItem.application?.TrackingNumber}}
+                        </p>
+                      </div>
+                      <div class="mx-2">
+                        <p class="m-0">{{ dataItem.application?.EmployeeName}}<span
+                            class="text-muted">&nbsp;({{dataItem.application?.designationName}})</span>
+                        </p>
+                        <!-- <p class="m-0 text-success p-strong" *ngIf="isBHU">{{ dataItem.profile?.Gender }}</p> -->
+                        <p class="m-0 text-success" *ngIf="dataItem.profile?.disability"><span
+                            class="p-strong">Disable:</span> {{ dataItem.profile?.disability }}</p>
+                        <!-- <p class="m-0">{{dataItem.application?.designationName}}</p> -->
+                        <p class="m-0 p-strong">{{ dataItem.application?.HealthFacilityName }}</p>
+                        <p class="m-0"><i><a class="text-success" [routerLink]="'/profile/' + dataItem.profile?.CNIC"
+                              target="_blank">view profile</a></i></p>
+                        <!--  <p class="m-0 text-success p-strong" *ngIf="isBHU">Seat Vacant at BHU: <span class="p-strong">
+                            {{ dataItem.bhuVacant }}%</span></p> -->
+                        <p class="m-0" *ngIf="dataItem.application?.Reason">
+                          <span><i class="fa fa-exclamation-triangle"></i>&nbsp;{{dataItem.application?.Reason}}&nbsp;
+                            <span class="text-muted">{{dataItem.compassionate + ' extra marks'}}</span></span>
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+                  <td style="vertical-align: middle" class="text-center" (click)="viewApplication(dataItem, 1)">
+                    <!--   <p class="m-0 p-strong">
+                      <span>{{calculateDays(dataItem.profile?.DateOfFirstAppointment) + ' Days' }}&nbsp;
+                        <small class="text-muted">x&nbsp;{{markings.serviceDetail.totalService}}</small></span><span
+                        *ngIf="dataItem.totalService">
+                        <small class="text-muted">&nbsp;= {{dataItem.totalService}}</small></span>
+                    </p> -->
+                    <h4> {{dataItem.service}}</h4>
+                    <!--  <p class="m-0 text-muted">
+                      <span><small> =&nbsp;{{dataItem.serviceScore + ' Days'}}&nbsp;
+                          x&nbsp;{{hrMarks.Service}}</small></span> 
+                    </p>-->
+                  </td>
+                  <td style="vertical-align: middle" class="h4 text-center" (click)="viewApplication(dataItem, 3)">
+                    {{dataItem.distance}}
+
+                  </td>
+                  <td style="vertical-align: middle" class="h4 text-center bg-light"
+                    (click)="viewApplication(dataItem, 4)">
+                    {{dataItem.finalScore ? dataItem.finalScore : 0}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12 mt-2" *ngIf="viewStep == 3 && !showOrder">
+      <div class="row mt-2">
+        <div class="col-md-4 mx-auto">
+          <button kendoButton primary="true" class="btn-block" *ngIf="currentUser.UserName == 'dpd'"
+            (click)="generateOrder()">Start Order Generation</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12 mt-3 animated fadeIn" *ngIf="viewStep == 3 && showOrder">
+      <hr>
+      <div class="content-heading" *ngIf="viewStep == 3">
+        Order
+        <button kendoButton primary="true" class="pull-right" (click)="printApplication()"><i
+            class="fa fa-print"></i></button>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-10 mx-auto animated fadeIn">
+
+          <!--  <ckeditor [editor]="Editor" data="<p>Hello, world!</p>"></ckeditor> -->
+          <!-- <quill-editor *ngIf="application.RawText" [(ngModel)]="application.RawText"> </quill-editor> -->
+          <div class="page page.preview-order-demo pb-3" id="applicationPrintOld">
+            <div class="table-order" style="padding: 30px 50px 0 50px;">
+              <div style="text-align:center;position:absolute;left:0;width:100%;z-index:-1;top: -62px;
+                    opacity: 0.2;">
+                <div style="text-align:center;position:absolute;left:0;width:100%;top:270px;z-index:-1;font-family: -apple-system, system-ui, BlinkMacSystemFont, '
+                  Segoe UI', Roboto, 'Helvetica Neue' , Arial, sans-serif; font-weight: normal; line-height: 1.5;">
+                  <img alt="HISDU" src="https://hrmis.pshealthpunjab.gov.pk/assets/img/brand/Watermark.png"
+                    style="display:inline-block;opacity:0.1;" />
+                </div>
+                <img alt="HISDU" src="https://hrmis.pshealthpunjab.gov.pk/assets/img/brand/Watermark.png"
+                  style="display:inline-block; " />
+              </div>
+              <table border="0" cellspacing="0" style="border-color:transparent !important; width:100%;font-family: sans-serif, Arial, Verdana, 'Trebuchet MS' !important;
+                    font-size: 13px !important;
+                    font-style: normal !important;
+                    font-variant: normal !important;
+                    font-weight: 400 !important;
+                    line-height: 1.6 !important;
+                    color: #383e4b !important;
+                    background-color: #fff !important;">
+                <tbody>
+                  <tr>
+                    <td style="border-color:transparent !important; text-align:left">
+                      <img alt="Punjab Government Log"
+                        src="https://hrmis.pshealthpunjab.gov.pk/assets/img/brand/govlogoUpdated.png"
+                        style="display:inline-block; width:134px" />
+                    </td>
+                    <td style="border-color:transparent !important; text-align:right">
+                      <div style="display:inline-block;text-align:center;">
+                        <p><strong>GOVERNMENT
+                            OF THE PUNJAB<br /> PRIMARY
+                            &amp; SECONDARY HEALTHCARE<br /> DEPARTMENT </strong><br /> Dated Lahore, <span
+                            [innerHTML]="dateNow"></span></p>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" style="border-color:transparent !important; text-align:left">
+                      <p style="margin-top: 50px;margin-bottom: 15px;"><strong><u>O R D E R</u> </strong></p>
+                    </td>
+                  </tr>
+                  <tr style="font-size: 13px !important;">
+                    <td colspan="2" style="border-color:transparent !important; text-align:justify;line-height: 1.6;">
+                      <p style="text-align: justify;margin: 0 0 10px 0;" *ngFor="let final of finalApplications">
+                        <strong style="margin-left: 62px;">
+                          <!-- No.<em><u>{{final.application?.FileNumber}}</u></em>, -->
+                          {{final.application?.EmployeeName ? final.application?.EmployeeName : '-'}} (CNIC:
+                        </strong>{{final.application?.CNIC ? dashifyCNIC(final.application?.CNIC) : '-'}}<strong>),
+                          ({{final.application?.designationName ? final.application?.designationName :
+                              '-'}}),
+                          {{final.application?.fromHealthFacility ? final.application?.fromHealthFacility : '-'}},</strong>
+                        is hereby transferred and posted at&nbsp;<strong>{{final.application?.toHealthFacility ?
+                              final.application?.toHealthFacility : '-'}},</strong> against the vacant
+                        post&nbsp;of&nbsp;
+                        <strong>({{final.application?.toDesignationName ? final.application?.toDesignationName :
+                              '-'}}){{final.application?.Reason ? '' : '.'}}</strong>
+                        {{final.application?.Reason ? final.application?.Reason + '.' : ''}}
+                      </p>
+                    </td>
+                  </tr>
+                  <!-- <tr style="font-size: 13px !important;" *ngIf="application.Remarks">
+                        <td colspan="2" style="border-color:transparent !important; text-align:justify;line-height: 1.6;">
+                          <p style="text-align: justify;margin-top: 7px;word-break: break-all;">
+                            <strong><i>2</i></strong>. <span style="margin-left: 49px;"> {{application.Remarks}}</span>
+                          </p>
+                        </td>
+                      </tr> -->
+                  <tr>
+                    <td colspan="2" style="border-color:transparent !important; text-align:right">
+                      <div style="text-align:center; display:inline-block;">
+                        <p style="line-height: 1.5 !important;">
+                          <strong>SECRETARY<br /> PRIMARY &amp;
+                            SECONDARY HEALTHCARE<br /> DEPARTMENT </strong></p>
+                      </div>
+                    </td>
+                  </tr>
+                  <!--  <tr>
+                        <td colspan="2" style="border-color:transparent !important; text-align:center">
+                          <p>&nbsp;</p>
+                          <p *ngIf="application.barcode"><img alt="IMAGE AREA" [src]="barcodeSrc()"
+                              style="border-width:0px" /><br />
+                            <strong>{{application.TrackingNumber}}</strong>
+                          </p>
+                          <p>&nbsp;</p>
+                          <p>&nbsp;</p>
+                        </td>
+                      </tr> -->
+                  <tr>
+                    <td colspan="2" style="border-color:transparent !important; text-align:left">
+                      <p><strong><u>Number &amp;
+                            Date Even</u></strong></p>
+                      <p>A copy is forwarded for information and necessary action to:</p>
+                      <ol>
+                        <li>PSO to Secretary P&amp;S Healthcare Department</li>
+                        <li>PA to Additional Secretary Concerned</li>
+                        <li>PA to Deputy Secretary Concerned</li>
+                        <li>Senior Data Processor Concerned</li>
+                        <li>Officer / Official Concerned</li>
+                        <li>Master File</li>
+                      </ol>
+                    </td>
+                  </tr>
+                  <tr>
+
+                    <td colspan="2" style="border-color:transparent !important; text-align:right">
+                      <div style="text-align:center;display: inline-block;">
+                        <strong>Section Officer
+                        </strong>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="k-i-loading" *ngIf="loading && viewStep != 3"></div>
+  <div *ngIf="loading && viewStep == 3" style="width: 100%;font-size: 24px;" class="shine p-1 text-center text-muted"><i
+      class="fa fa-calculator"></i> Loading...</div>
+</div>
+
+
+
+
+
+<kendo-dialog
+  [title]="selectedApplication.application?.EmployeeName + ' - ' + (scoreType == 1 ? 'Service' : scoreType == 2 ? 'Vacancy' : scoreType == 3 ? 'Distance' : '')"
+  *ngIf="selectedApplication && viewWindow && markings" [width]="scoreType == 3 ? '1325' : '830'"
+  (close)="closeViewWindow()">
+  <div class="row">
+    <div class="col-md-12" *ngIf="scoreType == 1">
+      <div class="row">
+        <div class="col-md-6">
+          <div><i><small>total service</small></i></div>
+          <!--   <p class="m-0 p-stro4ng">{{selectedApplication.profile?.DateOfFirstAppointment | date }}
+          </p> -->
+          <p class="m-0 p-strong">
+            <span>{{calculateDays(selectedApplication.profile?.DateOfFirstAppointment) + ' Days' }} x 0.00142&nbsp;
+              <!-- <small class="text-muted">x&nbsp;{{markings.serviceDetail.totalService}}</small> --></span><span
+              *ngIf="selectedApplication.totalService">
+              <small class="text-muted">&nbsp;= {{selectedApplication.totalService}}</small></span>
+          </p>
+        </div>
+        <!-- <div class="col-md-4">
+          <div><i><small>current posting</small></i></div>
+          <p class="m-0 p-strong">
+            <span>{{calculateDays(selectedApplication.profile?.PresentPostingDate) + ' Days' }}&nbsp;
+              <small class="text-muted">x&nbsp;{{markings.serviceDetail.posting}}</small></span><span
+              *ngIf="selectedApplication.posting">
+              <small class="text-muted">&nbsp;= {{selectedApplication.posting}}</small></span>
+          </p>
+
+        </div> -->
+        <div class="col-md-6">
+          <div><i><small>Total</small></i></div>
+          <p class="m-0 p-strong">
+            <span>{{selectedApplication.serviceScore}}&nbsp;
+              <small class="text-muted">x&nbsp;{{hrMarks.Service}}</small></span><span
+              *ngIf="selectedApplication.service">
+              <small class="text-muted">&nbsp;= {{selectedApplication.service}}</small></span>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12" *ngIf="scoreType == 2">
+      <div class="row">
+        <div class="col-md-4">
+          <div><i><small>from</small></i></div>
+          <p class="m-0 p-strong"><span>{{selectedApplication.facilityVacancyPercentage?.PercentageFrom}}%&nbsp;
+              <small class="text-muted">x&nbsp;{{markings.vacancyDetail.from}}</small></span><span
+              *ngIf="selectedApplication.fromVacancy">
+              <small class="text-muted">&nbsp;= {{selectedApplication.fromVacancy}}</small></span>
+          </p>
+        </div>
+        <div class="col-md-4">
+          <div><i><small>to</small></i></div>
+          <p class="m-0 p-strong"><span>{{selectedApplication.facilityVacancyPercentage?.PercentageTo}}%&nbsp;
+              <small class="text-muted">x&nbsp;{{markings.vacancyDetail.to}}</small></span><span
+              *ngIf="selectedApplication.toVacancy">
+              <small class="text-muted">&nbsp;= {{selectedApplication.toVacancy}}</small></span>
+          </p>
+        </div>
+        <div class="col-md-4">
+          <div><i><small>Total</small></i></div>
+          <p class="m-0 p-strong">
+            <span>{{selectedApplication.vacancyScore}}&nbsp;
+              <small class="text-muted">x&nbsp;{{markings.vacancy}}</small></span><span
+              *ngIf="selectedApplication.vacancy">
+              <small class="text-muted">&nbsp;= {{selectedApplication.vacancy}}</small></span>
+          </p>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-12" *ngIf="scoreType == 3">
+      <table [ngStyle]="{'font-size': fontSize +'px' }" class="table table-bordered"
+        *ngIf="selectedApplication.facilityDistances">
+        <thead>
+          <tr>
+            <td class="p-strong" (click)="fontSize = (fontSize == 12 ? 14 : fontSize == 14 ? 16 : 12)">Service History
+            </td>
+            <!-- <td class="p-strong">No. of Days</td> -->
+            <td class="p-strong" style="width: 10%;">P2P</td>
+            <!--  <td class="p-strong" style="width: 12%;">Preferred District <span
+                class="text-muted">({{markings.distanceDetail.district}})</span></td> -->
+            <!-- <td class="p-strong">From Lahore</td> -->
+            <td class="p-strong">From Main City</td>
+            <td class="p-strong">From Nearest DHQ</td>
+            <td class="p-strong">From Nearest THQ</td>
+            <td class="p-strong">Total</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let distance of selectedApplication.facilityDistances">
+            <td
+              [ngClass]="distance.HFName == 'Total' || distance.HFName == 'Sub Total' || distance.HFName == 'Distance Marks' ? 'p-strong' : ''">
+              <p class="m-0" [ngClass]="distance.Error ? 'text-danger p-strong' : ''">
+                {{distance.Error ? distance.Error : distance.HFName}}</p>
+              <span>
+                <small *ngIf="distance.ServiceHistory">
+
+                  <strong class="p-strong">From</strong>
+                  {{distance.ServiceHistory.From_Date | date:'dd/MM/yyyy'}}<span
+                    *ngIf="distance.ServiceHistory.Continued"> - <span
+                      class="text-success cursor-p">Continue</span></span>&nbsp;
+                  <span class="m-0"
+                    *ngIf="distance.ServiceHistory.To_Date && !distance.ServiceHistory.Continued"><strong
+                      class="p-strong">To</strong>
+                    {{distance.ServiceHistory.To_Date | date:'dd/MM/yyyy'}}</span>&nbsp;
+                  <span class="m-0" *ngIf="distance.ServiceHistory.TotalDays">{{distance.ServiceHistory.TotalDays}}
+                    Day<span *ngIf="distance.ServiceHistory.TotalDays > 1">s</span>
+                  </span>
+
+                </small></span>
+            </td>
+            <!--   <td *ngIf="distance.HFName != 'Distance Marks' && distance.HFName != 'Total'  && distance.HFName != 'Sub Total'"
+              [ngClass]="distance.HFName == 'Total' ? 'p-strong' : ''">
+              {{distance.TotalDays}}</td> -->
+
+            <td
+              *ngIf="distance.HFName != 'Distance Marks' && distance.HFName != 'Total'  && distance.HFName != 'Sub Total'"
+              [ngClass]="distance.HFName == 'Total' ? 'p-strong' : ''">
+              {{distance.ByRoad}}</td>
+            <!-- <td *ngIf="distance.HFName != 'Distance Marks' && distance.HFName != 'Total'  && distance.HFName != 'Sub Total'"
+              [ngClass]="distance.HFName == 'Total' ? 'p-strong' : ''">
+              {{distance.PreferredDistrict}}
+              <p class="m-0 text-muted">
+                <span><small>{{((distance.PreferredDistrictValue / 1000)).toFixed()}}</small></span>
+              </p>
+            </td> -->
+            <!--  <td *ngIf="distance.HFName != 'Distance Marks' && distance.HFName != 'Total'  && distance.HFName != 'Sub Total'"
+              [ngClass]="distance.HFName == 'Total' ? 'p-strong' : ''">
+              {{distance.FromLHR}}
+            </td> -->
+
+            <td
+              *ngIf="distance.HFName != 'Distance Marks' && distance.HFName != 'Total'  && distance.HFName != 'Sub Total'"
+              [ngClass]="distance.HFName == 'Total' ? 'p-strong' : ''">
+              {{distance.FromCity}}&nbsp;<small><i><u>{{distance.FromCityName}}</u></i></small>
+            </td>
+
+            <td
+              *ngIf="distance.HFName != 'Distance Marks' && distance.HFName != 'Total'  && distance.HFName != 'Sub Total'"
+              [ngClass]="distance.HFName == 'Total' ? 'p-strong' : ''">
+              {{distance.FromDHQ}}&nbsp;<small><i><u>{{distance.FromDHQName}}</u></i></small>
+
+            </td>
+            <td
+              *ngIf="distance.HFName != 'Distance Marks' && distance.HFName != 'Total'  && distance.HFName != 'Sub Total'"
+              [ngClass]="distance.HFName == 'Total' ? 'p-strong' : ''">
+              {{distance.FromTHQ}}&nbsp;<small><i><u>{{distance.FromTHQName}}</u></i></small>
+
+            </td>
+            <td
+              *ngIf="distance.HFName != 'Distance Marks' && distance.HFName != 'Total'  && distance.HFName != 'Sub Total'"
+              [ngClass]="distance.HFName == 'Total' ? 'p-strong' : 'p-strong'">
+              {{distance.totalDistance}}
+              <p class="m-0 text-muted">
+                <!-- <span>
+                  <small>{{'(' + (((distance.PreferredDistrictValue / 1000))).toFixed() + ' x ' + markings.distanceDetail.district + ')'
+                   + ' + (' + (((distance.FromLHRValue / 1000))).toFixed() + ' x ' + markings.distanceDetail.lhr + ')'
+                    + ' + (' + (((distance.FromCityValue / 1000))).toFixed() + ' x ' + markings.distanceDetail.city + ')'
+                     + ' + (' + (((distance.FromDHQValue / 1000))).toFixed() + ' x ' + markings.distanceDetail.dhq + ')'
+                      + ' + (' + (((distance.FromTHQValue / 1000))).toFixed() + ' x ' + markings.distanceDetail.thq + ')'}}
+                    &nbsp;=&nbsp;{{distance.totalDistance}}</small></span> -->
+                <span>
+                  <small>{{(((distance.ByRoadValue / 1000))).toFixed()
+                        + ' + ' + (((distance.FromLHRValue / 1000))).toFixed()
+                        + ' + ' + (((distance.FromCityValue / 1000))).toFixed()
+                         + ' + ' + (((distance.FromDHQValue / 1000))).toFixed()
+                          + ' + ' + (((distance.FromTHQValue / 1000))).toFixed()}}
+                    &nbsp;=&nbsp;{{distance.totalDistance}}</small></span>
+              </p>
+            </td>
+            <td *ngIf="distance.HFName == 'Sub Total'" class="p-strong">
+              {{(distance.totoalServiceDays).toFixed()}}
+            </td>
+            <td *ngIf="distance.HFName == 'Sub Total'" class="p-strong">
+              {{distance.lhrDistance.toFixed()}}
+              <p class="m-0 text-muted">
+                <span>
+                  <small>{{distance.lhrDistance.toFixed() + ' / ' + distance.totoalServiceDays.toFixed()}}&nbsp;=&nbsp;{{(distance.lhrDistance / distance.totoalServiceDays).toFixed()}}</small></span>
+              </p>
+            </td>
+            <td *ngIf="distance.HFName == 'Sub Total'" class="p-strong">
+              {{(distance.dhqDistance).toFixed()}}
+              <p class="m-0 text-muted">
+                <span>
+                  <small>{{distance.dhqDistance.toFixed() + ' / ' + distance.totoalServiceDays.toFixed()}}&nbsp;=&nbsp;{{(distance.dhqDistance / distance.totoalServiceDays).toFixed()}}</small></span>
+              </p>
+            </td>
+            <td *ngIf="distance.HFName == 'Sub Total'" class="p-strong">
+              {{(distance.thqDistance).toFixed()}}
+              <p class="m-0 text-muted">
+                <span>
+                  <small>{{distance.thqDistance.toFixed() + ' / ' + distance.totoalServiceDays.toFixed()}}&nbsp;=&nbsp;{{(distance.thqDistance / distance.totoalServiceDays).toFixed()}}</small></span>
+              </p>
+            </td>
+            <td *ngIf="distance.HFName == 'Sub Total'" class="p-strong">
+              {{(distance.mainCityDistance).toFixed()}}
+              <p class="m-0 text-muted">
+                <span>
+                  <small>{{distance.mainCityDistance.toFixed() + ' / ' + distance.totoalServiceDays.toFixed()}}&nbsp;=&nbsp;{{(distance.mainCityDistance / distance.totoalServiceDays).toFixed()}}</small></span>
+              </p>
+            </td>
+            <td *ngIf="distance.HFName == 'Total'" class="p-strong h4" colspan="6">
+              {{(distance.TotalDays).toFixed()}}
+              <p class="m-0 text-muted">
+                <span>
+                  <small><span
+                      *ngFor="let d of distance.totalDistances; let i = index;">{{d + '' +  ((i + 1) < (distance.totalDistances?.length) ? ' + ' : '') }}</span>
+                    &nbsp;x {{'0.0278'}}&nbsp;=&nbsp;{{(distance.TotalDays).toFixed()}}</small></span>
+              </p>
+            </td>
+
+            <td *ngIf="distance.HFName == 'Distance Marks'" class="p-strong" colspan="6">
+              <!--  {{selectedApplication.distance}} -->
+
+              <p class="m-0">
+                <span class="h4">
+                  <small>{{(distance.TotalDays).toFixed()}}&nbsp;X&nbsp;{{(markings.distance)}}</small>&nbsp;=
+                  <span>{{selectedApplication.distance}}</span></span>
+              </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</kendo-dialog>
+
+<kendo-dialog [title]="selectedApplication.EmployeeName" *ngIf="selectedApplication && viewOrderWindow"
+  [minWidth]="'450'" [height]="'585'" [width]="'830'" (close)="closeViewOrderWindow()">
+  <div class="order-view-div" [innerHTML]="transform(selectedApplication.RawText)"></div>
+</kendo-dialog>

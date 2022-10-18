@@ -1,0 +1,252 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3">
+        Job Applications
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12">
+      <div class="top-controls">
+        <!--    <button kendoButton [primary]="true" [look]="'outline'" (click)="getHFOpened()"><i
+            class="fa fa-refresh"></i>&nbsp;Refresh</button>
+        <button kendoButton [primary]="true" routerLink="/application/document" class="mr-2"><i
+            class="fa fa-sticky-note"></i>&nbsp;New
+          Document</button> -->
+      </div>
+    </div>
+  </div>
+  <div class="animated fadeIn" *ngIf="jobApplicants.length > 0">
+    <div class="content-heading mb-2">
+      Applicants ({{jobApplicants.length}})
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <kendo-grid [data]="kGrid.gridView" [sortable]="{
+          allowUnsort: kGrid.allowUnsort,
+          mode: kGrid.multiple ? 'multiple' : 'single'
+          }" [scrollable]="true" [sort]="kGrid.sort" (sortChange)="sortChange($event)">
+          <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-text'">
+            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+              <p>{{(rowIndex + 1)}}
+              </p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="asd" [title]="'Photo'" width="25" [headerClass]="'grid-header-text'">
+            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+              <img class="pic-shadow" width="75px" height="75px"
+                [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/PHFMCApplicants/Photo/' + dataItem.CNIC + '_23.jpg'"
+                onError="this.src='../../../assets/img/notfound.png'" alt="">
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="asd" [title]="'Candidate Info'" width="35" [headerClass]="'grid-header-text'">
+            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+              <div class="employee-info">
+                <p class="m-0"><strong class="p-strong"> Name: </strong>
+                  {{dataItem.Name ? dataItem.Name : ''}}</p>
+                <p class="m-0"><strong class="p-strong"> Father Name: </strong>
+                  {{dataItem.FatherName ? dataItem.FatherName : ''}}</p>
+                <p class="m-0"><strong class="p-strong"> CNIC: </strong> {{dashifyCNIC(dataItem.CNIC)}}</p>
+                <p class="m-0"><strong class="p-strong"> Domicile: </strong>
+                  {{dataItem.DomicileName}}</p>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="asd" [title]="'Candidate Info'" width="35" [headerClass]="'grid-header-text'">
+            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+              <div class="employee-info cursor-p" (click)="openPreferencesWindow(dataItem)">
+                <p class="m-0"><strong class="p-strong"> Preferences: </strong>{{dataItem.applications?.length}}</p>
+                <p class="m-0"><strong class="p-strong"> Documents: </strong>{{dataItem.ApplicantDocuments?.length}}</p>
+                <p class="m-0"><strong class="p-strong"> Experience Documents:
+                  </strong>{{dataItem.ApplicantExperiences?.length}}</p>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+            <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+            <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+            <kendo-pager-next-buttons></kendo-pager-next-buttons>
+            <div class="pager-rows-number">
+              <select #select (change)="changePagesize(select.value)">
+                <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}
+                </option>
+                <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+                  [selected]="page === kGrid.pageSize ? true : undefined">
+                  {{page}}
+                </option>
+              </select> &nbsp; items per page
+            </div>
+            <kendo-pager-info></kendo-pager-info>
+          </ng-template>
+        </kendo-grid>
+        <!--  <kendo-panelbar>
+          <kendo-panelbar-item *ngFor="let applicant of jobApplicants"
+            [title]="applicant.Name + ' (' + applicant.Count + ')'">
+            <ng-template kendoPanelBarContent>
+              <div class="animated fadeIn" *ngIf="applicant.applications.length > 0">
+                <div class="row">
+                  <div class="col-md-3 offset-md-9">
+                    <img class="pic-shadow" width="100px" height="100px"
+                      [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/PHFMCApplicants/Photo/' + applicant.CNIC + '_23.jpg'"
+                      onError="this.src='../../../assets/img/notfound.png'" alt="">
+                  </div>
+                  <div class="col-md-12 col-sm-12 control-col-st">
+
+                    <table class="w-100" style="background: transparent;">
+                      <tbody>
+                        <tr *ngFor="let application of applicant.applications;let i = index;" class="animated fadeIn">
+                          <td style="border:none !important;">
+                            <p class="mb-0 ml-2 p-2">
+                              {{(i + 1)}}.
+                            </p>
+                          </td>
+                          <td style="border:none !important;">
+                            <p class="m-0 ml-1 p-2">{{application.DesignationName}}, <u>{{application.HFName}}</u></p>
+                          </td>
+                          <td style="border:none !important;">
+                            <p class="m-0 ml-1 p-2">{{application.CreatedDate | date: 'dd/MM/yyyy hh:mm a'}}</p>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </kendo-panelbar-item>
+        </kendo-panelbar> -->
+      </div>
+    </div>
+    <hr>
+  </div>
+  <div *ngIf="loading" class="k-i-loading"></div>
+
+</div>
+
+<kendo-dialog [title]="selectedApplicant.Name" *ngIf="preferencesWindow && selectedApplicant"
+  (close)="closePreferencesWindow()" [minWidth]="'450'" [height]="'525'" [width]="'1150'">
+  <div class="row mt-3">
+    <div class="col-md-2">
+      <img class="animated fadeIn" style="width:75px;height:75px;border:1px solid;"
+        [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/PHFMCApplicants/Photo/' + selectedApplicant.CNIC + '_23.jpg'"
+        onError="this.src='../../../assets/img/notfound.png'" alt="">
+    </div>
+    <div class="col-md-4">
+      <p class="m-0"><strong class="p-strong"> Name: </strong> {{selectedApplicant.Name ? selectedApplicant.Name : ''}}
+      </p>
+      <p class="m-0"><strong class="p-strong"> Father Name: </strong>
+        {{selectedApplicant.FatherName ? selectedApplicant.FatherName : ''}}</p>
+      <p class="m-0"><strong class="p-strong"> CNIC: </strong> {{dashifyCNIC(selectedApplicant.CNIC)}}</p>
+      <p class="m-0"><strong class="p-strong" *ngIf="user.UserName == 'dpd' || user.UserName == 'ordercell'"> Domicile
+        </strong> {{selectedApplicant.DomicileName}}
+      </p>
+    </div>
+    <div class="col-md-6">
+      <p class="m-0"><strong class="p-strong"> Merit # </strong> {{selectedApplicant.MeritNumber}}
+      </p>
+      <p class="m-0"><strong class="p-strong"> Application # </strong> {{selectedApplicant.ApplicationNumber}}</p>
+      <p class="m-0"><strong class="p-strong"> PMDC # </strong> {{selectedApplicant.PMDCNumber}}</p>
+      <p class="m-0" *ngIf="user.UserName == 'dpd' || user.UserName == 'ordercell'"><strong class="p-strong"> Address
+        </strong> {{selectedApplicant.Address}}
+      </p>
+    </div>
+  </div>
+  <hr>
+  <!--  <div class="k-i-loading" *ngIf="loadingPreferences"></div> -->
+
+  <tabset>
+    <tab heading="Academic Documents">
+      <div class="row" *ngIf="selectedApplicant.ApplicantDocuments?.length > 0">
+        <div class="col-md-12">
+          <p class="mb-2"><span class="p-strong">Preferences:</span> {{ selectedApplicant.ApplicantDocuments?.length}}
+          </p>
+          <kendo-grid [data]="selectedApplicant.ApplicantDocuments">
+            <kendo-grid-column [width]="7" field="asd" title="No." [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0">{{(rowIndex + 1)}}.</p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="63" field="DocumentName" title="Documents" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0">{{dataItem.DocumentName}}</p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="30" field="ObtainedMarks" title="Marks" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0">{{dataItem.ObtainedMarks}} / {{dataItem.TotalMarks}}</p>
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+          <p class="m-0" *ngIf="selectedApplicant.ApplicantDocuments?.length == 0">
+            No Documents
+          </p>
+        </div>
+      </div>
+    </tab>
+    <tab heading="Experience">
+      <div class="row" *ngIf="selectedApplicant.ApplicantExperiences?.length > 0">
+        <div class="col-md-12">
+          <p class="mb-2"><span class="p-strong">Preferences:</span> {{ selectedApplicant.ApplicantExperiences?.length}}
+          </p>
+          <kendo-grid [data]="selectedApplicant.ApplicantExperiences">
+            <kendo-grid-column [width]="7" field="asd" title="No." [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0">{{(rowIndex + 1)}}.</p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="63" field="DocumentName" title="Documents" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0">Organization: {{dataItem.Organization}}</p>
+                <p class="m-0">Job Title: {{dataItem.JobTitle}}</p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="30" field="ObtainedMarks" title="Marks" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0">From: {{dataItem.FromDate | date: 'dd/mm/yyyy hh:mm a'}}</p>
+                <p class="m-0">To: {{dataItem.ToDate | date: 'dd/mm/yyyy hh:mm a'}}</p>
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+          <p class="m-0" *ngIf="selectedApplicant.ApplicantExperiences?.length == 0">
+            No Experience
+          </p>
+        </div>
+      </div>
+    </tab>
+    <tab heading="Preferences">
+      <div class="row" *ngIf="selectedApplicant.applications?.length > 0">
+        <div class="col-md-12">
+          <p class="mb-2"><span class="p-strong">Preferences:</span> {{ selectedApplicant.applications?.length}}
+          </p>
+          <kendo-grid [data]="selectedApplicant.applications">
+            <kendo-grid-column [width]="7" field="asd" title="No." [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0">{{(rowIndex + 1)}}.</p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="93" field="FullName" title="Applications" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0">{{dataItem.DesignationName}}, <u>{{dataItem.HFName}}</u> <small
+                    class="pull-right">{{dataItem.CreatedDate | date: 'dd/MM/yyyy hh:mm a'}}</small></p>
+                <p class="m-0"></p>
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+          <p class="m-0" *ngIf="selectedApplicant.applications?.length == 0">
+            No Preferences
+          </p>
+        </div>
+      </div>
+    </tab>
+
+  </tabset>
+
+
+</kendo-dialog>

@@ -1,0 +1,42 @@
+<!-- <p>leave-record works!</p> -->
+<div class="animated fadeIn" *ngIf="leaveRecord">
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="onlineFts-top-h3">
+                Leave Record
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+
+<kendo-grid [data]="leaveRecord" [resizable]="true">
+  <kendo-grid-column field="DateTime" [title]="'Date'" width="15" [headerClass]="'grid-header-custom'"
+    [class]="{ 'grid-cell-custom': true }">
+    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+      <p class="m-0 text-center">{{ dataItem.DateTime | date:'dd/MM/yyyy' }}</p>
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column field="ActionName" [title]="'Leave Type'" width="25" [headerClass]="'grid-header-custom'"
+    [class]="{ 'grid-cell-custom': true }">
+    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+      <div class="d-flex flex-column width-full" style="font-weight: 100 !important;">
+        {{dataItem.LeaveTypeName}}
+      </div>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="ToStatus" width="40" title="Duration" [headerClass]="'grid-header-custom'"
+    [class]="{ 'grid-cell-custom': true }">
+    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+      <div><strong style="font-family: Roboto-Bold !important;"
+          class="no-underline text-bold wb-break-all d-inline-block"
+          href="">{{ dataItem.FromDate | date:'dd/MM/yyyy' }}</strong> - <strong
+          style="font-family: Roboto-Bold !important;" class="no-underline text-bold wb-break-all d-inline-block"
+          href="">{{ dataItem.ToDate | date:'dd/MM/yyyy' }}</strong> - <u>{{dataItem.TotalDays}}
+          day{{dataItem.TotalDays > 1 ? 's' : ''}}</u></div>
+    </ng-template>
+  </kendo-grid-column>
+
+</kendo-grid>
+

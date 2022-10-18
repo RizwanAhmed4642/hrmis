@@ -1,0 +1,3422 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.6\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.6\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.2.3.1\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.3.1\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A351B739-D4F4-43A0-838B-F77BFE61B8DD}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Hrmis</RootNamespace>
+    <AssemblyName>Hrmis</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
+    <Use64BitIISExpress />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr3.Runtime.3.5.1\lib\net40-client\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.6.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.1.8.6.1\lib\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="CsvHelper, Version=7.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.7.0.1\lib\net45\CsvHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="DocX, Version=1.0.0.22, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocX.1.0.0.22\lib\net40\DocX.dll</HintPath>
+    </Reference>
+    <Reference Include="DPCtlUruNet, Version=1.0.0.1, Culture=neutral, PublicKeyToken=7f32ef930fec5e5f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\DigitalPersona\U.are.U SDK\Windows\Lib\.NET\DPCtlUruNet.dll</HintPath>
+    </Reference>
+    <Reference Include="DPCtlXUru, Version=1.0.0.1, Culture=neutral, PublicKeyToken=7f32ef930fec5e5f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\DigitalPersona\U.are.U SDK\Windows\Lib\.NET\DPCtlXUru.dll</HintPath>
+    </Reference>
+    <Reference Include="DPUruNet, Version=1.0.0.1, Culture=neutral, PublicKeyToken=7f32ef930fec5e5f, processorArchitecture=MSIL">
+      <HintPath>..\packages\DPUruNet.1.0.0.1\lib\DPUruNet.dll</HintPath>
+    </Reference>
+    <Reference Include="DPXUru, Version=1.0.0.1, Culture=neutral, PublicKeyToken=7f32ef930fec5e5f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\DigitalPersona\U.are.U SDK\Windows\Lib\.NET\DPXUru.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="FCM.Net, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FCM.Net.1.0.5\lib\net452\FCM.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Hangfire.Core, Version=1.7.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hangfire.Core.1.7.8\lib\net45\Hangfire.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Hangfire.SqlServer, Version=1.7.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hangfire.SqlServer.1.7.8\lib\net45\Hangfire.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ImageResizer.4.1.9\lib\net45\ImageResizer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.4.1\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.4.1\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.4.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.4.1\lib\net45\Microsoft.AI.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.4.1\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.4.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.TelemetryCorrelation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.0\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.6\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Exchange.WebServices, Version=15.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Exchange.WebServices.2.2\lib\40\Microsoft.Exchange.WebServices.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Exchange.WebServices.Auth, Version=15.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Exchange.WebServices.2.2\lib\40\Microsoft.Exchange.WebServices.Auth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.4.0.0\lib\net451\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.FileSystems, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.FileSystems.4.0.0\lib\net451\Microsoft.Owin.FileSystems.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.4.0.0\lib\net451\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.1.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Facebook, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Facebook.3.1.0\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Google, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Google.3.1.0\lib\net45\Microsoft.Owin.Security.Google.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.MicrosoftAccount.3.1.0\lib\net45\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Twitter, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Twitter.3.1.0\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.StaticFiles, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.StaticFiles.4.0.0\lib\net451\Microsoft.Owin.StaticFiles.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.14.0.314.76\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Spire.Doc, Version=5.7.0.54020, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\FreeSpire.Doc.5.7\lib\net20\Spire.Doc.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.License, Version=1.3.5.20, Culture=neutral, PublicKeyToken=b1144360237c8b3f, processorArchitecture=MSIL">
+      <HintPath>..\packages\FreeSpire.Doc.5.7\lib\net20\Spire.License.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.Pdf, Version=3.7.291.54020, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\FreeSpire.Doc.5.7\lib\net20\Spire.Pdf.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.0\lib\net45\System.Diagnostics.DiagnosticSource.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.3\lib\net45\System.Web.Cors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Cors.5.2.3\lib\net45\System.Web.Http.Cors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.7\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="Xceed.Words.NET, Version=1.1.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocX.1.1.0\lib\Xceed.Words.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="Zen.Barcode.Core, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b5ae55aa76d2d9de, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zen.Barcode.Rendering.Framework.3.1.10729.1\lib\Zen.Barcode.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.Owin">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Owin.5.2.3\lib\net45\System.Web.Http.Owin.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
+    <Compile Include="Areas\HelpPage\App_Start\HelpPageConfig.cs" />
+    <Compile Include="Areas\HelpPage\Controllers\HelpController.cs" />
+    <Compile Include="Areas\HelpPage\HelpPageAreaRegistration.cs" />
+    <Compile Include="Areas\HelpPage\HelpPageConfigurationExtensions.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\CollectionModelDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\ComplexTypeModelDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\DictionaryModelDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\EnumTypeModelDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\EnumValueDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\IModelDocumentationProvider.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\KeyValuePairModelDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\ModelDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\ModelDescriptionGenerator.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\ModelNameAttribute.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\ModelNameHelper.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\ParameterAnnotation.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\ParameterDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\SimpleTypeModelDescription.cs" />
+    <Compile Include="Areas\HelpPage\Models\HelpPageApiModel.cs" />
+    <Compile Include="Areas\HelpPage\SampleGeneration\HelpPageSampleGenerator.cs" />
+    <Compile Include="Areas\HelpPage\SampleGeneration\HelpPageSampleKey.cs" />
+    <Compile Include="Areas\HelpPage\SampleGeneration\ImageSample.cs" />
+    <Compile Include="Areas\HelpPage\SampleGeneration\InvalidSample.cs" />
+    <Compile Include="Areas\HelpPage\SampleGeneration\ObjectGenerator.cs" />
+    <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
+    <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
+    <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\CommonData\HealthFacilitiesController.cs" />
+    <Compile Include="Controllers\CommonData\LocationController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HrmisApiControllers\BaseApiController.cs" />
+    <Compile Include="Controllers\HrmisApiControllers\BaseDataHrmisController.cs" />
+    <Compile Include="Controllers\HrmisApiControllers\CentralController.cs" />
+    <Compile Include="Controllers\HrmisApiControllers\CsvToJsonController.cs" />
+    <Compile Include="Controllers\HrmisApiControllers\DashboardController.cs" />
+    <Compile Include="Controllers\HrmisApiControllers\EsrController.cs" />
+    <Compile Include="Controllers\HrmisApiControllers\FileUploadController.cs" />
+    <Compile Include="Controllers\HrmisApiControllers\HealthFacilityDetailsController.cs" />
+    <Compile Include="Controllers\HrmisApiControllers\JobAppController.cs" />
+    <Compile Include="Controllers\HrmisApiControllers\MWController.cs" />
+    <Compile Include="Controllers\HrmisApiControllers\PERController.cs" />
+    <Compile Include="Controllers\HrmisApiControllers\ProfileDetailsViewsController.cs" />
+    <Compile Include="Controllers\HrmisApiControllers\PromotionApplicationController.cs" />
+    <Compile Include="Controllers\HrmisApiControllers\PromotionESRController.cs" />
+    <Compile Include="Controllers\HrmisApiControllers\PromotionJobApplicationController.cs" />
+    <Compile Include="Controllers\HrmisApiControllers\SeniorityApiController.cs" />
+    <Compile Include="Controllers\HrmisApiControllers\TransferAndPostingController.cs" />
+    <Compile Include="Controllers\HrmisApiControllers\VacancyPositionController.cs" />
+    <Compile Include="Controllers\HrmisRestApi\AdhocController.cs" />
+    <Compile Include="Controllers\HrmisRestApi\ApplicationController.cs" />
+    <Compile Include="Controllers\HrmisRestApi\AttandanceController.cs" />
+    <Compile Include="Controllers\HrmisRestApi\DailyWagesController.cs" />
+    <Compile Include="Controllers\HrmisRestApi\DashboardHrmisController.cs" />
+    <Compile Include="Controllers\HrmisRestApi\DatabaseController.cs" />
+    <Compile Include="Controllers\HrmisRestApi\FilesACRsController.cs" />
+    <Compile Include="Controllers\HrmisRestApi\HealthFacilityController.cs" />
+    <Compile Include="Controllers\HrmisRestApi\JobController.cs" />
+    <Compile Include="Controllers\HrmisRestApi\LawWingController.cs" />
+    <Compile Include="Controllers\HrmisRestApi\MeritDiplomaCandidateController.cs" />
+    <Compile Include="Controllers\HrmisRestApi\OnlineJobController.cs" />
+    <Compile Include="Controllers\HrmisRestApi\OrderNotificationController.cs" />
+    <Compile Include="Controllers\HrmisRestApi\ProfileController.cs" />
+    <Compile Include="Controllers\HrmisRestApi\PublicController.cs" />
+    <Compile Include="Controllers\HrmisRestApi\RootController.cs" />
+    <Compile Include="Controllers\HrmisRestApi\SwmoPromotionController.cs" />
+    <Compile Include="Controllers\HrmisRestApi\VacancyController.cs" />
+    <Compile Include="Controllers\IdentityApiControllers\AccountController.cs" />
+    <Compile Include="Controllers\IdentityApiControllers\StaffManageApiController.cs" />
+    <Compile Include="Controllers\IdentityApiControllers\ValuesController.cs" />
+    <Compile Include="Controllers\MSSApiControllers\ProfilesController.cs" />
+    <Compile Include="Controllers\PromotionJobApplicationsController.cs" />
+    <Compile Include="Controllers\PublicControllers\MainController.cs" />
+    <Compile Include="Controllers\PublicControllers\WMOsController.cs" />
+    <Compile Include="Controllers\TestingController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812240956107_checking.cs" />
+    <Compile Include="Migrations\201812240956107_checking.Designer.cs">
+      <DependentUpon>201812240956107_checking.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812260431423_usupdated.cs" />
+    <Compile Include="Migrations\201812260431423_usupdated.Designer.cs">
+      <DependentUpon>201812260431423_usupdated.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812270629243_cnincProfileId.cs" />
+    <Compile Include="Migrations\201812270629243_cnincProfileId.Designer.cs">
+      <DependentUpon>201812270629243_cnincProfileId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Common\AdhocAd.cs" />
+    <Compile Include="Models\Common\Class1.cs" />
+    <Compile Include="Models\Common\Common.cs" />
+    <Compile Include="Models\Common\CommonEnums.cs" />
+    <Compile Include="Models\Common\Filter.cs" />
+    <Compile Include="Models\Common\JsonResponseBody.cs" />
+    <Compile Include="Models\Common\LogClass.cs" />
+    <Compile Include="Models\Common\Paginator.cs" />
+    <Compile Include="Models\Common\SearchQuery.cs" />
+    <Compile Include="Models\Common\TableResponse.cs" />
+    <Compile Include="Models\Common\Utility.cs" />
+    <Compile Include="Models\DbModel\AAA_SCRIPT_TRANSER_HF.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplicant.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplicantDocument.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplicantDocumentView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplicantExperience.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplicantLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplicantPMC.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplicantPMCQualification.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplicantQualification.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplicantQualificationView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplicantsSummary_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplicantStatu.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplicantView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplication.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplicationGrievance.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplicationGrievanceStatu.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplicationGrievanceV.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplicationLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplicationMark.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplicationMarksView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplicationPreference.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplicationPreferenceView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplicationStatu.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplicationVerification.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocApplicationView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocDescription.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocDistrictOpenedBHU.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocDistrictOpenedBHU2.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocDistrictOpenedBHUView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocDistrictOpenedBHUView2.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocDistrictQuota.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocDocument.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocDocumentRequired.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocGreivanceUpload.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocGreivanceUploadView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocHF.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocHFOpened.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocHFOpened2.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocHFOpenedView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocHFOpenedView2.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocInterview.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocInterviewBatch.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocInterviewBatchApplication.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocInterviewBatchApplicationV.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocInterviewBatchCommittee.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocInterviewView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocJob.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocJobView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocMerit.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocMeritLocked.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocMeritLockedView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocMeritVerification.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocMeritView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocMeritView2.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocPosting.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocPostingFinal.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocPostingFinalView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocPostingLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocRecruitementCommittee.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocScrutiny.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocScrutinyCommittee.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocScrutinyMinute.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocScrutinyReason.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocScrutinyView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AdhocSelectedMerit.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\APMOPref.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\APMOPrefsView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicantExperience.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicantPreferenceView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicantQualification.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicantQualificationview.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicantView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationAction.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationAttachment.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationDocument.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationDueDate.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationFileRecosition.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationFileRecositionLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationFileReqDView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationFileReqLogView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationFileReqView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationForwardLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationLogView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationMaster.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationMutualCode.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationPersonAppeared.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationPreference.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationPurpose.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationRequest.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationRequestView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationSource.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationStatu.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationThumbView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationTracking.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationType.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ApplicationView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AppOrder.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AppRoute.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AppStatusLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AppTypeDoc.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AppTypePendancy.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AttachmentView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AwaitingPosting.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AwaitingPostingAppView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AwaitingPostingSummary_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\AwaitingPostingView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\BankDetail.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\BedsInfo.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Cadre.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\CadreView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\City.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\CLR.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Coordinate.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Cours.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\COVID19Orders.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\CovidFacility.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\CovidFacilityType.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\CovidFacilityView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\CovidStaff.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\CovidStaffView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\COVIDTrend.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\CovidTrendLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\CreatedLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\C_ErpComponent.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\C_ErpField.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\C_ErpModule.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\C_ErpModuleComponents.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\C_ErpUserFields.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\C_ErpUserModuleComponents.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\C_Role.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\C_SessionLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\C_User.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\C_UserAuth.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\C_UserClaim.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\C_UserContact.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\C_UserLogin.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\C_UserRight.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\C__EFMigrationsHistory.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\C__MigrationHistory.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DailyWagerBankDetail.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DailyWagerCategory.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DailyWagerContractDetail.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DailyWagerDesignation.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DailyWagerDetailView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DailyWagesDistrictWise_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DailyWagesProfile.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DDsDetail.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DDSDetailsView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DDSSouth.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DDSView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DDS_Attachments.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DDS_Files.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Degree.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DermaApplication.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DeviceRegistration.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Disability.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DisposalOf.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\District.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DistrictLatLong.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DistrictsDistance.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DistrictView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Division.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DivisionLatLong.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DivisionView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DoctorsView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Domicile.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DSRPendancy_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\DSR_OrderGenerationCell_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Empattendance.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\EmpLeaveExpiredSummaryDistrict_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\EmpLeaveExpiredSummary_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\EmpLeaveForm.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\EmpLeaveStatu.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\EmpLeaveType.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\EmployeePosting.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\EmployeePostingView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\EmployeesLeaveExpired.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\EmployeesOnLeave.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\EmpOnLeaveSummaryDistrict_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\EmpOnLeaveSummary_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\EmpRoster.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\EmpTask.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\EmpTask_Status.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Emp_Shift.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Entity.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\EntityField.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Entity_Lifecycle.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Entity_Log.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Entity_Log_View.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Entity_Modified_Log.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Entity_Modified_Log_View.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\EPIDataTemp.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\EpiFacilitiesTemp.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ESR.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\EsrAttachment.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ESRDetail.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\EsrForwardToOfficer.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ESRLatestView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ESRReportView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\EsrSectionOfficer.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\EsrSigned.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ESRView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ESR_DSG.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ESR_FINAL.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\FCLEAVETDTL.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\FCLEAVETYP.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\FCPromotion.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\FCRequest.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\FCTransfer.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\FileDetail.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\FileMoveDetail.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\FileMoveDetailView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\FileMoveMaster.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\FileMoveMasterView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\FileRequestStatu.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\FilesMaster.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\FilesUpdated.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\FilesUpdateView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\FileType.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\FingerPrint.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\fts12_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\fts_AppTypeSO_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\GEOLVL_V.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\GetCoordinate.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Grading.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\GradingVal.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\GSMNETWORK.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\hc_hfbankdetails.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HealthFacilitiesWithHFAC.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HealthFacilities_15_04_17.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HealthFacility.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HealthFacilityDetail.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFAC.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFBlock.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFCategory.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFDetail.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFDistance.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFList.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFListGeoLocation.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFListGI.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFListMode.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFListP.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFMode.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFModeView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFOpenedLHR.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFOpenedLHRView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFOpenedPosting.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFOpenedPosting_10_12_2019.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFOpenedView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFPhoto.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFPicView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFRecord.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFRecordView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFService.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFTown.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFTownView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFType.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HfTypeList.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFTypeWiseReport.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFTypeWiseRpt.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFUC.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFUCM.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFUCMView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFWard.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFWardBed.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HFWardBedsView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HF_Code_Map.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HisduEmpAttaundaceLog1.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HisduEmpDailyAttancucsSummery1.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HisduEmpMonthelyLeaveSummery.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HisduMonthelyEmpReport1.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HISDU_DataFrequency.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HISDU_Department.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HISDU_EmpStatus.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HISDU_Holidays.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HISDU_HrProfile.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HISDU_HrProfile_8dec.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HISDU_MonthlyLeave.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HISDU_Projects.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HISDU_Projects_CurrentStatus.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HISDU_Project_Type.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HISDU_Teams.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HISDU_Team_Members.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrAcceptance.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrApplication.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrApplicationView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrAttachedPerson.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrAttachedPersonView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrAttendance.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrComplain.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrDb.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HrDb.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrDb.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrDb.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HrDb.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrDepartment.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrDesignation.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrDesignationDoc.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrDesignationTemp.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrDesignationView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrDuplicationLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrEmpMode.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrFile.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrFileDetail.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrFocalPerson.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrFp.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrHealthWorker.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrHealthWorkerExportView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrHealthWorkerView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrInquiry.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrInquiryPenalty.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrInquiryView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrLanguage.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrLeaveRecord.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrLeaveRecordView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrMarking.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrPosting.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrPostingMode.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrPostingStatu.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrPostingView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrPost_Type.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrPost_TypeView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrProfile.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrProfile6feb18.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrProfileDetailsView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrProfileEditRequest.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrProfileReq.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrProfileReq_VIEW.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrProfileSp.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrProfileStatu.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrQualification.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrQualificationView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrReligion.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrReview.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrReviewStatu.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrReviewSubmission.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrReviewSubmissionView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrReviewView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrScale.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrSeniority.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrSeniorityApplication.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrSeniorityApplicationLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrSeniorityApplicationView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrSeniorityApplicationView_Fixed.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrSeniorityApplication_Fixed.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrSeniorityDCPharmacistApplicationView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrSeniorityDCPharmacistApplicationView_Fixed.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrSeniorityDCPharmApplication.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrSeniorityDCPharmApplicationFixed.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrServiceHistory.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrServiceHistoryView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\HrSMSEmployee.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\InquiryStatu.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Job.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobApplicant.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobApplicantDocument.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobApplicantDocumentView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobApplicantExperience.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobApplicantPrefView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobApplicantStatu.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobApplicantsView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobApplicantView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobApplication.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobApplicationPreference.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobApplicationPreferenceView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobApplicationsView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobApplicationView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobBatchesView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobDescription.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobDocument.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobDocumentRequired.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobDocumentRequiredView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobHF.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobHFView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobPosting.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobsView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\JobView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawBench.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawCallsList.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawCallsListOfficer.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawCallsListOfficerView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawCallsListRemark.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawCallsListView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawCas.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawCasePetitioner.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawCaseRepresentative.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawCaseStatu.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawCaseStatusModifiedLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawCaseType.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawCourt.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawDepartment.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawFile.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawFilesImage.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawFilesOfficer.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawFilesPetitioner.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawFilesRepresentative.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawHearing.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawHearingJudge.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawHearingLawyer.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawJudge.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawLawyer.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawOnBehalfOf.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawPetitioner.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawRepresentative.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LawWingReport.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LeaveApplication.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LeaveApplication_View.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LeaveHistory.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LeaveOrder.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LeaveOrderView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LeavesExpired.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LeaveStatu.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LeaveType.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LoggedInLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\LoggedProfileInLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MedicineMaster.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Merit.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MeritActiveDesignation.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MeritDiplomaCandidate.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MeritDiplomaCandidateDetail.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MeritDiplomaCandidateView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MeritGrievience.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MeritMark.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MeritPG.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MeritPGDistrict.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MeritPGView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MeritPosting.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MeritPostingView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MeritPreference.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MeritPreferencesFinal.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MeritPreferencesFinal_10_12_2019.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MeritPreferences_10_12_2019.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MeritsView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MeritsVp.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MeritsVpDistrict.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MessageLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MobileApp.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Monthlydate.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MoPrefferedHealthFacilityView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MWPointType.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MWRoute.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MWRouteDetail.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MWRouteDetailView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\MWRouteView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\NotificationLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\NotificationProject.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\NotificationSM.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\NotificationType.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\NursesVPTemp26.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Office.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Officer.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\OrderAllView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\OrderReportOverallView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\OrderReportSignedByAll.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\OrderTracking.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PandSOfficerView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PenaltyType.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PensionDocument.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PensionDocumentAttached.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PER.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PerDeferment.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PerGrading.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PerImage.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PerInquiry.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PermotionReport.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PerPrfmAssment.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PerTargetAchievement.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PerTraining.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PerType.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PerView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PerWrkngPprGrdsCnt.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PHFMCOrder.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PHFMCOrderView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Pivot_Dsg_Specific.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PrfmAssment.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ProfileAttachment.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ProfileAttachmentsView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ProfileAttachmentType.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ProfileCompactView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ProfileDetailsSeniorityView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ProfileDetailsView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ProfileDetailsViewActive.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ProfileListView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ProfileRemark.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ProfileRemarksView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ProfileSeniorityView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ProfileThumbView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Profile_SP_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Program_Project_Wise_HealthFacility.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Project.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Project_ProgramView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PromoJobApplicationVM.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PromotedCandidate.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PromotedCandidateView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PromotedCandidateView2.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PromotionApply.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PromotionApplyView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PromotionEsrView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PromotionJobApplication.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PromotionJobApplicationServiceStatement.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PSHealthFacility.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PSHealthProgram.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PSHealthProject.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PUCDashboard_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\PunjabOfficer.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\P_SConcernedCadres.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\P_SConcernedDesignations.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\P_SConcernedOfficers.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\P_SOfficers.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Qualification.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\QualificationType.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ScrutinyExperience.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ScrutinyQualification.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SeniorityBatch.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SeniorityDetail.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SeniorityMaster.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Service.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ServiceTemp.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ServiceTempView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SHMEDVP.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ShowOfficerStamp.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SignedOrder.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SMSType.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SMS_Log.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SMS_Session.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\spCheckProfileId_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Specialization.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\spGetStafffDetail_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SP_APPSSUM_WITH_DATE_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SP_CP_OFFICE_WISE_WITH_DATE_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SP_DEPT_PENDENCY_WITH_DATE_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SP_DEPT_PENDENCY_WITH_DATE_TYPE_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SP_DEPT_WITH_DATE2_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SP_DEPT_WITH_DATE_PROGRAM_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SP_DEPT_WITH_DATE_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SP_DEPT_WITH_DATE_TYPE_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SP_DIARY_OFFICE_WISE_WITH_DATE_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SP_FCTYP_WISE_WITH_DATE_2_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SP_FCTYP_WISE_WITH_DATE_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\sp_helpdiagrams_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SP_LAWING_OFFICE_WISE_WITH_DATE_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SP_OFC_WISE_WITH_DATE_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SP_Pagination_Employee_Profile_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SP_PLTYP_WISE_WITH_DATE_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SP_RI_OFFICE_WISE_WITH_DATE_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SP_TOT_APPSSUM_WITH_DATE_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SP_TOT_FCTYP_WISE_WITH_DATE_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SP_TOT_OFC_WISE_WITH_DATE_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SP_TOT_PLTYP_WISE_WITH_DATE_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Subscriber.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Subscription.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SwmoPromotion.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\SwmoPromotionDetail.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\sysdiagram.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Tehsil.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\TehsilLatLong.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\TehsilsDistance.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\TehsilView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\TempProfilePhoto.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\tEMPtABLE.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Town.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Training.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\TransferAppliationStatu.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\TransferApplication.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\TransferApplication_View.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\TransferOrder.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\TransferType.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\UcData.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\UCWiseData.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\UniqueAdhocHealthFacility.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\UserContactView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\UserCreatedLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\UserCreatedVPProfileLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\UserDetail.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\UserInformation.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\UserLevel.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\UserLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\UserLog25feb22.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\userlog286.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\UserLog3Feb22.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\userlogtest.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\UserLogView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\UserLog_bkp.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\UsersUpdated.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\UsersView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\UsersViewNew.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\User_Activity_Log.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspAdhocApplicationCountDistrictWise_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspAdhocApplicationGrievanceCountSummary_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspAdhocApplicationsDistDesiSummary_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspAdhocCounts_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspAdhocGreivanceScrutinySummay_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspAdhocPendencyDistrictWiseSummary_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspAdhocTotalApplicationsStatusWiseSummary_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspApplicationTypeWiseOfficer_2_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspApplicationTypeWiseOfficer_3_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspApplicationTypeWiseOfficer_4_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspApplicationTypeWiseOfficer_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspCrrPendancy_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspDayWiseTotalApplications_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspDesignationWiseApplicationsSummary_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspDistrictWiseApplicationPreferencesSummary_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspETransferAppVp_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspETransferVp_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspFileRecSectionWise_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspGetCitezenComplaints_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspGetDiary_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspGetHFApps_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspJobApplicantPreferences_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspMeritOrders_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspOfficerDiary2_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspOfficerDiary_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspPendancy3_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspPendancy4_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspPendancy5_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspPendancyDistrictWise_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspPensionCases_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\uspSeniority_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\usp_HFTypeWiseReport_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\usp_MeritPosting_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VacancyQuota.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ViewESRSummaryTotal.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ViewHFService.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ViewMeritPreference.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ViewMeritPreferencesFinal.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ViewMeritsVp.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\ViewProfilePhoto.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_absent.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_Absentees.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_all_activity_log.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_AttendanceCalc.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_CurrentBalance.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_Dashb_Roster.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_dpt_month_attendance.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_HF_test.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_HISDUProfileDetailsView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_LeaveRecords.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_Log.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_MonthlyAttendance1.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_MonthlyBalance.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_MonthlyBalance_Rpt.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_New.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_NewAT.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_Profilethumbview_change.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_ProjectsDetail.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_RosterDetail.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_RosterEmployees.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_Rptattandance.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_RptDailyAttendance.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_TaskDetail.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_TeamDetails.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_TeamEmployees.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_TeamMembers.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_TeamProjects.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\View_TotalLeaves.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VP.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VPChartsCount.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VPDetail.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VpDetailLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VpDetailView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VpDProfileView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VpDView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VpGeoView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VPHolder.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VPHolderView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VPMaster.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VpMasterLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VpMasterProfileView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VpMastProfileView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VpMDView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VpMeritPostingView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VpMeritPreferenceView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VpMProfileView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VpMView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VPostDtl.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VPostMast.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VPProfile.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VPProfileLog.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VpProfileStatu.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VPProfileView.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VPQ.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VPQuotaDesignation_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VPQuotaDistrictDesignation_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VPQuotaDistrict_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VPQuota_Result.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VPSP.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VpSpecialized.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\VpSubscriber.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\Ward.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbModel\WMO_Grievances.cs">
+      <DependentUpon>HrDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Dto\AppResponse.cs" />
+    <Compile Include="Models\Dto\CachedData.cs" />
+    <Compile Include="Models\Dto\DashboardModel.cs" />
+    <Compile Include="Models\Dto\ExceptExtension.cs" />
+    <Compile Include="Models\Dto\FileDto.cs" />
+    <Compile Include="Models\Dto\HealthFacilityDto.cs" />
+    <Compile Include="Models\Dto\HFDetailed.cs" />
+    <Compile Include="Models\Dto\HFEMpProfile.cs" />
+    <Compile Include="Models\Dto\HFQuery.cs" />
+    <Compile Include="Models\Dto\HFTypeCounts.cs" />
+    <Compile Include="Models\Dto\HrDesignationDto.cs" />
+    <Compile Include="Models\Dto\HrSeniorityApplicationDTO.cs" />
+    <Compile Include="Models\Dto\MeritPgDistrictViewModel.cs" />
+    <Compile Include="Models\Dto\PaginatedFilterDTO.cs" />
+    <Compile Include="Models\Dto\ProfileActiveSeniority.cs" />
+    <Compile Include="Models\Dto\ProfileDetailsViewDto.cs" />
+    <Compile Include="Models\Dto\VpMasterDto.cs" />
+    <Compile Include="Models\Extensions\CommonExtensions.cs" />
+    <Compile Include="Models\IdentityModels\AccountBindingModels.cs" />
+    <Compile Include="Models\IdentityModels\AccountViewModels.cs" />
+    <Compile Include="Models\IdentityModels\IdentityModels.cs" />
+    <Compile Include="Models\ImageProcessor\ImageProcessingManager.cs" />
+    <Compile Include="Models\ImageProcessor\ImagesUtil.cs" />
+    <Compile Include="Models\Repository\GenericRepository.cs" />
+    <Compile Include="Models\Repository\GenericUnitOfWork.cs" />
+    <Compile Include="Models\Repository\IRepository.cs" />
+    <Compile Include="Models\Services\DailyWagesService.cs" />
+    <Compile Include="Models\Services\UserLogsService.cs" />
+    <Compile Include="Models\Services\ApplicationService.cs" />
+    <Compile Include="Models\Services\AttandanceService.cs" />
+    <Compile Include="Models\Services\DashboardService.cs" />
+    <Compile Include="Models\Services\DatabaseService.cs" />
+    <Compile Include="Models\Services\FilesACRService.cs" />
+    <Compile Include="Models\Services\FileService.cs" />
+    <Compile Include="Models\Services\HealthFacilityService.cs" />
+    <Compile Include="Models\Services\MeritDiplomaService.cs" />
+    <Compile Include="Models\Services\MWRouteService.cs" />
+    <Compile Include="Models\Services\OnlineJobService.cs" />
+    <Compile Include="Models\Services\ProfileService.cs" />
+    <Compile Include="Models\Services\PublicService.cs" />
+    <Compile Include="Models\Services\QuickMessage.cs" />
+    <Compile Include="Models\Services\RootService.cs" />
+    <Compile Include="Models\Services\SwmoPromotionService.cs" />
+    <Compile Include="Models\Services\TransferPostingService.cs" />
+    <Compile Include="Models\Services\UserService.cs" />
+    <Compile Include="Models\Services\VacancyService.cs" />
+    <Compile Include="Models\Services\ZipFileManager.cs" />
+    <Compile Include="Models\ViewModels\Application\ApplicationFts.cs" />
+    <Compile Include="Models\ViewModels\Application\ApplicationListViewModel.cs" />
+    <Compile Include="Models\ViewModels\Application\ApplicationProfileViewModel.cs" />
+    <Compile Include="Models\ViewModels\Application\MeritDiplomaCandidateViewModel.cs" />
+    <Compile Include="Models\ViewModels\Application\MobileTracking.cs" />
+    <Compile Include="Models\ViewModels\Application\SwmoPromotionViewModel.cs" />
+    <Compile Include="Models\ViewModels\Common\ConsultantProfile.cs" />
+    <Compile Include="Models\ViewModels\Common\DesignationFilterModel.cs" />
+    <Compile Include="Models\ViewModels\Common\FTSFilters.cs" />
+    <Compile Include="Models\ViewModels\Common\InboxOfficersViewModel.cs" />
+    <Compile Include="Models\ViewModels\Dashboard\DashboardTotalsViewModel.cs" />
+    <Compile Include="Models\ViewModels\HealthFacility\HFDashboardViewModel.cs" />
+    <Compile Include="Models\ViewModels\HealthFacility\HFDrpopdownViewModel.cs" />
+    <Compile Include="Models\ViewModels\OrderNotification\OrderSaveModel.cs" />
+    <Compile Include="Models\ViewModels\User\UserViewModelCustom.cs" />
+    <Compile Include="Models\ViewModels\Vacancy\VacancyViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\ApplicationOAuthProvider.cs" />
+    <Compile Include="Results\ChallengeResult.cs" />
+    <Compile Include="SqlServerTypes\Loader.cs" />
+    <Compile Include="Startup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\HelpPage\HelpPage.css" />
+    <Content Include="assets\favicon.ico" />
+    <Content Include="assets\favicon_o.ico" />
+    <Content Include="assets\img\avatars\1.jpg" />
+    <Content Include="assets\img\avatars\2.jpg" />
+    <Content Include="assets\img\avatars\3.jpg" />
+    <Content Include="assets\img\avatars\4.jpg" />
+    <Content Include="assets\img\avatars\5.jpg" />
+    <Content Include="assets\img\avatars\6.jpg" />
+    <Content Include="assets\img\avatars\7.jpg" />
+    <Content Include="assets\img\avatars\8.jpg" />
+    <Content Include="assets\img\avatars\adminavatar.png" />
+    <Content Include="assets\img\brand\healthheader.png" />
+    <Content Include="assets\img\brand\logo-punjab.png" />
+    <Content Include="assets\img\icons\alipay-card.png" />
+    <Content Include="assets\img\icons\edit.svg" />
+    <Content Include="assets\img\icons\edit1.svg" />
+    <Content Include="assets\img\icons\edit2.svg" />
+    <Content Include="assets\img\icons\eye-details.svg" />
+    <Content Include="assets\img\icons\minus-symbol.svg" />
+    <Content Include="assets\img\icons\pdf-icon.png" />
+    <Content Include="assets\img\icons\plus-symbol.svg" />
+    <Content Include="assets\img\icons\sms-verification.png" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\HRHomePageContent\css\creative.css" />
+    <Content Include="Content\HRHomePageContent\css\creative.min.css" />
+    <Content Include="Content\HRHomePageContent\img\header.jpg" />
+    <Content Include="Content\HRHomePageContent\img\human-resource-management.jpg" />
+    <Content Include="Content\HRHomePageContent\img\logo.png" />
+    <Content Include="Content\HRHomePageContent\img\portfolio\fullsize\1.jpg" />
+    <Content Include="Content\HRHomePageContent\img\portfolio\fullsize\2.jpg" />
+    <Content Include="Content\HRHomePageContent\img\portfolio\fullsize\3.jpg" />
+    <Content Include="Content\HRHomePageContent\img\portfolio\fullsize\4.jpg" />
+    <Content Include="Content\HRHomePageContent\img\portfolio\fullsize\5.jpg" />
+    <Content Include="Content\HRHomePageContent\img\portfolio\fullsize\6.jpg" />
+    <Content Include="Content\HRHomePageContent\img\portfolio\thumbnails\1.jpg" />
+    <Content Include="Content\HRHomePageContent\img\portfolio\thumbnails\2.jpg" />
+    <Content Include="Content\HRHomePageContent\img\portfolio\thumbnails\3.jpg" />
+    <Content Include="Content\HRHomePageContent\img\portfolio\thumbnails\4.jpg" />
+    <Content Include="Content\HRHomePageContent\img\portfolio\thumbnails\5.jpg" />
+    <Content Include="Content\HRHomePageContent\img\portfolio\thumbnails\6.jpg" />
+    <Content Include="Content\HRHomePageContent\vendor\bootstrap\css\bootstrap.css" />
+    <Content Include="Content\HRHomePageContent\vendor\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Content\HRHomePageContent\vendor\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\HRHomePageContent\vendor\bootstrap\js\bootstrap.js" />
+    <Content Include="Content\HRHomePageContent\vendor\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\css\font-awesome.css" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\css\font-awesome.min.css" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\HRHomePageContent\vendor\jquery\jquery.js" />
+    <Content Include="Content\HRHomePageContent\vendor\jquery\jquery.min.js" />
+    <Content Include="Content\HRHomePageContent\vendor\magnific-popup\jquery.magnific-popup.js" />
+    <Content Include="Content\HRHomePageContent\vendor\magnific-popup\jquery.magnific-popup.min.js" />
+    <Content Include="Content\HRHomePageContent\vendor\magnific-popup\magnific-popup.css" />
+    <Content Include="Content\HRHomePageContent\vendor\scrollreveal\scrollreveal.js" />
+    <Content Include="Content\HRHomePageContent\vendor\scrollreveal\scrollreveal.min.js" />
+    <Content Include="Global.asax" />
+    <Content Include="Models\DbModel\HrDb.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>HrDb.edmx</DependentUpon>
+      <LastGenOutput>HrDb.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\DbModel\HrDb.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>HrDb.edmx</DependentUpon>
+      <LastGenOutput>HrDb.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\tssyntax.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Areas\HelpPage\Views\Web.config" />
+    <Content Include="Areas\HelpPage\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\ResourceModel.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\Index.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\TextSample.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\SimpleTypeModelDescription.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\Samples.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\Parameters.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ModelDescriptionLink.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\KeyValuePairModelDescription.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\InvalidSample.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ImageSample.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\HelpPageApiModel.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\EnumTypeModelDescription.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\DictionaryModelDescription.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ComplexTypeModelDescription.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Models\tssyntax.js.map" />
+    <Content Include="Models\Files\Districts.json" />
+    <Content Include="Models\Files\Divisions.json" />
+    <Content Include="Models\Files\Tehsils.json" />
+    <Content Include="Content\HRHomePageContent\vendor\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\HRHomePageContent\vendor\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\HRHomePageContent\vendor\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\HRHomePageContent\vendor\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\less\animated.less" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\less\bordered-pulled.less" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\less\core.less" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\less\fixed-width.less" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\less\font-awesome.less" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\less\icons.less" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\less\larger.less" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\less\list.less" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\less\mixins.less" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\less\path.less" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\less\rotated-flipped.less" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\less\screen-reader.less" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\less\stacked.less" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\less\variables.less" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\scss\font-awesome.scss" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\scss\_animated.scss" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\scss\_bordered-pulled.scss" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\scss\_core.scss" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\scss\_fixed-width.scss" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\scss\_icons.scss" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\scss\_larger.scss" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\scss\_list.scss" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\scss\_mixins.scss" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\scss\_path.scss" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\scss\_rotated-flipped.scss" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\scss\_screen-reader.scss" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\scss\_stacked.scss" />
+    <Content Include="Content\HRHomePageContent\vendor\font-awesome\scss\_variables.scss" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="assets\font\roboto\Roboto-Black.ttf" />
+    <Content Include="assets\font\roboto\Roboto-BlackItalic.ttf" />
+    <Content Include="assets\font\roboto\Roboto-Bold.ttf" />
+    <Content Include="assets\font\roboto\Roboto-BoldItalic.ttf" />
+    <Content Include="assets\font\roboto\Roboto-Italic.ttf" />
+    <Content Include="assets\font\roboto\Roboto-Light.ttf" />
+    <Content Include="assets\font\roboto\Roboto-LightItalic.ttf" />
+    <Content Include="assets\font\roboto\Roboto-Medium.ttf" />
+    <Content Include="assets\font\roboto\Roboto-MediumItalic.ttf" />
+    <Content Include="assets\font\roboto\Roboto-Regular.ttf" />
+    <Content Include="assets\font\roboto\Roboto-Thin.ttf" />
+    <Content Include="assets\font\roboto\Roboto-ThinItalic.ttf" />
+    <Content Include="assets\font\roboto\RobotoCondensed-Bold.ttf" />
+    <Content Include="assets\font\roboto\RobotoCondensed-BoldItalic.ttf" />
+    <Content Include="assets\font\roboto\RobotoCondensed-Italic.ttf" />
+    <Content Include="assets\font\roboto\RobotoCondensed-Light.ttf" />
+    <Content Include="assets\font\roboto\RobotoCondensed-LightItalic.ttf" />
+    <Content Include="assets\font\roboto\RobotoCondensed-Regular.ttf" />
+    <Content Include="Content\pakistan_districts.geojson" />
+    <Content Include="wwwroot\1.a1e8f50c33db9fb20ca2.js" />
+    <Content Include="wwwroot\10.3622eef06c2771c7af7e.js" />
+    <Content Include="wwwroot\11.426e736600632211406a.js" />
+    <Content Include="wwwroot\12.7e6d2bdd0cf68dd243c8.js" />
+    <Content Include="wwwroot\13.be72dcaefd53a1c2cc9b.js" />
+    <Content Include="wwwroot\14.657238237153cb8e68b3.js" />
+    <Content Include="wwwroot\15.50968e2e1f8f2823b0ca.js" />
+    <Content Include="wwwroot\16.eb7b3198164ea5483a56.js" />
+    <Content Include="wwwroot\17.9e36a35937ffc4aafedf.js" />
+    <Content Include="wwwroot\18.0899c0a7941f50055abe.js" />
+    <Content Include="wwwroot\19.6a828155e89341f6d719.js" />
+    <Content Include="wwwroot\20.100bd603afc6b089b2f0.js" />
+    <Content Include="wwwroot\21.cee6363d0b6d9497c5da.js" />
+    <Content Include="wwwroot\22.143c793aed86d2d6f12a.js" />
+    <Content Include="wwwroot\23.534364a47f1efedebdf7.js" />
+    <Content Include="wwwroot\24.d27c45e871d8ce524d1d.js" />
+    <Content Include="wwwroot\25.f017c4f7bc829bf155d1.js" />
+    <Content Include="wwwroot\26.d1431385794e8d39bd3e.js" />
+    <Content Include="wwwroot\27.d05720e0251ca5ce705a.js" />
+    <Content Include="wwwroot\28.0c2ac04064aeaee60d29.js" />
+    <Content Include="wwwroot\29.05ee1847f9a0dbad5af3.js" />
+    <Content Include="wwwroot\3.94065c0903a8428ef5d0.js" />
+    <Content Include="wwwroot\30.a276ccaf19850634ea06.js" />
+    <Content Include="wwwroot\31.9d1faa1762d5b48a4e1e.js" />
+    <Content Include="wwwroot\32.875c7d66d9b0dfa50017.js" />
+    <Content Include="wwwroot\33.c37f13ce317c495d5236.js" />
+    <Content Include="wwwroot\34.52a86bd073805a258e83.js" />
+    <Content Include="wwwroot\35.bb2d19b440ffb72ed0b9.js" />
+    <Content Include="wwwroot\36.c258b00a934ea1ae4780.js" />
+    <Content Include="wwwroot\37.bb65af3d0b5c16ae521b.js" />
+    <Content Include="wwwroot\38.3975dff2122374f1ef8f.js" />
+    <Content Include="wwwroot\39.c16cf0bb7e49c87485ec.js" />
+    <Content Include="wwwroot\3rdpartylicenses.txt" />
+    <Content Include="wwwroot\4.c397e50685171e4b95b8.js" />
+    <Content Include="wwwroot\5.6ebf92619268d5f1aee2.js" />
+    <Content Include="wwwroot\applicant-bd.7db11e77deea3c367f89.jpg" />
+    <Content Include="wwwroot\assets\ckeditor\adapters\jquery.js" />
+    <Content Include="wwwroot\assets\ckeditor\build-config.js" />
+    <Content Include="wwwroot\assets\ckeditor\ckeditor.js" />
+    <Content Include="wwwroot\assets\ckeditor\config.js" />
+    <Content Include="wwwroot\assets\ckeditor\contents.css" />
+    <Content Include="wwwroot\assets\ckeditor\lang\en.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\a11yhelp.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\af.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\ar.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\az.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\bg.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\ca.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\cs.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\cy.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\da.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\de-ch.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\de.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\el.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\en-au.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\en-gb.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\en.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\eo.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\es-mx.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\es.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\et.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\eu.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\fa.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\fi.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\fo.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\fr-ca.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\fr.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\gl.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\gu.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\he.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\hi.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\hr.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\hu.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\id.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\it.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\ja.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\km.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\ko.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\ku.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\lt.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\lv.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\mk.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\mn.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\nb.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\nl.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\no.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\oc.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\pl.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\pt-br.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\pt.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\ro.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\ru.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\si.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\sk.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\sl.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\sq.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\sr-latn.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\sr.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\sv.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\th.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\tr.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\tt.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\ug.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\uk.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\vi.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\zh-cn.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\zh.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\a11yhelp\dialogs\lang\_translationstatus.txt" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\about\dialogs\about.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\about\dialogs\hidpi\logo_ckeditor.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\about\dialogs\logo_ckeditor.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\clipboard\dialogs\paste.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\colordialog\dialogs\colordialog.css" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\colordialog\dialogs\colordialog.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\copyformatting\cursors\cursor-disabled.svg" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\copyformatting\cursors\cursor.svg" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\copyformatting\styles\copyformatting.css" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\dialog\dialogDefinition.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\div\dialogs\div.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\find\dialogs\find.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\flash\dialogs\flash.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\flash\images\placeholder.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\forms\dialogs\button.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\forms\dialogs\checkbox.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\forms\dialogs\form.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\forms\dialogs\hiddenfield.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\forms\dialogs\radio.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\forms\dialogs\select.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\forms\dialogs\textarea.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\forms\dialogs\textfield.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\forms\images\hiddenfield.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\icons.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\icons_hidpi.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\iframe\dialogs\iframe.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\iframe\images\placeholder.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\image\dialogs\image.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\image\images\noimage.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\link\dialogs\anchor.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\link\dialogs\link.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\link\images\anchor.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\link\images\hidpi\anchor.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\liststyle\dialogs\liststyle.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\magicline\images\hidpi\icon-rtl.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\magicline\images\hidpi\icon.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\magicline\images\icon-rtl.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\magicline\images\icon.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\pagebreak\images\pagebreak.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\pastefromword\filter\default.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\preview\preview.html" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\scayt\dialogs\dialog.css" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\scayt\dialogs\options.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\scayt\dialogs\toolbar.css" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\scayt\skins\moono-lisa\scayt.css" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\showblocks\images\block_address.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\showblocks\images\block_blockquote.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\showblocks\images\block_div.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\showblocks\images\block_h1.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\showblocks\images\block_h2.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\showblocks\images\block_h3.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\showblocks\images\block_h4.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\showblocks\images\block_h5.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\showblocks\images\block_h6.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\showblocks\images\block_p.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\showblocks\images\block_pre.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\dialogs\smiley.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\angel_smile.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\angel_smile.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\angry_smile.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\angry_smile.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\broken_heart.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\broken_heart.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\confused_smile.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\confused_smile.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\cry_smile.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\cry_smile.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\devil_smile.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\devil_smile.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\embaressed_smile.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\embarrassed_smile.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\embarrassed_smile.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\envelope.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\envelope.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\heart.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\heart.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\kiss.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\kiss.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\lightbulb.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\lightbulb.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\omg_smile.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\omg_smile.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\regular_smile.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\regular_smile.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\sad_smile.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\sad_smile.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\shades_smile.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\shades_smile.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\teeth_smile.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\teeth_smile.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\thumbs_down.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\thumbs_down.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\thumbs_up.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\thumbs_up.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\tongue_smile.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\tongue_smile.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\tounge_smile.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\whatchutalkingabout_smile.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\whatchutalkingabout_smile.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\wink_smile.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\smiley\images\wink_smile.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\af.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\ar.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\az.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\bg.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\ca.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\cs.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\cy.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\da.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\de-ch.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\de.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\el.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\en-au.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\en-ca.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\en-gb.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\en.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\eo.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\es-mx.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\es.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\et.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\eu.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\fa.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\fi.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\fr-ca.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\fr.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\gl.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\he.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\hr.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\hu.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\id.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\it.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\ja.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\km.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\ko.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\ku.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\lt.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\lv.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\nb.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\nl.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\no.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\oc.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\pl.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\pt-br.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\pt.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\ro.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\ru.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\si.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\sk.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\sl.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\sq.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\sv.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\th.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\tr.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\tt.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\ug.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\uk.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\vi.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\zh-cn.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\zh.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\lang\_translationstatus.txt" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\specialchar\dialogs\specialchar.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\tableselection\styles\tableselection.css" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\tabletools\dialogs\tableCell.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\table\dialogs\table.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\templates\dialogs\templates.css" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\templates\dialogs\templates.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\templates\templates\default.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\templates\templates\images\template1.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\templates\templates\images\template2.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\templates\templates\images\template3.gif" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\widget\images\handle.png" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\wsc\dialogs\ciframe.html" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\wsc\dialogs\tmpFrameset.html" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\wsc\dialogs\wsc.css" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\wsc\dialogs\wsc.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\wsc\dialogs\wsc_ie.js" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\wsc\skins\moono-lisa\wsc.css" />
+    <Content Include="wwwroot\assets\ckeditor\samples\css\samples.css" />
+    <Content Include="wwwroot\assets\ckeditor\samples\img\github-top.png" />
+    <Content Include="wwwroot\assets\ckeditor\samples\img\header-bg.png" />
+    <Content Include="wwwroot\assets\ckeditor\samples\img\header-separator.png" />
+    <Content Include="wwwroot\assets\ckeditor\samples\img\logo.png" />
+    <Content Include="wwwroot\assets\ckeditor\samples\img\logo.svg" />
+    <Content Include="wwwroot\assets\ckeditor\samples\img\navigation-tip.png" />
+    <Content Include="wwwroot\assets\ckeditor\samples\index.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\js\sample.js" />
+    <Content Include="wwwroot\assets\ckeditor\samples\js\sf.js" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\ajax.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\api.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\appendto.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\assets\inlineall\logo.png" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\assets\outputxhtml\outputxhtml.css" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\assets\posteddata.php" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\assets\sample.jpg" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\assets\uilanguages\languages.js" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\datafiltering.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\dialog\assets\my_dialog.js" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\dialog\dialog.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\divreplace.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\enterkey\enterkey.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\htmlwriter\assets\outputforflash\outputforflash.swf" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\htmlwriter\assets\outputforflash\swfobject.js" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\htmlwriter\outputforflash.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\htmlwriter\outputhtml.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\index.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\inlineall.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\inlinebycode.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\inlinetextarea.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\jquery.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\magicline\magicline.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\readonly.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\replacebyclass.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\replacebycode.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\sample.css" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\sample.js" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\sample_posteddata.php" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\tabindex.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\toolbar\toolbar.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\uicolor.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\uilanguages.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\wysiwygarea\fullpage.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\xhtmlstyle.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\toolbarconfigurator\css\fontello.css" />
+    <Content Include="wwwroot\assets\ckeditor\samples\toolbarconfigurator\font\fontello.svg" />
+    <Content Include="wwwroot\assets\ckeditor\samples\toolbarconfigurator\font\LICENSE.txt" />
+    <Content Include="wwwroot\assets\ckeditor\samples\toolbarconfigurator\index.html" />
+    <Content Include="wwwroot\assets\ckeditor\samples\toolbarconfigurator\js\abstracttoolbarmodifier.js" />
+    <Content Include="wwwroot\assets\ckeditor\samples\toolbarconfigurator\js\fulltoolbareditor.js" />
+    <Content Include="wwwroot\assets\ckeditor\samples\toolbarconfigurator\js\toolbarmodifier.js" />
+    <Content Include="wwwroot\assets\ckeditor\samples\toolbarconfigurator\js\toolbartextmodifier.js" />
+    <Content Include="wwwroot\assets\ckeditor\samples\toolbarconfigurator\lib\codemirror\codemirror.css" />
+    <Content Include="wwwroot\assets\ckeditor\samples\toolbarconfigurator\lib\codemirror\codemirror.js" />
+    <Content Include="wwwroot\assets\ckeditor\samples\toolbarconfigurator\lib\codemirror\javascript.js" />
+    <Content Include="wwwroot\assets\ckeditor\samples\toolbarconfigurator\lib\codemirror\neo.css" />
+    <Content Include="wwwroot\assets\ckeditor\samples\toolbarconfigurator\lib\codemirror\show-hint.css" />
+    <Content Include="wwwroot\assets\ckeditor\samples\toolbarconfigurator\lib\codemirror\show-hint.js" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\dialog.css" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\dialog_ie.css" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\dialog_ie7.css" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\dialog_ie8.css" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\dialog_iequirks.css" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\editor.css" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\editor_gecko.css" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\editor_ie.css" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\editor_ie7.css" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\editor_ie8.css" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\editor_iequirks.css" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\icons.png" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\icons_hidpi.png" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\images\anchor.png" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\images\arrow.png" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\images\close.png" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\images\hidpi\anchor.png" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\images\hidpi\close.png" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\images\hidpi\lock-open.png" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\images\hidpi\lock.png" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\images\hidpi\refresh.png" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\images\lock-open.png" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\images\lock.png" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\images\refresh.png" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\images\spinner.gif" />
+    <Content Include="wwwroot\assets\ckeditor\styles.js" />
+    <Content Include="wwwroot\assets\css\animate-master.scss.css" />
+    <Content Include="wwwroot\assets\css\quill.bubble.css" />
+    <Content Include="wwwroot\assets\css\quill.snow.css" />
+    <Content Include="wwwroot\assets\favicon.ico" />
+    <Content Include="wwwroot\assets\fingerprintscripts\appfp.js" />
+    <Content Include="wwwroot\assets\fingerprintscripts\es6-shim.js" />
+    <Content Include="wwwroot\assets\fingerprintscripts\fingerprint.sdk.min.js" />
+    <Content Include="wwwroot\assets\fingerprintscripts\websdk.client.bundle.min.js" />
+    <Content Include="wwwroot\assets\img\adhocad.jpg" />
+    <Content Include="wwwroot\assets\img\avatars\1.jpg" />
+    <Content Include="wwwroot\assets\img\avatars\2.jpg" />
+    <Content Include="wwwroot\assets\img\avatars\3.jpg" />
+    <Content Include="wwwroot\assets\img\avatars\4.jpg" />
+    <Content Include="wwwroot\assets\img\avatars\5.jpg" />
+    <Content Include="wwwroot\assets\img\avatars\6.jpg" />
+    <Content Include="wwwroot\assets\img\avatars\7.jpg" />
+    <Content Include="wwwroot\assets\img\avatars\8.jpg" />
+    <Content Include="wwwroot\assets\img\avatars\adminavatar.png" />
+    <Content Include="wwwroot\assets\img\brand\applicant-bd.jpg" />
+    <Content Include="wwwroot\assets\img\brand\govlogoUpdated.png" />
+    <Content Include="wwwroot\assets\img\brand\healthheader.png" />
+    <Content Include="wwwroot\assets\img\brand\HISDU.png" />
+    <Content Include="wwwroot\assets\img\brand\hisducheck.jpg" />
+    <Content Include="wwwroot\assets\img\brand\hisducheckrotate1.jpg" />
+    <Content Include="wwwroot\assets\img\brand\logo-punjab.png" />
+    <Content Include="wwwroot\assets\img\brand\mobilelogo.png" />
+    <Content Include="wwwroot\assets\img\brand\PHFMC-logo.png" />
+    <Content Include="wwwroot\assets\img\brand\pshdwatermark.jpg" />
+    <Content Include="wwwroot\assets\img\brand\Watermark.png" />
+    <Content Include="wwwroot\assets\img\dghslogo.jpg" />
+    <Content Include="wwwroot\assets\img\distictsDHQ.jpg" />
+    <Content Include="wwwroot\assets\img\distictsDHQr.jpg" />
+    <Content Include="wwwroot\assets\img\distictsDHQTHQr.jpg" />
+    <Content Include="wwwroot\assets\img\distictsTHQDHQr.jpg" />
+    <Content Include="wwwroot\assets\img\distictsTHQr.jpg" />
+    <Content Include="wwwroot\assets\img\DistrictsTHQr.jpg" />
+    <Content Include="wwwroot\assets\img\districtTHQDHQr.jpg" />
+    <Content Include="wwwroot\assets\img\etransfer\1.jpg" />
+    <Content Include="wwwroot\assets\img\etransfer\2.jpg" />
+    <Content Include="wwwroot\assets\img\etransfer\3.jpg" />
+    <Content Include="wwwroot\assets\img\etransfer\4.jpg" />
+    <Content Include="wwwroot\assets\img\icons\alipay-card.png" />
+    <Content Include="wwwroot\assets\img\icons\bluedot.png" />
+    <Content Include="wwwroot\assets\img\icons\covid-inj.jpeg" />
+    <Content Include="wwwroot\assets\img\icons\dentist.png" />
+    <Content Include="wwwroot\assets\img\icons\edit.svg" />
+    <Content Include="wwwroot\assets\img\icons\edit1.svg" />
+    <Content Include="wwwroot\assets\img\icons\edit2.svg" />
+    <Content Include="wwwroot\assets\img\icons\eye-details.svg" />
+    <Content Include="wwwroot\assets\img\icons\medical_officer.png" />
+    <Content Include="wwwroot\assets\img\icons\minus-symbol.svg" />
+    <Content Include="wwwroot\assets\img\icons\nurse.png" />
+    <Content Include="wwwroot\assets\img\icons\nursenew.jpeg" />
+    <Content Include="wwwroot\assets\img\icons\pdf-icon.png" />
+    <Content Include="wwwroot\assets\img\icons\plus-symbol.svg" />
+    <Content Include="wwwroot\assets\img\icons\right-arrow.png" />
+    <Content Include="wwwroot\assets\img\icons\sms-verification.png" />
+    <Content Include="wwwroot\assets\img\icons\specialist.png" />
+    <Content Include="wwwroot\assets\img\icons\woman_doctor.png" />
+    <Content Include="wwwroot\assets\img\icons\woman_medical_officer.png" />
+    <Content Include="wwwroot\assets\img\img2.jpg" />
+    <Content Include="wwwroot\assets\img\notfound.png" />
+    <Content Include="wwwroot\assets\js\app.js" />
+    <Content Include="wwwroot\assets\js\moment.js" />
+    <Content Include="wwwroot\color.c7a33805ffda0d32bd2a.png" />
+    <Content Include="wwwroot\common.d609d0f039c94747b546.js" />
+    <Content Include="wwwroot\CoreUI-Icons-Linear-Free.13020ebbb43d37b76f46.svg" />
+    <Content Include="wwwroot\fontawesome-webfont.acf3dcb7ff752b5296ca.svg" />
+    <Content Include="wwwroot\hue.0614c27197fc3ce572e1.png" />
+    <Content Include="wwwroot\img2.6ad1f9a3fc610167cb28.jpg" />
+    <Content Include="wwwroot\index.html" />
+    <Content Include="wwwroot\line.567f57385ea3dde2c9ae.gif" />
+    <Content Include="wwwroot\loading.8732a6660b528fadfaeb.gif" />
+    <Content Include="wwwroot\main.17ca75b3f7aadfa15890.js" />
+    <Content Include="wwwroot\open-sans-v15-latin-300.505d96bd1954c3e75b4b.svg" />
+    <Content Include="wwwroot\open-sans-v15-latin-700.9f5a774538ba87b28526.svg" />
+    <Content Include="wwwroot\open-sans-v15-latin-regular.ddaaf4901aa3a2fa8805.svg" />
+    <Content Include="wwwroot\password-meter.d59e6dc2616c53ce8e77.png" />
+    <Content Include="wwwroot\polyfills-es5.ab9691e4fddac8fbad3d.js" />
+    <Content Include="wwwroot\polyfills.3797b608d21d282a47c5.js" />
+    <Content Include="wwwroot\primeicons.bdb64e58abc05187f829.svg" />
+    <Content Include="wwwroot\runtime.982a06b7175c09c19ab5.js" />
+    <Content Include="wwwroot\scripts.fd9fd75a8b0490a0b1a6.js" />
+    <Content Include="wwwroot\styles.8579edffddff4c19b8aa.css" />
+    <EntityDeploy Include="Models\DbModel\HrDb.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>HrDb.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\DbModel\HrDb.edmx.diagram">
+      <DependentUpon>HrDb.edmx</DependentUpon>
+    </Content>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\PublishProfiles\Hrmis.pubxml" />
+    <None Include="Properties\PublishProfiles\Local.pubxml" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <None Include="Scripts\jquery-3.1.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.1.1.js" />
+    <Content Include="Scripts\jquery-3.1.1.min.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="SqlServerTypes\x64\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Testing\Index.cshtml" />
+    <Content Include="Views\Profiles\Home.cshtml" />
+    <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.1.1.min.map" />
+    <Content Include="Views\PromotionJobApplications\Create.cshtml" />
+    <Content Include="Views\PromotionJobApplications\Delete.cshtml" />
+    <Content Include="Views\PromotionJobApplications\Details.cshtml" />
+    <Content Include="Views\PromotionJobApplications\Edit.cshtml" />
+    <Content Include="Views\PromotionJobApplications\Index.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="wwwroot\assets\ckeditor\CHANGES.md" />
+    <Content Include="wwwroot\assets\ckeditor\LICENSE.md" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\scayt\CHANGELOG.md" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\scayt\LICENSE.md" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\scayt\README.md" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\wsc\LICENSE.md" />
+    <Content Include="wwwroot\assets\ckeditor\plugins\wsc\README.md" />
+    <Content Include="wwwroot\assets\ckeditor\README.md" />
+    <Content Include="wwwroot\assets\ckeditor\samples\old\htmlwriter\assets\outputforflash\outputforflash.fla" />
+    <Content Include="wwwroot\assets\ckeditor\samples\toolbarconfigurator\font\config.json" />
+    <Content Include="wwwroot\assets\ckeditor\samples\toolbarconfigurator\font\fontello.eot" />
+    <Content Include="wwwroot\assets\ckeditor\samples\toolbarconfigurator\font\fontello.ttf" />
+    <Content Include="wwwroot\assets\ckeditor\samples\toolbarconfigurator\font\fontello.woff" />
+    <Content Include="wwwroot\assets\ckeditor\samples\toolbarconfigurator\lib\codemirror\LICENSE" />
+    <Content Include="wwwroot\assets\ckeditor\skins\moono\readme.md" />
+    <Content Include="wwwroot\assets\fingerprintscripts.7z" />
+    <Content Include="wwwroot\assets\font\noori\Noori.ttf" />
+    <Content Include="wwwroot\assets\font\roboto\Roboto-Black.ttf" />
+    <Content Include="wwwroot\assets\font\roboto\Roboto-BlackItalic.ttf" />
+    <Content Include="wwwroot\assets\font\roboto\Roboto-Bold.ttf" />
+    <Content Include="wwwroot\assets\font\roboto\Roboto-BoldItalic.ttf" />
+    <Content Include="wwwroot\assets\font\roboto\Roboto-Italic.ttf" />
+    <Content Include="wwwroot\assets\font\roboto\Roboto-Light.ttf" />
+    <Content Include="wwwroot\assets\font\roboto\Roboto-LightItalic.ttf" />
+    <Content Include="wwwroot\assets\font\roboto\Roboto-Medium.ttf" />
+    <Content Include="wwwroot\assets\font\roboto\Roboto-MediumItalic.ttf" />
+    <Content Include="wwwroot\assets\font\roboto\Roboto-Regular.ttf" />
+    <Content Include="wwwroot\assets\font\roboto\Roboto-Thin.ttf" />
+    <Content Include="wwwroot\assets\font\roboto\Roboto-ThinItalic.ttf" />
+    <Content Include="wwwroot\assets\font\roboto\RobotoCondensed-Bold.ttf" />
+    <Content Include="wwwroot\assets\font\roboto\RobotoCondensed-BoldItalic.ttf" />
+    <Content Include="wwwroot\assets\font\roboto\RobotoCondensed-Italic.ttf" />
+    <Content Include="wwwroot\assets\font\roboto\RobotoCondensed-Light.ttf" />
+    <Content Include="wwwroot\assets\font\roboto\RobotoCondensed-LightItalic.ttf" />
+    <Content Include="wwwroot\assets\font\roboto\RobotoCondensed-Regular.ttf" />
+    <Content Include="wwwroot\assets\img\img.zip" />
+    <Content Include="wwwroot\assets\img\TransferPolicyDraft.pdf" />
+    <Content Include="wwwroot\assets\js\pakistan_districts.geojson" />
+    <Content Include="wwwroot\assets\js\punjab_boundary.geojsonl.json" />
+    <Content Include="wwwroot\CoreUI-Icons-Linear-Free.0087dce419a7376eb06c.woff" />
+    <Content Include="wwwroot\CoreUI-Icons-Linear-Free.089ab3c11c572362d088.eot" />
+    <Content Include="wwwroot\CoreUI-Icons-Linear-Free.1bc3764815bb391a1677.ttf" />
+    <Content Include="wwwroot\fontawesome-webfont.674f50d287a8c48dc19b.eot" />
+    <Content Include="wwwroot\fontawesome-webfont.af7ae505a9eed503f8b8.woff2" />
+    <Content Include="wwwroot\fontawesome-webfont.b06871f281fee6b241d6.ttf" />
+    <Content Include="wwwroot\fontawesome-webfont.fee66e712a8a08eef580.woff" />
+    <Content Include="wwwroot\Noori.4b37da11a19bd60a9432.ttf" />
+    <Content Include="wwwroot\open-sans-v15-latin-300.177cc92d2e8027712a8c.ttf" />
+    <Content Include="wwwroot\open-sans-v15-latin-300.521d17bc9f3526c690e8.woff" />
+    <Content Include="wwwroot\open-sans-v15-latin-300.60c866748ff15f5b347f.woff2" />
+    <Content Include="wwwroot\open-sans-v15-latin-300.76b56857ebbae3a5a689.eot" />
+    <Content Include="wwwroot\open-sans-v15-latin-700.148a6749baa5f658a451.eot" />
+    <Content Include="wwwroot\open-sans-v15-latin-700.623e3205570002af47fc.woff" />
+    <Content Include="wwwroot\open-sans-v15-latin-700.7e08cc656863d52bcb5c.ttf" />
+    <Content Include="wwwroot\open-sans-v15-latin-700.d08c09f2f169f4a6edbc.woff2" />
+    <Content Include="wwwroot\open-sans-v15-latin-regular.9dce7f01715340861bdb.eot" />
+    <Content Include="wwwroot\open-sans-v15-latin-regular.bf2d0783515b7d75c35b.woff" />
+    <Content Include="wwwroot\open-sans-v15-latin-regular.c045b73d86803686f4cd.ttf" />
+    <Content Include="wwwroot\open-sans-v15-latin-regular.cffb686d7d2f4682df83.woff2" />
+    <Content Include="wwwroot\primeicons.473e2a746d3c151d7dca.ttf" />
+    <Content Include="wwwroot\primeicons.71bb3d79dcf18b45ae84.woff" />
+    <Content Include="wwwroot\primeicons.b8eccb1059ea5faaf6d8.eot" />
+    <Content Include="wwwroot\Roboto-Black.a77b7fc4cf040eb5bb26.ttf" />
+    <Content Include="wwwroot\Roboto-BlackItalic.4ed7470bb05534191cd1.ttf" />
+    <Content Include="wwwroot\Roboto-Bold.afa7a91dadd77b23634a.ttf" />
+    <Content Include="wwwroot\Roboto-BoldItalic.d0108b3d28ce9d0261b3.ttf" />
+    <Content Include="wwwroot\Roboto-Italic.2991e14ab958afe393cf.ttf" />
+    <Content Include="wwwroot\Roboto-Light.e22062b3188c8199283e.ttf" />
+    <Content Include="wwwroot\Roboto-LightItalic.1e27387f589f7cce254e.ttf" />
+    <Content Include="wwwroot\Roboto-Medium.99fc0816a09395454061.ttf" />
+    <Content Include="wwwroot\Roboto-MediumItalic.a0338073eed8fa60d0a7.ttf" />
+    <Content Include="wwwroot\Roboto-Regular.54a91b0619ccf9373d52.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DailyWagerUploads\" />
+    <Folder Include="Logs\Audit\" />
+    <Folder Include="Logs\Errors\" />
+    <Folder Include="obj\Debug\" />
+    <Folder Include="Views\Central\" />
+    <Folder Include="Views\Database\" />
+    <Folder Include="Views\Esr\" />
+    <Folder Include="Views\MeritDiplomaCandidate\" />
+    <Folder Include="Views\OnlineJob\" />
+    <Folder Include="Views\PER\" />
+    <Folder Include="Views\PromotionESR\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Models\tssyntax.ts" />
+    <TypeScriptCompile Include="Scripts\syntax.ts" />
+    <TypeScriptCompile Include="Scripts\typings\copy-paste\index.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201812240956107_checking.resx">
+      <DependentUpon>201812240956107_checking.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812260431423_usupdated.resx">
+      <DependentUpon>201812260431423_usupdated.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812270629243_cnincProfileId.resx">
+      <DependentUpon>201812270629243_cnincProfileId.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>8913</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:8913/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+  </Target>
+  <!--   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.3.1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.3.1\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.6\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.6\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target> -->
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

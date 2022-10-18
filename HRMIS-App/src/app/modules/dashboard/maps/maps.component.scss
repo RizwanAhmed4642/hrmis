@@ -1,0 +1,255 @@
+#map {
+    height: 96vh;
+    width: 100%;
+}
+
+.side-panel-custom {
+    overflow: auto;
+}
+
+.area {
+    background: #fff;
+    display: block;
+    height: 475px;
+    opacity: 0;
+    position: absolute;
+    width: 320px;
+}
+
+#area2 {
+    left: 320px;
+}
+
+.badge-warning {
+    background: yellow !important;
+}
+
+.area:hover,
+#area1:hover,
+#area2:hover {
+    opacity: 0.2;
+}
+
+agm-map {
+    height: 97vh;
+    width: 100%;
+}
+
+.gm-style-iw-c {
+    width: 760px !important;
+}
+
+.k-dropdown {
+    font-size: 32px;
+}
+
+::-webkit-scrollbar {
+    cursor: pointer !important;
+    width: 11px;
+}
+
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+.six-ane {
+    background: #008000;
+}
+
+.five-ane {
+    background: #7CFC00;
+}
+
+.four-ane {
+    background: #7CFC00;
+}
+
+.three-ane {
+    background: #FFFF00;
+}
+
+.two-ane {
+    background: #FFA500;
+}
+
+.one-ane {
+    background: #FFA500;
+}
+
+.zero-ane {
+    background: #FF0000;
+}
+
+
+.four-anet {
+    background: #008000;
+}
+
+.three-anet {
+    background: #7CFC00;
+}
+
+.two-anet {
+    background: #FFFF00;
+    color: black !important;
+}
+
+.one-anet {
+    background: #FFA500;
+}
+
+.zero-anet {
+    background: #FF0000;
+}
+
+
+
+
+.org-chart {
+    display: flex;
+    justify-content: left;
+}
+
+.org-chart ul {
+    padding-top: 20px;
+    position: relative;
+    transition: all 0.5s;
+}
+
+.org-chart ul ul::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    border-left: 1px solid #000;
+    width: 0;
+    height: 20px;
+}
+
+.org-chart li {
+    float: left;
+    text-align: center;
+    list-style-type: none;
+    position: relative;
+    padding: 20px 10px;
+    transition: all 0.5s;
+}
+
+.org-chart li::before,
+.org-chart li::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 50%;
+    border-top: 1px solid #000;
+    width: 50%;
+    height: 20px;
+}
+
+.org-chart li::after {
+    right: auto;
+    left: 50%;
+    border-left: 1px solid #000;
+}
+
+.org-chart li:only-child::after,
+.org-chart li:only-child::before {
+    display: none;
+}
+
+.org-chart li:only-child {
+    padding-top: 0;
+}
+
+.org-chart li:first-child::before,
+.org-chart li:last-child::after {
+    border: 0 none;
+}
+
+.org-chart li:last-child::before {
+    border-right: 1px solid #000;
+    border-radius: 0 5px 0 0;
+}
+
+.org-chart li:first-child::after {
+    border-radius: 5px 0 0 0;
+}
+
+.org-chart li .user {
+    text-decoration: none;
+    color: #666;
+    display: inline-block;
+    padding: 20px 10px;
+    transition: all 0.5s;
+    background: #fff;
+    //min-width: 180px;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.org-chart li .user:hover,
+.org-chart li .user:hover+ul li .user {
+    //background: #b5d5ef;
+    color: #002A50;
+    transition: all 0.15s;
+    transform: translateY(-5px);
+    //box-shadow: inset 0 0 0 3px #76b1e1, 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+/* .org-chart li .user:hover img,
+.org-chart li .user:hover+ul li .user img {
+    box-shadow: 0 0 0 5px #4c99d8;
+} */
+
+/* .org-chart li .user:hover+ul li::after,
+.org-chart li .user:hover+ul li::before,
+.org-chart li .user:hover+ul::before,
+.org-chart li .user:hover+ul ul::before {
+    border-color: #94a0b4;
+} */
+
+.org-chart li .user>div,
+.org-chart li .user>a {
+    font-size: 12px;
+}
+
+.org-chart li .user img {
+    margin: 0 auto;
+    max-width: 60px;
+    max-width: 60px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 5px #aaa;
+}
+
+.org-chart li .user .name {
+    font-size: 16px;
+    margin: 5px 0 0;
+    font-weight: 300;
+}
+
+.org-chart li .user .role {
+    font-weight: 600;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+
+.org-chart li .user .manager {
+    font-size: 12px;
+    color: #b21e04;
+}
+
+
+
+
+
+///////////////////////////
+
+

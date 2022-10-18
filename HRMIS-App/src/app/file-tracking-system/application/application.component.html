@@ -1,0 +1,1646 @@
+<div *ngIf="loading" class="k-i-loading"></div>
+<div class="animated fadeIn" *ngIf="!loading && application">
+
+
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3" *ngIf="application.ApplicationSource_Id != 5">
+        <!-- <i class="text-muted"><small>#
+            {{application.TrackingNumber ?
+          application.TrackingNumber : '00000'}}</small></i>&nbsp; -->
+        {{application.EmployeeName ? application.EmployeeName : '-'}}
+        <small><i>({{application.designationName
+            ?
+            application.designationName : '-'}})</i></small>
+      </div>
+      <div class="top-h3" *ngIf="application.ApplicationSource_Id == 5">
+        <!-- <i class="fa fa-arrow-left"></i> --> R & I Branch - PUC <i class="text-muted pull-right"><small>Tracking #
+            {{application.TrackingNumber ?
+              application.TrackingNumber : '00000'}}</small></i>
+      </div>
+    </div>
+
+    <div class="col-md-4 col-xs-12" *ngIf="application.ApplicationSource_Id != 5">
+      <div class="top-controls">
+        <button (click)="printApplication()" ladda data-style="zoom-in" kendoButton primary="true"
+          class="animated fadeIn"><i class="fa fa-print"></i> Print
+        </button>
+      </div>
+    </div>
+  </div>
+  <tabset>
+
+    <tab heading="Application" (selectTab)="onTabSelect($event)">
+      <!-- <div class="row">
+            <div class="col-md-12 col-xs-12">
+              <div class="top-h3">
+                <p class="m-0">
+                  {{application.ApplicationTypeName}} # {{application.TrackingNumber}}
+                </p>
+              </div>
+            </div>
+            <div class="col-md-6 col-xs-12">
+                  <div class="top-controls">
+                    <button kendoButton [primary]="true" [look]="'outline'" class="ml-2" (click)="openWindow('')">New
+                      Application</button>
+                  </div>
+                </div>
+          </div> -->
+
+      <div class="row animated fadeIn">
+        <div class="col-md-8 control-col-st">
+
+          <!-- <button (click)="printApplication()">Print</button> -->
+          <!--  <div class="content-heading mb-2 text-center">
+                Application
+              </div> -->
+          <div class="page preview p-0" id="applicationPrint"
+            *ngIf="application.TrackingNumber <= 49572 && !editApplication"
+            [innerHTML]="transform(application.RawText)">
+          </div>
+          <div class="page preview" id="applicationPrint"
+            *ngIf="application.TrackingNumber > 49572 && !editApplication">
+            <div class="application-page">
+
+              <table border="0" class="header-pshealth" cellspacing="0">
+                <tbody>
+                  <tr>
+                    <td class="gop-logo-a4-header"><img alt="Punjab Government Log"
+                        src="http://hrmis.pshealthpunjab.gov.pk/assets/img/brand/govlogoUpdated.png" />
+                    </td>
+                    <td class="pshealth-right-a4-td-header">
+                      <div class="pshealth-right-a4-text-header"><strong class="p-strong">GOVERNMENT OF THE PUNJAB<br />
+                          PRIMARY &amp; SECONDARY HEALTHCARE<br />
+                          DEPARTMENT </strong><br />
+                        Dated Lahore, {{application.Created_Date | date:'dd-MM-yyyy'}}</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">
+                      &nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td class="app-type-preview" colspan="2">
+                      <p *ngIf="application.ApplicationSource_Id != 5" (click)="openTrackingDialog()"> <strong
+                          class="p-strong"><strong class="p-strong">{{capitalize(application.ApplicationTypeName)}}
+                            #
+                            {{application.TrackingNumber
+                          ?
+                          application.TrackingNumber : '00000'}}</strong> </strong></p>
+                      <p *ngIf="application.ApplicationSource_Id == 5" (click)="openTrackingDialog()"> <strong
+                          class="p-strong"><strong class="p-strong">Tracking
+                            #
+                            {{application.TrackingNumber
+                            ?
+                            application.TrackingNumber : '00000'}}</strong> </strong></p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <table border="0" *ngIf="application.ApplicationType_Id != 11 && application.ApplicationSource_Id != 5"
+                cellspacing="0" class="applicant-information">
+                <tbody>
+                  <tr>
+                    <td colspan="4" class="applicant-info-heading">
+                      <strong class="p-strong">Applicant Information</strong></td>
+                  </tr>
+                  <tr>
+                    <td class="applicant-info-detail-1">
+                      <p class="mb-0 mt-2"> <strong class="p-strong">Name </strong></p>
+                      <p class="mb-0"> <strong class="p-strong">Father Name </strong></p>
+                      <p class="mb-0" *ngIf="application.Department_Id && application.Department_Id != 25">
+                        <strong class="p-strong">Department
+                        </strong></p>
+                    </td>
+                    <td class="applicant-info-detail-2">
+                      <p class="mb-0 mt-2">{{application.EmployeeName ? application.EmployeeName : '-'}}</p>
+                      <p class="mb-0">{{application.FatherName ? application.FatherName : '-'}}</p>
+                      <p class="mb-0" *ngIf="application.Department_Id && application.Department_Id != 25">{{application.DepartmentName
+                      ?
+                      application.DepartmentName : '-'}}</p>
+                    </td>
+                    <td class="applicant-info-detail-3">
+                      <p class="mb-0 mt-2"> <strong class="p-strong">CNIC </strong></p>
+
+                      <p class="mb-0" *ngIf="application.MobileNo"> <strong class="p-strong">Contact </strong></p>
+                    </td>
+                    <td class="applicant-info-detail-4">
+                      <p class="mb-0 mt-2">{{application.CNIC ? dashifyCNIC(application.CNIC) : '-'}} </p>
+                      <p class="mb-0" *ngIf="application.MobileNo">{{application.MobileNo ? application.MobileNo : ''}}
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="1">
+                      <p class="mb-0"><strong class="p-strong">Designation </strong></p>
+                    </td>
+                    <td colspan="3">
+                      <p class="mb-0">{{application.designationName ? application.designationName : '-'}}</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="1">
+                      <p><strong class="p-strong">Health Facility </strong></p>
+                    </td>
+                    <td colspan="3">
+                      <p>{{application.HealthFacilityName ? application.HealthFacilityName : '-'}}</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <table border="0" *ngIf="application.ApplicationSource_Id == 5" cellspacing="0"
+                class="applicant-information">
+                <tbody>
+                  <tr>
+                    <td colspan="4" class="applicant-info-heading">
+                      <strong class="p-strong">R & I Branch Applicant Information</strong></td>
+                  </tr>
+                  <tr>
+                    <td class="applicant-info-detail-1">
+                      <p class="mb-0 mt-2"> <strong class="p-strong">Dispatch # </strong></p>
+                      <p class="mb-0"> <strong class="p-strong">Dated </strong></p>
+                      <p class="mb-0"> <strong class="p-strong">CNIC </strong></p>
+                      <p class="mb-0"> <strong class="p-strong">Subject </strong></p>
+                      <p class="mb-0"> <strong class="p-strong">Address </strong></p>
+                    </td>
+                    <td class="applicant-info-detail-2">
+                      <p class="mb-0 mt-2">{{application.DispatchNumber ? application.DispatchNumber : '-'}} </p>
+                      <p class="mb-0">
+                        {{application.DispatchDated ? (application.DispatchDated | date:'dd/MM/yyyy') : '-'}} </p>
+                      <p class="mb-0">{{application.CNIC ? dashifyCNIC(application.CNIC) : '-'}}</p>
+                      <p class="mb-0">{{application.DispatchSubject ? application.DispatchSubject : '-'}}</p>
+                      <p class="mb-0">{{application.DispatchFrom ? application.DispatchFrom : '-'}}</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <table border="0" *ngIf="application.ApplicationSource_Id == 2 && !application.IsPersonAppeared"
+                cellspacing="0" class="applicant-information">
+                <tbody>
+                  <tr>
+                    <td colspan="4" class="applicant-info-heading">
+                      <strong class="p-strong">Paliamentarian Information</strong></td>
+                  </tr>
+                  <tr>
+                    <td class="applicant-info-detail-5">
+                      <p class="mb-0 mt-2"> <strong class="p-strong">Name </strong></p>
+                      <p> <strong class="p-strong">Reference </strong></p>
+                    </td>
+                    <td class="applicant-info-detail-6">
+                      <p class="mb-0 mt-2">{{personAppeared.Name ?
+                      personAppeared.Name : '-'}}</p>
+                      <p>{{personAppeared.Reference ?
+                      personAppeared.Reference : '-'}}</p>
+                    </td>
+                    <td class="applicant-info-detail-7">
+                      <p class="mb-0 mt-2"> <strong class="p-strong">District</strong></p>
+                      <p> <strong class="p-strong">Constituency </strong></p>
+                      <!--  <p class="mb-0"> <strong  class="p-strong">File # </strong></p> -->
+                    </td>
+                    <td class="applicant-info-detail-8">
+                      <p class="mb-0 mt-2">{{personAppeared.DistrictName
+                      ?
+                      personAppeared.DistrictName : '-'}}</p>
+                      <p>{{personAppeared.Constituency ?
+                      personAppeared.Constituency : '-'}}</p>
+
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <table border="0" *ngIf="application.ApplicationType_Id == 1 || application.ApplicationType_Id == 2 || 
+                application.ApplicationType_Id == 3 || application.ApplicationType_Id == 4 || 
+                application.ApplicationType_Id == 9 || application.ApplicationType_Id == 10" cellspacing="0"
+                class="application-type-detail-preview">
+                <tbody>
+                  <tr>
+                    <td colspan="2" class="application-type-detail-preview-heading">
+                      <strong class="p-strong">{{application.ApplicationTypeName}} Detail</strong> </td>
+                  </tr>
+                  <tr *ngIf="application.ApplicationType_Id == 1">
+                    <td>
+                      <p class="mb-0 mt-2"> <strong class="p-strong">Leave Type</strong>
+                        &nbsp;<u>{{application.leaveType}}</u></p>
+                      <p> <strong class="p-strong">From Date</strong>
+                        &nbsp;<u>{{application.FromDate | date:'dd/MM/yyyy'}}</u></p>
+                    </td>
+                    <td>
+                      <p class="mb-0 mt-2"> <strong class="p-strong">Period </strong> &nbsp;{{application.TotalDays}}
+                        day{{application.TotalDays
+                      <= 1 ? '' : 's' }} </p>
+                      <p> <strong class="p-strong">To Date</strong>
+                        &nbsp;<u>{{application.ToDate | date:'dd/MM/yyyy'}}</u></p>
+                    </td>
+                  </tr>
+                  <tr *ngIf="application.ApplicationType_Id == 2">
+                    <td class="w-20">
+                      <p class="mb-0 mt-2"> <strong class="p-strong">Type</strong></p>
+                      <p class="mb-0"> <strong class="p-strong">From</strong></p>
+                      <p> <strong class="p-strong">To</strong></p>
+                    </td>
+                    <td class="w-80">
+                      <p class="mb-0 mt-2"><u>General Transfer</u></p>
+                      <p class="mb-0">{{application.fromHealthFacility ? application.fromHealthFacility : '-'}}</p>
+                      <p>{{application.toHealthFacility ? application.toHealthFacility : '-'}}</p>
+                    </td>
+                  </tr>
+                  <tr *ngIf="application.ApplicationType_Id == 3">
+                    <td class="w-20">
+                      <p class="mb-0 mt-2"> <strong class="p-strong">Seniority #</strong></p>
+                      <p> <strong class="p-strong">Current Scale</strong></p>
+                    </td>
+                    <td class="w-80">
+                      <p class="mb-0 mt-2">{{application.SeniorityNumber ? application.SeniorityNumber : '-'}}</p>
+                      <p>{{application.CurrentScale ? application.CurrentScale : '-'}}</p>
+                    </td>
+                  </tr>
+                  <tr *ngIf="application.ApplicationType_Id == 4">
+                    <td class="w-20">
+                      <p class="mt-2"> <strong class="p-strong">Type</strong></p>
+                    </td>
+                    <td class="w-80">
+                      <p class="mt-2">{{application.RetirementType_Id ? application.RetirementType_Id : '-'}}</p>
+                    </td>
+                  </tr>
+                  <tr *ngIf="application.ApplicationType_Id == 8">
+                    <td class="w-20">
+                      <p class="mb-0 mt-2"> <strong class="p-strong">Designation</strong></p>
+                      <p> <strong class="p-strong">Health Facility</strong></p>
+                    </td>
+                    <td class="w-80">
+                      <p class="mb-0 mt-2">{{application.toDesignationName ? application.toDesignationName : '-'}}</p>
+                      <p>{{application.toHealthFacility ? application.toHealthFacility : '-'}}</p>
+                    </td>
+                  </tr>
+                  <tr *ngIf="application.ApplicationType_Id == 10">
+                    <td class="w-30">
+                      <p class="mt-2"> <strong class="p-strong">Contract Expire Date</strong></p>
+                    </td>
+                    <td class="w-70">
+                      <p class="mt-2">{{application.AdhocExpireDate | date:'dd/MM/yyyy'}}</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <table *ngIf="applicationAttachments?.length > 0" border="0" cellspacing="0" class="attached-document">
+                <tbody>
+                  <tr>
+                    <td colspan="2" class="attached-document-heading">
+                      <strong class="p-strong">Scanned Documents</strong></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">
+                      <p class="mt-2">
+                        <span *ngFor="let attachment of applicationAttachments;let i = index;">
+                          <strong class="p-strong">{{(i + 1) + ' - '}}</strong>
+                          <span (click)="openWindow(attachment.UploadPath, i, attachment.Id)"
+                            style="cursor:pointer;">{{attachment.DocName}}</span>
+                          <br *ngIf="i == 4"> &nbsp;
+                        </span>
+                      </p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <table *ngIf="application.Remarks" border="0" cellspacing="0" class="remarks-preview">
+                <tbody>
+                  <tr>
+                    <td colspan="2" class="remarks-heading">
+                      <strong class="p-strong">Remarks</strong> </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">
+                      <p class="mt-2">{{application.Remarks}}</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <br>
+              <table border="0" cellspacing="0" class="info-application-preview">
+                <tbody>
+                  <tr>
+                    <td colspan="2" class="info-application-preview-heading">
+                      <strong class="p-strong">Tracking ID :
+                        {{application.TrackingNumber ? application.TrackingNumber : '0000'}}</strong>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="info-application-preview-left">
+                      <p class="ml-1 mb-0 mt-2"><small><i>Track this application through Department's official Website
+                            or
+                            Mobile App</i></small></p>
+                      <p class="ml-1 mb-0"><small><i>Website link: <strong
+                              class="p-strong">pshealthpunjab.gov.pk</strong></i></small></p>
+                      <p class="ml-1 mb-0"><small><i>Mobile App: <strong class="p-strong">FTS -
+                              hisduapps.pshealthpunjab.gov.pk</strong></i></small></p>
+                      <p class="ml-1"><small><i>Helpline: <strong>1033</strong></i></small></p>
+                    </td>
+                    <td class="info-application-preview-right">
+                      <img *ngIf="barcodeImgSrc" (click)="openTrackingDialog()" alt="IMAGE AREA" class="mb-2 mt-2"
+                        [src]="barcodeSrc()" />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <table border="0" cellspacing="0" class="application-route-detail">
+                <tbody>
+                  <tr>
+                    <td class="application-route-detail-header">
+                      <strong class="p-strong">Marked To</strong> </td>
+                    <td class="application-route-detail-header">
+                      <strong class="p-strong">Date Time</strong>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="w-50">
+                      <p class="mt-10">{{application.ForwardingOfficerName ? application.ForwardingOfficerName
+                      : '____________________________'}}</p>
+                    </td>
+                    <td class="w-50">
+                      <p class="mt-10">{{application.Created_Date | date:'dd/MM/yyyy, h:mm a'}}</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="p-4 animated fadeIn" *ngIf="application && editApplication">
+            <h5>{{application.EmployeeName}}
+            </h5>
+            <hr>
+            <div class="animated fadeIn">
+              <div class="row">
+                <div class="col-md-6 control-col-st">
+                  <label class="k-form-field">
+                    <span>Employee Name</span>
+                    <input kendoTextBox type="text" name="EmployeeName" [(ngModel)]="application.EmployeeName"
+                      #EmployeeName="ngModel" required>
+                  </label>
+                </div>
+                <div class="col-md-6 control-col-end">
+                  <label class="k-form-field">
+                    <span>Father Name</span>
+                    <input kendoTextBox type="text" name="FatherName" [(ngModel)]="application.FatherName"
+                      #FatherName="ngModel" required>
+                  </label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 control-col-st">
+                  <label class="k-form-field">
+                    <span>CNIC</span>
+                    <input kendoTextBox type="text" name="CNIC" [(ngModel)]="application.CNIC" #CNIC="ngModel" required>
+                  </label>
+                </div>
+                <div class="col-md-4 control-col">
+                  <label class="k-form-field">
+                    <span>Gender</span>
+                    <input kendoTextBox type="text" disabled name="Gender" [(ngModel)]="application.Gender"
+                      #Gender="ngModel" required>
+                  </label>
+                </div>
+                <div class="col-md-4 control-col-end">
+                  <label class="k-form-field"> <span>Date of Birth</span>
+                    <kendo-datepicker name="DateOfBirth" placeholder="D.O.B" [format]="'dd/MM/yyyy'"
+                      [(ngModel)]="application.DateOfBirth" #dateModel="ngModel" required></kendo-datepicker>
+                  </label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 control-col-st">
+                  <label class="k-form-field">
+                    <span>Division</span>
+                    <kendo-dropdownlist [data]="dropDowns.divisionsData"
+                      [defaultItem]="dropDowns.defultFiltersModel.division" [textField]="'Name'" [valueField]="'Code'"
+                      [value]="dropDowns.selectedFiltersModel.division"
+                      (valueChange)="dropdownValueChanged($event, 'division')">
+                    </kendo-dropdownlist>
+                  </label>
+                </div>
+                <div class="col-md-4 control-col">
+                  <label class="k-form-field">
+                    <span>District</span>
+                    <kendo-dropdownlist [data]="dropDowns.districtsData"
+                      [defaultItem]="dropDowns.defultFiltersModel.district" [textField]="'Name'" [valueField]="'Code'"
+                      [value]="dropDowns.selectedFiltersModel.district"
+                      (valueChange)="dropdownValueChanged($event, 'district')">
+                    </kendo-dropdownlist>
+                  </label>
+                </div>
+                <div class="col-md-4 control-col-end">
+                  <label class="k-form-field">
+                    <span>Tehsil</span>
+                    <kendo-dropdownlist [data]="dropDowns.tehsilsData"
+                      [defaultItem]="dropDowns.defultFiltersModel.tehsil" [textField]="'Name'" [valueField]="'Code'"
+                      [value]="dropDowns.selectedFiltersModel.tehsil"
+                      (valueChange)="dropdownValueChanged($event, 'tehsil')">
+                    </kendo-dropdownlist>
+                  </label>
+                </div>
+                <div class="col-md-8 control-col-st">
+                  <label class="k-form-field">
+                    <span>Health Facility</span>
+                    <kendo-autocomplete [data]="hfsList" [valueField]="'FullName'"
+                      (valueChange)="dropdownValueChanged($event, 'healthFacility')" required [filterable]="true"
+                      (filterChange)="searchEvent.next({ event: $event, filter: 'hfs'})"
+                      [value]="application.fromHealthFacility" placeholder="Search Health Facility"
+                      class="k-autocomplete-form">
+                      <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                        <div class="search-list-item">
+                          {{ dataItem.FullName }}</div>
+                      </ng-template>
+                    </kendo-autocomplete>
+                  </label>
+                </div>
+                <div class="col-md-4 control-col-end">
+                  <label class="k-form-field">
+                    <span>File Number</span>
+                    <kendo-autocomplete [data]="ddsFilesList" [valueField]="'DiaryNo'"
+                      (valueChange)="searchClicked($event, 'ddsfiles')" [filterable]="true"
+                      (filterChange)="searchEvent.next({ event: $event, filter: 'ddsfiles'})"
+                      [value]="application.FileNumber" placeholder="Search File" class="k-autocomplete-form">
+                      <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                        <div class="search-list-item">
+                          {{ dataItem.DiaryNo}} - <i>{{dataItem.Subject }}</i></div>
+                      </ng-template>
+                    </kendo-autocomplete>
+                  </label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 control-col-st">
+                  <label class="k-form-field">
+                    <span>Mobile Number</span>
+                    <kendo-maskedtextbox [mask]="mobileMask" name="MobileNo" [(ngModel)]="application.MobileNo"
+                      #MobileNo="ngModel"></kendo-maskedtextbox>
+                  </label>
+                </div>
+                <div class="col-md-6 control-col-end">
+                  <label class="k-form-field">
+                    <span>E-Mail</span>
+                    <input kendoTextBox type="email" name="EMaiL" [(ngModel)]="application.EMaiL" #EMaiL="ngModel"
+                      pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?">
+                  </label>
+                </div>
+              </div>
+              <hr>
+              <div class="content-heading mb-2">
+                {{application.ApplicationTypeName}}
+              </div>
+              <div id="otherApplication" *ngIf="application.ApplicationType_Id == 9" class="animated fadeIn">
+                <label class="k-form-field mt-1">
+                  <span>Subject <span class="text-danger">*</span></span>
+                  <input kendoTextBox type="text" name="DispatchSubject" [(ngModel)]="application.DispatchSubject"
+                    #DispatchSubject="ngModel" required>
+                </label>
+              </div>
+              <div id="leaveInfo" *ngIf="application.ApplicationType_Id == 1">
+                <div class="row">
+                  <div class="col-md-12">
+                    <label class="k-form-field">
+                      <span>Leave Type</span>
+                      <kendo-dropdownlist [data]="dropDowns.leaveTypesData"
+                        (valueChange)="dropdownValueChanged($event, 'leaveType')" [textField]="'LeaveType1'"
+                        [valueField]="'Id'" [value]="dropDowns.selectedFiltersModel.leaveType"
+                        [defaultItem]="dropDowns.defultFiltersModel.leaveType">
+                      </kendo-dropdownlist>
+                    </label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4 control-col-st">
+                    <label class="k-form-field">
+                      <span>From Date</span>
+                      <kendo-datepicker name="FromDate" placeholder="Starting from" [format]="'dd/MM/yyyy'"
+                        [(ngModel)]="application.FromDate" #FromDate="ngModel"></kendo-datepicker>
+                    </label>
+                  </div>
+                  <div class="col-md-4 control-col">
+                    <label class="k-form-field">
+                      <span>To Date</span>
+                      <kendo-datepicker name="ToDate" placeholder="Leave end date" [format]="'dd/MM/yyyy'"
+                        (valueChange)="leaveInputsChanged(1)" [(ngModel)]="application.ToDate" #ToDate="ngModel">
+                      </kendo-datepicker>
+                    </label>
+                  </div>
+                  <div class="col-md-4 control-col-end">
+                    <label class="k-form-field">
+                      <span>Total Days</span>
+                      <input kendoTextBox type="number" (change)="leaveInputsChanged(2)" name="TotalDays"
+                        [(ngModel)]="application.TotalDays" #TotalDays="ngModel">
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div id="transferOrAdhocInfo"
+                *ngIf="application.ApplicationType_Id == 2 || application.ApplicationType_Id == 8">
+                <div *ngIf="application.ApplicationType_Id == 2">
+                  <label class="k-form-field">
+                    <span>Department <span class="text-danger">*</span></span>
+                    <kendo-dropdownlist [data]="dropDowns.departmentsData" [textField]="'Name'" [valueField]="'Id'"
+                      (valueChange)="dropdownValueChanged($event, 'toDepartment')"
+                      [value]="{ Name: 'Primary & Secondary Healthcare Department', Id: 25 }"
+                      [defaultItem]="dropDowns.defultFiltersModel.department">
+                    </kendo-dropdownlist>
+                  </label>
+                </div>
+                <label class="k-form-field">
+                  <span>Designation <span class="text-danger">*</span></span>
+                  <kendo-dropdownlist [data]="dropDowns.designationsData" [textField]="'Name'" [valueField]="'Id'"
+                    (valueChange)="dropdownValueChanged($event, 'toDesignation')"
+                    [value]="dropDowns.selectedFiltersModel.designationForTransfer"
+                    [defaultItem]="dropDowns.defultFiltersModel.designationForTransfer">
+                  </kendo-dropdownlist>
+                </label>
+                <div class="row">
+                  <div class="col-md-4 control-col-st">
+                    <label class="k-form-field">
+                      <span>Division <span class="text-danger">*</span></span>
+                      <kendo-dropdownlist [data]="divisions" [textField]="'Name'" [valueField]="'Code'"
+                        [value]="dropDowns.selectedFiltersModel.divisionForTransfer"
+                        (valueChange)="dropdownValueChanged($event, 'dd')"
+                        [defaultItem]="selectedFiltersModel.divisionForTransfer">
+                      </kendo-dropdownlist>
+                    </label>
+                  </div>
+                  <div class="col-md-4 control-col">
+                    <label class="k-form-field">
+                      <span>District <span class="text-danger">*</span></span>
+                      <kendo-dropdownlist [data]="districts" [textField]="'Name'"
+                        [value]="dropDowns.selectedFiltersModel.districtForTransfer" [valueField]="'Code'"
+                        (valueChange)="dropdownValueChanged($event, 'dd')"
+                        [defaultItem]="selectedFiltersModel.districtForTransfer">
+                      </kendo-dropdownlist>
+                    </label>
+                  </div>
+                  <div class="col-md-4 control-col-end">
+                    <label class="k-form-field">
+                      <span>Tehsil <span class="text-danger">*</span></span>
+                      <kendo-dropdownlist [data]="tehsils" [textField]="'Name'"
+                        [value]="dropDowns.selectedFiltersModel.tehsilForTransfer" [valueField]="'Code'"
+                        (valueChange)="dropdownValueChanged($event, 't')"
+                        [defaultItem]="selectedFiltersModel.tehsilForTransfer">
+                      </kendo-dropdownlist>
+                    </label>
+                  </div>
+                  <div class="col-md-12">
+                    <label class="k-form-field">
+                      <span>Health Facility <span class="text-danger">*</span></span>
+                      <kendo-autocomplete [data]="hfsList2" [valueField]="'FullName'"
+                        (valueChange)="dropdownValueChanged($event, 'healthFacility2')" required [filterable]="true"
+                        (filterChange)="searchEvent.next({ event: $event, filter: 'hfs2'})"
+                        [value]="application.toHealthFacility" placeholder="Search Health Facility"
+                        class="k-autocomplete-form">
+                        <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                          <div class="search-list-item">
+                            {{ dataItem.FullName }}</div>
+                        </ng-template>
+                      </kendo-autocomplete>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div id="PromotionInfo" *ngIf="application.ApplicationType_Id == 3">
+                <div class="row">
+                  <div class="col-md-6 control-col-st">
+                    <label class="k-form-field">
+                      <span>Current Scale <span class="text-danger">*</span></span>
+                      <input kendoTextBox type="number" min="1" max="21" name="CurrentScale"
+                        [(ngModel)]="application.CurrentScale" #CurrentScale="ngModel">
+                    </label>
+                  </div>
+                  <div class="col-md-6 control-col-end">
+                    <label class="k-form-field">
+                      <span>Seniority Number <span class="text-danger">*</span></span>
+                      <input kendoTextBox type="number" min="1" name="SeniorityNumber"
+                        [(ngModel)]="application.SeniorityNumber" #SeniorityNumber="ngModel">
+                    </label>
+                  </div>
+                </div>
+
+
+              </div>
+              <div id="retirementInfo" *ngIf="application.ApplicationType_Id == 4">
+                <label class="k-form-field">
+                  <span>Retirement Type <span class="text-danger">*</span></span>
+                  <kendo-dropdownlist [data]="dropDowns.retirementTypes" [textField]="'Name'" [valueField]="'Id'"
+                    [value]="dropDowns.selectedFiltersModel.retirementType"
+                    (valueChange)="dropdownValueChanged($event, 'retirementType')"
+                    [defaultItem]="selectedFiltersModel.retirementType">
+                  </kendo-dropdownlist>
+                </label>
+              </div>
+              <div id="adhocExpireInfo" *ngIf="application.ApplicationType_Id == 10">
+                <label class="k-form-field">
+                  <span>Adhoc Expire Date <span class="text-danger">*</span></span>
+                  <kendo-datepicker name="AdhocExpireDate" placeholder="Choose Contract Expiry Date"
+                    [format]="'dd/MM/yyyy'" [(ngModel)]="application.AdhocExpireDate" #AdhocExpireDate="ngModel">
+                  </kendo-datepicker>
+                </label>
+              </div>
+              <div id="complaintInfo" *ngIf="application.ApplicationType_Id == 6">
+                <label class="k-form-field">
+                  <span>Complaint Type <span class="text-danger">*</span></span>
+                  <kendo-dropdownlist name="ComplaintType" [data]="['General', 'Employee']"
+                    [(ngModel)]="application.ComplaintType" #ComplaintType="ngModel"
+                    [defaultItem]="'Select Complaint Type'" [valuePrimitive]="true">
+                  </kendo-dropdownlist>
+                </label>
+              </div>
+              <div id="remarks">
+                <label class="k-form-field">
+                  <span>Remarks</span>
+                  <textarea kendoTextArea type="text" name="Remarks" [(ngModel)]="application.Remarks"
+                    #Remarks="ngModel"></textarea>
+                </label>
+              </div>
+              <!--  <div class="row">
+                  <div class="col-md-3 control-col-st">
+                    <button kendoButton (click)="saveProfile(selectedProfile)" [ladda]="savingProfile" data-style="zoom-in"
+                      primary="true" class="btn-block">Save</button>
+                  </div>
+                  <div class="col-md-3 control-col">
+                    <button kendoButton primary="true" look="outline" class="btn-block"
+                      (click)="cancelProfile()">Cancel</button>
+                  </div>
+                  <div class="col-md-3 control-col">
+                    <button kendoButton primary="true" look="outline" class="btn-block"
+                      (click)="openInNewTab('profile/' + selectedProfile.CNIC)">Edit Employee
+                      Profile</button>
+                  </div>
+                  <div class="col-md-3 control-col-end">
+                    <button kendoButton look="outline" class="btn-block" (click)="removeProfile()">Remove</button>
+                  </div>
+                </div> -->
+            </div>
+          </div>
+
+        </div>
+        <div class="col-md-4 control-col-end">
+          <!--  <div class="content-heading mb-2 text-center">
+                Actions
+              </div> -->
+
+          <!--    <div class="page actionside"
+            *ngIf="application.Created_By.startsWith('ri.') && user.UserName == 'ri.incharge'" style="padding:0px;">
+            <table class="table table-puc" style="background: white;">
+              <tbody>
+                <tr class="heading" *ngIf="application.ApplicationType_Id != 14">
+                  <td valign="middle" colspan="2">
+                    <p class="m-0"> <strong style="font-family:'Roboto-Bold';font-weight: 100;">Forward
+                      </strong>
+                    </p>
+                  </td>
+                </tr>
+                <tr *ngIf="application.ApplicationType_Id != 14">
+                  <td colspan="2">
+                    <div>
+                      <kendo-dropdownlist [data]="sectionOfficersData"
+                        [defaultItem]="dropDowns.defultFiltersModel.officer" [textField]="'DesignationName'"
+                        [valueField]="'Id'" [value]="dropDowns.selectedFiltersModel.officer"
+                        (filterChange)="handleFilter($event, 'forwardingOfficer')" [filterable]="true"
+                        (valueChange)="dropdownValueChanged($event, 'officer')">
+                      </kendo-dropdownlist>
+                    </div>
+                    <div *ngIf="application.IsPending">
+                      <hr>
+                      <p *ngIf="application.ToOfficerName" class="m-0">Sent To:
+                        <u>{{application.ToOfficerName}}</u>
+                      </p>
+                      <p class="m-0"><strong class="p-strong">Forward Time:</strong> {{application.ForwardTime |
+                            date:'d/M/yy, h:mm a'}}</p>
+                      <p class="m-0">Status: <u>{{application.IsPending ? 'Not Recieved Yet' : ''}}</u> </p>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <button kendoButton [ladda]="forwardingApplication" data-style="zoom-in" [primary]="true"
+                      class="btn-block" (click)="updateLog()">
+                      Update
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div> -->
+
+
+          <div class="page actionside" *ngIf="application.Users_Id == user.Id" style="padding:0px;">
+            <table class="table table-puc" style="background: white;">
+              <tbody>
+                <tr class="heading">
+                  <td valign="middle" colspan="2">
+                    <p class="m-0"> <strong style="font-family:'Roboto-Bold';font-weight: 100;">Remarks
+                      </strong>
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <p class="m-0" *ngIf="applicationLog?.Remarks?.length > 0">{{applicationLog?.Remarks?.length}} / 750
+                    </p>
+                    <textarea kendoTextArea type="text" [(ngModel)]="applicationLog.Remarks"></textarea>
+                    <p class="mt-1 mb-0 text-danger" *ngIf="applicationLog?.Remarks?.length > 750">Character limit
+                      exceed</p>
+                  </td>
+                </tr>
+                <tr class="heading" *ngIf="applicationAttachments.length > 0">
+                  <th style="font-family:'Roboto-Bold';font-weight: 100;" colspan="2">
+                    Action
+                  </th>
+                </tr>
+                <tr>
+                  <!--    <td valign="middle">
+                    <button class="btn btn-primary btn-block" [ladda]="removingApplication" data-style="zoom-in"
+                      (click)="editApplication = !editApplication"><i class="fa fa-pencil"></i> Edit
+                    </button>
+                  </td> -->
+                  <td valign="middle" colspan="2">
+                    <button class="btn btn-danger btn-block"
+                      [disabled]="!applicationLog.Remarks || applicationLog?.Remarks?.length > 750"
+                      [ladda]="removingApplication" data-style="zoom-in" (click)="removeApplication()"><i
+                        class="fa fa-times"></i> Remove
+                    </button>
+                  </td>
+                </tr>
+                <tr class="heading"
+                  *ngIf="!application.IsSigned || (!application.PandSOfficer_Id && !application.ToOfficer_Id)">
+                  <th style="font-family:'Roboto-Bold';font-weight: 100;" colspan="2">
+                    Action
+                  </th>
+                </tr>
+                <tr *ngIf="!application.IsSigned || (!application.PandSOfficer_Id && !application.ToOfficer_Id)">
+                  <td valign="middle" colspan="2">
+                    <div class="row">
+                      <div class="col-md-12 mt-2">
+                        <label class="k-form-field">
+                          <span><strong class="p-strong">Upload Signed Application</strong>&nbsp;<i class="fa"
+                              [ngClass]="signedApplication.attached ? 'fa-check-circle text-success' : 'fa-exclamation-circle text-warning'"></i></span>
+                          <input type="file" (change)="uploadSignedCopy($event)" style="width: 100%;">
+                        </label>
+                        <label class="k-form-field" *ngIf="signedApplication.attached">
+                          <button kendoButton class="btn-block" primary="true" [ladda]="uploadingSignedCopy"
+                            data-style="zoom-in" (click)="uploadSignedApplication()">
+                            Upload Signed Application
+                          </button>
+                        </label>
+                      </div>
+                      <div class="col-md-12 mt-2">
+                        <button kendoButton type="button"
+                          *ngIf="!application.PandSOfficer_Id && !application.ToOfficer_Id" type="input"
+                          [ladda]="forwardingApplication" data-style="zoom-in" [primary]="true" class="btn-block"
+                          (click)="updateMarkLog()">
+                          Send to {{application.ForwardingOfficerName ? application.ForwardingOfficerName :
+            application.ForwardingOfficerName}}
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="page actionside" *ngIf="currentOfficer && application.PandSOfficer_Id == currentOfficer.Id"
+            style="padding:0px;">
+           
+            <!-- 
+            <pre>{{currentOfficer | json}}</pre> -->
+            <!-- <p>File <strong style="font-family:'Roboto-Bold';font-weight: 100;"><u>{{application.FileNumber}}</u>
+              </strong>&nbsp;<span style="color:#46a23f;cursor: pointer;" (click)="openRequestDialog()"
+                *ngIf="application.FileRequestStatus_Id != 1 && application.FileRequestStatus_Id != 11 && application.FileRequestStatus_Id != 2">(request
+                file)</span>
+              <a href="" *ngIf="application.FileRequestStatus_Id == 1 || application.FileRequestStatus_Id == 11 || application.FileRequestStatus_Id == 2">(file
+                requested)</a>
+            </p>
+            <p>Status <strong style="font-family:'Roboto-Bold';font-weight: 100;"><u>{{application.StatusName}}</u>
+              </strong>&nbsp;<a href="">edit</a>
+            </p>
+            <p>Office <strong
+                style="font-family:'Roboto-Bold';font-weight: 100;"><u>{{application.PandSOfficerName ? application.PandSOfficerName : application.ForwardingOfficerName}}</u>
+              </strong>&nbsp;<a href="">edit</a>
+            </p> -->
+            <!--   <table class="table" style="background: white;">
+              <tbody>
+                <tr>
+                  <td valign="middle">
+                    <p class="m-0"> <strong style="font-family:'Roboto-Bold';font-weight: 100;">File Number :
+                      </strong>
+                      {{application.FileNumber}}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    *ngIf="application.FileRequestStatus_Id != 1 && application.FileRequestStatus_Id != 11 && application.FileRequestStatus_Id != 2">
+                    <button kendoButton [look]="'outline'" [primary]="true" *ngIf="ddsFile"
+                      class="animated fadeIn btn-block" (click)="openRequestDialog()">
+                      Request File
+                    </button>
+                  </td>
+                  <td
+                    *ngIf="application.FileRequestStatus_Id == 1 || application.FileRequestStatus_Id == 11 || application.FileRequestStatus_Id == 2">
+                    <button kendoButton [look]="'outline'" disabled="disabled" [primary]="true" *ngIf="ddsFile"
+                      class="animated fadeIn btn-block">
+                      File Requested
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table> -->
+            <!--  <table class="table" style="background: white;"
+              *ngIf="application.Status_Id != 2 && application.Status_Id != 3">
+              <tbody>
+                <tr>
+                  <td valign="middle" colspan="2">
+                    <p class="m-0"> <strong style="font-family:'Roboto-Bold';font-weight: 100;">Actions
+                      </strong>
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <button [ladda]="approvingApplication" data-style="zoom-in"
+                      (click)="openActionDialog(2, 'Approve PUC')" class="animated fadeIn btn btn-success btn-block"><i
+                        class="fa fa-check"></i>
+                      Approve
+                    </button>
+                  </td>
+                  <td>
+                    <button [ladda]="rejectingApplication" data-style="zoom-in"
+                      (click)="openActionDialog(3, 'Reject PUC')" class="animated fadeIn btn btn-block btn-danger"><i
+                        class="fa fa-times"></i>
+                      Reject
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table> -->
+            <table class="table table-puc" style="background: white;">
+              <tbody>
+                <tr class="heading" *ngIf="applicationAttachments.length > 0">
+                  <th style="font-family:'Roboto-Bold';font-weight: 100;" colspan="2">
+                    Documents ({{applicationAttachments.length}})
+                  </th>
+                </tr>
+                <tr style="cursor: pointer;" *ngFor="let doc of applicationAttachments; let i = index;"
+                  (click)="application.ApplicationSource_Id == 5 ? '' : openWindow(doc.UploadPath, i, doc.Id)"
+                  [hidden]="applicationAttachments.length == 0">
+                  <td valign="middle">{{doc.DocName}}</td>
+                  <td> <img width="40px"
+                      [src]="application.ApplicationSource_Id == 5 ? 'https://www.pngkey.com/png/full/139-1394507_png-file-svg-icon-attached-document.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + doc.UploadPath"
+                      draggable="false" alt=""></td>
+                </tr>
+                <tr class="heading" *ngIf="currentOfficer && application.PandSOfficer_Id == 22">
+                  <td valign="middle" colspan="2">
+                    <p class="m-0"> <strong style="font-family:'Roboto-Bold';font-weight: 100;">Verification
+                      </strong>
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2" *ngIf="currentOfficer && application.PandSOfficer_Id == 22">
+                    <input type="checkbox" id="penalty2" class="k-checkbox" />
+                    <label class="k-checkbox-label" for="penalty2">Regular Officer
+                    </label>
+                    <br>
+                    <input type="checkbox" id="penalty3" class="k-checkbox" />
+                    <label class="k-checkbox-label" for="penalty3">One Year Current Service
+                    </label>
+                    <br>
+                    <input type="checkbox" id="penalty" class="k-checkbox" />
+                    <label class="k-checkbox-label" for="penalty">Service Record Complete
+                    </label>
+                    <br>
+                    <input type="checkbox" id="penalty1" class="k-checkbox" />
+                    <label class="k-checkbox-label" for="penalty1">Leave Record Complete
+                    </label>
+                  </td>
+                </tr>
+                <tr class="heading" *ngIf="application.Status_Id == 8">
+                  <th style="font-family:'Roboto-Bold';font-weight: 100;" colspan="2">
+                    Waiting Documents
+                  </th>
+                </tr>
+                <tr class="heading" *ngIf="application.Status_Id == 3">
+                  <th style="font-family:'Roboto-Bold';font-weight: 100;" colspan="2">
+                    Rejection
+                  </th>
+                </tr>
+                <tr style="cursor: pointer;" *ngIf="application.Status_Id == 8 || application.Status_Id == 3">
+                  <td colspan="2"> <button kendoButton class="btn-block" primary="true" data-style="zoom-in"
+                      (click)="generateLetter()">
+                      Generate Letter
+                    </button>
+                  </td>
+                </tr>
+                <!--  <tr style="cursor: pointer;" *ngIf="applicationAttachments.length == 0">
+                  <td colspan="2">No Online Document.</td>
+                </tr> -->
+                <tr class="heading" *ngIf="application.ApplicationType_Id != 14">
+                  <th style="font-family:'Roboto-Bold';font-weight: 100;" colspan="2">
+                    File
+                  </th>
+                </tr>
+                <tr *ngIf="application.ApplicationType_Id != 14">
+                  <td valign="middle" colspan="2">
+
+
+                    <p class="m-0" *ngIf="application.FileNumber" class="m-0"><strong class="p-strong">File
+                        Number</strong></p>
+                    <p *ngIf="application.FileNumber"> {{application.FileNumber}}
+                      <!-- <strong style="font-family:'Roboto-Bold';font-weight: 100;"></strong> -->
+                    </p>
+                    <p class="m-0 text-success pull-right"
+                      *ngIf="!application.FileRequested && user.RoleName != 'Law wing'" style="cursor:pointer;"
+                      (click)="changeFileNumberEdit()">
+                      <small *ngIf="application.FileNumber">Change</small>
+                    </p>
+                    <p class="m-0 text-success pull-right"
+                      *ngIf="!application.FileRequested && user.RoleName == 'Law wing'" style="cursor:pointer;"
+                      (click)="changeLawFileNumberEdit()">
+                      <small *ngIf="application.FileNumber">Change</small>
+                    </p>
+                    <button kendoButton [look]="'outline'" [primary]="true"
+                      *ngIf="!application.FileNumber && user.RoleName != 'Law wing'" class="animated fadeIn btn-block"
+                      (click)="changeFileNumberEdit()">Add File Number
+                    </button>
+                    <button kendoButton [look]="'outline'" [primary]="true"
+                      *ngIf="!application.FileNumber && user.RoleName == 'Law wing'" class="animated fadeIn btn-block"
+                      (click)="changeLawFileNumberEdit()">Add File
+                    </button>
+                    <div *ngIf="application.DDS_Id && application.DDS_Id > 0">
+
+                      <div
+                        *ngIf="application.FileRequestStatus_Id != 1 && application.FileRequestStatus_Id != 11 && application.FileRequestStatus_Id != 2">
+                        <hr>
+                        <button kendoButton [look]="'outline'" [primary]="true" *ngIf="ddsFile"
+                          class="animated fadeIn btn-block" (click)="openRequestDialog()">
+                          Request File
+                        </button>
+                      </div>
+                      <div
+                        *ngIf="application.FileRequestStatus_Id == 1 || application.FileRequestStatus_Id == 11 || application.FileRequestStatus_Id == 2">
+                        <hr class="m-0 p-0">
+                        <!--  <p class="m-0">File Requested
+                          <i class="fa fa-check-circle text-success"></i>
+                        </p> -->
+                        <p *ngIf="application.FileRequested" class="m-0"><strong class="p-strong">File Request
+                            Status</strong></p>
+                        <p *ngIf="application.FileRequested">
+                          {{application.FileRequestStatus}}</p>
+                        <!-- <button kendoButton [look]="'outline'" disabled="disabled" [primary]="true" *ngIf="ddsFile" class="animated fadeIn btn-block">
+                      File Requested
+                    </button> -->
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr class="heading"
+                  *ngIf="user.UserName == 'og1' || user.UserName == 'ordercell'  && application.ApplicationType_Id == 2 && application.Status_Id == 2">
+                  <td valign="middle" colspan="2">
+                    <p class="m-0"> <strong style="font-family:'Roboto-Bold';font-weight: 100;">Issue Order
+                      </strong>
+                    </p>
+                  </td>
+                </tr>
+                <tr *ngIf="user.UserName == 'og1' || user.UserName == 'ordercell'">
+                  <td colspan="2">
+                    <div class="row animated fadeIn"
+                      *ngIf="application.ApplicationType_Id == 2 && application.Status_Id == 2 && (user.UserName == 'og1' || user.UserName == 'ordercell')">
+                      <div class="col-md-12">
+                        <label class="k-form-field mb-2">
+                          <span *ngIf="vacantString && vacantString != 'SV'" class="animated fadeIn text-danger"><i
+                              class="fa fa-exclamation-circle"></i>
+                            {{vacantString}}</span>
+                          <button *ngIf="vacantString == 'SV'" kendoButton [look]="'outline'" [primary]="true"
+                            class="animated fadeIn btn-block"
+                            [routerLink]="'/order/new/' + application.CNIC +'/' + application.ApplicationType_Id + '/' + application.Id + '/' + application.TrackingNumber">
+                            {{vacantString != 'SV' ? 'Generate Order' : 'Generate Order'}}
+                          </button>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row animated fadeIn"
+                      *ngIf="application.ApplicationType_Id != 2 && application.Status_Id == 2 && (user.UserName == 'og1' || user.UserName == 'ordercell')">
+                      <div class="col-md-12">
+                        <label class="k-form-field mb-2">
+                          <button kendoButton [look]="'outline'" [primary]="true" class="animated fadeIn btn-block"
+                            [routerLink]="'/order/new/' + application.CNIC +'/' + application.ApplicationType_Id + '/' + application.Id + '/' + application.TrackingNumber">
+                            Generate Order
+                          </button>
+                        </label>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr *ngIf="(user.UserName == 'so.toqeer' || user.UserName == 'a.system') && vpPack.vpMaster?.Id">
+                  <td colspan="2">
+                    <div class="content-heading mb-2">
+                      Vacancy Status
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <p class="m-0">
+                          <strong class="p-strong">Sanctioned</strong>
+                        </p>
+                        <p class="m-0">
+                          {{vpPack.vpMaster.TotalSanctioned}}
+                        </p>
+                      </div>
+                      <div class="col-md-3">
+                        <p class="m-0">
+                          <strong class="p-strong">Filled</strong>
+                        </p>
+                        <p class="m-0">
+                          {{vpPack.vpMaster.TotalWorking}}
+                        </p>
+                      </div>
+                      <div class="col-md-3">
+                        <p class="m-0">
+                          <strong class="p-strong">Vacant</strong>
+                        </p>
+                        <p class="m-0">
+                          {{vpPack.vpMaster.Vacant}}
+                        </p>
+                      </div>
+                      <div class="col-md-3">
+                        <p class="m-0">
+                          <strong class="p-strong">Approval</strong>
+                        </p>
+                        <p class="m-0">
+                          {{vpPack.vpMaster.TotalApprovals}}
+                        </p>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row animated fadeIn">
+                      <div class="col-md-12">
+                        <label class="k-form-field mb-2">
+                          <button kendoButton [look]="'outline'" [primary]="true" *ngIf="vpPack.vpMaster.Vacant > 0"
+                            (click)="attachVacancy()" class="animated fadeIn btn-block">
+                            Attach
+                          </button>
+                        </label>
+                      </div>
+                      <!--  <div class="col-md-6">
+                        <label class="k-form-field mb-2">
+                          <button kendoButton [look]="'outline'" [primary]="true" *ngIf="vpPack.vpMaster.Vacant > 0"
+                            class="animated fadeIn btn-block">
+                            Print
+                          </button>
+                        </label>
+                      </div> -->
+                    </div>
+                    <!-- <div class="animated fadeIn" *ngIf="vpPack.vpDetails.length > 0">
+                      <hr>
+                      <div class="content-heading mb-2">
+                        Vacancy Status
+                      </div>
+                      <div class="row">
+                        <div class="col-md-2" *ngFor="let vpDetail of vpPack.vpDetails">
+                          <p class="m-0">
+                            <strong class="p-strong">{{vpDetail.EmpModeName}}</strong>
+                          </p>
+                          <p class="m-0">
+                            {{vpDetail.TotalWorking}}
+                          </p>
+                        </div>
+                      </div>
+                    </div> -->
+                  </td>
+                </tr>
+                <!--   <tr style="cursor: pointer;">
+                  <td colspan="2">
+                    <button [ladda]="approvingApplication" data-style="zoom-in" (click)="requestMissingDocuments()"
+                      class="animated fadeIn btn btn-outline-success btn-block"><i class="fa fa-file-text-o"></i>
+                      Request more documents
+                    </button>
+                  </td>
+                </tr> -->
+                <tr class="heading" *ngIf="application.ApplicationType_Id != 14">
+                  <td valign="middle" colspan="2">
+                    <p class="m-0"> <strong style="font-family:'Roboto-Bold';font-weight: 100;">Change Status
+                      </strong>
+                    </p>
+                  </td>
+                </tr>
+                <tr *ngIf="application.ApplicationType_Id != 14">
+                  <td colspan="2">
+                    <kendo-dropdownlist [data]="dropDowns.applicationStatusData" [textField]="'Name'"
+                      [valueField]="'Id'" (valueChange)="dropdownValueChanged($event, 'status')"
+                      [value]="dropDowns.selectedFiltersModel.applicationStatus"
+                      [defaultItem]="dropDowns.defultFiltersModel.applicationStatus">
+                    </kendo-dropdownlist>
+                  </td>
+                </tr>
+
+                <tr class="heading" *ngIf="application.ApplicationType_Id != 14">
+                  <td valign="middle" colspan="2">
+                    <p class="m-0"> <strong style="font-family:'Roboto-Bold';font-weight: 100;">Forward
+                      </strong>
+                    </p>
+                  </td>
+                </tr>
+                <tr *ngIf="application.ApplicationType_Id != 14">
+                  <td colspan="2">
+                    <div>
+                      <kendo-dropdownlist [data]="sectionOfficersData"
+                        [defaultItem]="dropDowns.defultFiltersModel.officer" [textField]="'DesignationName'"
+                        [valueField]="'Id'" [value]="dropDowns.selectedFiltersModel.officer"
+                        (filterChange)="handleFilter($event, 'forwardingOfficer')" [filterable]="true"
+                        (valueChange)="dropdownValueChanged($event, 'officer')">
+                      </kendo-dropdownlist>
+                    </div>
+                    <div *ngIf="application.IsPending">
+                      <hr>
+                      <p *ngIf="application.ToOfficerName" class="m-0">Sent To:
+                        <u>{{application.ToOfficerName}}</u>
+                      </p>
+                      <p class="m-0"><strong class="p-strong">Forward Time:</strong> {{application.ForwardTime |
+                        date:'d/M/yy, h:mm a'}}</p>
+                      <p class="m-0">Status: <u>{{application.IsPending ? 'Not Recieved Yet' : ''}}</u> </p>
+                    </div>
+                  </td>
+                </tr>
+
+
+                <tr class="heading"
+                  *ngIf="application.ApplicationType_Id != 14 && user.RoleName == 'Law wing' && currentOfficer.Id != applicationLog.ToOfficer_Id && applicationLog.ToOfficer_Id">
+                  <td valign="middle" colspan="2">
+                    <p class="m-0"> <strong style="font-family:'Roboto-Bold';font-weight: 100;">Priority
+                      </strong>
+                    </p>
+                  </td>
+                </tr>
+                <tr
+                  *ngIf="application.ApplicationType_Id != 14 && user.RoleName == 'Law wing' && currentOfficer.Id != applicationLog.ToOfficer_Id && applicationLog.ToOfficer_Id">
+                  <td colspan="2">
+                    <div>
+                      <label class="k-form-field"> <span>Puporse <span class="text-danger">*</span></span>
+                        <kendo-dropdownlist [data]="dropDowns.applicationPurposes"
+                          [defaultItem]="dropDowns.defultFiltersModel.applicationPurpose" [textField]="'Purpose'"
+                          [valueField]="'Id'" [value]="dropDowns.selectedFiltersModel.applicationPurpose"
+                          (valueChange)="dropdownValueChanged($event, 'purpose')">
+                        </kendo-dropdownlist>
+                      </label>
+                      <label class="k-form-field"> <span>Last Date <span class="text-danger">*</span></span>
+                        <kendo-datepicker placeholder="Select Last Date" [format]="'dd/MM/yyyy'"
+                          [(ngModel)]="applicationLog.DueDate"></kendo-datepicker>
+                      </label>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="heading">
+                  <td valign="middle" colspan="2">
+                    <p class="m-0"> <strong style="font-family:'Roboto-Bold';font-weight: 100;">Remarks
+                      </strong>
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <div class="row" *ngIf="applicationLog.SMS_SentToApplicant && application.MobileNo">
+                      <div class="col-md-2">
+                        <i class="fa fa-exclamation-circle text-success font-2xl"></i>
+                      </div>
+                      <div class="col-md-10">
+                        <h6>SMS update
+                          will be sent to applicant with message you
+                          enter below</h6>
+                      </div>
+                    </div>
+                    <p class="m-0" *ngIf="applicationLog?.Remarks?.length > 0">{{applicationLog?.Remarks?.length}} / 750
+                    </p>
+                    <textarea kendoTextArea type="text" [(ngModel)]="applicationLog.Remarks"></textarea>
+                    <p class="mt-1 mb-0 text-danger" *ngIf="applicationLog?.Remarks?.length > 750">Character limit
+                      exceed</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <button kendoButton [disabled]="!applicationLog.Remarks || applicationLog?.Remarks?.length > 750"
+                      [ladda]="forwardingApplication" data-style="zoom-in" [primary]="true" class="btn-block"
+                      (click)="updateLog()">
+                      Update
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+
+
+
+          <div class="page actionside" *ngIf="user?.UserName.toLocaleLowerCase().startsWith('ceo.')"
+            style="padding:0px;">
+            <table class="table table-puc" style="background: white;">
+              <tbody>
+                <tr class="heading" *ngIf="applicationAttachments.length > 0">
+                  <th style="font-family:'Roboto-Bold';font-weight: 100;" colspan="2">
+                    Documents ({{applicationAttachments.length}})
+                  </th>
+                </tr>
+                <tr style="cursor: pointer;" *ngFor="let doc of applicationAttachments; let i = index;"
+                  (click)="openWindow(doc.UploadPath, i, doc.Id)" [hidden]="applicationAttachments.length == 0">
+                  <td valign="middle">{{doc.DocName}}</td>
+                  <td> <img width="40px"
+                      [src]="application.ApplicationSource_Id == 5 ? 'https://www.pngkey.com/png/full/139-1394507_png-file-svg-icon-attached-document.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + doc.UploadPath"
+                      draggable="false" alt=""></td>
+                </tr>
+                <tr class="heading">
+                  <td valign="middle" colspan="2">
+                    <p class="m-0"> <strong style="font-family:'Roboto-Bold';font-weight: 100;">Verification
+                      </strong>
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <input type="checkbox" id="penalty2" class="k-checkbox" />
+                    <label class="k-checkbox-label" for="penalty2">Regular Officer
+                    </label>
+                    <br>
+                    <input type="checkbox" id="penalty3" class="k-checkbox" />
+                    <label class="k-checkbox-label" for="penalty3">One Year Current Service
+                    </label>
+                    <br>
+                    <input type="checkbox" id="penalty" class="k-checkbox" />
+                    <label class="k-checkbox-label" for="penalty">Service Record Complete
+                    </label>
+                    <br>
+                    <input type="checkbox" id="penalty1" class="k-checkbox" />
+                    <label class="k-checkbox-label" for="penalty1">Leave Record Complete
+                    </label>
+                  </td>
+                </tr>
+                <!--  <tr class="heading">
+                  <td valign="middle" colspan="2">
+                    <p class="m-0"> <strong style="font-family:'Roboto-Bold';font-weight: 100;">Forward
+                      </strong>
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <div>
+                      <kendo-dropdownlist [data]="sectionOfficers" [defaultItem]="dropDowns.defultFiltersModel.officer"
+                        [textField]="'DesignationName'" [valueField]="'Id'"
+                        [value]="dropDowns.selectedFiltersModel.officer"
+                        (valueChange)="dropdownValueChanged($event, 'officer')">
+                      </kendo-dropdownlist>
+                    </div>
+                    <div *ngIf="application.IsPending">
+                      <hr>
+                      <p *ngIf="application.ToOfficerName" class="m-0">Sent To:
+                        <u>{{application.ToOfficerName}}</u>
+                      </p>
+                      <p class="m-0"><strong class="p-strong">Forward Time:</strong> {{application.ForwardTime |
+                        date:'d/M/yy, h:mm a'}}</p>
+                      <p class="m-0">Status: <u>{{application.IsPending ? 'Not Recieved Yet' : ''}}</u> </p>
+                    </div>
+                  </td>
+                </tr> -->
+                <tr class="heading">
+                  <td valign="middle" colspan="2">
+                    <p class="m-0"> <strong style="font-family:'Roboto-Bold';font-weight: 100;">Remarks
+                      </strong>
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <div class="row" *ngIf="applicationLog.SMS_SentToApplicant && application.MobileNo">
+                      <div class="col-md-2">
+                        <i class="fa fa-exclamation-circle text-success font-2xl"></i>
+                      </div>
+                      <div class="col-md-10">
+                        <h6>SMS update
+                          will be sent to applicant with message you
+                          enter below</h6>
+                      </div>
+                    </div>
+                    <p class="m-0" *ngIf="applicationLog?.Remarks?.length > 0">{{applicationLog?.Remarks?.length}} / 750
+                    </p>
+                    <textarea kendoTextArea type="text" [(ngModel)]="applicationLog.Remarks"></textarea>
+                    <p class="mt-1 mb-0 text-danger" *ngIf="applicationLog?.Remarks?.length > 750">Character limit
+                      exceed</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <button kendoButton [disabled]="!applicationLog.Remarks || applicationLog?.Remarks?.length > 750"
+                      [ladda]="forwardingApplication" data-style="zoom-in" [primary]="true" class="btn-block"
+                      (click)="updateLog()">
+                      <i class="fa fa-send"></i> Send to Department
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+    </tab>
+    <tab heading="Documents" (selectTab)="onTabSelect($event)">
+      <div class="row" *ngIf="applicationAttachments.length > 0">
+        <div class="col-md-12">
+          <div id="documents">
+            <div class="content-heading mb-2">
+              Documents <small>({{applicationAttachments.length}})</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="d-flex flex-wrap">
+            <div class="mx-2 mb-2" *ngFor="let doc of applicationAttachments;let i = index;"
+              style="cursor: pointer !important;" (click)="openWindow(doc.UploadPath, i, doc.Id)">
+
+              <img width="175px" class="border"
+                [src]="application.ApplicationSource_Id == 5 ? 'https://www.pngkey.com/png/full/139-1394507_png-file-svg-icon-attached-document.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + doc.UploadPath"
+                alt="">
+              <div class="text-center mt-1">
+                <strong class="p-strong">{{doc.DocName}}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="row" *ngIf="applicationDocuments.length > 0 && application.Users_Id == user.Id">
+        <div class="col-md-12">
+          <div id="documents">
+            <div class="content-heading mb-2">
+              Upload Documents <small class="pull-right"
+                (click)="getApplicationDocuments(application.ApplicationType_Id)"><i class="fa fa-refresh"></i></small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4" *ngFor="let doc of applicationDocuments;let i = index;"
+          [ngClass]="i % 3 === 0 ? 'control-col-st' : i % 3 === 1 ? 'control-col' : i % 3 === 2 ? 'control-col-end' : ''">
+          <label class="k-form-field">
+            <span><strong class="p-strong">{{doc.Name}}</strong>&nbsp;<i class="fa"
+                [ngClass]="doc.attached ? 'fa-check-circle text-success' : 'fa-exclamation-circle text-warning'"></i></span>
+            <input type="file" (change)="selectFile($event, doc)" style="width: 100%;"
+              [ngClass]="doc.attached ? 'text-success p-strong' : ''" [name]="doc.Name">
+          </label>
+        </div>
+
+      </div>
+      <div class="row mt-2" *ngIf="applicationAttachmentsUpload.length > 0">
+        <div class="col-md-12">
+          <button type="button" (click)="uploadAttachments()" [ladda]="uploadingAttachments" data-style="zoom-in"
+            class="btn btn-block btn-lg btn-success animated fadeIn"><i class="fa fa-upload"></i> Upload
+            {{applicationAttachmentsUpload.length}}
+            Document{{applicationAttachmentsUpload.length > 1 ? 's' : ''}}
+          </button>
+        </div>
+      </div>
+      <!-- <div class="content-heading mb-2">
+        Documents <small (click)="requestMissingDocuments()" style="float: right;
+        font-style: normal;
+        font-size: 16px;
+        font-weight: 100;
+        color: black;
+        cursor: pointer;"><i
+            class="fa fa-plus"></i>
+          Request More
+          Documents</small>
+      </div>
+      <div class="row">
+        <div class="col-md-3" *ngFor="let doc of applicationAttachments; let i = index;" (click)="openWindow(doc.UploadPath, i)">
+         
+          <p class="mt-2 doc-name-side text-center" style="cursor:pointer;"><i>{{doc.DocName}}</i></p>
+        </div>
+      </div> -->
+    </tab>
+    <tab heading="Details" (selectTab)="onTabSelect($event)">
+      <app-application-details [trackingNo]="application.TrackingNumber"></app-application-details>
+    </tab>
+  </tabset>
+</div>
+
+
+<!-- 
+<kendo-window [title]="'Application Attachment'" [state]="'maximized'" *ngIf="imageWindowOpened"
+  (close)="closeWindow()" [minWidth]="450">
+  <img [src]="'https://hrmis.pshealthpunjab.gov.pk/' + imagePath" alt="">
+  <kendo-scrollview [data]="applicationAttachments" [activeIndex]="activeIndex" [width]="'100%'" [height]="'500px'"
+    [animate]="true" [arrows]="true" [pageable]="true">
+    <ng-template let-item="item">
+      <h2 class="demo-title text-center">{{item.DocName}}</h2>
+      <img height="100%" [src]="'https://hrmis.pshealthpunjab.gov.pk/' + item.UploadPath" draggable="false" alt="">
+    </ng-template>
+  </kendo-scrollview>
+</kendo-window>
+ -->
+<kendo-dialog [title]="'Application Attachment'" *ngIf="imageWindowOpened" [minWidth]="'450'" [width]="'950'"
+  (close)="closeWindow()" [height]="'585'">
+  <div class="row">
+    <div class="col-md-12" *ngIf="application.Users_Id == user.Id">
+      <button class="btn btn-danger pull-right" (click)="removeApplicationAttachment()" data-style="zoom-in"
+        [ladda]="removingApplicationAttachment">
+        <i class="fa fa-times" style="cursor: pointer;"></i> Remove
+      </button>
+    </div>
+    <hr *ngIf="application.Users_Id == user.Id">
+    <div class="col-md-12">
+      <ngx-image-zoom
+        [thumbImage]="application.ApplicationSource_Id == 5 ? 'https://www.pngkey.com/png/full/139-1394507_png-file-svg-icon-attached-document.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + imagePath"
+        [fullImage]="application.ApplicationSource_Id == 5 ? 'https://www.pngkey.com/png/full/139-1394507_png-file-svg-icon-attached-document.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + imagePath"
+        [magnification]="'2'" [zoomMode]="'toggle'">
+      </ngx-image-zoom>
+    </div>
+  </div>
+</kendo-dialog>
+
+
+<kendo-dialog [title]="'PUC - Tracking # ' + application.TrackingNumber" *ngIf="trackingDialogOpened"
+  (close)="closeTrackingDialog()" [width]="'950'" [height]="'475'" [minWidth]="'950'">
+  <app-application-details [trackingNo]="application.TrackingNumber"></app-application-details>
+</kendo-dialog>
+
+<kendo-dialog [title]="actionName + ' Confirmation'" *ngIf="actionDialogOpened" (close)="closeActionDialog()"
+  [minWidth]="'500'">
+  <!--  <div class="row">
+    <div class="col-md-4 text-right control-col-st">
+      <p class="p-strong">Status</p>
+    </div>
+    <div class="col-md-7 control-col-end">
+      {{applicationLog.ToStatus}}
+    </div>
+  </div> -->
+  <div class="row">
+    <div class="col-md-4 text-right control-col-st">
+      <p class="p-strong">Remarks</p>
+    </div>
+    <div class="col-md-7 control-col-end">
+      <textarea [(ngModel)]="applicationLog.Remarks" placeholder="minimum 10 characters maximum 1,000"
+        kendoTextArea></textarea>
+    </div>
+  </div>
+  <kendo-dialog-actions *ngIf="actionDialogOpened" class="animated fadeIn">
+    <kendo-buttongroup [width]="'100%'">
+      <button kendoButton primary="true" [disabled]="!applicationLog.Remarks || applicationLog.Remarks?.length < 10"
+        (click)="approveReject()"
+        style="height: 100% !important;background: #46a23f !important;color: white !important;" class="animated fadeIn">
+        Confirm!
+      </button>
+      <button kendoButton (click)="closeActionDialog()">Cancel</button>
+    </kendo-buttongroup>
+  </kendo-dialog-actions>
+</kendo-dialog>
+
+<kendo-dialog [title]="'Application Updated'" *ngIf="successDialogOpened" (close)="closeSuccessDialog()" [width]="550"
+  [minWidth]="450">
+  <table class="table animated fadeIn">
+    <thead>
+      <tr>
+        <th colspan="2" style="width:85%">
+          Action
+        </th>
+        <th style="width:15%">
+          Status
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="applicationLog.ToOfficerName">
+        <td>Forwarded to</td>
+        <td>{{applicationLog.ToOfficerName}}</td>
+        <td>
+          <div class="badge badge-success">success</div>
+        </td>
+      </tr>
+      <tr *ngIf="applicationLog.ToStatus">
+        <td>Status</td>
+        <td>{{applicationLog.ToStatus}}</td>
+        <td>
+          <div class="badge badge-success">success</div>
+        </td>
+      </tr>
+      <tr *ngIf="applicationLog.Remarks">
+        <td>Remarks</td>
+        <td>{{applicationLog.Remarks}}</td>
+        <td>
+          <div class="badge badge-success">success</div>
+        </td>
+      </tr>
+      <tr *ngIf="applicationLog.SMS_SentToApplicant">
+        <td colspan="2">SMS to Applicant</td>
+        <td>
+          <div class="badge badge-success">success</div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <kendo-dialog-actions *ngIf="successDialogOpened" class="animated fadeIn">
+    <kendo-buttongroup [width]="'100%'">
+      <button kendoButton primary="true" *ngIf="shouldGenerateLetter" (click)="generateLetter()"
+        style="height: 100% !important;background: #46a23f !important;color: white !important;" class="animated fadeIn">
+        Generate Letter
+      </button>
+      <button kendoButton *ngIf="!shouldGenerateLetter" primary="true" (click)="closeSuccessDialog()">Back to
+        Applications</button>
+
+    </kendo-buttongroup>
+  </kendo-dialog-actions>
+</kendo-dialog>
+
+<kendo-dialog
+  [title]="changeFileNumber ? 'Change File Number' : 'Request File - Tracking Number ' + application.TrackingNumber"
+  *ngIf="lawFileDialogOpened" (close)="closeLawFileDialog()" width="600" [minWidth]="450">
+  <div class="row animated fadeIn" *ngIf="!changeFileNumber">
+    <div class="col-md-4 text-right">
+      <strong class="p-strong">File Name</strong>
+    </div>
+    <div class="col-md-7">
+      {{ddsFile.Subject}}
+    </div>
+  </div>
+  <div class="row animated fadeIn mt-1" *ngIf="!changeFileNumber">
+    <div class="col-md-4 text-right">
+      <strong class="p-strong">File No.</strong>
+    </div>
+    <div class="col-md-7">
+      {{ddsFile.DiaryNo}}
+    </div>
+  </div>
+  <div class="row animated fadeIn" *ngIf="changeFileNumber">
+    <div class="col-md-12">
+      <label class="k-form-field">
+        <span>Search File Number in Law Files</span>
+        <kendo-autocomplete [data]="lawFilesList" [valueField]="'FileNumber'"
+          (valueChange)="searchClicked($event, 'lawfiles')" [filterable]="true"
+          (filterChange)="searchEvent.next({ event: $event, filter: 'lawfiles'})" placeholder="Search File"
+          class="k-autocomplete-form">
+          <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+            <div class="search-list-item">
+              {{ dataItem.FileNumber}} - <i>{{dataItem.CaseNumber }}</i> - {{dataItem.CourtTitle }}</div>
+          </ng-template>
+        </kendo-autocomplete>
+      </label>
+    </div>
+  </div>
+</kendo-dialog>
+
+<kendo-dialog
+  [title]="changeFileNumber ? 'Change File Number' : 'Request File - Tracking Number ' + application.TrackingNumber"
+  *ngIf="requestDialogOpened" (close)="closeRequestDialog()" [minWidth]="450">
+  <div class="row animated fadeIn" *ngIf="!changeFileNumber">
+    <div class="col-md-4 text-right">
+      <strong class="p-strong">File Name</strong>
+    </div>
+    <div class="col-md-7">
+      {{ddsFile.Subject}}
+    </div>
+  </div>
+  <div class="row animated fadeIn mt-1" *ngIf="!changeFileNumber">
+    <div class="col-md-4 text-right">
+      <strong class="p-strong">File No.</strong>
+    </div>
+    <div class="col-md-7">
+      {{ddsFile.DiaryNo}}
+    </div>
+  </div>
+  <div class="row animated fadeIn" *ngIf="changeFileNumber">
+    <div class="col-md-12">
+      <label class="k-form-field">
+        <span>Search File Number in Scanned Files</span>
+        <kendo-autocomplete [data]="ddsFilesList" [valueField]="'DiaryNo'"
+          (valueChange)="searchClicked($event, 'ddsfiles')" [filterable]="true"
+          (filterChange)="searchEvent.next({ event: $event, filter: 'ddsfiles'})" placeholder="Search File"
+          class="k-autocomplete-form">
+          <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+            <div class="search-list-item">
+              {{ dataItem.DiaryNo}} - <i>{{dataItem.Subject }}</i></div>
+          </ng-template>
+        </kendo-autocomplete>
+      </label>
+    </div>
+  </div>
+  <hr>
+  <div class="row" *ngIf="!fileNotAvailable && !fileIssued">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-3">
+      <button *ngIf="!fileRequstedBy && !changeFileNumber" [ladda]="requestingFile" data-style="zoom-in" kendoButton
+        (click)="sendFileRequest(ddsFile.Id)" primary="true">Request File</button>
+    </div>
+    <div class="col-md-5">
+      <button *ngIf="changeFileNumber" [ladda]="changingFileNumber" data-style="zoom-in" kendoButton
+        (click)="changeFileNumberOfApplication(application)" primary="true">Save</button>
+    </div>
+  </div>
+  <div class="row" *ngIf="fileRequstedBy">
+    <div class="col-md-10 offset-md-1">
+      <p class="m-0 text-center" *ngIf="fileRequstedBy" primary="true">File already requested by
+        <strong class="p-strong">{{fileRequstedBy}}</strong></p>
+      <p class="m-0 text-center" *ngIf="fileRequstedBy" primary="true">Request Status
+        <strong class="p-strong">{{fileRequstedStatus}}</strong></p>
+    </div>
+  </div>
+</kendo-dialog>

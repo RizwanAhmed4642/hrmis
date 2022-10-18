@@ -1,0 +1,56 @@
+<!-- <div *ngIf="!this.resFound" class="k-i-loading"></div> -->
+<div class="animated fadeIn" *ngIf="applications">
+    <div class="row">
+        <div class="col-md-6 col-xs-6">
+            <div class="onlineFts-top-h3">
+                My Application(s)
+            </div>
+        </div>
+        <div class="col-md-6 col-xs-6">
+           <!--  <div class="onlineFts-top-h3" style="float: right;">
+              <button kendoButton [primary]="true" class="ml-2" (click)="openApplicationTypes()"><i class="fa fa-plus"></i>&nbsp;New Application</button>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+<div *ngIf="appsNotFound">
+    <h3 style="text-align: center;">No Applications Found..!!</h3>
+</div>
+
+<div class="row animated fadeIn">
+    <div class="col-md-4 mb-3" *ngFor="let application of applications; let i = index;"
+      [ngClass]="i % 3 === 0 ? 'control-col-st' : i % 3 === 1 ? 'control-col' : i % 3 === 2 ? 'control-col-end' : ''">
+      <div class="order-thumb">
+        <div class="order-thumb-wrap" (click)="openApplicationDetails(application.Id, application.TrackingNumber)" routerLink="details">
+          <div class="order-thumb-type">
+            {{application.ApplicationTypeName}} <span class="pull-right"><i class="fa fa-barcode"></i>
+              {{application.TrackingNumber}}</span>
+          </div>
+          <hr>
+          <div class="order-thumb-employee mt-1">
+            {{application.ForwardingOfficerName}}
+          </div>
+          <div class="order-thumb-employee">
+            {{application.StatusName}}
+          </div>
+        </div>
+        <div class="order-thumb-log-wrap">
+          <div class="order-thumb-log"> <span>{{application.ApplicationSourceName}}</span><span class="pull-right"><i
+                class="fa fa-calendar"></i>
+              {{application.Created_Date | date:'d/M/yy, h:mm a'}}</span>
+          </div>
+        </div>
+          <!-- <div class="order-thumb-log-wrap">
+            <div class="order-thumb-log"> <span style="font-weight: bold;"><a routerLink="documents">Documents Attached</a></span>
+                <span class="pull-right" style="font-weight: bold;">
+                    {{count}}
+                </span>
+            </div>
+          </div> -->
+      </div>
+    </div>
+
+</div>
+
+

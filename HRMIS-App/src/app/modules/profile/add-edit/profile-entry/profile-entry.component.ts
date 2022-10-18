@@ -1,0 +1,270 @@
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
+import { Subject } from 'rxjs/Subject';
+import { debounceTime } from 'rxjs/operators/debounceTime';
+import { DropDownsHR } from '../../../../_helpers/dropdowns.class';
+import { CookieService } from '../../../../_services/cookie.service';
+import { RootService } from '../../../../_services/root.service';
+import { AuthenticationService } from '../../../../_services/authentication.service';
+
+@Component({
+  selector: 'app-profile-entry',
+  templateUrl: './profile-entry.component.html',
+  styles: []
+})
+export class ProfileEntryComponent implements OnInit {
+  @ViewChild('photoRef', {static: false}) public photoRef: any;
+  private subscription: Subscription;
+  public dropDowns: DropDownsHR = new DropDownsHR();
+  public cnic: string = '';
+  public cnicMask: string = "00000-0000000-0";
+  public photoSrc = '';
+  public photoFile: any[] = [];
+  public services: any[] = [];
+  public merit: any = {};
+  public service: any = {};
+  public profile: any;
+  public radnom: number = Math.random();
+  public inputChange: Subject<any>;
+  private cnicSubscription: Subscription;
+
+  public showMeritForm: boolean = false;
+  public loadingCNIC: boolean = false;
+  public isUploading: boolean = false;
+  public savingProfile: boolean = false;
+  public existingProfile: boolean = false;
+  public birthDateMax: Date = new Date();
+  constructor(private route: ActivatedRoute, private _rootService: RootService,
+    private _cookieService: CookieService,
+    private router: Router,
+    private _authenticationService: AuthenticationService, ) { }
+
+  ngOnInit() {
+    this.merit = {};
+    this.birthDateMax.setFullYear(this.birthDateMax.getFullYear() - 18);
+    this.fetchParams();
+    this.subscribeCNIC();
+    this.getDomiciles();
+  }
+  private fetchParams() {
+    this.subscription = this.route.params.subscribe(
+      (params: any) => {
+        if (params.hasOwnProperty('id')) {
+          this.merit.Id = +params['id'];
+          this.fetchMeritInfo();
+        } else {
+          this.getDesignations();
+        }
+      }
+    );
+
+    /*  this.cnic = this._cookieService.getCookie('cnicussrpublic');
+     if (this.cnic) {
+       this.fetchMeritInfo();
+       this._rootService.getProfileByCNIC(this.cnic).subscribe((x) => {
+         if (x) {
+           this.profile = x;
+           console.log(this.profile);
+         }
+       }, err => {
+         console.log(err);
+       });
+     } */
+  }
+  public fetchMeritInfo() {
+    this._rootService.getMeritById(this.merit.Id).subscribe((res: any) => {
+      if (res) {
+        this.merit = res;
+        this.setValues();
+        this.savingProfile = false;
+      }
+    }, err => {
+      console.log(err);
+    });
+  }
+  public setValues() {
+    if (this.merit.DOB) {
+      this.merit.DOB = new Date(this.merit.DOB);
+    }
+    this._rootService.getDomiciles().subscribe((res: any) => {
+      if (res) {
+        let domiciles = res;
+        let domicile = domiciles.find(x => x.Id == this.merit.Domicile_Id);
+        if (domicile) {
+          this.dropDowns.selectedFiltersModel.domicile = { Id: this.merit.Domicile_Id, DistrictName: domicile.Name };
+        }
+      }
+    },
+      err => { this.handleError(err); }
+    );
+
+    if (this.merit.Religion_Id == 2) {
+      this.dropDowns.selectedFiltersModel.religion = { Id: 2, Name: 'Non Muslim' };
+    } else {
+      this.dropDowns.selectedFiltersModel.religion = { Id: 1, Name: 'Muslim' };
+    }
+    this.getDesignations();
+    this.photoSrc = 'https://hrmis.pshealthpunjab.gov.pk/Uploads/MeritPhotos/' + this.merit.CNIC + '_23.jpg?v=' + this.radnom;
+    this.showMeritForm = true;
+  }
+  public onSubmit() {
+    this.savingProfile = true;
+    if (this.merit.DOB) {
+      this.merit.DOB = this.merit.DOB.toDateString();
+    }
+    this.merit.MeritsActiveDesignationId = this.merit.MeritsActiveDesignationId ? this.merit.MeritsActiveDesignationId : 36;
+    this.merit.Status = this.merit.Status ? this.merit.Status : 'New';
+    /*  this.merit.Status = 1320;  */
+    /*    this._rootService.verifyMeritProfile(this.merit).subscribe((res: any) => {
+        if (res && res.Id) {
+          if (this.photoFile.length > 0) {
+            this._rootService.uploadMeritProfilePhoto(this.photoFile, res.CNIC).subscribe((res: any) => {
+              if (res) {
+                this.savingProfile = false;
+                this.router.navigate(['/ppsc/letter']);
+              }
+            }, err => {
+              this.handleError(err);
+            });
+          } else {
+            this.savingProfile = false;
+            this.router.navigate(['/ppsc/letter']);
+          }
+        }
+      }, err => {
+        this.handleError(err);
+      }); */
+    this._rootService.saveProfile(this.merit).subscribe((res: any) => {
+      if (res && res.Id) {
+        this.merit.Id = res.Id;
+        this.fetchMeritInfo();
+      }
+    }, err => {
+      this.handleError(err);
+    });
+
+  }
+  public addService() {
+    this.services.push(this.service);
+    this.service = {};
+  }
+  private getDomiciles = () => {
+    this.dropDowns.domicile = [];
+    this.dropDowns.domicileData = [];
+    this._rootService.getDomiciles().subscribe((res: any) => {
+      this.dropDowns.domicile = res;
+      this.dropDowns.domicileData = this.dropDowns.domicile.slice();
+    },
+      err => { this.handleError(err); }
+    );
+  }
+  private getDesignations = () => {
+    this.dropDowns.designations = [];
+    this.dropDowns.designationsData = [];
+    this._rootService.getConsultantDesignations().subscribe((res: any) => {
+      if (res && res.List) {
+        this.dropDowns.designations = res.List;
+        this.dropDowns.designationsData = this.dropDowns.designations.slice();
+
+        if (this.merit && this.merit.Id) {
+          let designation = this.dropDowns.designationsData.find(x => x.Id == this.merit.Designation_Id);
+          if (designation) {
+            this.dropDowns.selectedFiltersModel.designation = { Name: designation.Name, Id: designation.Id };
+          }
+        }
+      }
+    },
+      err => { this.handleError(err); }
+    );
+  }
+  public dropdownValueChanged = (value, filter) => {
+    if (!value) {
+      return;
+    }
+    if (filter == 'domicile') {
+      this.merit.Domicile_Id = value.Id;
+    }
+    if (filter == 'religion') {
+      this.merit.Religion_Id = value.Id;
+    }
+    if (filter == 'designation') {
+      this.merit.Designation_Id = value.Id;
+    }
+  }
+
+  public subscribeCNIC() {
+    this.inputChange = new Subject();
+    this.cnicSubscription = this.inputChange.pipe(debounceTime(400)).subscribe((query) => {
+      /*  this.loadingCNIC = true;
+       this.existingProfile = null;
+       if (!query) { this.loadingCNIC = false; return; }
+       let cnic: string = query as string;
+       cnic = cnic.replace(' ', '');
+       if (cnic.length != 13) { this.loadingCNIC = false; return; }
+       if (cnic == this.oldCNIC) { this.loadingCNIC = false; return; } */
+      /*   this._profileService.getProfile(cnic).subscribe(
+          res => {
+            console.log(res);
+            if (res) {
+              this.existingProfile = res as Profile;
+              console.log(this.existingProfile.CNIC);
+            }
+            this.loadingCNIC = false;
+          },
+          err => {
+            this.handleError(err);
+          }
+        ); */
+      if (this.merit.CNIC && this.merit.CNIC.length == 13) {
+        let i = +this.merit.CNIC[this.merit.CNIC.length - 1];
+        this.merit.Gender = (i % 2 == 0) ? 'Female' : 'Male';
+      }
+    });
+  }
+  public readUrl(event: any, filter: string) {
+    if (event.target.files && event.target.files[0]) {
+      if (filter == 'pic') {
+        this.photoFile = [];
+        let inputValue = event.target;
+        this.photoFile = inputValue.files;
+        var reader = new FileReader();
+        reader.onload = ((event: any) => {
+          this.photoSrc = event.target.result;
+        }).bind(this);
+        reader.readAsDataURL(event.target.files[0]);
+      }
+    }
+  }
+
+  public uploadBtn(filter: string) {
+    if (filter == 'pic') {
+      this.photoRef.nativeElement.click();
+    }
+  }
+  public dashifyCNIC(cnic: string) {
+    if (!cnic) {
+      return;
+    }
+    return cnic[0] +
+      cnic[1] +
+      cnic[2] +
+      cnic[3] +
+      cnic[4] +
+      '-' +
+      cnic[5] +
+      cnic[6] +
+      cnic[7] +
+      cnic[8] +
+      cnic[9] +
+      cnic[10] +
+      cnic[11] +
+      '-' +
+      cnic[12];
+  }
+  private handleError(err: any) {
+    if (err.status == 403) {
+      this._authenticationService.logout();
+    }
+  }
+}

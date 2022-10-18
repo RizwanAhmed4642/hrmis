@@ -1,0 +1,62 @@
+<div class="row animated fadeIn">
+    <div class="col-md-4 mb-3" *ngFor="let application of applications; let i = index;"
+      [ngClass]="i % 3 === 0 ? 'control-col-st' : i % 3 === 1 ? 'control-col' : i % 3 === 2 ? 'control-col-end' : ''">
+      <div class="order-thumb">
+        <div class="order-thumb-wrap">
+          <div class="order-thumb-type">
+            {{application.ApplicationTypeName}} <span class="pull-right"><i class="fa fa-barcode"></i>
+              {{application.TrackingNumber}}</span>
+          </div>
+          <hr>
+          <div class="order-thumb-employee mt-1">
+            {{application.ForwardingOfficerName}}
+          </div>
+          <div class="order-thumb-employee">
+            {{application.StatusName}}
+          </div>
+        </div>
+        <div class="order-thumb-log-wrap">
+          <div class="order-thumb-log"> <span>{{application.ApplicationSourceName}}</span> <span class="pull-right"><i
+                class="fa fa-calendar"></i>
+              {{application.Created_Date | date:'d/M/yy, h:mm a'}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</div>
+
+<!-- 
+<kendo-grid [data]="applications" [resizable]="true">
+  <kendo-grid-column field="DateTime" [title]="'Date'" width="15" [headerClass]="'grid-header-text-center'"
+    [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+      <p class="m-0 text-center">{{ dataItem.Created_Date | date:'dd/MM/yyyy' }}</p>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="ActionName" [title]="'Leave Type'" width="25" [headerClass]="'grid-header-text'"
+    [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+      <div class="d-flex flex-column width-full" style="font-weight: 100 !important;">
+        {{dataItem.leaveType}}
+      </div>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="ToStatus" width="40" title="Duration" [headerClass]="'grid-header-text'"
+    [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+      <div><strong style="font-family: Roboto-Bold !important;"
+          class="no-underline text-bold wb-break-all d-inline-block"
+          href="">{{ dataItem.FromDate | date:'dd/MM/yyyy' }}</strong> - <strong
+          style="font-family: Roboto-Bold !important;" class="no-underline text-bold wb-break-all d-inline-block"
+          href="">{{ dataItem.ToDate | date:'dd/MM/yyyy' }}</strong> - <u>{{dataItem.TotalDays}} days</u></div>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="ToStatus" width="20" title="Status" [headerClass]="'grid-header-text'"
+    [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+      <p class="m-0"><u>{{dataItem.StatusName}}</u>
+      </p>
+    </ng-template>
+  </kendo-grid-column>
+</kendo-grid> -->

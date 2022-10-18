@@ -1,0 +1,181 @@
+<div class="animated fadeIn" *ngIf="loading">
+  <div class="row print-not">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3">
+        New PUC
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" [look]="'outline'" routerLink="../">Back To List</button>
+      </div>
+    </div>
+  </div>
+  <div class="p-4" style="background: #e9e9e9;color: black;border-radius: 9px;">
+    <div class="row print-not" id="applicantInfo">
+      <div class="col-md-7 col-sm-6 col-xs-12 control-col-st">
+        <label class="k-form-field">
+          <span>Subject</span>&nbsp;<span class="text-danger">*</span>
+          <input kendoTextBox type="text" [(ngModel)]="application.DispatchSubject">
+        </label>
+      </div>
+      <div class="col-md-2 col-sm-6 col-xs-12 control-col">
+        <label class="k-form-field">
+          <span>Dispatch Number</span>&nbsp;<span class="text-danger">*</span>
+          <input kendoTextBox type="text" [(ngModel)]="application.DispatchNumber">
+        </label>
+      </div>
+      <div class="col-md-3 col-sm-6 col-xs-12 control-col-end">
+        <label class="k-form-field">
+          <span>Dated</span>&nbsp;<span class="text-danger">*</span>
+          <kendo-datepicker placeholder="Dispatch Date" [format]="'dd/MM/yyyy'" [(ngModel)]="application.DispatchDated">
+          </kendo-datepicker>
+        </label>
+      </div>
+      <div class="col-md-5 col-sm-6 col-xs-12 control-col-st">
+        <label class="k-form-field">
+          <span>From</span>&nbsp;<span class="text-muted">(address)</span>&nbsp;<span class="text-danger">*</span>
+          <input kendoTextBox type="text" disabled [(ngModel)]="application.DispatchFrom">
+        </label>
+      </div>
+      <div class="col-md-2 col-sm-6 col-xs-12 control-col">
+        <label class="k-form-field">
+          <span>Type</span>&nbsp;
+          <span class="text-danger">*</span>
+          <kendo-dropdownlist [data]="types" [textField]="'Name'" [valueField]="'Id'"
+            (valueChange)="dropdownValueChanged($event, 'applicationType')"
+            [value]="dropDowns.selectedFiltersModel.applicationType"
+            [defaultItem]="dropDowns.selectedFiltersModel.applicationType">
+          </kendo-dropdownlist>
+        </label>
+
+      </div>
+      <div class="col-md-2 col-sm-6 col-xs-12 control-col">
+        <label class="k-form-field">
+          <span>CNIC</span>&nbsp;
+          <!-- <span class="text-danger">*</span> -->
+          <kendo-maskedtextbox [mask]="cnicMask" name="CNIC" [(ngModel)]="application.CNIC">
+          </kendo-maskedtextbox>
+        </label>
+      </div>
+
+      <div class="col-md-3 col-sm-6 col-xs-12 control-col-end">
+        <label class="k-form-field">
+          <span>Contact No.</span>&nbsp;
+          <!-- <span class="text-danger">*</span> -->
+          <kendo-maskedtextbox [mask]="mobileMask" name="MobileNo" [(ngModel)]="application.MobileNo">
+          </kendo-maskedtextbox>
+        </label>
+      </div>
+      <div class="col-md-9 control-col-st col-sm-6 col-xs-12">
+        <label class="k-form-field">
+          <span>Remarks</span>
+          <textarea kendoTextArea type="text" [(ngModel)]="application.Remarks"></textarea>
+        </label>
+      </div>
+      <!--  <div class="col-md-3 control-col-end">
+        <label class="k-form-field">
+          <span>Choose
+            {{photoFile.length == 0 ? 'File' : 'Another File'}}&nbsp;<i class="fa"
+              [ngClass]="application.attached ? 'fa-check-circle text-success' : ''"></i></span>
+          <img *ngIf="photoSrc" class="animated fadeIn"
+            style="width:100px;height:100px;margin-top:30px;border:1px solid;" [src]="photoSrc"
+            onError="this.src='../../../../assets/img/notfound.png'" alt="">
+          <input #photoRef type="file" (change)="readUrl($event, 'pic')">
+        </label>
+      </div> -->
+    </div>
+    <div *ngIf="application" class="animated fadeIn print-not">
+      <hr>
+      <div id="documents" *ngIf="applicationDocuments.length > 0">
+        <div class="content-heading mb-2">
+          Documents / Attachments <small class="pull-right" (click)="getApplicationDocuments(15)"><i
+              class="fa fa-refresh"></i></small>
+        </div>
+        <div class="row">
+          <div class="col-md-3 my-2" *ngFor="let doc of applicationDocuments; let i = index;">
+            <input type="checkbox" [id]="'penalty' + i" class="k-checkbox" />
+            <label class="k-checkbox-label" [for]="'penalty' + i">{{doc.Name}}
+            </label>
+          </div>
+        </div>
+        <!--  <div class="animated fadeIn" *ngIf="applicationAttachments && applicationAttachments.length > 0">
+          <hr>
+          <div class="row">
+            <div class="col-md-12">
+              <button kendoButton primary="true" class="btn-lg btn-block" (click)="uploadFile(application.Id)"><i
+                  class="fa fa-upload"></i>&nbsp;Upload Attachment</button>
+            </div>
+          </div>
+        </div> -->
+      </div>
+    </div>
+    <hr class="print-not">
+    <div class="content-heading mb-2 print-not">
+      Mark to
+    </div>
+    <div class="row print-not">
+      <div class="col-md-6 col-sm-6 col-xs-12 control-col-st">
+        <span>Send To <span class="text-danger">*</span></span>
+        <kendo-dropdownlist disabled [data]="officersData" [textField]="'DesignationName'" [valueField]="'Id'"
+          (valueChange)="dropdownValueChanged($event, 'office')" [value]="dropDowns.selectedFiltersModel.officer"
+          (filterChange)="handleFilter($event, 'markingOfficer')" [filterable]="true"
+          [defaultItem]="dropDowns.selectedFiltersModel.officer">
+        </kendo-dropdownlist>
+      </div>
+      <!--   <div class="col-md-3 col-sm-6 col-xs-12 control-col">
+        <span>Priority <span class="text-danger">*</span></span>
+        <kendo-dropdownlist [data]="dropDowns.applicationPriorities" [textField]="'Name'" [valueField]="'Id'"
+          (valueChange)="dropdownValueChanged($event, 'priority')"
+          [value]="dropDowns.selectedFiltersModel.applicationPriority"
+          [defaultItem]="dropDowns.defultFiltersModel.applicationPriority">
+        </kendo-dropdownlist>
+      </div> -->
+      <!-- <div class="col-md-3 col-sm-6 col-xs-12 control-col-end">
+        <span>Last Date <span class="text-danger" *ngIf="application.ApplicationType_Id == 16">*</span></span>
+        <kendo-datepicker placeholder="Starting from"
+          [format]="'dd/MM/yyyy'" [(ngModel)]="application.LastDate">
+        </kendo-datepicker>
+      </div> -->
+      <div class="col-md-3 col-sm-6 col-xs-12 control-col-st mt-3">
+        <button kendoButton [ladda]="savingApplication" data-style="zoom-in" (click)="onSubmit()" [primary]="true"
+          [disabled]="!application.DispatchFrom || !application.DispatchSubject || !application.DispatchNumber || !application.DispatchDated || !application.ApplicationType_Id"
+          class="btn-block btn-lg">Submit
+        </button>
+      </div>
+      <div *ngIf="application.Id" class="col-md-3 col-sm-6 col-xs-12 control-col mt-3">
+        <button kendoButton (click)="clear()" [primary]="true" look="outline"><i class="fa fa-refresh"></i>&nbsp;Clear
+        </button>
+      </div>
+    </div>
+
+    <hr class="print-not">
+    <div *ngIf="application.barcode">
+      <div class="content-heading mb-2 print-not">
+        Tracking #
+      </div>
+      <div class="row animated fadeIn print-not">
+        <div class="col-md-2">
+          <div style="width:100%;" id="barcodeFileBars">
+            <img [src]="barcodeSrc()" class="animated fadeIn" *ngIf="application.barcode" alt="">
+            <label
+              style="display: block;margin-top:4px;width:77px;text-align: center;">{{application.TrackingNumber}}</label>
+          </div>
+          <div id="barcodeFileBars" style="margin: 0 !important" hidden>
+            <img [src]="barcodeSrc()" alt="">
+            <label
+              style="display: block;margin-top:4px;width:77px;text-align: center;">{{application.TrackingNumber}}</label>
+          </div>
+          <button kendoButton type="button" [primary]="true" [look]="'outline'" (click)="printBarcode()">
+            <i class="fa fa-print"></i>&nbsp;Print</button>
+          <!--   <button kendoButton type="button" [primary]="true" [look]="'outline'" (click)="printTest()">
+            <i class="fa fa-print"></i>&nbsp;Print</button> -->
+
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+</div>

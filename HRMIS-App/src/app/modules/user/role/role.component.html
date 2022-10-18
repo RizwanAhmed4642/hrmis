@@ -1,0 +1,42 @@
+<div class="animated fadeIn">
+  <h3 class="top-h3">Roles
+    <button kendoButton [primary]="true" routerLink="/user" class="pull-right mr-1">Back</button>
+  </h3>
+  <div class="row">
+    <div class="col-md-10 control-col-st">
+      <label class="k-form-field">
+        <span>New Role</span>
+        <input type="text" [(ngModel)]="newRoleName" (keyup.enter)="addRole()" kendoTextBox>
+      </label>
+      <p class="text-danger">{{error}}</p>
+    </div>
+    <div class="col-md-2 mt-1 control-col-end">
+      <label class="k-form-field">
+        <button kendoButton class="btn-block btn-align-v" [disabled]="newRoleName.length < 2 || newRoleName == alreadyExistRoleName" (click)="addRole()" [primary]="true">Add Role</button>
+      </label>
+    </div>
+  </div>
+
+  <div class="row row-panel">
+    <div class="col-md-12">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width:5%">
+              No.
+            </th>
+            <th style="width:95%">
+              Name
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let role of roles;let i = index;">
+            <td>{{(i + 1)}}.</td>
+            <td>{{role}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

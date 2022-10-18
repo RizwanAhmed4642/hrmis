@@ -1,0 +1,421 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3">
+        {{!vacancyDetail.GeoLevel ? 'Vacancy Position' : ''}} {{vacancyDetail.GeoLevel ? vacancyDetail.GeoLevel : ''}}
+        {{vacancyDetail.DesingationIdsLength == 1 && gridView && gridView.data ? ' - ' + gridView.data[0].DesignationName : ''}}
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12" *ngIf="!vacancyDetail.GeoLevel">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" [look]="'outline'" class="ml-2"
+          routerLink="/vacancy-position/report-manager">Report
+          Manager</button>
+        <!--   <button kendoButton [primary]="true" [look]="'outline'" class="ml-2" (click)="showFilters = !showFilters">{{showFilters
+          ?
+          'Hide' : 'Apply'}} Filters</button> -->
+        <button kendoButton [primary]="true" routerLink="/vacancy-position/new" [look]="'outline'">New Vacancy</button>
+      </div>
+    </div>
+  </div>
+  <div [hidden]="!showFilters">
+    <div class="row">
+      <div class="col-md-12 col-sm-6 pb-2 control-col-st">
+        <span>Columns</span>
+        <kendo-buttongroup [width]="'100%'">
+          <button kendoButton [toggleable]="true">Division</button>
+          <button kendoButton [toggleable]="true">District</button>
+          <button kendoButton [toggleable]="true">Tehsil</button>
+          <button kendoButton [toggleable]="true">Type</button>
+          <button kendoButton [toggleable]="true">Health Facility</button>
+          <button kendoButton [toggleable]="true">Scale</button>
+          <button kendoButton [toggleable]="true">Cadre</button>
+          <button kendoButton [toggleable]="true">Designation</button>
+          <button kendoButton [toggleable]="true">Category</button>
+          <button kendoButton [toggleable]="true">Sanctioned</button>
+          <button kendoButton [toggleable]="true">Filled</button>
+          <button kendoButton [toggleable]="true">Profiles</button>
+          <button kendoButton [toggleable]="true">Vacant</button>
+        </kendo-buttongroup>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-md-2 col-sm-6 pb-2 control-col-st">
+        <label class="k-form-field">
+          <span>Division</span>
+          <kendo-dropdownlist [data]="dropDowns.divisionsData" [defaultItem]="dropDowns.selectedFiltersModel.division"
+            [filterable]="true" [textField]="'Name'" [valueField]="'Code'"
+            (filterChange)="handleFilter($event, 'division')" (valueChange)="dropdownValueChanged($event, 'division')"
+            [value]="dropDowns.selectedFiltersModel.division">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-2 col-sm-6 pb-2 control-col">
+        <label class="k-form-field">
+          <span>District</span>
+          <kendo-dropdownlist [data]="dropDowns.districtsData" [defaultItem]="{Name: 'Select District', Code: '0'}"
+            [filterable]="true" [textField]="'Name'" [valueField]="'Code'"
+            (filterChange)="handleFilter($event, 'district')" (valueChange)="dropdownValueChanged($event, 'district')"
+            [value]="dropDowns.selectedFiltersModel.district">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-2 col-sm-6 pb-2 control-col">
+        <label class="k-form-field">
+          <span>Tehsil</span>
+          <kendo-dropdownlist [data]="dropDowns.tehsilsData" [defaultItem]="{Name: 'Select Tehsil', Code: '0'}"
+            [filterable]="true" [textField]="'Name'" [valueField]="'Code'"
+            (filterChange)="handleFilter($event, 'tehsil')" (valueChange)="dropdownValueChanged($event, 'tehsil')"
+            [value]="dropDowns.selectedFiltersModel.tehsil">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-6 col-sm-6 pb-2 control-col-end">
+        <label class="k-form-field">
+          <span>Type of Health Facility</span>
+          <kendo-dropdownlist [data]="dropDowns.hfTypesData"
+            [defaultItem]="{Name: 'Select Type of Health Facility', Code: '0'}" [filterable]="true" [textField]="'Name'"
+            [valueField]="'Code'" (filterChange)="handleFilter($event, 'hfType')"
+            (valueChange)="dropdownValueChanged($event, 'hfType')" [value]="dropDowns.selectedFiltersModel.hfType">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-2 col-sm-6 pb-2 control-col-st">
+        <label class="k-form-field">
+          <span>Scale</span>
+          <kendo-dropdownlist [data]="dropDowns.divisionsData" [defaultItem]="{Name: 'Select Scale', Code: '0'}"
+            [filterable]="true" [textField]="'Name'" [valueField]="'Code'"
+            (filterChange)="handleFilter($event, 'division')" (valueChange)="dropdownValueChanged($event, 'division')"
+            [value]="dropDowns.selectedFiltersModel.division">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-2 col-sm-6 pb-2 control-col">
+        <label class="k-form-field">
+          <span>Cadre</span>
+          <kendo-dropdownlist [data]="dropDowns.districtsData" [defaultItem]="{Name: 'Select Cadre', Code: '0'}"
+            [filterable]="true" [textField]="'Name'" [valueField]="'Code'"
+            (filterChange)="handleFilter($event, 'district')" (valueChange)="dropdownValueChanged($event, 'district')"
+            [value]="dropDowns.selectedFiltersModel.district">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-3 col-sm-6 pb-2 control-col">
+        <label class="k-form-field">
+          <span>Designation</span>
+          <kendo-dropdownlist [data]="dropDowns.tehsilsData" [defaultItem]="{Name: 'Select Designation', Code: '0'}"
+            [filterable]="true" [textField]="'Name'" [valueField]="'Code'"
+            (filterChange)="handleFilter($event, 'tehsil')" (valueChange)="dropdownValueChanged($event, 'tehsil')"
+            [value]="dropDowns.selectedFiltersModel.tehsil">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-3 col-sm-6 pb-2 control-col">
+        <label class="k-form-field">
+          <span>Category</span>
+          <kendo-dropdownlist [data]="dropDowns.tehsilsData" [defaultItem]="{Name: 'Select Category', Code: '0'}"
+            [filterable]="true" [textField]="'Name'" [valueField]="'Code'"
+            (filterChange)="handleFilter($event, 'tehsil')" (valueChange)="dropdownValueChanged($event, 'tehsil')"
+            [value]="dropDowns.selectedFiltersModel.tehsil">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-2 col-sm-6 pb-2 control-col-end">
+        <label class="k-form-field">
+          <span>Clinical / Non Clinical</span>
+          <kendo-dropdownlist [data]="dropDowns.tehsilsData" [defaultItem]="{Name: 'Select Category', Code: '0'}"
+            [filterable]="true" [textField]="'Name'" [valueField]="'Code'"
+            (filterChange)="handleFilter($event, 'tehsil')" (valueChange)="dropdownValueChanged($event, 'tehsil')"
+            [value]="dropDowns.selectedFiltersModel.tehsil">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-md-3 col-sm-6 pb-2 control-col-st">
+        <label class="k-form-field">
+          <button kendoButton class="btn-block" (click)="onSearch()" [primary]="true">PRINT</button>
+        </label>
+      </div>
+      <div class="col-md-3 col-sm-6 pb-2 control-col">
+        <label class="k-form-field">
+          <button kendoButton class="btn-block" (click)="onSearch()" [primary]="true">SEARCH</button>
+        </label>
+      </div>
+      <div class="col-md-3 col-sm-6 pb-2 control-col">
+        <label class="k-form-field">
+          <button kendoButton class="btn-block" (click)="onSearch()" [primary]="true">EXCEL</button>
+        </label>
+      </div>
+      <div class="col-md-3 col-sm-6 pb-2 control-col-end">
+        <label class="k-form-field">
+          <button kendoButton class="btn-block" (click)="onSearch()" [primary]="true">PDF</button>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="loading && vacancyReport.length == 0" class="k-i-loading"></div>
+
+  <div class="row" *ngIf="vacancyReport.length > 0">
+    <div class="col-md-12">
+      <div class="grid-wrapper" kendoTooltip filter="span">
+        <kendo-grid [data]="gridView" [sortable]="{
+            allowUnsort: allowUnsort,
+            mode: multiple ? 'multiple' : 'single'
+            }" [selectable]="true" [sort]="sort" (sortChange)="sortChange($event)" [scrollable]="false">
+          <kendo-grid-column [width]="30" field="asd" title="No." [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p style="margin: 0;">{{(rowIndex + 1)}}.</p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="150" field="DesignationName" title="Designation"
+            [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p style="margin: 0;">{{dataItem.DesignationName}}</p>
+              <!--  <p style="margin: 0;"><span class="text-secondary font-weight-light" style="font-size: 12px;">{{dataItem.CadreName}}
+                  - {{dataItem.BPS}}</span></p> -->
+            </ng-template>
+            <ng-template style="background-color: #fff;color: #000; border-bottom : 1px solid #c8ced3"
+              kendoGridFooterTemplate let-column="column">Total</ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="100" field="TotalSanctioned" [title]="'Sanctioned'"
+            [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p style="margin: 0;">{{numberWithCommas(dataItem.TotalSanctioned)}}</p>
+            </ng-template>
+            <ng-template style="background-color: #fff;color: #000; border-bottom : 1px solid #c8ced3"
+              kendoGridFooterTemplate let-column="column">{{numberWithCommas(vacancyTotal["TotalSanctioned"].sum)}}
+            </ng-template>
+
+          </kendo-grid-column>
+          <kendo-grid-column [width]="80" field="TotalWorking" [title]="'Filled'" [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p style="margin: 0;">{{numberWithCommas(dataItem.TotalWorking)}}</p>
+            </ng-template>
+            <ng-template style="background-color: #fff;color: #000; border-bottom : 1px solid #c8ced3"
+              kendoGridFooterTemplate let-column="column">{{numberWithCommas(vacancyTotal["TotalWorking"].sum)}}
+            </ng-template>
+
+          </kendo-grid-column>
+
+          <kendo-grid-column [width]="80" field="TotalVacant" [title]="'Vacant'" [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p style="margin: 0;"> {{numberWithCommas(dataItem.TotalVacant)}}</p>
+            </ng-template>
+            <ng-template style="background-color: #fff;color: #000; border-bottom : 1px solid #c8ced3"
+              kendoGridFooterTemplate let-column="column">{{numberWithCommas(vacancyTotal["TotalVacant"].sum)}}
+            </ng-template>
+
+          </kendo-grid-column>
+          <!--  <kendo-grid-column [width]="80" field="TotalProfile" [title]="'Profile'" [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p style="margin: 0;cursor:pointer;">{{dataItem.TotalProfile ? numberWithCommas(dataItem.TotalProfile) :
+                0}}
+                <span *ngIf="dataItem.Profiles != dataItem.TotalWorking && dataItem.Profiles != 0 && dataItem.TotalWorking != 0"
+                  class="pull-right text-secondary">
+                  {{dataItem.TotalProfile < dataItem.TotalWorking ? '-' + numberWithCommas((dataItem.TotalWorking -
+                    dataItem.TotalProfile)) : dataItem.TotalProfile>
+                    dataItem.TotalWorking ? '+' + numberWithCommas((dataItem.TotalProfile - dataItem.TotalWorking)) :
+                    0}} </span>
+              </p>
+            </ng-template>
+            <ng-template style="background-color: #fff;color: #000; border-bottom : 1px solid #c8ced3"
+              kendoGridFooterTemplate let-column="column">{{numberWithCommas(vacancyTotal["TotalProfile"].sum)}}</ng-template>
+
+          </kendo-grid-column> -->
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row" *ngIf="vacancyReportDetail.length > 0">
+    <div class="col-md-12">
+      <div class="grid-wrapper" kendoTooltip filter="span">
+
+        <table class="table table-striped table-hover table-50 vpmgrtable ">
+          <thead>
+            <tr>
+              <th>Sr.</th>
+
+              <th>Health Facility</th>
+              <th style="margin: 0;text-align: center;" *ngIf="detailReportType == 'DesignationFacility'">Designation
+              </th>
+              <th style="margin: 0;text-align: center;">Sanctioned</th>
+              <th style="margin: 0;text-align: center;">PSHD</th>
+              <th style="margin: 0;text-align: center;">PHFMC</th>
+              <th style="margin: 0;text-align: center;">IRMNCH</th>
+              <th style="margin: 0;text-align: center;">Vacant</th>
+              <th style="margin: 0;text-align: center;">Profile</th>
+              <!--   <th>Detail</th> -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dataItem of gridView.data;let j = index;">
+              <td>
+                {{(j + 1)}}
+              </td>
+
+              <td>
+                <p style="margin: 0;" class="cursor-p" (click)="openInNewTab('health-facility/' + dataItem.HFMISCode)">
+                  {{dataItem.HfFullName}}</p>
+              </td>
+              <td *ngIf="detailReportType == 'DesignationFacility'">
+                <p style="margin: 0;text-align: center;">{{dataItem.DesignationName}}</p>
+              </td>
+              <td>
+                <p style="margin: 0;text-align: center;" class="cursor-p"
+                  (click)="openInNewTab('health-facility/' + dataItem.HFMISCode)">
+                  {{numberWithCommas(dataItem.TotalSanctioned ? dataItem.TotalSanctioned : 0)}}</p>
+              </td>
+              <td>
+                <p style="margin: 0;text-align: center;" class="cursor-p"
+                  (click)="openInNewTab('health-facility/' + dataItem.HFMISCode)">
+                  {{numberWithCommas((dataItem.Adhoc ? dataItem.Adhoc : 0) + (dataItem.Regular ? dataItem.Regular : 0))}}
+                </p>
+              </td>
+              <td>
+                <p style="margin: 0;text-align: center;" class="cursor-p"
+                  (click)="openInNewTab('health-facility/' + dataItem.HFMISCode)">
+                  {{numberWithCommas(dataItem.PHFMC ? dataItem.PHFMC : 0)}}</p>
+              </td>
+              <td>
+                <p style="margin: 0;text-align: center;" class="cursor-p"
+                  (click)="openInNewTab('health-facility/' + dataItem.HFMISCode)">
+                  {{numberWithCommas(dataItem.Contract ? dataItem.Contract : 0)}}</p>
+              </td>
+              <td>
+                <p style="margin: 0;text-align: center;" class="cursor-p"
+                  (click)="openInNewTab('health-facility/' + dataItem.HFMISCode)">
+                  {{numberWithCommas(dataItem.TotalVacant ? dataItem.TotalVacant : 0)}}</p>
+              </td>
+              <td>
+                <p style="margin: 0;text-align: center;" class="cursor-p"
+                  (click)="openInNewTab('health-facility/' + dataItem.HFMISCode)">
+                  {{numberWithCommas(dataItem.TotalProfile ? dataItem.TotalProfile : 0)}}</p>
+              </td>
+              <!--   <td>
+                   (click)="openWindow(dataItem)"<i class="fa fa-eye cursor-p"></i>
+              </td> -->
+            </tr>
+          </tbody>
+        </table>
+
+        <!--   <kendo-grid [data]="gridView" [sortable]="{
+            allowUnsort: allowUnsort,
+            mode: multiple ? 'multiple' : 'single'
+            }" [selectable]="true" [sort]="sort" (sortChange)="sortDetailChange($event)" [scrollable]="false">
+          <kendo-grid-column [width]="4" field="asd" title="No." [headerClass]="'grid-header-text text-center'"
+            [style]="{'background-color': '#fff', 'padding': '4px 8px','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p style="margin: 0;text-align: center;">{{(rowIndex + 1)}}.</p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="41" field="HfFullName" title="Health Facility" [headerClass]="'grid-header-text'"
+            [style]="{'background-color': '#fff', 'padding': '4px 8px','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p style="margin: 0;">{{dataItem.HfFullName}}</p>
+            </ng-template>
+
+            <ng-template style="background-color: #fff;padding: 4px 8px;color: #000; border-bottom : 1px solid #c8ced3"
+              kendoGridFooterTemplate let-column="column">
+              <p class="p-strong text-center">
+                Total
+              </p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="15" field="DesignationName"
+            *ngIf="detailReportType == 'DesignationFacility'" title="Designation"
+            [headerClass]="'grid-header-text text-center'"
+            [style]="{'background-color': '#fff', 'padding': '4px 8px','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p style="margin: 0;text-align: center;">{{dataItem.DesignationName}}</p>
+            </ng-template>
+            <ng-template style="background-color: #fff;padding: 4px 8px;color: #000; border-bottom : 1px solid #c8ced3"
+              kendoGridFooterTemplate let-column="column"></ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="10" field="TotalSanctioned" [title]="'Sanctioned'"
+            [headerClass]="'grid-header-text text-center'"
+            [style]="{'background-color': '#fff', 'padding': '4px 8px','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p style="margin: 0;text-align: center;">{{numberWithCommas(dataItem.TotalSanctioned)}}</p>
+            </ng-template>
+            <ng-template style="background-color: #fff;padding: 4px 8px;color: #000; border-bottom : 1px solid #c8ced3"
+              kendoGridFooterTemplate let-column="column">
+
+              <p class="p-strong text-center">
+                {{numberWithCommas(vacancyDetailTotal["TotalSanctioned"].sum)}}
+              </p>
+            </ng-template>
+
+          </kendo-grid-column>
+          <kendo-grid-column [width]="10" field="TotalWorking" [title]="'Filled'"
+            [headerClass]="'grid-header-text text-center'"
+            [style]="{'background-color': '#fff', 'padding': '4px 8px','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p style="margin: 0;text-align: center;">{{numberWithCommas(dataItem.TotalWorking)}}</p>
+            </ng-template>
+            <ng-template style="background-color: #fff;padding: 4px 8px;color: #000; border-bottom : 1px solid #c8ced3"
+              kendoGridFooterTemplate let-column="column">
+
+              <p class="p-strong text-center">
+                {{numberWithCommas(vacancyDetailTotal["TotalWorking"].sum)}}
+              </p>
+
+
+            </ng-template>
+
+          </kendo-grid-column>
+
+          <kendo-grid-column [width]="10" field="TotalVacant" [title]="'Vacant'"
+            [headerClass]="'grid-header-text text-center'"
+            [style]="{'background-color': '#fff', 'padding': '4px 8px','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p style="margin: 0;text-align: center;"> {{numberWithCommas(dataItem.TotalVacant)}}</p>
+            </ng-template>
+            <ng-template style="background-color: #fff;padding: 4px 8px;color: #000; border-bottom : 1px solid #c8ced3"
+              kendoGridFooterTemplate let-column="column">
+
+              <p class="p-strong text-center">
+                {{numberWithCommas(vacancyDetailTotal["TotalVacant"].sum)}}
+              </p>
+
+
+            </ng-template>
+
+          </kendo-grid-column>
+          <kendo-grid-column [width]="10" field="TotalProfile" [title]="'Profile'"
+            [headerClass]="'grid-header-text text-center'"
+            [style]="{'background-color': '#fff', 'padding': '4px 8px','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <img class="pic-shadow" style="cursor: pointer;" *ngFor="let profile of dataItem.profiles" width="30" height="30"
+                [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + profile.CNIC + '_23.jpg'"
+                onError="this.src='../../../assets/img/notfound.png'" alt="">
+            </ng-template>
+            <ng-template style="background-color: #fff;padding: 4px 8px;color: #000; border-bottom : 1px solid #c8ced3"
+              kendoGridFooterTemplate let-column="column">
+              <p class="p-strong text-center">
+                {{numberWithCommas(vacancyDetailTotal["TotalProfile"].sum)}}
+              </p>
+            </ng-template>
+
+          </kendo-grid-column>
+        </kendo-grid> -->
+      </div>
+    </div>
+  </div>
+
+
+
+
+</div>

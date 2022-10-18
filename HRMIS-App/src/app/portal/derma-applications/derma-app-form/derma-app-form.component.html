@@ -1,0 +1,70 @@
+<div *ngIf="portalClosed">
+    <h1>Portal has been closed</h1>
+</div>
+<div *ngIf="!portalClosed" class="container animated fadeIn">
+    <div class="row mb-2 animated fadeIn">
+        <div class="offset-md-4 col-md-5 col-sm-6 col-xs-12 mt-2 control-col">
+            <div class=" top-h3">
+                Applications For Post Graduate Program (Thailand)
+            </div>
+        </div>
+        <!-- <pre>{{dermaApp | json}}</pre> -->
+
+        <div class="offset-md-4 col-md-5 col-sm-6 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+                <span>CNIC</span>&nbsp;<span class="text-danger">*</span>
+                <kendo-maskedtextbox [mask]="cnicMask" [maskValidation]="true" name="CNIC" [(ngModel)]="dermaApp.CNIC"
+                    #CNIC="ngModel" required>
+                </kendo-maskedtextbox>
+            </label>
+        </div>
+        <div class="offset-md-4 col-md-5 col-sm-6 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+                <span>Name</span>&nbsp;<span class="text-danger">*</span>
+                <input kendoTextBox type="text" name="Name" [(ngModel)]="dermaApp.Name" #Name="ngModel" required />
+            </label>
+        </div>
+        <div class="offset-md-4 col-md-5 col-sm-6 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+                <span>Father Name</span>&nbsp;<span class="text-danger">*</span>
+                <input kendoTextBox type="text" name="FatherNameName" [(ngModel)]="dermaApp.FatherName"
+                    #FatherName="ngModel" required />
+            </label>
+        </div>
+        <div class="offset-md-4 col-md-5 col-sm-6 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+                <span>Designation</span>&nbsp;<span class="text-danger">*</span>
+                <kendo-dropdownlist [data]="designations" [textField]="'Name'" [valueField]="'Name'"
+                    (valueChange)="dropdownValueChanged($event, 'designation')" [(ngModel)]="dermaApp.Designation"
+                    [defaultItem]="{Id: 0, Name: 'Select'}" [filterable]="true" (filterChange)="handleFilter($event)">
+                </kendo-dropdownlist>
+            </label>
+        </div>
+        <div class="offset-md-4 col-md-5 col-sm-6 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+                <span>Course</span>&nbsp;<span class="text-danger">*</span>
+                <kendo-dropdownlist [data]="Courses" [textField]="'Name'" [valueField]="'Name'"
+                    (valueChange)="dropdownValueChanged($event, 'course')" [(ngModel)]="dermaApp.Course"
+                    [defaultItem]="{Id: 0, Name: 'Select'}">
+                </kendo-dropdownlist>
+            </label>
+        </div>
+        <div class="offset-md-4 col-md-5 col-sm-6 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+                <span>Contact Number</span>&nbsp;<span class="text-danger">*</span>
+                <input kendoTextBox type="text" placeholder="03331234567 / 923331234567" name="PhoneNumber"
+                    [(ngModel)]="dermaApp.PhoneNumber" #PhoneNumber="ngModel" required />
+            </label>
+        </div>
+        <div class="offset-md-4 col-md-5 col-sm-6 col-xs-12 mt-2 control-col">
+            I am interested in this program <label class="k-checkbox-label" for="rembme">
+                <input type="checkbox" id="rembme" [(ngModel)]="dermaApp.IsInterested" class="k-checkbox" />
+            </label>
+        </div>
+        <div class="offset-md-4 col-md-5 col-sm-6 col-xs-12 mt-2 control-col">
+            <button kendoButton class="btn-block" [disabled]="dermaApp.IsInterested != true || CNIC.invalid 
+            || (dermaApp.PhoneNumber.length != 11 && dermaApp.PhoneNumber.length != 12)" (click)="onSubmit()"
+                data-style="zoom-in" type="submit" [primary]="true">Save</button>
+        </div>
+    </div>
+</div>

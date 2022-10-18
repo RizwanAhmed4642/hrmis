@@ -1,0 +1,269 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-6 col-xs-12">
+      <div class="top-h3">
+        {{isNew ? 'New' : 'Edit'}} File
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" [look]="'outline'" class="ml-2"
+          routerLink="/fts/lawwing-files">Back</button>
+      </div>
+    </div>
+  </div>
+  <div class="content-heading">File Information</div>
+  <hr>
+  <div class="row animated fadeIn" *ngIf="!loadingDDsFile">
+    <div class="col-md-6 offset-md-1">
+      <label class="k-form-field" id="generalInfo">
+        <span>Petitioners</span>
+        <kendo-autocomplete [data]="petitioners" [valueField]="'Name'"
+          (valueChange)="searchClicked($event, 'petitioner')" required [filterable]="true"
+          (filterChange)="searchEvent.next({ event: $event, filter: 'petitioner'})" placeholder="Search Petitioner"
+          class="k-autocomplete-form">
+          <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+            <div class="search-list-item">
+              Name:&nbsp;<strong class="p-strong">{{dataItem.Name}}</strong>, Father Name:&nbsp;<strong
+                class="p-strong">{{dataItem.FatherName}}</strong></div>
+          </ng-template>
+        </kendo-autocomplete>
+      </label>
+      <ul *ngIf="file.petitioners">
+        <li class="pr-4 pl-1 success-hover" *ngFor="let p of file.petitioners;let i = index;">{{p.Name}}<span
+            class="text-danger pull-right" (click)="removeSelected(i, 'petitioner')"><i
+              class="fa fa-times cursor-p"></i></span></li>
+      </ul>
+      <label class="k-form-field" id="generalInfo">
+        <span>Respondents</span>
+        <kendo-autocomplete [data]="respondents" [valueField]="'Name'"
+          (valueChange)="searchClicked($event, 'respondent')" required [filterable]="true"
+          (filterChange)="searchEvent.next({ event: $event, filter: 'respondent'})" placeholder="Search Respondent"
+          class="k-autocomplete-form">
+          <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+            <div class="search-list-item">
+              {{ dataItem.Name }}</div>
+          </ng-template>
+        </kendo-autocomplete>
+      </label>
+      <ul *ngIf="file.respondents">
+        <li class="pr-4 pl-1 success-hover" *ngFor="let p of file.respondents;let i = index;">{{p.Name}}
+          <span class="text-danger pull-right" (click)="removeSelected(i, 'respondent')"><i
+              class="fa fa-times cursor-p"></i></span></li>
+      </ul>
+
+      <label class="k-form-field" id="generalInfo">
+        <span>Section Officer / Program / District</span>
+        <kendo-autocomplete [data]="sectionOfficersData" [valueField]="'DesignationName'"
+          (valueChange)="dropdownValueChanged($event, 'officer')" (valueChange)="searchClicked($event, 'officer')"
+          required [filterable]="true" (filterChange)="searchEvent.next({ event: $event, filter: 'officer'})"
+          placeholder="Search Section Officer / Program / District" class="k-autocomplete-form">
+          <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+            <div class="search-list-item">
+              {{ dataItem.DesignationName }}</div>
+          </ng-template>
+        </kendo-autocomplete>
+      </label>
+      <ul *ngIf="file.officers">
+        <li class="pr-4 pl-1 success-hover" *ngFor="let p of file.officers;let i = index;">{{p.DesignationName}}
+          <span class="text-danger pull-right" (click)="removeSelected(i, 'officer')"><i
+              class="fa fa-times cursor-p"></i></span></li>
+      </ul>
+      <label class="k-form-field" id="generalInfo">
+        <span>Judges</span>
+        <kendo-autocomplete [data]="judges" [valueField]="'Name'" (valueChange)="searchClicked($event, 'judge')"
+          required [filterable]="true" (filterChange)="searchEvent.next({ event: $event, filter: 'judge'})"
+          placeholder="Search Judge" class="k-autocomplete-form">
+          <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+            <div class="search-list-item">
+              {{ dataItem.Name }}</div>
+          </ng-template>
+        </kendo-autocomplete>
+      </label>
+      <ul *ngIf="file.judges">
+        <li class="pr-4 pl-1 success-hover" *ngFor="let p of file.judges;let i = index;">{{p.Name}}
+          <span class="text-danger pull-right" (click)="removeSelected(i, 'judge')"><i
+              class="fa fa-times cursor-p"></i></span></li>
+      </ul>
+
+      <label class="k-form-field" id="generalInfo">
+        <span>Title</span>
+        <input kendoTextBox type="text" [(ngModel)]="file.Title" required />
+      </label>
+      <label class="k-form-field" id="generalInfo">
+        <span>Court Title
+        </span>
+        <input kendoTextBox type="text" [(ngModel)]="file.CourtTitle" required />
+      </label>
+      <label class="k-form-field" id="generalInfo">
+        <span>File Number
+        </span>
+        <input kendoTextBox type="text" [(ngModel)]="file.FileNumber" required />
+      </label>
+      <label class="k-form-field" id="generalInfo">
+        <span>Case Number
+        </span>
+        <input kendoTextBox type="text" [(ngModel)]="file.CaseNumber" required />
+      </label>
+      <div class="row">
+        <div class="col-md-4 control-col-st">
+          <label class="k-form-field" id="generalInfo">
+            <span>Rack
+            </span>
+            <input kendoTextBox type="text" [(ngModel)]="file.Rack" required />
+          </label>
+        </div>
+        <div class="col-md-4 control-col">
+          <label class="k-form-field" id="generalInfo">
+            <span>Shelf
+            </span>
+            <input kendoTextBox type="text" [(ngModel)]="file.Shelf" required />
+          </label>
+        </div>
+        <div class="col-md-4 control-col-end">
+          <input type="checkbox" [(ngModel)]="file.IsDisposed" id="disposed" class="k-checkbox" />
+          <label class="k-checkbox-label" for="disposed">Is Disposed
+          </label>
+        </div>
+      </div>
+      <label class="k-form-field" id="generalInfo">
+        <span>Brief of Case
+        </span>
+        <textarea kendoTextArea [(ngModel)]="file.Brief" required></textarea>
+      </label>
+      <label class="k-form-field">
+        <span>Status of Stay</span>
+        <kendo-dropdownlist [data]="['Granted', 'Not Granted']" [valuePrimitive]="true" [(ngModel)]="file.StayStatus">
+        </kendo-dropdownlist>
+      </label>
+      <label class="k-form-field" id="generalInfo">
+        <span>Remarks
+        </span>
+        <textarea kendoTextArea [(ngModel)]="file.Remarks" required></textarea>
+      </label>
+      <hr>
+      <div class="row">
+        <div class="col-md-4 control-col-st">
+          <button kendoButton class="btn-block" [ladda]="addingFile" data-style="zoom-in" [primary]="true"
+            (click)="submitFile()">Submit</button>
+        </div>
+        <div class="col-md-4" [ngClass]="file.ID ? 'control-col' : 'control-col-end'">
+          <button kendoButton class="btn-block" ladda [look]="'outline'" [primary]="true"
+            routerLink="/fts/scanned-files">Go
+            Back</button>
+        </div>
+        <div class="col-md-4 control-col-end" *ngIf="file.ID">
+          <button kendoButton class="btn-block btn-danger" ladda (click)="removeLawFile(file.ID)">Remove</button>
+        </div>
+      </div>
+      <div class="row animated fadeIn" *ngIf="barcodeImgSrc">
+        <div class="col-md-4">
+          <label class="k-form-field">
+            <span>Barcode <span class="text-success"><i class="fa fa-check-circle"></i></span></span>
+            <div style="width:100%;">
+              <img [src]="barcodeSrc()" class="animated fadeIn" *ngIf="barcodeImgSrc" alt="">
+              <label style="display: block;margin-top:4px;width:77px;text-align: center;">* {{file.ID}} *</label>
+            </div>
+            <button kendoButton primary="true" [look]="'outline'" class="btn-sm" (click)="printBarcode()"><i
+                class="fa fa-print"></i>&nbsp;
+              Print</button>
+          </label>
+          <div id="barcodeFileBars" hidden>
+            <img [src]="barcodeSrc()" *ngIf="barcodeImgSrc" alt="">
+            <label style="display: block;margin-top:4px;width:77px;text-align: center;">* {{file.ID}} *</label>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="content-heading" *ngIf="file.ID">File Attachments</div>
+
+
+      <hr *ngIf="file.ID">
+      <div class="row" *ngIf="file.ID">
+        <div class="col-md-6 control-col-st">
+          <label class="k-form-field">
+            <span>Attach Files <span *ngIf="!photoSrc" class="text-warning fa fa-exclamation-circle"></span><span
+                *ngIf="photoSrc" class="text-success"><i class="fa fa-check-circle"></i></span></span>
+            <div>
+              <img *ngIf="photoSrc" class="animated fadeIn" style="width:100px;height:100px;border:1px solid;"
+                [src]="photoSrc" alt="">
+              <input #photoRef type="file" accept="image/jpg, image/jpeg, application/pdf" (change)="readUrl($event)"
+                hidden>
+            </div>
+            <div>
+              <button kendoButton type="button" [primary]="true" [look]="'outline'" (click)="uploadBtn()"
+                class="btn-sm mt-1" [ngClass]="photoFile.length == 0 ? 'mt-0' : 'mt-2'" style="cursor:pointer;">
+                <i
+                  class="fa fa-upload"></i>&nbsp;{{photoFile.length == 0 ? 'Choose File' : 'Choose Other File'}}</button>
+            </div>
+          </label>
+        </div>
+        <div class="col-md-6 control-col-end">
+          <label class="k-form-field">
+            <span>&nbsp;</span> <!-- [ladda]="addingFile" data-style="zoom-in" -->
+            <button kendoButton class="btn-block" [primary]="true" (click)="uploadFile()">Upload</button>
+          </label>
+        </div>
+      </div>
+
+      <div class="row" *ngIf="fileAttachments.length > 0">
+        <div class="col-md-12">
+          <div class="d-flex flex-wrap">
+            <div class="mx-2 mb-2" *ngFor="let doc of fileAttachments;let i = index;">
+              <img width="175px" class="border"
+                [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/Files/LawFiles/' + doc.PhotName" alt="">
+              <div class="text-center mt-1">
+                <strong class="p-strong">
+                  <!-- {{doc.PhotName}} -  --><i class="fa fa-times cursor-p text-danger"
+                    (click)="removeLawFileAttachments(doc.ID)"></i></strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="col-md-5">
+      <pre>{{file | json}}</pre>
+      <pre>{{fileAttachments | json}}</pre>
+      <pre>{{photoSrc}}</pre>
+    </div> -->
+  </div>
+</div>
+
+<kendo-dialog [title]="'File Created'" *ngIf="successDialogOpened && file.Id != 0" (close)="closeSuccessDialog()"
+  [minWidth]="450" [width]="'550'">
+  <table class="table animated fadeIn">
+    <tbody>
+      <tr>
+        <td>File Name / Subject</td>
+        <td colspan="2">{{file.F_Name}}</td>
+      </tr>
+      <tr>
+        <td>File Number</td>
+        <td colspan="2">{{file.F_FileNumber}}</td>
+      </tr>
+      <tr>
+        <td>Barcode</td>
+        <td>
+          <div>
+            <img [src]="barcodeSrc()" *ngIf="barcodeImgSrc" alt="">
+            <label style="display: block;margin-top:4px;width:77px;text-align: center;">* {{file.ID}} *</label>
+          </div>
+        </td>
+        <td>
+          <button kendoButton primary="true" [look]="'outline'" class="btn-block btn-lg" (click)="printBarcode()"><i
+              class="fa fa-print"></i>
+            Print</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <kendo-dialog-actions *ngIf="successDialogOpened" class="animated fadeIn">
+    <kendo-buttongroup [width]="'100%'">
+      <button kendoButton primary="true" (click)="dialogAction()"
+        style="height: 100% !important;background: #46a23f !important;color: white !important;" class="animated fadeIn">
+        <i class="fa fa-plus"></i> Done
+      </button>
+    </kendo-buttongroup>
+  </kendo-dialog-actions>
+</kendo-dialog>

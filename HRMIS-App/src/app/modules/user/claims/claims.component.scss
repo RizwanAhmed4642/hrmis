@@ -1,0 +1,63 @@
+.claim-table thead th {
+  font-family: "Roboto-Bold";
+  font-weight: 500;
+  font-size: 1rem;
+}
+.claim-table tbody td {
+  font-family: "Roboto-Regular";
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+// .fields-list::-webkit-scrollbar {
+//   width: 5px;
+// }
+
+// /* Track */
+// .fields-list::-webkit-scrollbar-track {
+//   background: #f1f1f1;
+// }
+
+// /* Handle */
+// .fields-list::-webkit-scrollbar-thumb {
+//   background: #888;
+// }
+
+// /* Handle on hover */
+// .fields-list::-webkit-scrollbar-thumb:hover {
+//   background: #555;
+// }
+ul.fields-list {
+  margin-bottom: 0px !important;
+ /*  max-height: 220px !important;
+  overflow-y: scroll; */
+}
+ul.fields-list li {
+  font-family: "Roboto-LightItalic";
+  color: #252525;
+  font-size: 0.83rem;
+  margin-top: 6px;
+}
+
+.mycheck {
+  padding-right: 10px;
+  font-family: "Roboto-Regular";
+  color: black;
+  font-size: 0.875rem;
+}
+.mycheck:hover {
+  color: #46a23f;
+}
+
+ol li {
+  padding: 2px 5px;
+  cursor: pointer;
+}
+ol li:hover {
+  box-shadow: inset 0px 0px 2px grey;
+  padding: 2px 5px;
+}
+
+
+
+.top-bar {
+}

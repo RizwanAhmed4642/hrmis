@@ -1,0 +1,130 @@
+@media only screen and (max-width: 992px) {
+  html:not([dir="rtl"]) .sidebar {
+    margin-left: -275px;
+  }
+
+  .sidebar-fixed .sidebar {
+    width: 275px !important;
+  }
+
+  .sidebar .sidebar-nav {
+    width: 275px !important;
+  }
+
+  .sidebar .nav {
+    width: 275px !important;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  html:not([dir="rtl"]) .sidebar {
+    margin-left: -275px;
+  }
+
+  .sidebar .sidebar-nav {
+    width: 275px !important;
+  }
+
+  .sidebar-fixed .sidebar {
+    width: 275px !important;
+  }
+
+  .sidebar-lg-show.sidebar-fixed .main {
+    margin-left: 275px !important;
+  }
+
+  .sidebar .nav {
+    width: 275px !important;
+  }
+
+  .app-body .sidebar {
+    flex: 0 0 275px !important;
+  }
+}
+
+.sidebar {
+  color: #77797b !important;
+  background: #f5f5f5 !important;
+}
+
+.sidebar .nav-link {
+  color: #77797b !important;
+  background: #f5f5f5 !important;
+  font-size: 1rem !important;
+  padding: 0.55rem 1rem !important;
+}
+
+.sidebar .nav-link.active {
+  color: #111111 !important;
+  border-right: 3px solid #46a23f;
+  background: #0000001a !important;
+}
+
+.sidebar .nav-link:hover {
+  background: #00000021 !important;
+}
+
+.sidebar .nav-link .nav-icon {
+  color: #77797b !important;
+  font-size: 1rem !important;
+}
+
+.sidebar .nav-link:hover .nav-icon {
+  color: #46a23f !important;
+}
+
+.sidebar .nav-link.active .nav-icon {
+  color: #46a23f !important;
+}
+
+.sidebar .nav-dropdown-items .nav-item>a {
+  padding-left: 34px !important;
+  border: 0 !important;
+}
+
+.sidebar .nav-dropdown.open {
+  background: white !important;
+}
+
+/*  .sidebar .nav-dropdown-toggle::before{
+    color: orange !important;
+    background: none !important;
+    content: "\2039" !important;
+    margin-top: -10px !important;
+  } */
+
+.sidebar .sidebar-header {
+  background: #f5f5f5 !important;
+  border-bottom: 1px solid #e2e2e2 !important;
+}
+
+.sidebar .nav-dropdown-toggle::before {
+  position: absolute !important;
+  top: 1.3rem !important;
+  right: 1rem !important;
+  display: block !important;
+  width: 0.875rem !important;
+  height: 0.875rem !important;
+  padding: 0 !important;
+  font-size: 1.5rem !important;
+  font-weight: bold;
+  line-height: 0.65625rem !important;
+  text-align: center !important;
+  content: "\2039" !important;
+  transition: 0.3s !important;
+  background-image: none !important;
+}
+
+.sidebar .sidebar-footer {
+  border-top: 1px solid #e2e2e2 !important;
+  background: none;
+  padding: 0px !important;
+}
+
+.sidebar .sidebar-footer a {
+  cursor: pointer;
+}
+
+/* .sidebar-lg-show.sidebar-fixed .app-footer {
+  margin-left: 275px !important;
+} */

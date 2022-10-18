@@ -1,0 +1,285 @@
+<div class="animated fadeIn" *ngIf="portalClosed">
+    <p class="p-strong" style="text-align:center">
+        Portal has been closed
+    </p>
+</div>
+
+<div class="content animated fadeIn">
+    <!--  <div class="animated fadeIn" *ngIf="applicant.Status_Id && applicant.Status_Id > 1">
+        <div class="row mb-2">
+            <div class="col-md-4">
+                <button kendoButton primary="true" look="outline" class="cursor-p btn-block" routerLink="/adhoc/apply">2 - <i
+                        class="fa fa-user"></i>
+                    Profile</button>
+            </div>
+            <div class="col-md-4">
+                <button kendoButton *ngIf="applicant.Status_Id > 2" primary="true" look="outline" class="btn-block"
+                    routerLink="/adhoc/document"><i class="fa fa-file"></i>
+                    Documents</button>
+            </div>
+            <div class="col-md-4">
+                <button kendoButton *ngIf="applicant.Status_Id > 3" primary="true" look="outline" class="btn-block"
+                    routerLink="/adhoc/experience">4 - <i class="fa fa-file"></i>
+                    Experience</button>
+            </div>
+        </div>
+        <hr>
+    </div> -->
+    <div class="row mb-2 animated fadeIn" *ngIf="alreadyApplied">
+        <div class="col-md-2 control-col-st">
+            <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/adhoc/home"><i
+                    class="fa fa-envelope"></i>
+                Inbox</button>
+        </div>
+        <div class="col-md-2 control-col">
+            <button kendoButton primary="true" look="outline" class="btn-block" [disabled]="2 + 2 == 4"><i
+                    class="fa fa-plus-circle"></i>
+                New Application</button>
+        </div>
+        <div class="col-md-2 control-col">
+            <button kendoButton primary="true" look="outline" class="btn-block" [disabled]="2 + 2 == 4"><i
+                    class="fa fa-user"></i>
+                My Profile</button>
+        </div>
+        <div class="col-md-2 control-col">
+            <button kendoButton primary="true" look="outline" class="btn-block" [disabled]="2 + 2 == 4"><i
+                    class="fa fa-institution"></i>
+                My Qualification</button>
+        </div>
+        <div class="col-md-2 control-col-end">
+            <button kendoButton primary="true" look="outline" class="btn-block" [disabled]="2 + 2 == 4"><i
+                    class="fa fa-medkit"></i>
+                My Experience</button>
+        </div>
+        <div class="col-md-2 control-col">
+            <button kendoButton primary="true" look="outline" class="btn-block" [disabled]="2 + 2 == 4"
+                routerLink="/adhoc/grievance"><i class="fa fa-resistance"></i>
+                Grievance</button>
+        </div>
+    </div>
+    <div class="animated fadeIn" *ngIf="!alreadyApplied">
+        <div class="row mb-2">
+            <div class="col-md-2 control-col-st">
+                <button kendoButton primary="true" look="outline" class="cursor-p btn-block" routerLink="/adhoc/apply">1
+                    - <i class="fa fa-graduation-cap"></i>
+                    Select Post</button>
+            </div>
+            <div class="col-md-2 control-col">
+                <button kendoButton primary="true" look="outline" class="cursor-p btn-block"
+                    routerLink="/adhoc/profile">2 - <i class="fa fa-user"></i>
+                    Profile</button>
+            </div>
+            <div class="col-md-2 control-col">
+                <button kendoButton primary="true" look="outline" class="cursor-p btn-block"
+                    routerLink="/adhoc/qualification">3 - <i class="fa fa-file"></i>
+                    Qualification</button>
+            </div>
+            <div class="col-md-2 control-col">
+                <button kendoButton primary="true" look="outline" class="cursor-p btn-block"
+                    routerLink="/adhoc/experience">4 - <i class="fa fa-medkit"></i>
+                    Experience</button>
+            </div>
+            <div class="col-md-2 control-col">
+                <button kendoButton primary="true" [look]="proceedApplication ? 'outline' : ''" class="btn-block"
+                    routerLink="/adhoc/preferences">5 - <i class="fa fa-building-o"></i>
+                    Preferences</button>
+            </div>
+            <div class="col-md-2 control-col-end">
+                <button kendoButton primary="true" [look]="proceedApplication ? '' : 'outline'" class="btn-block"
+                    routerLink="/adhoc/experience">6 - <i class="fa fa-print"></i>
+                    Finalize & Print!</button>
+            </div>
+            <!--   <div class="col-md-3">
+        <button kendoButton *ngIf="applicant.Status_Id && applicant.Status_Id > 4" primary="true" look="outline"
+          class="btn-block" routerLink="/job/applications"><i class="fa fa-newspaper-o"></i>
+          Applications</button>
+      </div> -->
+        </div>
+
+    </div>
+
+    <div class="animated fadeIn row" *ngIf="!alreadyApplied && !portalClosed">
+        <div class="col-md-6">
+            <p class="my-3 font-2xl" *ngIf="!proceedApplication">
+                {{urdu.infoeng}}
+            </p>
+            <p class="my-3 font-2xl" *ngIf="proceedApplication">
+                Application Completed. Your application will be locked here after final submission & print
+            </p>
+        </div>
+        <div class="col-md-6">
+            <p class="urdu-text my-3 font-3xl p-strong pull-right" *ngIf="!proceedApplication">
+                {{urdu.info1}}<span class="text-success">{{urdu.info2}}</span><span>{{urdu.info3}}</span>
+            </p>
+            <p class="urdu-text my-3 font-3xl p-strong pull-right" *ngIf="proceedApplication">
+                {{urdu.infoLock}}
+            </p>
+        </div>
+    </div>
+    <hr>
+    <div class="mb-3 animated fadeIn">
+        <div class="row animated fadeInDownBig" *ngIf="districts.length > 0">
+            <div class="col-md-12 animated fadeIn" *ngIf="!proceedApplication && !portalClosed">
+                <div class="panelbar-wrapper">
+                    <kendo-panelbar>
+                        <kendo-panelbar-item [expanded]="false" *ngFor="let dist of districts"
+                            [title]="dist.Name + ' (' + dist.Count + ')'">
+                            <ng-template kendoPanelBarContent>
+                                <div class="animated fadeIn" *ngIf="dist.hfs.length > 0">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 control-col-st">
+                                            <table class="w-100" style="background: transparent;">
+                                                <tbody>
+                                                    <tr *ngFor="let hf of dist.hfs;let i = index;"
+                                                        class="animated fadeIn">
+                                                        <td style="border:none !important;">
+                                                            <p class="m-0 ml-1 p-2 h5 tr-hover cursor-p">{{hf.DsgName}},
+                                                                <span class="text-success">{{hf.Name}}</span></p>
+                                                        </td>
+                                                        <td style="border:none !important;">
+                                                            <button kendoButton primary="true"
+                                                                *ngIf="!hf.applied || hf.applied == false"
+                                                                (click)="apply(hf)" class="btn-lg animated fadeIn"
+                                                                [ladda]="hf.loading" data-style="zoom-in"> Apply
+                                                                Now</button>
+                                                            <button *ngIf="hf.applied == true"
+                                                                class="btn btn-danger btn-lg animated fadeIn"
+                                                                (click)="removeHF(hf)" [ladda]="hf.loading"
+                                                                data-style="zoom-in">
+                                                                Remove</button>
+                                                            <p class="m-0 text-danger" *ngIf="hf.applied == 'limit'">
+                                                                {{'5 limit reached'}}</p>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </kendo-panelbar-item>
+                    </kendo-panelbar>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 mt-2 animated fadeIn" *ngIf="proceedApplication">
+            <button kendoButton primary="true" style="position: absolute;top:25px;left:83%;"
+                (click)="printApplication()">Print Application</button>
+            <div class="page preview-order p-4" id="phfmchr">
+                <small><b>Application No.</b> {{application.Id}} -
+                    {{application.CreatedDate | date: 'dd/MM/yyyy hh:mm a'}}</small>
+                <p class="heading"><strong class="p-strong">PRIMARY & SECONDARY HEALTHCARE DEPARTMENT</strong></p>
+                <p class="heading">Adhoc Application</p>
+                <br>
+                <table class="info">
+                    <tr>
+                        <td style="width: 80%;">
+                            <p class="normalPara"><span class="pr-2">Name: <u>{{applicant.Name}}</u></span>
+                                <span class="pl-2">S/D/W of: <u>{{applicant.FatherName}}</u> </span>
+                                <span class="pl-2">CNIC: <u>{{dashifyCNIC(applicant.CNIC)}}</u> </span></p>
+
+                            <!--   <p class="normalPara"><span class="pr-2">Post Applied for:
+                                    <u>{{applicant.appliedFor}}</u></span> </p> -->
+
+                            <p class="normalPara">
+                                <!-- <span class="pr-2">Facility Applied in <u>Human Capital
+                                        Investment
+                                        Program</u></span> -->
+                                <span class="">D.O.B: <u>{{applicant.DOB | date:'dd/MM/yyyy'}}</u>
+                                </span>
+                                <span class="pl-2">Age: <u>{{applicant.age}} years</u> </span> </p>
+
+                            <p class="normalPara"><span class="pr-2">Cell No:
+                                    <u>{{applicant.MobileNumber}}</u></span>
+                                <span class="pl-2">Domicile: <u>{{applicant.DomicileName}}</u> </span>
+                                <!--  <span class="pl-2">Hafiz-e-Quran: <u>No</u> </span> </p> -->
+
+                                <p class="normalPara">
+                                    <span>Email: <u>{{applicant.Email}}</u> </span> </p>
+
+                                <p class="normalPara"><span class="pr-2">Address:
+                                        <u>{{applicant.Address}}</u></span></p>
+                        </td>
+                        <td style="width: 17%;vertical-align: top;">
+                            <div class="candidate-photo">
+                                <img onError="this.src='../../../assets/img/notfound.png'"
+                                    [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/AdhocApplicants/Photo/' + applicant.CNIC + '_23.jpg'"
+                                    alt="">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+
+                <p class="normalPara" style="text-decoration: underline;">QUALIFICATION: </p>
+                <table class="doc">
+                    <tr>
+                        <th>Institute / University / Board </th>
+                        <th>Degree</th>
+                        <th>Month & Year of Passing</th>
+                        <th>Obtained Marks</th>
+                        <th>Total Marks</th>
+                    </tr>
+                    <tr *ngFor="let doc of documents;let i = index;">
+                        <td>{{doc.Institute}} </td>
+                        <td>{{doc.DegreeName}}</td>
+                        <td>{{doc.PassingYear | date:'yyyy'}}</td>
+                        <td>{{doc.ObtainedMarks}}</td>
+                        <td>{{doc.TotalMarks}}</td>
+                    </tr>
+                </table>
+                <p class="normalPara mt-2" style="text-decoration: underline;">EXPERIENCE:</p>
+                <table class="doc">
+                    <tr>
+                        <th rowspan="2">Health Facility </th>
+                        <th rowspan="2">Job Title </th>
+                        <th rowspan="1" colspan="2">Duration</th>
+                    </tr>
+                    <tr>
+                        <td>From</td>
+                        <td>To</td>
+                    </tr>
+                    <tr *ngFor="let exp of experiences;let i = index;">
+                        <td>{{exp.Organization}}</td>
+                        <td>{{exp.JobTitle}}</td>
+                        <td>{{exp.FromDate | date:'MM/yyyy'}}</td>
+                        <td>{{exp.ToDate | date:'MM/yyyy'}}</td>
+                    </tr>
+                </table>
+                <br><br>
+                <div style="width: 50%;">Total Experience: {{applicant.exp}}
+                    year{{applicant.exp > 1 ? 's' : ''}}
+                </div>
+                <p class="m-0">Documents Attached:
+                    {{(documents.length + experiences.length) | number}}</p>
+                <p>Preferences:
+                    {{(applicant.Preferences?.length) | number}}</p>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row mt-3 animated fadeIn" *ngIf="!alreadyApplied && !portalClosed">
+        <div class="col-md-6 offset-md-3">
+            <button *ngIf="!proceedApplication" style="margin: 0 auto;" [disabled]="!applied"
+                routerLink="/adhoc/preferences" class="btn-block btn-lg" kendoButton primary="true"
+                look="outline">Review Preferences</button>
+
+            <button *ngIf="proceedApplication" style="margin: 0 auto;" (click)="lockApplication()"
+                class="btn-block btn-lg" kendoButton primary="true" [look]="locking ? '' : 'outline'">Submit
+                (application will be
+                locked)</button>
+        </div>
+        <div class="col-md-3">
+            <button type="button" class="btn btn-secondary btn-block btn-lg" routerLink="/adhoc">Logout</button>
+        </div>
+    </div>
+    <div class="row mt-3 animated fadeIn" *ngIf="alreadyApplied && portalClosed">
+        <div class="col-md-3 offset-md-6">
+            <button style="margin: 0 auto;" routerLink="/adhoc/home" class="btn-block btn-lg" kendoButton primary="true"
+                look="outline">Go Back</button>
+        </div>
+        <div class="col-md-3">
+            <button type="button" class="btn btn-secondary btn-block btn-lg" routerLink="/adhoc">Logout</button>
+        </div>
+    </div>
+</div>

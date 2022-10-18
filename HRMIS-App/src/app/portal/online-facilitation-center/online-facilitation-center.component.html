@@ -1,0 +1,71 @@
+<!-- <div class="app-body">
+    <main class="main d-flex align-items-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 mx-auto">
+            <div class="card mx-4 animated fadeIn"
+              style="background-color: transparent;border: none !important; margin-top: 0px !important;padding: 0px !important;">
+              <div class="card-body" style="padding: 0px !important;">
+                <div class="d-flex text-center">
+                  <div class="dept-name" style="width: 100%;padding: 40px 0px 0px 0px;">
+                    <div class="dept-second">
+                      Facilitation Center
+                    </div>
+                  </div>
+                </div>
+                <hr>
+                <router-outlet></router-outlet>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+      </div>
+    </main>
+  </div> -->
+
+
+
+<div class=" app-body">
+  <main class="main d-flex align-items-center">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 mx-auto">
+          <div class="card mx-4 animated fadeIn"
+            style="background-color: transparent; border: none !important; margin-top: 0px !important;padding: 0px !important;">
+            <div class="card-body" style="padding: 0px !important; margin-top: 15px;">
+              <!-- <div class="d-flex bd-highlight text-center">
+                   <div class="dept-name" style="width: 100%; padding: 10px 0px 0px 0px;">
+                    <div class="dept-second" style="background-color: #669900; color: white;">
+                        Online Facilitation Center
+                    </div>
+                  </div>
+                </div> getApplicationsTypes-->
+              <p-menubar [model]="items" [style]="{'position': 'fixed', 'width': '93%'}">
+                <button kendoButton [primary]="true" style="margin-top: 3px;" class="ml-2 mr-2"
+                  (click)="getApplicationsTypes()"><i class="fa fa-plus"></i>&nbsp;New Application</button>
+                <button kendoButton [primary]="true" label="Logout"
+                  style="margin-top: 3px; margin-right: 1px; font-weight: bold;" (click)="logout()">Logout</button>
+              </p-menubar>
+              <hr><br>
+              <router-outlet></router-outlet>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<kendo-dialog [title]="'Select Application Type'" *ngIf="!dialogClosed" (close)="closeWindow()" [minWidth]="'450'"
+  [width]="'800'" [height]="'500'">
+  <div class="row">
+    <div class="col-md-4" *ngFor="let type of applicationTypes; let i = index;"
+      [ngClass]="i % 3 === 0 ? 'control-col-st' : i % 3 === 1 ? 'control-col' : i % 3 === 2 ? 'control-col-end' : ''">
+      <button [tabIndex]="i" class="mb-3 btn-block" kendoButton [primary]="true"
+        (click)="openApplicationTypes('online-facilitation-center/application/add/' + type.Id)"
+        [look]="'outline'">{{type.Name}}</button>
+    </div>
+  </div>
+</kendo-dialog>

@@ -1,0 +1,1596 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3">
+        {{applicationType}}
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12">
+      <div class="top-controls">
+        <!-- <button kendoButton *ngIf="user.UserName == 'dpd'" (click)="setEditorContents()" [primary]="true">Editor</button> -->
+        <button kendoButton [primary]="true" [look]="'outline'" routerLink="/order/0/1">Back to List</button>
+      </div>
+    </div>
+  </div>
+  <div class="row animated fadeIn" *ngIf="!generateOrder">
+    <div class="col-md-4 pb-4" style="background: #e9e9e9;color: black;min-height: 1800px;">
+      <label class="k-form-field mt-2">
+        <span>Order Type <span class="text-danger">*</span></span>
+        <kendo-dropdownlist [data]="applicationTypes" [textField]="'Name'" [valueField]="'Id'"
+          [value]="dropDowns.selectedFiltersModel.orderType" (valueChange)="dropdownValueChanged($event, 'type')"
+          [defaultItem]="dropDowns.defultFiltersModel.orderType">
+        </kendo-dropdownlist>
+      </label>
+      <label class="k-form-field">
+        <span>File Number <span class="text-danger">*</span> </span>
+        <input kendoTextBox type="text" [(ngModel)]="application.FileNumber">
+      </label>
+
+      <label class="k-form-field mt-1" *ngIf="application.ApplicationType_Id == 8">
+        <span>With Immediate Effect</span>
+        <kendo-switch [(ngModel)]="application.AppointmentEffect" [onLabel]="'Yes'" [offLabel]="'No'">
+        </kendo-switch>
+      </label>
+
+      <div class="animated fadeIn" *ngIf="application && !loading && !generateOrder">
+        <div id="beforeSubmit" class="animated fadeIn" *ngIf="!canPrint">
+          <div class="row">
+            <div class="col-md-12">
+
+              <label class="k-form-field animated fadeIn">
+                <span>Search Employee by Name, CNIC
+                  <span class="animated fadeIn lds-ellipsis" *ngIf="searchingProfiles">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </span>
+                </span>
+                <kendo-autocomplete [data]="profilesList" [valueField]="'CNIC'"
+                  (valueChange)="dropdownValueChanged($event, 'employee')" required [filterable]="true"
+                  (filterChange)="searchEvent.next({ event: $event, filter: 'employee'})"
+                  placeholder="Search Officer by Name, CNIC" class="k-autocomplete-form">
+                  <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                    <div class="search-list-item">
+                      {{ dataItem.EmployeeName }} - ({{dashifyCNIC(dataItem.CNIC)}})</div>
+                  </ng-template>
+                </kendo-autocomplete>
+              </label>
+            </div>
+          </div>
+          <div class="animated fadeIn" *ngIf="applications.length > 0">
+            <div class="content-heading content-heading-order-left mt-2 mb-2"
+              (click)="toggleEmployeeInfo = !toggleEmployeeInfo">
+              Employee Profile <i class="fa fa-caret-left section-slider-arrow pull-right mt-2"
+                [ngClass]="toggleEmployeeInfo ? 'down' : 'left'"></i>
+            </div>
+            <div id="employeeInfo" class="section-slider" [ngClass]="toggleEmployeeInfo ? 'animated fadeIn' : 'closed'">
+              <!--    <label class="k-form-field mt-1 animated fadeIn">
+              <span>Different Order</span>
+              <kendo-switch [(ngModel)]="differentTransfer" [onLabel]="'Yes'" [offLabel]="'No'">
+              </kendo-switch>
+            </label> -->
+              <table class="table-light-cstm">
+                <tr *ngFor="let app of applications;let ind = index;">
+                  <td colspan="3">
+                    <h5 class="order-employee p-strong text-left mb-0" (click)="openOrderFieldWindow(app)">
+                      <span>{{(ind + 1)}}. <span class="p-hoverable cursor-p"
+                          [ngClass]="app.vacancyFill ? 'text-danger' : ''">{{app.EmployeeName}}</span></span>
+                      <button kendoButton class="btn-sm pull-right" (click)="selectProfile(app, ind)" [primary]="true"
+                        look="outline">
+                        <span *ngIf="app.missingCount == 0">
+                          <i class="fa fa-pencil"></i>
+                        </span>
+                        <span *ngIf="app.missingCount > 0">
+                          <i class="fa fa-exclamation-circle text-danger"></i>&nbsp;({{app.missingCount}})
+                        </span>
+                        &nbsp;Edit
+                      </button>
+                    </h5>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <form name="applicationForm" class="animated fadeIn" *ngIf="applications.length > 0" #f="ngForm" novalidate>
+            <div class="animated fadeIn">
+              <div class="section-slider down">
+                <div *ngIf="applicationDocuments.length > 0">
+                  <div class="content-heading content-heading-order-left mb-2"
+                    (click)="toggleDocuments = !toggleDocuments">
+                    Documents <i class="fa fa-caret-left section-slider-arrow pull-right mt-2"
+                      [ngClass]="toggleDocuments ? 'down' : 'left'"></i>
+                  </div>
+                  <div id="documents" class="section-slider" [ngClass]="toggleDocuments ? 'animated fadeIn' : 'closed'">
+                    <label class="k-form-field" *ngFor="let doc of applicationDocuments; let i = index;">
+                      <span><strong class="p-strong">{{(i + 1) + ' - ' + doc.Name}}</strong>&nbsp;<i class="fa"
+                          [ngClass]="doc.attached ? 'fa-check-circle text-success' : 'fa-exclamation-circle text-warning'"></i></span>
+                      <input type="file" (change)="selectFile($event, doc)" style="width: 100%;" [name]="doc.Name">
+                    </label>
+                  </div>
+                </div>
+                <div class="content-heading content-heading-order-left mb-2" (click)="toggleSignedBy = !toggleSignedBy">
+                  Signed By <i class="fa fa-caret-left section-slider-arrow pull-right mt-2"
+                    [ngClass]="toggleSignedBy ? 'down' : 'left'"></i>
+                </div>
+                <div id="signedBy" class="section-slider" [ngClass]="toggleSignedBy ? 'animated fadeIn' : 'closed'">
+                  <label class="k-form-field">
+                    <span>Officer <span class="text-danger">*</span></span>
+                    <kendo-dropdownlist [data]="allOfficers" [textField]="'DesignationName'" [disabled]="lockSignedBy"
+                      [valueField]="'Id'" (valueChange)="dropdownValueChanged($event, 'allOfficer')"
+                      [value]="selectedFiltersModel.signingOfficer"
+                      [defaultItem]="dropDowns.defultFiltersModel.signingOfficer" required>
+                    </kendo-dropdownlist>
+                  </label>
+                </div>
+                <hr>
+                <!-- <button type="submit"
+                [disabled]="f.form.invalid || !application.ForwardingOfficer_Id || 
+              application.ForwardingOfficer_Id == 0 || ((application.ApplicationType_Id == 4 || application.ApplicationType_Id == 6 || application.ApplicationType_Id == 8) && !application.ToDesignation_Id)"
+                kendoButton [ladda]="savingApplication" data-style="zoom-in" [primary]="true"
+                class="btn-block btn-lg">Generate
+                Order
+              </button> -->
+                <!-- (!vacantSeatAvailable && (application.ApplicationType_Id == 4 || application.ApplicationType_Id == 6 || application.ApplicationType_Id == 8 || application.ApplicationType_Id == 12)) || -->
+                <p *ngIf="errorCombineOrderString" class="animated fadeIn"><i
+                    class="text-danger fa fa-exclamation-circle"></i>&nbsp;<i
+                    class="text-success">{{errorCombineOrderString}}, Vacancy: {{errorCombineOrderVacancy}}, Profile:
+                    {{errorCombineOrderProfile}}</i></p>
+                <button type="button"
+                  [disabled]="applications.length == 0 || !application.FileNumber || !application.ForwardingOfficer_Id || application.ForwardingOfficer_Id == 0 || 
+                ((!application.LeaveType_Id || application.LeaveType_Id == 0) && (application.ApplicationType_Id == 5) ) || 
+                applicationAttachments.length == 0 || (application.ApplicationType_Id == 5 && application.TotalDays > 730)" kendoButton
+                  [ladda]="savingApplication" data-style="zoom-in" [primary]="true" class="btn-block btn-lg"
+                  (click)="combineOrder()">Generate
+                  Order
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div id="afterSubmit" class="animated fadeIn" *ngIf="canPrint">
+          <div class="content-heading mb-1 mt-2">
+            Order Saved <i class="fa fa-check-circle-o"></i>
+          </div>
+          <hr>
+          <button kendoButton type="button" [primary]="true" class="btn-block btn-lg" [look]="'outline'"
+            [routerLink]="'/order/editor-view/' + esr.Id + '/' + 1">
+            Edit Order</button>
+          <hr *ngIf="afterSubmitStep == 2">
+          <label class="k-form-field" *ngIf="afterSubmitStep == 2">
+            <span><strong>Upload Signed Order</strong>&nbsp;</span>
+            <input type="file" (change)="uploadSignedCopy($event)" style="width: 100%;">
+          </label>
+          <hr *ngIf="signedApplication.attached">
+          <button kendoButton type="button" kendoButton *ngIf="signedApplication.attached" type="input"
+            [ladda]="uploadingOrder" data-style="zoom-in" [primary]="true" class="btn-block"
+            (click)="uploadAndConfirmOrder()">
+            Upload Signed Order
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8 animated fadeIn" *ngIf="applications.length > 0 && !editProfile">
+      <div class="page preview-order" id="applicationPrintOld">
+        <div class="table-order" style="padding: 30px 50px 0 50px;">
+          <div *ngIf="userhfmisCode.length == 6"
+            style="text-align:center;position:absolute;left:0;width:100%;top:270px;z-index:-1;">
+            <img alt="HISDU" src="https://hrmis.pshealthpunjab.gov.pk/assets/img/brand/govlogoUpdated.png"
+              style="display:inline-block;opacity:0.1; " />
+          </div>
+          <div *ngIf="userhfmisCode.length == 1" style="text-align:center;position:absolute;left:0;width:100%;z-index:-1;    top: -62px;
+            opacity: 0.2;">
+            <img alt="HISDU" src="https://hrmis.pshealthpunjab.gov.pk/assets/img/brand/Watermark.png"
+              style="display:inline-block; " />
+          </div>
+          <table border="0" cellspacing="0" style="border-color:transparent !important; width:100%;font-family: sans-serif, Arial, Verdana, 'Trebuchet MS' !important;
+            font-size: 13px !important;
+            font-style: normal !important;
+            font-variant: normal !important;
+            font-weight: 400 !important;
+            line-height: 1.6 !important;
+            color: #383e4b !important;
+            background-color: #fff !important;">
+            <tbody>
+              <tr>
+                <td style="border-color:transparent !important; text-align:left">
+                  <img alt="Punjab Government Log" *ngIf="!isPHFMC"
+                    src="https://hrmis.pshealthpunjab.gov.pk/assets/img/brand/govlogoUpdated.png"
+                    style="display:inline-block; width:134px" />
+                  <img alt="Punjab Government Log" *ngIf="isPHFMC"
+                    src="https://hrmis.pshealthpunjab.gov.pk/assets/img/brand/PHFMC-logo.png"
+                    style="display:inline-block; width:134px" />
+                </td>
+                <td style="border-color:transparent !important; text-align:right">
+                  <div style="text-align:center; display:inline-block;" *ngIf="isCEO">
+                    <p style="line-height: 1.5 !important;">
+                      <strong>CHIEF
+                        EXECUTIVE OFFICER<br /> DISTRICT HEALTH AUTHORITY<br />
+                        {{dropDowns.districtsData?.length == 1 ? capitalize(dropDowns.districtsData[0].Name) : ''}}
+                      </strong><br /> Dated {{dropDowns.districtsData?.length == 1 ?
+                      dropDowns.districtsData[0].Name : ''}}, <span [innerHTML]="dateNow"></span></p>
+                  </div>
+                  <div style="display:inline-block;text-align:center;" *ngIf="isHisduAdmin">
+                    <p><strong>GOVERNMENT
+                        OF THE PUNJAB<br /> PRIMARY
+                        &amp; SECONDARY HEALTHCARE<br /> DEPARTMENT </strong><br /> Dated Lahore, <span
+                        [innerHTML]="dateNow"></span></p>
+                  </div>
+                  <div style="display:inline-block;text-align:center;" *ngIf="isPHFMC">
+                    <p><strong>PUNJAB HEALTH FACILITIES MANAGEMENT COMPANY </strong><br /> Dated Lahore, <span
+                        [innerHTML]="dateNow"></span></p>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" style="border-color:transparent !important; text-align:left">
+                  <p style="margin-top: 50px;margin-bottom: 15px;"><strong><u>{{orderType}}</u> </strong></p>
+                </td>
+              </tr>
+              <tr style="font-size: 13px !important;">
+                <td colspan="2" style="border-color:transparent !important; text-align:justify;line-height: 1.6;"
+                  *ngIf="application.ApplicationType_Id == 1">
+                  <table border="1" cellpadding="0" cellspacing="0" style="margin: 15px 0px;">
+                    <tbody>
+                      <tr>
+                        <td style="border: 1px solid #383e4b;padding: 0.50rem;"><strong>File</strong></td>
+                        <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;">
+                          <strong>Name/CNIC</strong></td>
+                        <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;">
+                          <strong>Designation</strong></td>
+                        <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;"><strong>Current
+                            Posting</strong></td>
+                        <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;"><strong>Transferred
+                            at</strong></td>
+                      </tr>
+                      <tr>
+                        <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;">
+                          <strong>No.<em><u>{{application.FileNumber}}</u></em></strong></td>
+                        <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;"><strong>{{application.EmployeeName
+                            ? application.EmployeeName
+                            : '-'}} (CNIC: </strong>{{application.CNIC
+                          ? dashifyCNIC(application.CNIC) : '-'}}<strong>)</strong></td>
+                        <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;"><strong>({{application.designationName
+                            ?
+                            application.designationName :
+                            '-'}}/BS-{{application.fromScale}})</strong></td>
+                        <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;"><strong>{{application.fromHealthFacility
+                            ?
+                            application.fromHealthFacility : '-'}}</strong></td>
+                        <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;"><strong>{{application.toHealthFacility
+                            ?
+                            application.toHealthFacility : '-'}}</strong></td>
+                      </tr>
+                      <tr>
+                        <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;">
+                          <strong>No.<em><u>{{application.FileNumber}}</u></em></strong></td>
+                        <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;"><strong>{{application.EmployeeName
+                            ? application.EmployeeName
+                            : '-'}} (CNIC: </strong>{{application.CNIC
+                          ? dashifyCNIC(application.CNIC) : '-'}}<strong>)</strong></td>
+                        <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;"><strong>({{application.designationName
+                            ?
+                            application.designationName :
+                            '-'}}/BS-{{application.fromScale}})</strong></td>
+                        <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;"><strong>{{application.toHealthFacility
+                            ?
+                            application.toHealthFacility : '-'}}</strong></td>
+                        <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;"><strong>{{application.fromHealthFacility
+                            ?
+                            application.fromHealthFacility : '-'}}</strong></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+                <td colspan="2" style="border-color:transparent !important; text-align:justify;line-height: 1.6;"
+                  *ngIf="application.ApplicationType_Id == 4">
+                  <!--   <div *ngIf="tableView" class="animated fadeIn">
+                    <table class="combine-order">
+                      <tr>
+                        <th>Employee</th>
+                        <th>Posted at</th>
+                        <th>Transferred to</th>
+                      </tr>
+                      <tr *ngFor="let app of applications">
+                        <td>
+                          <p class="m-0">{{app.EmployeeName ? app.EmployeeName : '-'}}</p>
+                          <p class="m-0">{{app.CNIC ? dashifyCNIC(app.CNIC) : '-'}}</p>
+                        </td>
+                        <td>
+                          <p class="m-0">
+                            {{app.designationName ? app.designationName : 'Designation'}}/BS-{{app.fromScale}},
+                          </p>
+                          <p class="m-0">{{app.fromHealthFacility ? app.fromHealthFacility : 'Health Facility'}}</p>
+                        </td>
+                        <td>
+                          <p class="m-0">
+                            {{app.toDesignationName ? app.toDesignationName : 'Designation'}}/BS-{{app.toScale}},
+                          </p>
+                          <p class="m-0">{{app.toHealthFacility ? app.toHealthFacility : 'Health Facility'}}</p>
+                        </td>
+                      </tr>
+
+                    </table>
+                  </div>
+                  <div *ngIf="!tableView" class="animated fadeIn"> -->
+                  <p style="text-align: justify;margin: 0;">
+                    <strong style="margin-left: 62px;">No.<em><u>{{application.FileNumber}}</u></em></strong></p>
+                  <p style="text-align: justify;margin: 0;" *ngFor="let app of applications;let i = index;">
+                    <strong style="margin-left: 62px;">{{i > 0 ? (i + 1) + '.' : ''}}
+                      {{app.EmployeeName ? app.EmployeeName : '-'}} (CNIC: </strong>{{app.CNIC
+                    ? dashifyCNIC(app.CNIC) : ''}}<strong>),
+                      ({{app.designationName ? app.designationName :
+                      '-'}}/BS-{{app.fromScale}}),
+                      {{app.fromHealthFacility ? app.fromHealthFacility : '-'}},</strong> is hereby
+                    transferred and posted at&nbsp;<strong>{{app.toHealthFacility ?
+                      app.toHealthFacility : '-'}},</strong> against the vacant
+                    post&nbsp;of&nbsp;<strong>({{app.toDesignationName ? app.toDesignationName :
+                      '-'}}/BS-{{app.toScale}}){{app.Reason ? '' : '.'}}</strong>
+                    {{app.Reason ? app.Reason + '.'
+                    :
+                    ''}}
+                  </p>
+                  <!-- </div> -->
+                </td>
+                <td colspan="2" style="border-color:transparent !important; text-align:justify;line-height: 1.6;"
+                  *ngIf="application.ApplicationType_Id == 9">
+                  <div *ngIf="tableView" class="animated fadeIn">
+                    <table class="combine-order">
+                      <tr>
+                        <th>Employee</th>
+                        <th>Appointed as</th>
+                        <th>Period</th>
+                      </tr>
+                      <tr *ngFor="let app of applications">
+                        <td>
+                          <p class="m-0">{{app.EmployeeName ? app.EmployeeName : '-'}}</p>
+                          <p class="m-0">{{app.CNIC ? dashifyCNIC(app.CNIC) : '-'}}</p>
+                        </td>
+                        <td>
+                          <p class="m-0">
+                            Consultant -
+                            {{app.designationName ? app.designationName : 'Designation'}}/BS-{{app.fromScale}},
+                          </p>
+                          <p class="m-0">{{app.fromHealthFacility ? app.fromHealthFacility : 'Health Facility'}}</p>
+                        </td>
+                        <td>
+                          <p class="m-0">
+                            for a period of <strong>{{app.TotalDays ? app.TotalDays : '-'}}</strong> with
+                            effect from <strong>{{app.FromDate ? app.FromDate : '-'}}</strong>
+                            against Fee of <strong>Rs. {{app.Salary ? app.Salary : '-'}}/- (Per
+                              Month)</strong>
+                          </p>
+                        </td>
+                      </tr>
+
+                    </table>
+                  </div>
+                  <div *ngIf="!tableView" class="animated fadeIn">
+                    <p style="text-align: justify;" *ngFor="let app of applications">
+                      <strong style="margin-left: 62px;">No.<em><u>{{app.FileNumber}}</u></em>,
+                        {{app.EmployeeName ? app.EmployeeName : '-'}} (CNIC: </strong>{{app.CNIC
+                    ? dashifyCNIC(app.CNIC) : '-'}}<strong>),
+                        ({{app.designationName ? app.designationName :
+                      '-'}}/BS-{{app.fromScale}}),
+                        {{app.fromHealthFacility ? app.fromHealthFacility : '-'}},</strong> is hereby
+                      appointed as <strong>Consultant</strong> in <strong>Primary & Secondary Healthcare
+                        Department</strong>
+                      for a period of <strong>{{app.TotalDays ? app.TotalDays : '-'}}</strong> with
+                      effect from <strong>{{app.FromDate ? app.FromDate : '-'}}</strong>
+                      against Fee of <strong>Rs. {{app.Salary ? app.Salary : '-'}}/- (Per
+                        Month)</strong>
+                      after observing the
+                      procedure, as laid down in <strong>PPRA Rules, 2014</strong>.
+                    </p>
+                  </div>
+                </td>
+                <td colspan="2" style="border-color:transparent !important; text-align:justify;line-height: 1.6;"
+                  *ngIf="application.ApplicationType_Id == 5">
+                  <div *ngIf="tableView" class="animated fadeIn">
+                    <table class="combine-order">
+                      <tr>
+                        <th>Employee</th>
+                        <th>Posted At</th>
+                        <th>Leave Period</th>
+                      </tr>
+                      <tr *ngFor="let app of applications">
+                        <td>
+                          <p class="m-0">{{app.EmployeeName ? app.EmployeeName : '-'}}</p>
+                          <p class="m-0">{{app.CNIC ? dashifyCNIC(app.CNIC) : '-'}}</p>
+                        </td>
+                        <td>
+                          <p class="m-0">
+                            {{app.designationName ? app.designationName : 'Designation'}}/BS-{{app.fromScale}},
+                          </p>
+                          <p class="m-0">{{app.fromHealthFacility ? app.fromHealthFacility : 'Health Facility'}}</p>
+                        </td>
+                        <td>
+                          <p class="m-0">
+                            <strong>{{app.TotalDays ? app.TotalDays == 1 ? app.TotalDays + ' day' :
+                              app.TotalDays
+                              + ' days' : ''}} {{app.leaveType}}</strong>
+                            leave w.e.f
+                            <u><strong>{{app.FromDate | date:'dd/MM/yyyy'}}</strong></u>
+                            to
+                            <u><strong>{{app.ToDate | date:'dd/MM/yyyy'}}</strong></u>
+                          </p>
+                        </td>
+                      </tr>
+
+                    </table>
+                  </div>
+                  <div *ngIf="!tableView" class="animated fadeIn">
+                    <div *ngFor="let app of applications">
+                      <p style="text-align: justify;">
+                        <strong
+                          style="margin-left: 45px;;margin-bottom: 0px;">No.<em><u>{{app.FileNumber}}</u></em></strong>,
+                        Sanction is hereby accorded to
+                        the grant of
+                        <strong>{{app.TotalDays ? app.TotalDays == 1 ? app.TotalDays + ' day' :
+                        app.TotalDays
+                        + ' days' : ''}} {{app.leaveType}}</strong>
+                        leave w.e.f
+                        <u><strong>{{app.FromDate | date:'dd/MM/yyyy'}}</strong></u>
+                        to
+                        <u><strong>{{app.ToDate | date:'dd/MM/yyyy'}}</strong></u> in favour of <strong>
+                          Mr/Ms.{{app.EmployeeName}}</strong>&nbsp;
+                        <strong>(CNIC</strong> : {{dashifyCNIC(app.CNIC)}}<strong>),
+                          ({{app.designationName}}/BS-{{app.fromScale}}),
+                          {{app.fromHealthFacility}}</strong>
+                        under
+                        the Revised Leave Rules, 1981.
+                      </p>
+                      <p style="text-align: justify;margin: 0px;"
+                        *ngIf="app.LeaveType_Id == 2 || app.LeaveType_Id == 10 || app.LeaveType_Id == 11 || app.LeaveType_Id == 12">
+                        <span style="margin-left: 45px;">Primary & Secondary Healthcare Department, Government of the
+                          Punjab has no objection to his/her proceeding abroad during the said leave provided that there
+                          will be no financial liability on part of Government of the Punjab.</span>
+                      </p>
+                    </div>
+                  </div>
+                </td>
+                <td colspan="2" style="border-color:transparent !important; text-align:justify;line-height: 1.6;"
+                  *ngIf="application.ApplicationType_Id == 6">
+                  <!--  <div *ngIf="tableView" class="animated fadeIn">
+                    <table class="combine-order">
+                      <tr>
+                        <th>Employee</th>
+                        <th>Designation</th>
+                        <th>Posted at</th>
+                      </tr>
+                      <tr *ngFor="let app of applications">
+                        <td>
+                          <p class="m-0">{{app.EmployeeName ? app.EmployeeName : '-'}}</p>
+                          <p class="m-0">{{app.CNIC ? dashifyCNIC(app.CNIC) : '-'}}</p>
+                        </td>
+                        <td>
+                          <p class="m-0">
+                            {{app.designationName ? app.designationName : 'Designation'}}/Awaiting Posting
+                          </p>
+                        </td>
+                        <td>
+                          <p class="m-0">
+                            {{app.toDesignationName ? app.toDesignationName :
+                              '-'}}/BS-{{app.fromScale}},
+                          </p>
+                          <p class="m-0">
+                            {{app.toHealthFacility
+                              ?
+                              app.toHealthFacility : '-'}}, against the vacant
+                            post
+                          </p>
+                        </td>
+                      </tr>
+
+                    </table>
+                  </div>
+                  <div *ngIf="!tableView" class="animated fadeIn"> -->
+                  <p style="text-align: justify;margin: 0;">
+                    <strong style="margin-left: 62px;">No.<em><u>{{application.FileNumber}}</u></em></strong></p>
+                  <p style="text-align: justify;margin: 0;" *ngFor="let app of applications;let i = index;">
+                    <strong style="margin-left: 62px;">{{i > 0 ? (i + 1) + '.' : ''}}
+                      {{app.EmployeeName ? app.EmployeeName : '-'}} (CNIC: </strong>{{app.CNIC
+                      ? dashifyCNIC(app.CNIC) : ''}}<strong>),
+                      ({{app.designationName ? app.designationName :
+                      '-'}}/ Awaiting Posting),</strong> is hereby posted at&nbsp;<strong>{{app.toHealthFacility
+                      ?
+                      app.toHealthFacility : '-'}},</strong> against the vacant
+                    post&nbsp;of&nbsp;<strong>({{app.toDesignationName ? app.toDesignationName :
+                      '-'}}/BS-{{app.fromScale}})</strong> {{app.Reason ? app.Reason :
+                    ''}}.
+                  </p>
+                  <!--  </div> -->
+                </td>
+                <td colspan="2" style="border-color:transparent !important; text-align:justify;line-height: 1.6;"
+                  *ngIf="application.ApplicationType_Id == 2">
+                  <div *ngIf="tableView" class="animated fadeIn">
+                    <table class="combine-order">
+                      <tr>
+                        <th>Employee</th>
+                        <th>Designation</th>
+                        <th>Disposal of</th>
+                      </tr>
+                      <tr *ngFor="let app of applications">
+                        <td>
+                          <p class="m-0">{{app.EmployeeName ? app.EmployeeName : '-'}}</p>
+                          <p class="m-0">{{app.CNIC ? dashifyCNIC(app.CNIC) : '-'}}</p>
+                        </td>
+                        <td>
+                          <p class="m-0">
+                            {{app.designationName ? app.designationName : 'Designation'}}/BS-{{app.fromScale}}
+                          </p>
+                        </td>
+                        <td>
+                          <p class="m-0">
+                            {{app.toHealthFacility
+                              ?
+                              app.toHealthFacility : '-'}}, with immediate effect for further posting
+                          </p>
+                        </td>
+                      </tr>
+
+                    </table>
+                  </div>
+                  <div *ngIf="!tableView" class="animated fadeIn">
+                    <p style="text-align: justify;" *ngFor="let app of applications">
+                      <strong style="margin-left: 62px;">No.<em><u>{{app.FileNumber}}</u></em>,
+                        {{app.EmployeeName ? app.EmployeeName : '-'}} (CNIC: </strong>{{app.CNIC
+                    ? dashifyCNIC(app.CNIC) : '-'}}<strong>),
+                        ({{app.designationName ? app.designationName :
+                      '-'}}/BS-{{app.fromScale}}),</strong> is hereby placed at the disposal of&nbsp;<strong>{{app.toHealthFacility
+                      ?
+                      app.toHealthFacility : '-'}},</strong> with immediate effect for further posting.
+                    </p>
+                  </div>
+                </td>
+                <td colspan="2" style="border-color:transparent !important; text-align:justify;line-height: 1.6;"
+                  *ngIf="application.ApplicationType_Id == 7">
+                  <div *ngIf="tableView" class="animated fadeIn">
+                    <table class="combine-order">
+                      <tr>
+                        <th>Employee</th>
+                        <th>Designation</th>
+                        <th></th>
+                      </tr>
+                      <tr *ngFor="let app of applications">
+                        <td>
+                          <p class="m-0">{{app.EmployeeName ? app.EmployeeName : '-'}}</p>
+                          <p class="m-0">{{app.CNIC ? dashifyCNIC(app.CNIC) : '-'}}</p>
+                        </td>
+                        <td>
+                          <p class="m-0">
+                            {{app.designationName ? app.designationName : 'Designation'}}/BS-{{app.fromScale}}
+                          </p>
+                          <p class="m-0">
+                            {{app.fromHealthFacility}}
+                          </p>
+                        </td>
+                        <td>
+                          <p class="m-0">
+                            is hereby notified
+                          </p>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div *ngIf="!tableView" class="animated fadeIn">
+                    <p style="text-align: justify;" *ngFor="let app of applications">
+                      <strong style="margin-left: 62px;">No.<em><u>{{app.FileNumber}}</u></em>,
+                        {{app.EmployeeName ? app.EmployeeName : '-'}} (CNIC: </strong>{{app.CNIC
+                    ? dashifyCNIC(app.CNIC) : '-'}}<strong>),
+                        ({{app.designationName ? app.designationName :
+                      '-'}}/BS-{{app.fromScale}}),</strong> is hereby notified.
+                    </p>
+                  </div>
+                </td>
+                <td colspan="2" style="border-color:transparent !important; text-align:justify;line-height: 1.6;"
+                  *ngIf="application.ApplicationType_Id == 3 || application.ApplicationType_Id == 10">
+                  <div *ngIf="tableView" class="animated fadeIn">
+                    <table class="combine-order">
+                      <tr>
+                        <th>Employee</th>
+                        <th>Designation</th>
+                        <th></th>
+                      </tr>
+                      <tr *ngFor="let app of applications">
+                        <td>
+                          <p class="m-0">{{app.EmployeeName ? app.EmployeeName : '-'}}</p>
+                          <p class="m-0">{{app.CNIC ? dashifyCNIC(app.CNIC) : '-'}}</p>
+                        </td>
+                        <td>
+                          <p class="m-0">
+                            {{app.designationName ? app.designationName : 'Designation'}}/BS-{{app.fromScale}}
+                          </p>
+                          <p class="m-0">
+                            {{app.fromHealthFacility}}
+                          </p>
+                        </td>
+                        <td>
+                          <p class="m-0">
+                            is hereby {{app.ApplicationType_Id == 3
+                              ?
+                              'suspended' : 'terminated'}}
+                          </p>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div *ngIf="!tableView" class="animated fadeIn">
+                    <p style="text-align: justify;" *ngFor="let app of applications">
+                      <strong style="margin-left: 62px;">No.<em><u>{{app.FileNumber}}</u></em>,
+                        {{app.EmployeeName ? app.EmployeeName : '-'}} (CNIC: </strong>{{app.CNIC
+                    ? dashifyCNIC(app.CNIC) : '-'}}<strong>),
+                        ({{app.designationName ? app.designationName :
+                      '-'}}/BS-{{app.fromScale}}),</strong> is hereby {{app.ApplicationType_Id == 3
+                    ?
+                    'suspended' : 'terminated'}}{{app.Reason ? '' : '.'}} {{app.Reason ?
+                    app.Reason + '.' : ''}}
+                    </p>
+                  </div>
+                </td>
+                <td colspan="2" style="border-color:transparent !important; text-align:justify;line-height: 1.6;"
+                  *ngIf="application.ApplicationType_Id == 8">
+                  <div *ngIf="tableView" class="animated fadeIn">
+                    <table class="combine-order">
+                      <tr>
+                        <th>S.No</th>
+                        <th>Name of Doctor</th>
+                        <th>Place of Posting</th>
+                        <th *ngIf="!application.AppointmentEffect">W.e.f</th>
+                      </tr>
+                      <tr *ngFor="let app of applications;let i = index;">
+                        <td>
+                          <p class="m-0">{{(i + 1)}}</p>
+                        </td>
+                        <td>
+                          <p class="m-0">{{app.EmployeeName ? app.EmployeeName : '-'}}</p>
+                          <p class="m-0">{{app.CNIC ? dashifyCNIC(app.CNIC) : '-'}}</p>
+                        </td>
+                        <td>
+                          <p class="m-0">
+                            {{app.toDesignationName ? app.toDesignationName : 'Designation'}}/BS-{{app.fromScale}},
+                          </p>
+                          <p class="m-0">{{app.toHealthFacility ? app.toHealthFacility : 'Health Facility'}}</p>
+                        </td>
+                        <td *ngIf="!application.AppointmentEffect">
+                          <p class="m-0"> <strong class="p-strong"
+                              *ngIf="!app.AppointmentEffect && app.AdhocExpireDate">{{' w.e.f ' + (app.AdhocExpireDate  | date:'dd.MM.yyyy')}}</strong>
+                            <strong class="p-strong"
+                              *ngIf="app.AppointmentEffect">{{app.AppointmentEffect ? 'with immediate effect' : ''}}</strong>
+                          </p>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div *ngIf="!tableView" class="animated fadeIn">
+                    <p style="text-align: justify;" *ngFor="let app of applications">
+                      <strong style="margin-left: 62px;">No.<em><u>{{app.FileNumber}}</u></em>,
+                        {{app.EmployeeName ? app.EmployeeName : '-'}} (CNIC: </strong>{{app.CNIC
+                    ? dashifyCNIC(app.CNIC) : '-'}}<strong>),</strong> is hereby appointed as&nbsp;<strong>({{app.toDesignationName
+                      ? app.toDesignationName :
+                      '-'}}/BS-{{app.fromScale}})</strong>, on adhoc basis
+                      <strong
+                        *ngIf="!app.AppointmentEffect">{{' w.e.f ' + (app.AdhocExpireDate  | date:'dd.MM.yyyy')}}</strong>
+                      {{app.AppointmentEffect ? 'with immediate effect' : ''}} for a period of
+                      one year at&nbsp;<strong>{{app.toHealthFacility
+                      ?
+                      app.toHealthFacility : '-'}},</strong> or till the availability of regular incumbent/
+                      selectee of the Punjab Public Service Commission, Lahore, whichever is earlier.
+                    </p>
+                  </div>
+                  <br>
+                  <p style="text-align: justify;">
+                    <span class="Apple-tab-span" style="white-space: pre;"> </span><span style="margin-left: 35px;">The
+                      other Terms and Conditions of adhoc appointment are as under:-</span><br>
+                    <strong>i.</strong><span class="Apple-tab-span" style="font-weight: bold; white-space: pre;">
+                    </span>The appointment on adhoc basis shall be subject to revocation at any time by the
+                    &nbsp;competent Authority.<br>
+
+                    <strong>ii.</strong><span class="Apple-tab-span" style="font-weight: bold; white-space: pre;">
+                    </span>Adhoc appointment, thus made shall not confer any right on the appointee in the matter
+                    of
+                    regular appointment to the same post nor the service shall count towards seniority in the
+                    grade.<br>
+
+                    <strong>iii.</strong><span class="Apple-tab-span" style="white-space: pre;"> </span>You shall
+                    be
+                    governed by Civil Servants Act, 1974 and any other such rules and orders, relating to leave,
+                    travelling allowances, medical attendance, pay etc. as may be issued by Government from time to
+                    time.<br>
+
+                    <strong>iv.</strong><span class="Apple-tab-span" style="font-weight: bold; white-space: pre;">
+                    </span>The appointment order is subject to verification of documents/ degrees from the issuing
+                    authority and <strong>PMDC</strong>&nbsp;registration certificate by the issuing authority. The
+                    appointment shall be cancelled and all the salaries/financial benefits drawn by the appointee
+                    shall be recovered through legal process. In case your documents are found to be fake/forged
+                    besides legal action shall also be initiated.&nbsp;<br>
+
+                    <strong>v.</strong><span class="Apple-tab-span" style="font-weight: bold; white-space: pre;">
+                    </span>In case you wish to resign at any time one month's notice shall be mandatory or in lieu
+                    of
+                    that one month's pay shall have to be deposited.&nbsp;<br>
+
+                    <strong>vi.</strong><span class="Apple-tab-span" style="font-weight: bold; white-space: pre;">
+                    </span>You shall furnish Registration Certificate issued by Pakistan Medical and Dental
+                    Council,
+                    at the time of joining to Controlling Authority.<br>
+                    <strong>vii.</strong><span class="Apple-tab-span" style="font-weight: bold; white-space: pre;">
+                    </span>The appointment is subject to the verification of the character and antecedents by the
+                    Police Authorities.<br>
+                    <strong>viii.</strong><span class="Apple-tab-span" style="font-weight: bold; white-space: pre;">
+                    </span>The offer is valid for fifteen days from the date of its receipt and shall automatically
+                    lapse if fail to report for duty. In<span class="Apple-tab-span"
+                      style="font-weight: bold; white-space: pre;">
+                    </span>case you accept this offer you may report for the duty to
+                    <strong>Chief Executive Officer (DHA)
+                      <!-- ,
+                      {{dropDowns.selectedFiltersModel.district?.Name}} -->.</strong><br>
+                    <span class="Apple-tab-span" style="white-space: pre;"> </span>
+                  </p>
+                </td>
+
+              </tr>
+              <!-- <tr style="font-size: 13px !important;" *ngIf="app.Remarks">
+                <td colspan="2" style="border-color:transparent !important; text-align:justify;line-height: 1.6;">
+                  <p style="text-align: justify;margin-top: 7px;word-break: break-all;">
+                    <strong><i>2</i></strong>. <span style="margin-left: 49px;"> {{app.Remarks}}</span>
+                  </p>
+                </td>
+              </tr> -->
+              <!--  <tr>
+                <td colspan="2" style="border-color:transparent !important; text-align:right;"
+                  *ngIf="userhfmisCode.length > 1">
+                  <div style="text-align:center; display:inline-block;">
+                    <p style="line-height: 1.5 !important;">
+                      <strong>CHIEF EXECUTIVE OFFICER<br />
+                        DISTRICT HEALTH AUTHORITY<br />
+                        {{dropDowns.districtsData?.length == 1 ? capitalize(dropDowns.districtsData[0].Name) : ''}}
+                      </strong>
+                    </p>
+                  </div>
+                </td>
+                <td colspan="2" style="border-color:transparent !important; text-align:right"
+                  *ngIf="userhfmisCode.length == 1">
+                  <div style="text-align:center; display:inline-block;">
+                    <p style="line-height: 1.5 !important;">
+                      <strong>SECRETARY<br /> PRIMARY &amp;
+                        SECONDARY HEALTHCARE<br /> DEPARTMENT </strong></p>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" style="border-color:transparent !important; text-align:center">
+                  <p>&nbsp;</p>
+                  <p *ngIf="app.barcode"><img alt="IMAGE AREA" [src]="barcodeSrc()"
+                      style="border-width:0px" /><br />
+                    <strong>{{app.TrackingNumber}}</strong>
+                  </p>
+                  <p>&nbsp;</p>
+                  <p>&nbsp;</p>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" style="border-color:transparent !important; text-align:left">
+                  <p><strong><u>Number &amp;
+                        Date Even</u></strong></p>
+                  <p>A copy is forwarded for information and necessary action to:</p>
+                  <ol *ngIf="userhfmisCode.length > 1">
+                    <li>The District Accounts Officer, {{dropDowns.districtsData?.length == 1 ?
+                      dropDowns.districtsData[0].Name : ''}}.</li>
+                    <li>The District Health Officer, (MIS&HRM/MS/PS), {{dropDowns.districtsData?.length == 1 ?
+                      dropDowns.districtsData[0].Name : ''}}.</li>
+                    <li>Officer / Official Concerned</li>
+                    <li>Master File</li>
+                  </ol>
+                  <ol *ngIf="userhfmisCode.length == 1">
+                    <li>PSO to Secretary P&amp;S Healthcare Department</li>
+                    <li>PA to Additional Secretary Concerned</li>
+                    <li>PA to Deputy Secretary Concerned</li>
+                    <li>Senior Data Processor Concerned</li>
+                    <li>Officer / Official Concerned</li>
+                    <li>Master File</li>
+                  </ol>
+                </td>
+              </tr> -->
+              <tr>
+                <td colspan="2" style="border-color:transparent !important; text-align:right" *ngIf="isCEO">
+                  <div style="text-align:center; display:inline-block;">
+                    <p style="line-height: 1.5 !important;">
+                      <strong>CHIEF EXECUTIVE OFFICER<br />
+                        DISTRICT HEALTH AUTHORITY<br />
+                        {{dropDowns.districtsData?.length == 1 ? capitalize(dropDowns.districtsData[0].Name) : ''}}
+                      </strong></p>
+                  </div>
+                </td>
+                <td colspan="2" style="border-color:transparent !important; text-align:right" *ngIf="isHisduAdmin">
+                  <div style="text-align:center;display: inline-block;">
+                    <span *ngIf="showOfficerStamp">
+                      <strong>{{officerStamp}}
+                      </strong><br />
+                    </span>
+                    <strong>{{application?.ForwardingOfficerName?.replace('Section',
+                      'Section Officer')}}
+                    </strong>
+                  </div>
+                </td>
+                <td colspan="2" style="border-color:transparent !important; text-align:right" *ngIf="isPHFMC">
+                  <div style="text-align:center; display:inline-block;"><strong>{{application?.ForwardingOfficerName?.replace('Section',
+                      'Section Officer')}}<br />
+                      {{dropDowns.districtsData?.length == 1 ? capitalize(dropDowns.districtsData[0].Name) : ''}}
+                    </strong></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+      </div>
+    </div>
+    <div class="col-md-8 p-4 animated fadeIn" *ngIf="applications.length > 0 && editProfile && selectedProfile">
+      <h5>{{selectedProfile.EmployeeName}}
+      </h5>
+      <hr>
+      <div class="animated fadeIn">
+        <div class="row">
+          <div class="col-md-6 control-col-st">
+            <label class="k-form-field">
+              <span>Employee Name <span class="text-danger">*</span></span>
+              <input kendoTextBox type="text" disabled name="EmployeeName" [(ngModel)]="selectedProfile.EmployeeName"
+                #EmployeeName="ngModel" required>
+            </label>
+          </div>
+          <div class="col-md-6 control-col-end">
+            <label class="k-form-field">
+              <span>Father Name <span class="text-danger">*</span></span>
+              <input kendoTextBox type="text" disabled name="FatherName" [(ngModel)]="selectedProfile.FatherName"
+                #FatherName="ngModel" required>
+            </label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 control-col-st">
+            <label class="k-form-field">
+              <span>CNIC <span class="text-danger">*</span></span>
+              <input kendoTextBox type="text" disabled name="CNIC" [(ngModel)]="selectedProfile.CNIC" #CNIC="ngModel"
+                required>
+            </label>
+          </div>
+          <div class="col-md-3 control-col">
+            <label class="k-form-field">
+              <span>File Number</span>
+              <input kendoTextBox type="text" name="FileNumber" [(ngModel)]="selectedProfile.FileNumber"
+                #FileNumber="ngModel">
+            </label>
+          </div>
+          <div class="col-md-3 control-col">
+            <label class="k-form-field">
+              <span>Gender <span class="text-danger">*</span></span>
+              <kendo-dropdownlist name="Gender" disabled [data]="['Male', 'Female']"
+                [(ngModel)]="selectedProfile.Gender" #Gender="ngModel" [defaultItem]="'Select Gender'"
+                [valuePrimitive]="true" required>
+              </kendo-dropdownlist>
+            </label>
+          </div>
+          <div class="col-md-3 control-col-end">
+            <label class="k-form-field"> <span>Date of Birth <span class="text-danger">*</span></span>
+              <kendo-datepicker name="DateOfBirth" placeholder="D.O.B" [format]="'dd/MM/yyyy'" [max]="maxDate"
+                [(ngModel)]="selectedProfile.DateOfBirth" #dateModel="ngModel" required></kendo-datepicker>
+            </label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 control-col-st">
+            <label class="k-form-field">
+              <span>Health Facility <span class="text-danger">*</span></span>
+              <input kendoTextBox type="text" disabled [value]="selectedProfile.HealthFacility">
+            </label>
+          </div>
+          <div class="col-md-6 control-col-end">
+            <label class="k-form-field">
+              <span>Designation <span class="text-danger">*</span></span>
+              <input kendoTextBox type="text" disabled [value]="selectedProfile.DesignationName">
+            </label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 control-col-st">
+            <label class="k-form-field">
+              <span>Mobile Number</span>
+              <kendo-maskedtextbox [mask]="mobileMask" name="MobileNo" [(ngModel)]="selectedProfile.MobileNo"
+                #MobileNo="ngModel"></kendo-maskedtextbox>
+            </label>
+          </div>
+          <div class="col-md-6 control-col-end">
+            <label class="k-form-field">
+              <span>E-Mail</span>
+              <input kendoTextBox type="email" name="EMaiL" [(ngModel)]="selectedProfile.EMaiL" #EMaiL="ngModel"
+                pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?">
+            </label>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-md-3 control-col-st">
+            <button kendoButton (click)="saveProfile(selectedProfile)" [ladda]="savingProfile" data-style="zoom-in"
+              primary="true" class="btn-block">Save</button>
+          </div>
+          <div class="col-md-3 control-col">
+            <button kendoButton primary="true" look="outline" class="btn-block"
+              (click)="cancelProfile()">Cancel</button>
+          </div>
+          <div class="col-md-3 control-col">
+            <button kendoButton primary="true" look="outline" class="btn-block"
+              (click)="openInNewTab('profile/' + selectedProfile.CNIC)">Edit Employee
+              Profile</button>
+          </div>
+          <div class="col-md-3 control-col-end">
+            <button kendoButton look="outline" class="btn-block" (click)="removeProfile()">Remove</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="k-i-loading" *ngIf="savingApplication"></div>
+    <hrmis-tnp-editor *ngIf="generateOrder" [barcodeSrc]="application.barcode" [qrcodeSrc]="application.qrCode"
+      [markupCC]="markupCC">
+    </hrmis-tnp-editor>
+  </div>
+</div>
+
+<kendo-dialog [title]="'Details'" *ngIf="orderFieldsDialog" (close)="closeOrderFieldWindow()" [minWidth]="450"
+  [width]="1100">
+  <div class="row p-2">
+    <div class="col-md-12">
+      <label class="k-form-field">
+        <span class="p-strong">Tracking Number <span class="text-danger">*</span></span>
+        <input kendoTextBox type="number" [(ngModel)]="dataItem.TrackingNumber">
+      </label>
+    </div>
+    <div class="col-md-4">
+      <span><strong class="p-strong">Employee Name</strong> {{dataItem.employeeProfile.EmployeeName}}</span>
+
+    </div>
+    <div class="col-md-4">
+      <strong class="p-strong">Father Name</strong> {{dataItem.employeeProfile.FatherName}}
+    </div>
+    <div class="col-md-4">
+      <strong class="p-strong">Designation</strong>
+      {{dataItem.employeeProfile.Designation_Name ? dataItem.employeeProfile.Designation_Name : ''}}
+    </div>
+    <div class="col-md-4">
+      <strong class="p-strong">Employement Mode</strong>
+      {{dataItem.employeeProfile.EmpMode_Name ? dataItem.employeeProfile.EmpMode_Name : ''}}
+      <a *ngIf="!dataItem.employeeProfile.EmpMode_Name"
+        [routerLink]="'/dataItem.employeeProfile/' + dataItem.employeeProfile.CNIC + '/edit'" (click)="closeWindow()"
+        class="text-danger"> Add Employement Mode</a>
+    </div>
+    <div class="col-md-4">
+      <strong class="p-strong">Health Facility</strong>
+      {{dataItem.employeeProfile.HealthFacility ? dataItem.employeeProfile.HealthFacility : ''}}, {{dataItem.employeeProfile.Tehsil ?
+            dataItem.employeeProfile.Tehsil : ''}},
+      {{dataItem.employeeProfile.District ? dataItem.employeeProfile.District : ''}}
+    </div>
+    <div class="col-md-4">
+      <strong class="p-strong">Status</strong>
+      {{dataItem.employeeProfile.StatusName ? dataItem.employeeProfile.StatusName : ''}}
+    </div>
+  </div>
+  <div class="row p-2">
+    <div class="col-md-4 combine-order-employee">
+      <div class="order-employee-detail">
+        <div id="detailInfo" class="section-slider mb-1" [ngClass]="toggleDetailInfo ? 'animated fadeIn' : 'closed'">
+          <div id="leaveInfo" *ngIf="dataItem.ApplicationType_Id == 5">
+            <label class="k-form-field">
+              <span>Leave Type <span class="text-danger">*</span></span>
+              <kendo-dropdownlist [data]="dropDowns.leaveTypesData"
+                (valueChange)="dropdownValueChangedApp($event, 'leaveType', dataItem)" [textField]="'LeaveType1'"
+                [valueField]="'Id'" [value]="{Id: dataItem.LeaveType_Id, LeaveType1: dataItem.leaveType}"
+                [defaultItem]="dropDowns.defultFiltersModel.leaveType">
+              </kendo-dropdownlist>
+            </label>
+            <label class="k-form-field">
+              <span>From Date <span class="text-danger">*</span></span>
+              <kendo-datepicker placeholder="Starting from" [format]="'dd/MM/yyyy'" [(ngModel)]="dataItem.FromDate">
+              </kendo-datepicker>
+            </label>
+            <label class="k-form-field">
+              <span>To Date <span class="text-danger">*</span></span>
+              <kendo-datepicker placeholder="Leave end date" [format]="'dd/MM/yyyy'"
+                (valueChange)="leaveInputsChangedApp(1, dataItem)" [(ngModel)]="dataItem.ToDate">
+              </kendo-datepicker>
+            </label>
+            <label class="k-form-field">
+              <span>Total Days <span class="text-danger">*</span></span>
+              <input kendoTextBox type="number" (change)="leaveInputsChangedApp(2, dataItem)"
+                [(ngModel)]="dataItem.TotalDays">
+            </label>
+            <label class="k-form-field" *ngIf="userhfmisCode?.length > 1">
+              <span>Order Date</span>
+              <kendo-datepicker placeholder="Order Date" [format]="'dd/MM/yyyy'" [(ngModel)]="dataItem.OrderDate">
+              </kendo-datepicker>
+            </label>
+          </div>
+          <div id="transferOrAdhocInfo"
+            *ngIf="dataItem.ApplicationType_Id == 4 || dataItem.ApplicationType_Id == 6 || dataItem.ApplicationType_Id == 8">
+            <label class="k-form-field" *ngIf="dropDowns.divisions?.length > 1">
+              <span>Division <span class="text-danger">*</span></span>
+              <kendo-dropdownlist [data]="divisionsForTransfer" [textField]="'Name'" [valueField]="'Code'"
+                [filterable]="false" [value]="dropDowns.selectedFiltersModel.divisionForTransfer"
+                (valueChange)="dropdownValueChangedApp($event, 'dd', dataItem)"
+                [disabled]="divisionsForTransfer.length == 1"
+                [defaultItem]="dropDowns.defultFiltersModel.divisionForTransfer"
+                (filterChange)="handleFilter($event, 'division')">
+              </kendo-dropdownlist>
+            </label>
+            <label class="k-form-field" *ngIf="dropDowns.districts?.length > 1">
+              <span>District <span class="text-danger">*</span></span>
+              <kendo-dropdownlist [data]="districtsForTransfer" [textField]="'Name'"
+                [value]="dropDowns.selectedFiltersModel.districtForTransfer" [valueField]="'Code'" [filterable]="false"
+                (valueChange)="dropdownValueChangedApp($event, 'dd', dataItem)"
+                [disabled]="districtsForTransfer.length == 1"
+                [defaultItem]="dropDowns.defultFiltersModel.districtForTransfer"
+                (filterChange)="handleFilter($event, 'district')">
+              </kendo-dropdownlist>
+            </label>
+            <label class="k-form-field" *ngIf="dropDowns.tehsils?.length > 1">
+              <span>Tehsil <span class="text-danger">*</span></span>
+              <kendo-dropdownlist [data]="tehsilsForTransfer" [textField]="'Name'"
+                [value]="dropDowns.selectedFiltersModel.tehsilForTransfer" [valueField]="'Code'" [filterable]="false"
+                (valueChange)="dropdownValueChangedApp($event, 't', dataItem)"
+                [disabled]="tehsilsForTransfer.length == 1"
+                [defaultItem]="dropDowns.defultFiltersModel.tehsilForTransfer"
+                (filterChange)="handleFilter($event, 'tehsil')">
+              </kendo-dropdownlist>
+            </label>
+            <label class="k-form-field">
+              <span>Health Facility (place of posting) <span class="text-danger">*</span><span
+                  class="animated fadeIn lds-ellipsis" *ngIf="dataItem.loadingHealthFacilities">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </span></span>
+              <kendo-dropdownlist [data]="dataItem.healthFacilitiesForTransfer" [textField]="'Name'" [valueField]="'Id'"
+                [value]="dropDowns.selectedFiltersModel.healthFacilityForTransfer"
+                (valueChange)="dropdownValueChangedApp($event, 'healthFacility2', dataItem)"
+                [disabled]="healthFacilitiesForTransfer.length == 1"
+                [defaultItem]="dropDowns.defultFiltersModel.healthFacilityForTransfer">
+              </kendo-dropdownlist>
+            </label>
+            <label class="k-form-field">
+              <span>Designation
+                <span class="animated fadeIn text-danger"
+                  *ngIf="dataItem.designationsForTransfer && dataItem.designationsForTransfer.length == 0">*</span>
+                <span class="animated fadeIn lds-ellipsis" *ngIf="dataItem.checkingVacancy">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </span>
+                <u>
+                  <span
+                    *ngIf="dataItem.vacantString != '' && dataItem.vacantString != 'SV' && !dataItem.vacantSeatAvailable && !dataItem.checkingVacancy"
+                    class="animated fadeIn text-danger pull-right"><i class="fa fa-exclamation-circle"></i>
+                    {{dataItem.vacantString}}
+                  </span>
+                </u>
+                <u>
+                  <span
+                    *ngIf="dataItem.vacantString == 'SV' && dataItem.vacantSeatAvailable && !dataItem.checkingVacancy"
+                    class="animated fadeIn text-success pull-right"><i class="fa fa-exclamation-circle"></i>
+                    {{'Seat Available'}}
+                  </span>
+                </u>
+              </span>
+              <kendo-dropdownlist [data]="dataItem.designationsForTransfer" [textField]="'DsgName'"
+                [valueField]="'Desg_Id'" [filterable]="false"
+                (valueChange)="dropdownValueChangedApp($event, 'toDesignation', dataItem)"
+                [disabled]="dataItem.checkingVacancy" (filterChange)="handleFilterApp($event, 'designation', dataItem)"
+                [value]="dropDowns.selectedFiltersModel.designationForOrderTransfer"
+                [defaultItem]="dropDowns.defultFiltersModel.designationForOrderTransfer">
+                <ng-template kendoDropDownListItemTemplate let-dataItem>
+                  <p class="m-0">{{dataItem.DsgName}}<span *ngIf="dataItem.Desg_Id"> -
+                      ({{dataItem.Vacant}})
+                    </span>
+                  </p>
+                </ng-template>
+              </kendo-dropdownlist>
+            </label>
+            <div
+              *ngIf="dataItem.designationsForTransfer && dataItem.designationsForTransfer.length > 0 && dataItem.vacantSeatAvailable"
+              class="section-slider down">
+              <div id="adhoc" *ngIf="dataItem.ApplicationType_Id == 8">
+                <!-- <label class="k-form-field mt-1">
+                  <span>With Immediate Effect</span>
+                  <kendo-switch [(ngModel)]="dataItem.AppointmentEffect" [onLabel]="'Yes'"
+                    [offLabel]="'No'">
+                  </kendo-switch>
+                </label> -->
+                <div class="animated fadeIn" *ngIf="!application.AppointmentEffect">
+                  <label class="k-form-field">
+                    <span>Contract Start Date (w.e.f) <span class="text-danger">*</span></span>
+                    <kendo-datepicker placeholder="Choose Appointment Date" [format]="'dd/MM/yyyy'"
+                      [(ngModel)]="dataItem.AdhocExpireDate">
+                    </kendo-datepicker>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div id="atDisposal" *ngIf="dataItem.ApplicationType_Id == 2">
+            <label class="k-form-field">
+              <span>Office <span class="text-danger">*</span></span>
+              <kendo-dropdownlist [data]="allOfficers" [defaultItem]="dropDowns.defultFiltersModel.office2"
+                [textField]="'DesignationName'" [valueField]="'Id'"
+                [value]="{Id: dataItem.ToDesignation_Id, DesignationName: dataItem.toOfficeName}"
+                (valueChange)="dropdownValueChangedApp($event, 'disposalOffice', dataItem)">
+              </kendo-dropdownlist>
+            </label>
+          </div>
+          <!--    <hr>
+          <button type="button" kendoButton primary="true" look="outline" class="btn-block"
+            (click)="dataItem.open = false">Close
+          </button> -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8 animated fadeIn" *ngIf="applications.length > 0 && !editProfile">
+
+      <div class="table-order page p-2">
+        <table border="0" cellspacing="0" style="border-color:transparent !important; width:100%;font-family: sans-serif, Arial, Verdana, 'Trebuchet MS' !important;
+            font-size: 13px !important;
+            font-style: normal !important;
+            font-variant: normal !important;
+            font-weight: 400 !important;
+            line-height: 1.6 !important;
+            color: #383e4b !important;
+            background-color: #fff !important;">
+          <tbody>
+
+            <tr style="font-size: 13px !important;">
+              <td colspan="2" style="border-color:transparent !important; text-align:justify;line-height: 1.6;"
+                *ngIf="application.ApplicationType_Id == 1">
+                <table border="1" cellpadding="0" cellspacing="0" style="margin: 15px 0px;">
+                  <tbody>
+                    <tr>
+                      <td style="border: 1px solid #383e4b;padding: 0.50rem;"><strong>File</strong></td>
+                      <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;">
+                        <strong>Name/CNIC</strong></td>
+                      <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;">
+                        <strong>Designation</strong></td>
+                      <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;"><strong>Current
+                          Posting</strong></td>
+                      <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;"><strong>Transferred
+                          at</strong></td>
+                    </tr>
+                    <tr>
+                      <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;">
+                        <strong>No.<em><u>{{application.FileNumber}}</u></em></strong></td>
+                      <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;"><strong>{{application.EmployeeName
+                            ? application.EmployeeName
+                            : '-'}} (CNIC: </strong>{{application.CNIC
+                          ? dashifyCNIC(application.CNIC) : '-'}}<strong>)</strong></td>
+                      <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;"><strong>({{application.designationName
+                            ?
+                            application.designationName :
+                            '-'}}/BS-{{application.fromScale}})</strong></td>
+                      <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;"><strong>{{application.fromHealthFacility
+                            ?
+                            application.fromHealthFacility : '-'}}</strong></td>
+                      <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;"><strong>{{application.toHealthFacility
+                            ?
+                            application.toHealthFacility : '-'}}</strong></td>
+                    </tr>
+                    <tr>
+                      <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;">
+                        <strong>No.<em><u>{{application.FileNumber}}</u></em></strong></td>
+                      <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;"><strong>{{application.EmployeeName
+                            ? application.EmployeeName
+                            : '-'}} (CNIC: </strong>{{application.CNIC
+                          ? dashifyCNIC(application.CNIC) : '-'}}<strong>)</strong></td>
+                      <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;"><strong>({{application.designationName
+                            ?
+                            application.designationName :
+                            '-'}}/BS-{{application.fromScale}})</strong></td>
+                      <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;"><strong>{{application.toHealthFacility
+                            ?
+                            application.toHealthFacility : '-'}}</strong></td>
+                      <td style="text-align: center;border: 1px solid #383e4b;padding: 0.50rem;"><strong>{{application.fromHealthFacility
+                            ?
+                            application.fromHealthFacility : '-'}}</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+              <td colspan="2" style="border-color:transparent !important; text-align:justify;line-height: 1.6;"
+                *ngIf="application.ApplicationType_Id == 4">
+                <!-- <div *ngIf="tableView" class="animated fadeIn">
+                  <table class="combine-order">
+                    <tr>
+                      <th>Employee</th>
+                      <th>Posted at</th>
+                      <th>Transferred to</th>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p class="m-0">{{dataItem.EmployeeName ? dataItem.EmployeeName : '-'}}</p>
+                        <p class="m-0">{{dataItem.CNIC ? dashifyCNIC(dataItem.CNIC) : '-'}}</p>
+                      </td>
+                      <td>
+                        <p class="m-0">
+                          {{dataItem.designationName ? dataItem.designationName : 'Designation'}}/BS-{{dataItem.fromScale}},
+                        </p>
+                        <p class="m-0">{{dataItem.fromHealthFacility ? dataItem.fromHealthFacility : 'Health Facility'}}
+                        </p>
+                      </td>
+                      <td>
+                        <p class="m-0">
+                          {{dataItem.toDesignationName ? dataItem.toDesignationName : 'Designation'}}/BS-{{dataItem.toScale}},
+                        </p>
+                        <p class="m-0">{{dataItem.toHealthFacility ? dataItem.toHealthFacility : 'Health Facility'}}</p>
+                      </td>
+                    </tr>
+
+                  </table>
+                </div>
+                <div *ngIf="!tableView" class="animated fadeIn"> -->
+                <p style="text-align: justify;margin: 0;">
+                  <strong style="margin-left: 62px;">{{dataItem.EmployeeName ? dataItem.EmployeeName : '-'}} (CNIC:
+                  </strong>{{dataItem.CNIC
+                    ? dashifyCNIC(dataItem.CNIC) : ''}}<strong>),
+                    ({{dataItem.designationName ? dataItem.designationName :
+                      '-'}}/BS-{{dataItem.fromScale}}),
+                    {{dataItem.fromHealthFacility ? dataItem.fromHealthFacility : '-'}},</strong> is hereby
+                  transferred and posted at&nbsp;<strong>{{dataItem.toHealthFacility ?
+                      dataItem.toHealthFacility : '-'}},</strong> against the vacant
+                  post&nbsp;of&nbsp;<strong>({{dataItem.toDesignationName ? dataItem.toDesignationName :
+                      '-'}}/BS-{{dataItem.toScale}}){{dataItem.Reason ? '' : '.'}}</strong>
+                  {{dataItem.Reason ? dataItem.Reason + '.'
+                    :
+                    ''}}
+                </p>
+                <!--  </div> -->
+              </td>
+              <td colspan="2" style="border-color:transparent !important; text-align:justify;line-height: 1.6;"
+                *ngIf="application.ApplicationType_Id == 9">
+                <div *ngIf="tableView" class="animated fadeIn">
+                  <table class="combine-order">
+                    <tr>
+                      <th>Employee</th>
+                      <th>Appointed as</th>
+                      <th>Period</th>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p class="m-0">{{dataItem.EmployeeName ? dataItem.EmployeeName : '-'}}</p>
+                        <p class="m-0">{{dataItem.CNIC ? dashifyCNIC(dataItem.CNIC) : '-'}}</p>
+                      </td>
+                      <td>
+                        <p class="m-0">
+                          Consultant -
+                          {{dataItem.designationName ? dataItem.designationName : 'Designation'}}/BS-{{dataItem.fromScale}},
+                        </p>
+                        <p class="m-0">{{dataItem.fromHealthFacility ? dataItem.fromHealthFacility : 'Health Facility'}}
+                        </p>
+                      </td>
+                      <td>
+                        <p class="m-0">
+                          for a period of <strong>{{dataItem.TotalDays ? dataItem.TotalDays : '-'}}</strong> with
+                          effect from <strong>{{dataItem.FromDate ? dataItem.FromDate : '-'}}</strong>
+                          against Fee of <strong>Rs. {{dataItem.Salary ? dataItem.Salary : '-'}}/- (Per
+                            Month)</strong>
+                        </p>
+                      </td>
+                    </tr>
+
+                  </table>
+                </div>
+                <div *ngIf="!tableView" class="animated fadeIn">
+                  <p style="text-align: justify;">
+                    <strong style="margin-left: 62px;">No.<em><u>{{dataItem.FileNumber}}</u></em>,
+                      {{dataItem.EmployeeName ? dataItem.EmployeeName : '-'}} (CNIC: </strong>{{dataItem.CNIC
+                    ? dashifyCNIC(dataItem.CNIC) : '-'}}<strong>),
+                      ({{dataItem.designationName ? dataItem.designationName :
+                      '-'}}/BS-{{dataItem.fromScale}}),
+                      {{dataItem.fromHealthFacility ? dataItem.fromHealthFacility : '-'}},</strong> is hereby
+                    appointed as <strong>Consultant</strong> in <strong>Primary & Secondary Healthcare
+                      Department</strong>
+                    for a period of <strong>{{dataItem.TotalDays ? dataItem.TotalDays : '-'}}</strong> with
+                    effect from <strong>{{dataItem.FromDate ? dataItem.FromDate : '-'}}</strong>
+                    against Fee of <strong>Rs. {{dataItem.Salary ? dataItem.Salary : '-'}}/- (Per
+                      Month)</strong>
+                    after observing the
+                    procedure, as laid down in <strong>PPRA Rules, 2014</strong>.
+                  </p>
+                </div>
+              </td>
+              <td colspan="2" style="border-color:transparent !important; text-align:justify;line-height: 1.6;"
+                *ngIf="application.ApplicationType_Id == 5">
+                <div *ngIf="tableView" class="animated fadeIn">
+                  <table class="combine-order">
+                    <tr>
+                      <th>Employee</th>
+                      <th>Posted At</th>
+                      <th>Leave Period</th>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p class="m-0">{{dataItem.EmployeeName ? dataItem.EmployeeName : '-'}}</p>
+                        <p class="m-0">{{dataItem.CNIC ? dashifyCNIC(dataItem.CNIC) : '-'}}</p>
+                      </td>
+                      <td>
+                        <p class="m-0">
+                          {{dataItem.designationName ? dataItem.designationName : 'Designation'}}/BS-{{dataItem.fromScale}},
+                        </p>
+                        <p class="m-0">{{dataItem.fromHealthFacility ? dataItem.fromHealthFacility : 'Health Facility'}}
+                        </p>
+                      </td>
+                      <td>
+                        <p class="m-0">
+                          <strong>{{dataItem.TotalDays ? dataItem.TotalDays == 1 ? dataItem.TotalDays + ' day' :
+                              dataItem.TotalDays
+                              + ' days' : ''}} {{dataItem.leaveType}}</strong>
+                          leave w.e.f
+                          <u><strong>{{dataItem.FromDate | date:'dd/MM/yyyy'}}</strong></u>
+                          to
+                          <u><strong>{{dataItem.ToDate | date:'dd/MM/yyyy'}}</strong></u>
+                        </p>
+                      </td>
+                    </tr>
+
+                  </table>
+                </div>
+                <div *ngIf="!tableView" class="animated fadeIn">
+                  <div>
+                    <p style="text-align: justify;">
+                      <strong
+                        style="margin-left: 45px;;margin-bottom: 0px;">No.<em><u>{{dataItem.FileNumber}}</u></em></strong>,
+                      Sanction is hereby accorded to
+                      the grant of
+                      <strong>{{dataItem.TotalDays ? dataItem.TotalDays == 1 ? dataItem.TotalDays + ' day' :
+                        dataItem.TotalDays
+                        + ' days' : ''}} {{dataItem.leaveType}}</strong>
+                      leave w.e.f
+                      <u><strong>{{dataItem.FromDate | date:'dd/MM/yyyy'}}</strong></u>
+                      to
+                      <u><strong>{{dataItem.ToDate | date:'dd/MM/yyyy'}}</strong></u> in favour of <strong>
+                        Mr/Ms.{{dataItem.EmployeeName}}</strong>&nbsp;
+                      <strong>(CNIC</strong> : {{dashifyCNIC(dataItem.CNIC)}}<strong>),
+                        ({{dataItem.designationName}}/BS-{{dataItem.fromScale}}),
+                        {{dataItem.fromHealthFacility}}</strong>
+                      under
+                      the Revised Leave Rules, 1981.
+                    </p>
+                    <p style="text-align: justify;margin: 0px;"
+                      *ngIf="dataItem.LeaveType_Id == 2 || dataItem.LeaveType_Id == 10 || dataItem.LeaveType_Id == 11 || dataItem.LeaveType_Id == 12">
+                      <span style="margin-left: 45px;">Primary & Secondary Healthcare Department, Government of the
+                        Punjab has no objection to his/her proceeding abroad during the said leave provided that there
+                        will be no financial liability on part of Government of the Punjab.</span>
+                    </p>
+                  </div>
+                </div>
+              </td>
+              <td colspan="2" style="border-color:transparent !important; text-align:justify;line-height: 1.6;"
+                *ngIf="application.ApplicationType_Id == 6">
+                <!--   <div *ngIf="tableView" class="animated fadeIn">
+                  <table class="combine-order">
+                    <tr>
+                      <th>Employee</th>
+                      <th>Designation</th>
+                      <th>Posted at</th>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p class="m-0">{{dataItem.EmployeeName ? dataItem.EmployeeName : '-'}}</p>
+                        <p class="m-0">{{dataItem.CNIC ? dashifyCNIC(dataItem.CNIC) : '-'}}</p>
+                      </td>
+                      <td>
+                        <p class="m-0">
+                          {{dataItem.designationName ? dataItem.designationName : 'Designation'}}/Awaiting Posting
+                        </p>
+                      </td>
+                      <td>
+                        <p class="m-0">
+                          {{dataItem.toDesignationName ? dataItem.toDesignationName :
+                              '-'}}/BS-{{dataItem.fromScale}},
+                        </p>
+                        <p class="m-0">
+                          {{dataItem.toHealthFacility
+                              ?
+                              dataItem.toHealthFacility : '-'}}, against the vacant
+                          post
+                        </p>
+                      </td>
+                    </tr>
+
+                  </table>
+                </div>
+                <div *ngIf="!tableView" class="animated fadeIn"> -->
+                <p style="text-align: justify;margin: 0;">
+                  <strong style="margin-left: 62px;">{{dataItem.EmployeeName ? dataItem.EmployeeName : '-'}} (CNIC:
+                  </strong>{{dataItem.CNIC
+                    ? dashifyCNIC(dataItem.CNIC) : ''}}<strong>),
+                    ({{dataItem.designationName ? dataItem.designationName :
+                      '-'}}/ Awaiting Posting),</strong> is hereby posted at&nbsp;<strong>{{dataItem.toHealthFacility
+                      ?
+                      dataItem.toHealthFacility : '-'}},</strong> against the vacant
+                  post&nbsp;of&nbsp;<strong>({{dataItem.toDesignationName ? dataItem.toDesignationName :
+                      '-'}}/BS-{{dataItem.fromScale}})</strong> {{dataItem.Reason ? dataItem.Reason :
+                    ''}}.
+                </p>
+                <!--  </div> -->
+              </td>
+              <td colspan="2" style="border-color:transparent !important; text-align:justify;line-height: 1.6;"
+                *ngIf="application.ApplicationType_Id == 2">
+                <div *ngIf="tableView" class="animated fadeIn">
+                  <table class="combine-order">
+                    <tr>
+                      <th>Employee</th>
+                      <th>Designation</th>
+                      <th>Disposal of</th>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p class="m-0">{{dataItem.EmployeeName ? dataItem.EmployeeName : '-'}}</p>
+                        <p class="m-0">{{dataItem.CNIC ? dashifyCNIC(dataItem.CNIC) : '-'}}</p>
+                      </td>
+                      <td>
+                        <p class="m-0">
+                          {{dataItem.designationName ? dataItem.designationName : 'Designation'}}/BS-{{dataItem.fromScale}}
+                        </p>
+                      </td>
+                      <td>
+                        <p class="m-0">
+                          {{dataItem.toHealthFacility
+                              ?
+                              dataItem.toHealthFacility : '-'}}, with immediate effect for further posting
+                        </p>
+                      </td>
+                    </tr>
+
+                  </table>
+                </div>
+                <div *ngIf="!tableView" class="animated fadeIn">
+                  <p style="text-align: justify;">
+                    <strong style="margin-left: 62px;">No.<em><u>{{dataItem.FileNumber}}</u></em>,
+                      {{dataItem.EmployeeName ? dataItem.EmployeeName : '-'}} (CNIC: </strong>{{dataItem.CNIC
+                    ? dashifyCNIC(dataItem.CNIC) : '-'}}<strong>),
+                      ({{dataItem.designationName ? dataItem.designationName :
+                      '-'}}/BS-{{dataItem.fromScale}}),</strong> is hereby placed at the disposal of&nbsp;<strong>{{dataItem.toHealthFacility
+                      ?
+                      dataItem.toHealthFacility : '-'}},</strong> with immediate effect for further posting.
+                  </p>
+                </div>
+              </td>
+              <td colspan="2" style="border-color:transparent !important; text-align:justify;line-height: 1.6;"
+                *ngIf="application.ApplicationType_Id == 7">
+                <div *ngIf="tableView" class="animated fadeIn">
+                  <table class="combine-order">
+                    <tr>
+                      <th>Employee</th>
+                      <th>Designation</th>
+                      <th></th>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p class="m-0">{{dataItem.EmployeeName ? dataItem.EmployeeName : '-'}}</p>
+                        <p class="m-0">{{dataItem.CNIC ? dashifyCNIC(dataItem.CNIC) : '-'}}</p>
+                      </td>
+                      <td>
+                        <p class="m-0">
+                          {{dataItem.designationName ? dataItem.designationName : 'Designation'}}/BS-{{dataItem.fromScale}}
+                        </p>
+                        <p class="m-0">
+                          {{dataItem.fromHealthFacility}}
+                        </p>
+                      </td>
+                      <td>
+                        <p class="m-0">
+                          is hereby notified
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div *ngIf="!tableView" class="animated fadeIn">
+                  <p style="text-align: justify;">
+                    <strong style="margin-left: 62px;">No.<em><u>{{dataItem.FileNumber}}</u></em>,
+                      {{dataItem.EmployeeName ? dataItem.EmployeeName : '-'}} (CNIC: </strong>{{dataItem.CNIC
+                    ? dashifyCNIC(dataItem.CNIC) : '-'}}<strong>),
+                      ({{dataItem.designationName ? dataItem.designationName :
+                      '-'}}/BS-{{dataItem.fromScale}}),</strong> is hereby notified.
+                  </p>
+                </div>
+              </td>
+              <td colspan="2" style="border-color:transparent !important; text-align:justify;line-height: 1.6;"
+                *ngIf="application.ApplicationType_Id == 3 || application.ApplicationType_Id == 10">
+                <div *ngIf="tableView" class="animated fadeIn">
+                  <table class="combine-order">
+                    <tr>
+                      <th>Employee</th>
+                      <th>Designation</th>
+                      <th></th>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p class="m-0">{{dataItem.EmployeeName ? dataItem.EmployeeName : '-'}}</p>
+                        <p class="m-0">{{dataItem.CNIC ? dashifyCNIC(dataItem.CNIC) : '-'}}</p>
+                      </td>
+                      <td>
+                        <p class="m-0">
+                          {{dataItem.designationName ? dataItem.designationName : 'Designation'}}/BS-{{dataItem.fromScale}}
+                        </p>
+                        <p class="m-0">
+                          {{dataItem.fromHealthFacility}}
+                        </p>
+                      </td>
+                      <td>
+                        <p class="m-0">
+                          is hereby {{dataItem.ApplicationType_Id == 3
+                              ?
+                              'suspended' : 'terminated'}}
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div *ngIf="!tableView" class="animated fadeIn">
+                  <p style="text-align: justify;">
+                    <strong style="margin-left: 62px;">No.<em><u>{{dataItem.FileNumber}}</u></em>,
+                      {{dataItem.EmployeeName ? dataItem.EmployeeName : '-'}} (CNIC: </strong>{{dataItem.CNIC
+                    ? dashifyCNIC(dataItem.CNIC) : '-'}}<strong>),
+                      ({{dataItem.designationName ? dataItem.designationName :
+                      '-'}}/BS-{{dataItem.fromScale}}),</strong> is hereby {{dataItem.ApplicationType_Id == 3
+                    ?
+                    'suspended' : 'terminated'}}{{dataItem.Reason ? '' : '.'}} {{dataItem.Reason ?
+                    dataItem.Reason + '.' : ''}}
+                  </p>
+                </div>
+              </td>
+              <td colspan="2" style="border-color:transparent !important; text-align:justify;line-height: 1.6;"
+                *ngIf="application.ApplicationType_Id == 8">
+                <div *ngIf="tableView" class="animated fadeIn">
+                  <table class="combine-order">
+                    <tr>
+                      <th>Name of Doctor</th>
+                      <th>Place of Posting</th>
+                      <th *ngIf="!application.AppointmentEffect">Contract start</th>
+                    </tr>
+                    <tr>
+
+                      <td>
+                        <p class="m-0">{{dataItem.EmployeeName ? dataItem.EmployeeName : '-'}}</p>
+                        <p class="m-0">{{dataItem.CNIC ? dashifyCNIC(dataItem.CNIC) : '-'}}</p>
+                      </td>
+                      <td>
+                        <p class="m-0">
+                          {{dataItem.toDesignationName ? dataItem.toDesignationName : 'Designation'}}/BS-{{dataItem.fromScale}},
+                        </p>
+                        <p class="m-0">{{dataItem.toHealthFacility ? dataItem.toHealthFacility : 'Health Facility'}}</p>
+                      </td>
+                      <td *ngIf="!application.AppointmentEffect">
+                        <p class="m-0"> <strong class="p-strong"
+                            *ngIf="!dataItem.AppointmentEffect && dataItem.AdhocExpireDate">{{' w.e.f ' + (dataItem.AdhocExpireDate  | date:'dd.MM.yyyy')}}</strong>
+                          <strong class="p-strong"
+                            *ngIf="dataItem.AppointmentEffect">{{dataItem.AppointmentEffect ? 'with immediate effect' : ''}}</strong>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <kendo-dialog-actions *ngIf="orderFieldsDialog" class="animated fadeIn">
+    <button kendoButton (click)="closeOrderFieldWindow()" primary="true">Save & Continue</button>
+  </kendo-dialog-actions>
+</kendo-dialog>

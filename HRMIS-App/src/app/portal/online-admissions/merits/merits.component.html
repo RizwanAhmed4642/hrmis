@@ -1,0 +1,133 @@
+<div class="animated fadein">
+    <div class="animated fadeIn">
+        <div class="row mb-2">
+            <div class="col-md-2 control-col-st">
+                <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/adhoc/home"><i
+                        class="fa fa-envelope"></i>
+                    Inbox</button>
+            </div>
+            <div class="col-md-2 control-col" *ngIf="!showMeritList">
+                <button kendoButton primary="true" look="outline" [disabled]="2 + 2 == 4" class="btn-block"><i
+                        class="fa fa-plus-circle"></i>
+                    New Application</button>
+            </div>
+            <div class="col-md-2 control-col">
+                <button kendoButton primary="true" look="outline" [disabled]="2 + 2 == 4" class="btn-block"><i
+                        class="fa fa-user"></i>
+                    My Profile</button>
+            </div>
+            <div class="col-md-2 control-col">
+                <button kendoButton primary="true" look="outline" [disabled]="2 + 2 == 4" class="btn-block"><i
+                        class="fa fa-institution"></i>
+                    My Qualification</button>
+            </div>
+            <div class="col-md-2 control-col">
+                <button kendoButton primary="true" look="outline" [disabled]="2 + 2 == 4" class="btn-block"><i
+                        class="fa fa-medkit"></i>
+                    My Experience</button>
+            </div>
+            <div class="col-md-2 control-col" *ngIf="showMeritList">
+                <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/adhoc/interviews"><i
+                        class="fa fa-calendar"></i>
+                    Interview</button>
+            </div>
+            <div class="col-md-2 control-col-end" *ngIf="showMeritList">
+                <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/adhoc/merits"><i
+                        class="fa fa-calendar-check-o"></i>
+                    Merit List</button>
+            </div>
+            <div class="col-md-2 control-col-end" *ngIf="!showMeritList">
+                <button kendoButton primary="true" look="outline" class="btn-block" [disabled]="!rejectedApplication"
+                    routerLink="/adhoc/grievance"><i class="fa fa-resistance"></i>
+                    Grievance</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="animated fadeIn">
+        <hr>
+        <div class="content-heading">
+            Merit Lists
+        </div>
+        <hr>
+        <div class="animated fadeIn" *ngIf="!meritListSelected">
+            <kendo-grid [data]="interviewApplications" *ngIf="!loading">
+                <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-custom'"
+                    [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{(rowIndex + 1)}}.
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="DesignationName" [title]="'Designation'" width="20"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{dataItem.DesignationName}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="DistrictName" [title]="'District'" width="20"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0 p-strong">{{dataItem.DistrictName}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="IsPresent" [title]="'Interview Status'" width="20"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{dataItem.IsPresent ? 'Present' : '-'}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="IsPresent" [title]="'View List'" width="10"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <button kendoButton primary="true" *ngIf="showMeritList"
+                            (click)="getAdhocMLVL(dataItem.DistrictCode, dataItem.Designation_Id)" look="outline"
+                            class="btn-sm">Merit List</button>
+                    </ng-template>
+                </kendo-grid-column>
+            </kendo-grid>
+        </div>
+        <div class="animated fadeIn" *ngIf="meritListSelected">
+            <kendo-grid [data]="merits" *ngIf="!loading">
+                <kendo-grid-column field="asd" [title]="'Merit Number'" width="10" [headerClass]="'grid-header-custom'"
+                    [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{(rowIndex + 1)}}.
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="DesignationName" [title]="'Name'" width="20"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{dataItem.Name}}</p>
+                        <p class="m-0">{{dataItem.Gender}}</p>
+                        <p class="m-0">S/D/W of {{dataItem.FatherName}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="DistrictName" [title]="'D.O.B'" width="20"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{dataItem.DOB | date:'dd.MM.yy'}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="IsPresent" [title]="'Marks (100)'" width="20"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{dataItem.Total}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+
+            </kendo-grid>
+        </div>
+        <div class="k-i-loading" *ngIf="loading"></div>
+        <hr>
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class=" offset-md-9 col-md-3 control-col-end">
+                    <button type="button" class="btn btn-secondary btn-block btn-lg"
+                        routerLink="/adhoc/account">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

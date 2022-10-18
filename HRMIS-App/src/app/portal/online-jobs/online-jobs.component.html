@@ -1,0 +1,26 @@
+<div class="app-body">
+    <main class="main d-flex align-items-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mx-auto">
+                    <div class="card mx-4 animated fadeIn"
+                        style="background-color: transparent;border: none !important; margin-top: 0px !important;padding: 0px !important;">
+                        <div class="card-body" style="padding: 0px !important;">
+                            <div class="d-flex">
+                                <div class="dept-name" style="width: 100%;padding: 5px 0px 0px 0px;">
+                                    <div class="dept-second">
+                                        <img src="../../../assets/img/brand/PHFMC-logo.png" width="120px" alt=""> PHFMC - Jobs
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="animated fadeIn" *ngIf="registerFlag">
+                                <router-outlet></router-outlet>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>

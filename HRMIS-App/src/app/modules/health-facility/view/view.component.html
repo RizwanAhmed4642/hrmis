@@ -1,0 +1,139 @@
+<div class="animated fadeIn" *ngIf="healthFacility">
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3" [ngClass]="healthFacility ? '' : 'shine'">
+        {{healthFacility?.FullName}}
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12"
+      *ngIf="currentUser.RoleName != 'HRView' && currentUser.RoleName != 'DG Health' && currentUser.RoleName != 'Section Officer' && currentUser.RoleName != 'Deputy Secretary'">
+      <div class="top-controls" *ngIf="!currentUser.UserName.toLowerCase().startsWith('ceo.')">
+        <button kendoButton [primary]="true" routerLink="/health-facility/list">Back To List</button>
+        <div *ngIf="currentUser.RoleName != 'Deputy Secretary' && currentUser.RoleName != 'HRView'">
+          <button type="button" kendoButton [primary]="true" [look]="'outline'"
+            [routerLink]="'/health-facility/' + healthFacility.HFMISCode + '/edit'"
+            class="pull-right mr-2 ml-2">Edit</button>
+          <button kendoButton [primary]="true"
+            *ngIf="(currentUser.UserName.toLowerCase().startsWith('sdp') || currentUser.RoleName.toLowerCase().startsWith('phfmc')) && (!userRight || (userRight && userRight.AddVacancy))"
+            [routerLink]="['/vacancy-position/' + healthFacility.HFMISCode +'/new']" [look]="'outline'">Add
+            Vacancy</button>
+        </div>
+      </div>
+      <div class="top-controls" *ngIf="currentUser.UserName.toLowerCase().startsWith('ceo.')">
+        <button kendoButton [primary]="true" routerLink="/health-facility/list">Back To List</button>
+        <button type="button" kendoButton
+          *ngIf="healthFacility.HFTypeCode != '011' && healthFacility.HFTypeCode != '012'" [primary]="true"
+          [look]="'outline'" [routerLink]="'/health-facility/' + healthFacility.HFMISCode + '/edit'"
+          class="pull-right mr-2 ml-2">Edit</button>
+        <!-- <button kendoButton [primary]="true"
+          *ngIf="healthFacility.HFTypeCode != '011' && healthFacility.HFTypeCode != '012' && healthFacility.HFAC != 2"
+          [routerLink]="['/vacancy-position/' + healthFacility.HFMISCode +'/new']" [look]="'outline'" class="pull-right"
+          [ngClass]="healthFacility.HFTypeCode == '011' || healthFacility.HFTypeCode == '012' ? 'mr-2' : ''">Add
+          Vacancy</button> -->
+      </div>
+    </div>
+  </div>
+  <div *ngIf="selectedTab">
+    <tabset>
+      <tab heading="General Information" (selectTab)="onTabSelect($event)">
+        <app-basic-info *ngIf="selectedTab == 'General Information'" [healthFacility]="healthFacility"
+          [dashboardView]="dashboardView" [hfPhoto]="hfPhoto.src" [hfPhotoLoaded]="hfPhotoLoaded"></app-basic-info>
+      </tab>
+      <tab heading="Vacancy" (selectTab)="onTabSelect($event)"
+        *ngIf="currentUser.RoleName != 'HRView' && currentUser.RoleName != 'Section Officer'">
+        <app-vacancy *ngIf="selectedTab == 'Vacancy'" [userRight]="userRight" [healthFacility]="healthFacility"
+          [hfmisCode]="hfmisCode" [employementModes]="employementModes">
+        </app-vacancy>
+      </tab>
+      <tab heading="Staff Statement" (selectTab)="onTabSelect($event)"
+        *ngIf="currentUser.RoleName != 'HRView' && currentUser.RoleName != 'Section Officer'">
+        <app-staff-statement *ngIf="selectedTab == 'Staff Statement'" [hfmisCode]="hfmisCode"
+          [headOfDepartment]="healthFacility.HeadOfDepartment">
+        </app-staff-statement>
+      </tab>
+      <tab heading="Staff Statement" (selectTab)="onTabSelect($event)"
+        *ngIf="currentUser.UserName == 'sodhas' || currentUser.UserName == 'so.specialist'">
+        <app-staff-statement *ngIf="selectedTab == 'Staff Statement'" [hfmisCode]="hfmisCode"
+          [headOfDepartment]="healthFacility.HeadOfDepartment">
+        </app-staff-statement>
+      </tab>
+      <!-- <tab heading="Wards" (selectTab)="onTabSelect($event)" *ngIf="wardsBedsInfo">
+        <app-hf-wards *ngIf="selectedTab == 'Wards'" [hfmisCode]="hfmisCode"></app-hf-wards>
+      </tab> -->
+      <tab heading="Wards & Beds Info" (selectTab)="onTabSelect($event)"
+        *ngIf="wardsBedsInfo && currentUser.RoleName != 'HRView' && currentUser.RoleName != 'Section Officer'">
+        <app-hf-wards-new *ngIf=" selectedTab=='Wards & Beds Info'" [HF_Id]=" healthFacility.Id"
+          [hfmisCode]="hfmisCode">
+        </app-hf-wards-new>
+      </tab>
+      <tab heading="Services" (selectTab)="onTabSelect($event)"
+        *ngIf="currentUser.RoleName != 'HRView' && currentUser.RoleName != 'Section Officer'">
+        <app-hf-services *ngIf="selectedTab == 'Services'" [hfmisCode]="hfmisCode"></app-hf-services>
+      </tab>
+      <tab heading="PPSC" (selectTab)="onTabSelect($event)" *ngIf="currentUser.UserName == 'dpd'">
+        <app-ppsc-postings *ngIf="selectedTab == 'PPSC'" [hfmisCode]="hfmisCode"></app-ppsc-postings>
+      </tab>
+      <!--   <tab heading="Logs" (selectTab)="onTabSelect($event)"></tab> -->
+    </tabset>
+  </div>
+</div>
+
+
+
+
+<div *ngIf="!healthFacility">
+  <div class="row">
+    <div class="col-md-7 col-xs-12">
+      <div class="shine shim-controls top-h3"></div>
+    </div>
+    <div class="col-md-2 col-xs-12 control-col-st">
+      <div class="top-controls">
+        <div class="shine shim-controls"></div>
+      </div>
+    </div>
+    <div class="col-md-1 col-xs-12 control-col">
+      <div class="top-controls">
+        <div class="shine shim-controls"></div>
+      </div>
+    </div>
+    <div class="col-md-2 col-xs-12 control-col-end">
+      <div class="top-controls">
+        <div class="shine shim-controls"></div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-2 control-col-st">
+      <div class="shine shim-controls btn-align-v"></div>
+    </div>
+    <div class="col-md-2 control-col">
+      <div class="shine shim-controls btn-align-v"></div>
+    </div>
+    <div class="col-md-2 control-col">
+      <div class="shine shim-controls btn-align-v"></div>
+    </div>
+    <div class="col-md-2 control-col">
+      <div class="shine shim-controls btn-align-v"></div>
+    </div>
+    <div class="col-md-2 control-col">
+      <div class="shine shim-controls btn-align-v"></div>
+    </div>
+    <div class="col-md-1 control-col">
+      <div class="shine shim-controls btn-align-v"></div>
+    </div>
+    <div class="col-md-1 control-col-end">
+      <div class="shine shim-controls btn-align-v"></div>
+    </div>
+  </div>
+</div>
+<div *ngIf="!healthFacility">
+  <div class="row row-panel">
+    <div class="col-md-7 control-col-st">
+      <div class="shine shim-thumb-lg"></div>
+    </div>
+    <div class="col-md-5 control-col-end">
+      <div class="shine shim-thumb"></div>
+      <div class="shine shim-thumb mt-4"></div>
+    </div>
+  </div>
+</div>

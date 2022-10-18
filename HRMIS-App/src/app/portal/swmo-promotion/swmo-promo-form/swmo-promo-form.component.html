@@ -1,0 +1,145 @@
+<!-- <div *ngIf="portalClosed">
+    <h1>Portal has been closed</h1>
+</div> -->
+<div class="container animated fadeIn">
+    <div class="row mb-2 animated fadeIn">
+        <!-- <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12 col-xs-12">
+                    <div class=" top-h3">
+                        Diploma Candidate
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <div class="offset-md-4 col-md-5 col-sm-6 col-xs-12 mt-2 control-col">
+            <div class=" top-h3">
+                MO Promotion
+                <!-- <pre>{{swmoPromotion | json}}</pre> -->
+            </div>
+        </div>
+        <div class="offset-md-4 col-md-5 col-sm-6 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+                <span>CNIC</span>&nbsp;<span class="text-danger">*</span>
+                <kendo-maskedtextbox [mask]="cnicMask" (input)="getProfile()" name="CNIC"
+                    [(ngModel)]="swmoPromotion.CNIC" #CNIC="ngModel" required>
+                </kendo-maskedtextbox>
+            </label>
+        </div>
+        <div class="offset-md-4 col-md-5 col-sm-6 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+                <span>Name</span>&nbsp;<span class="text-danger">*</span>
+                <input kendoTextBox type="text" name="Name" [(ngModel)]="swmoPromotion.Name" #Name="ngModel" required />
+            </label>
+        </div>
+        <div class="offset-md-4 col-md-5 col-sm-6 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+                <span>Designation</span>&nbsp;<span class="text-danger">*</span>
+                <kendo-dropdownlist [data]="dropDowns.designations" [textField]="'Name'" [valueField]="'Id'"
+                    (valueChange)="dropdownValueChanged($event, 'designation')"
+                    [value]="dropDowns.selectedFiltersModel.designations"
+                    [defaultItem]="dropDowns.defultFiltersModel.designation">
+                </kendo-dropdownlist>
+            </label>
+        </div>
+        <div class="offset-md-4 col-md-5 col-sm-6 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+
+                <span>Contact Number</span>&nbsp;<span class="text-danger">*</span>
+                <kendo-maskedtextbox [mask]="mobileMask" [(ngModel)]="swmoPromotion.PhoneNumber" required>
+                </kendo-maskedtextbox>
+            </label>
+        </div>
+        <div class="offset-md-4 col-md-5 col-sm-6 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+                <span>Place of Posting<span class="text-danger">*</span></span>
+                <kendo-dropdownlist [filterable]="true" [data]="HFListAll" [textField]="'FullName'" [valueField]="'Id'"
+                    (valueChange)="dropdownValueChanged($event, 'HF')"
+                    [value]="dropDowns.selectedFiltersModel.healthFacilities"
+                    [defaultItem]="dropDowns.defultFiltersModel.healthFacility" (filterChange)="handleFilter($event)">
+                </kendo-dropdownlist>
+            </label>
+        </div>
+        <div class="offset-md-4 col-md-5 col-sm-6 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+                <span>District Name</span>&nbsp;<span class="text-danger">*</span>
+                <kendo-dropdownlist [data]="dropDowns.districts" [textField]="'Name'" [valueField]="'Code'"
+                    (valueChange)="dropdownValueChanged($event, 'district')"
+                    [value]="dropDowns.selectedFiltersModel.districts"
+                    [defaultItem]="dropDowns.defultFiltersModel.district">
+                </kendo-dropdownlist>
+            </label>
+        </div>
+        <div class="offset-md-4 col-md-5 col-sm-6 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+                <span>Permanent Since</span>&nbsp;<span class="text-danger">*</span>
+                <kendo-datepicker name="PermanentSince" [format]="'dd/MM/yyyy'"
+                    [(ngModel)]="swmoPromotion.PermanentSince" #PermanentSince="ngModel" required></kendo-datepicker>
+            </label>
+        </div>
+
+        <!-- <div class="offset-md-4 col-md-5 col-sm-6 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+                <span>Roll No.</span>&nbsp;
+                <input kendoTextBox type="text" name="Rollno" [(ngModel)]="swmoPromotion.Rollno" #Rollno="ngModel">
+            </label>
+        </div> -->
+        <!-- <div class="offset-md-4 col-md-5 col-sm-6 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+                <span>Marks in UHS Test</span>&nbsp;
+                <input kendoTextBox type="number" name="Marks" [(ngModel)]="swmoPromotion.Marks" #Marks="ngModel">
+            </label>
+        </div> -->
+        <div class="offset-md-4 col-md-5 col-sm-6 col-xs-12 mt-2 control-col">
+            <!-- <label class="k-form-field">
+                <span>Preferred Institute</span>&nbsp;<span class="text-danger">*</span>
+                <kendo-dropdownlist [data]="dropDowns.religions" [textField]="'Name'" [valueField]="'Id'"
+                    (valueChange)="dropdownValueChanged($event, 'religion')"
+                    [value]="dropDowns.selectedFiltersModel.religion"
+                    [defaultItem]="dropDowns.defultFiltersModel.religion">
+                </kendo-dropdownlist>
+            </label> -->
+            <div class="row">
+                <div class="col-md-8 col-sm-6 col-xs-12 mt-2 control-col-st">
+                    <label class="k-form-field">
+                        <span>Preferred Health Facility<span class="text-danger">*</span></span>
+                        <kendo-dropdownlist [filterable]="true" (filterChange)="handleFilterPref($event)" required
+                            [(ngModel)]="swmoPromotionDetailObj.PreferenceHfId" [valuePrimitive]="true"
+                            [data]="FilteredHFListPref" [textField]="'FullName'" [valueField]="'Id'"
+                            [defaultItem]="{Id : 0, Name :'Select HealthFacility'}">
+                        </kendo-dropdownlist>
+                    </label>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12 mt-3 control-col-end">
+                    <label class="k-form-field"></label>
+                    <button kendoButton class="btn-block"
+                        (click)="addPreferenceHF(swmoPromotionDetailObj.PreferenceHfId)" data-style="zoom-in"
+                        type="submit" [primary]="true" [disabled]="swmoPromotionDetail.length >= 5">Add
+                        Preference</button>
+                </div>
+            </div>
+            <div class="search-list-item">
+                <ul *ngIf="Templist">
+                    <li class="pr-4 pl-1 success-hover" *ngFor="let p of Templist;let i = index;">
+                        Name:&nbsp;<strong class="p-strong">{{p.FullName}}</strong>
+                        <span class="text-danger pull-right" (click)="removePreferenceHF(i,p.Id)"><i
+                                class="fa fa-times cursor-p"></i></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- <div class="offset-md-4 col-md-5 col-sm-6 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+                <img *ngIf="photoSrc" class="animated fadeIn" style="width:100px;height:100px;border:1px solid;"
+                    [src]="photoSrc" onError="this.src='../../../assets/img/notfound.png'" alt="">
+                <input class="" name="setSeniorityNoFile" accept=".png,.PNG,.jpg,.JPG,.jpeg,.JPEG,.pdf,.PDF" type="file"
+                    (change)="readUrl($event,'pic')">
+            </label>
+        </div> -->
+        <div class="offset-md-4 col-md-5 col-sm-6 col-xs-12 mt-2 control-col">
+            <button kendoButton class="btn-block" [disabled]="swmoPromotion.PermanentSince == null || swmoPromotion.CNIC == null 
+            || swmoPromotion.HfId == null || Templist.length == 0" (click)="onSubmit()" data-style="zoom-in"
+                type="submit" [primary]="true">Save</button>
+        </div>
+    </div>
+</div>

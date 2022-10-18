@@ -1,0 +1,267 @@
+<div class="login-div">
+    <div class="animated fadeIn" *ngIf="merit.Status && (merit.Status == 'Accepted' || merit.Status == 'Completed')">
+        <!--  <div class="row mb-2">
+            <div class="col-md-4">
+                <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/ppsc/profile">1-
+                    Profile</button>
+            </div>
+            <div class="col-md-4">
+                <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/ppsc/letter">2- Offer
+                    Letter &
+                    Acceptance</button>
+            </div>
+            <div class="col-md-4">
+                <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/ppsc/preferences">3-
+                    Preferences</button>
+            </div>
+        </div>
+        <hr> -->
+    </div>
+    <div class="animated fadeIn">
+        <div id="pgForm" *ngIf="!isPGSaved">
+            <div class="row">
+                <div class="col-md-6 control-col-st">
+                    <div class="pt-3 h4 m-0">
+                        <p class="p-strong">Are you a Post Graduate Trainee?</p>
+                    </div>
+                </div>
+                <div class="col-md-2 control-col">
+                    <div class="py-3 h4 m-0">
+                        <button class="k-button k-primary k-outline btn-block" (click)="onPgYesNo(true)">
+                            Yes
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-2 control-col-end">
+                    <div class="py-3 h4 m-0">
+                        <button class="k-button k-primary k-outline btn-block" (click)="onPgYesNo(false)">
+                            No
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <hr *ngIf="pgForm.isPG">
+            <div *ngIf="pgForm.isPG">
+                <div class="row mb-1">
+                    <div class="col-md-6 col-sm-6 col-xs-12 mt-2 control-col-st">
+                        <label class="k-form-field">
+                            <span>Admission Date</span>&nbsp;<span class="text-danger">*</span>
+                            <kendo-datepicker [format]="'dd/MM/yyyy'" [(ngModel)]="pgForm.pgFrom">
+                            </kendo-datepicker>
+                        </label>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-12 mt-2 control-col">
+                        <label class="k-form-field">
+                            <span>RTMC</span>&nbsp;<span class="text-danger">*</span>
+                            <input accept=".png,.PNG,.jpg,.JPG,.jpeg,.JPEG,.pdf,.PDF" type="file"
+                                (change)="setAdmissionFile($event)">
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <label class="k-label">Trainee in Government Health Facility?&nbsp;<span
+                                class="text-danger">*</span></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <input type="radio" value="Yes" id="govt" [(ngModel)]="pgForm.govt" kendoRadioButton />
+                        <label class="k-label k-primary ml-1" for="govt">Yes</label>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="radio" value="No" id="private" [(ngModel)]="pgForm.govt" kendoRadioButton />
+                        <label class="k-label ml-1" for="private">No</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-7 control-col-st" *ngIf="pgForm.govt == 'Yes'">
+                        <label class="k-form-field mt-2">
+                            <span>Government Health Facility&nbsp;<span class="text-danger">*</span></span>
+                            <kendo-dropdownlist [data]="pgHealthFacilities" [textField]="'Name'" [valueField]="'Id'"
+                                [value]="{ Name: 'Select Health Facility', Id: null }"
+                                [defaultItem]="{ Name: 'Select Health Facility', Id: null }"
+                                (valueChange)="dropdownValueChanged($event, 'ghf')"
+                                (filterChange)="handleFilter($event, 'ghf')" [filterable]="true">
+                            </kendo-dropdownlist>
+                        </label>
+                    </div>
+                    <div class="col-md-7 control-col-st" *ngIf="pgForm.govt == 'No'">
+                        <label class="k-form-field mt-2">
+                            <span>Private Health Facility Name&nbsp;<span class="text-danger">*</span></span>
+                            <input kendoTextBox [(ngModel)]="pgForm.pgHFName" />
+                        </label>
+                    </div>
+                    <div class="col-md-5 control-col-end" *ngIf="pgForm.govt">
+                        <label class="k-form-field mt-2">
+                            <span>Specialization&nbsp;<span class="text-danger">*</span></span>
+                            <kendo-dropdownlist [data]="specializations" [textField]="'Name'" [valueField]="'Id'"
+                                [value]="dropDowns.selectedFiltersModel.specialization"
+                                [defaultItem]="dropDowns.defultFiltersModel.specialization"
+                                (valueChange)="dropdownValueChanged($event, 'sp')"
+                                (filterChange)="handleFilter($event, 'sp')" [filterable]="true">
+                            </kendo-dropdownlist>
+                        </label>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button class="btn-block mb-1" [ladda]="isPgSaving" data-style="zoom-in"
+                            [disabled]="!pgForm.pgFile || !pgForm.Specialization_Id || !pgForm.govt || !pgForm.pgFrom"
+                            (click)="yesNo()" kendoButton primary="true"><i class="fa fa-arrow-right-circle"></i>
+                            Proceed for
+                            Preferences</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div id="preference" class="animated fadeIn" *ngIf="isPGSaved">
+            <div id="preferencePGDistricts" class="animated fadeIn" *ngIf="pgForm.isPG">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="p-3 h4 m-0">
+                            <p class="p-strong">Please submit maximum of 5 preferred districts</p>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-10 control-col-st">
+                        <label class="k-form-field mt-2">
+                            <span>Select Preferred District</span>
+                            <kendo-dropdownlist [data]="dropDowns.districtsData" [textField]="'Name'"
+                                [valueField]="'Code'" (valueChange)="dropdownValueChanged($event, 'district')"
+                                (filterChange)="handleFilter($event, 'district')" [filterable]="true">
+                            </kendo-dropdownlist>
+                        </label>
+                    </div>
+                    <div class="col-md-2 control-col-end">
+                        <label class="k-form-field
+                mt-2">
+                            <span>&nbsp;</span>
+                            <button class=" btn btn-so-primary btn-block" (click)="addPreference()"
+                                [ladda]="addingPrefs" [disabled]="preferences.length == 5"
+                                data-style="zoom-in">Add</button>
+                        </label>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-4 control-col-st">
+                        <h4 *ngIf="preferences.length > 0" class="animated fadeIn">Preferences: <small
+                                class="text-muted">{{preferences.length}} / 5</small></h4>
+                    </div>
+                    <div class="col-md-4 control-col">
+                        <h4 class="text-danger text-center p-strong" *ngIf="preferences.length < merit.MeritNumber">
+                            Incomplete. Please add atleast 15 Preferences
+                        </h4>
+                    </div>
+                    <!-- <div class="col-md-4 control-col-end">
+                        <button class=" btn btn-so-primary btn-block"
+                            [disabled]="preferences.length != merit.MeritNumber || preferences.length < merit.MeritNumber"
+                            (click)="saveAllPreferences()" [ladda]="addingAllPrefs" data-style="zoom-in">Save
+                            All</button>
+                    </div> -->
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 control-col-st">
+                        <table class="table view-table" style="background: transparent;">
+                            <tbody>
+                                <tr *ngFor="let preference of preferences;let i = index;" class="animated fadeIn">
+                                    <td style="border:none !important;">{{(i + 1)}}.</td>
+                                    <td style="border:none !important;">
+                                        {{preference.FullName}}</td>
+                                    <td style="border:none !important;">
+                                        <button class="btn btn-danger btn-sm"
+                                            (click)="removePreferences(preference.HFMISCode)"><i
+                                                class="fa fa-times"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div id="preferenceNotPG" *ngIf="!pgForm.isPG">
+                <div class="row">
+                    <div class="col-md-12">
+                        <!--  <h3 class="p-strong"><i class="fa fa-info-circle text-success"></i> Note</h3>
+                <hr> -->
+                        <div class="p-3 h4 m-0">
+                            <p class="p-strong">Please submit 15 preferences</p>
+                            <!-- <p class="p-strong">For Example: If your PPSC merit number is 64, then you must submit minimum 64 preferences
+                    </p> -->
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-10 control-col-st">
+                        <label class="k-form-field mt-2">
+                            <span>Select Preferred Place of Posting</span>
+                            <kendo-dropdownlist [data]="hfs" [textField]="'FullName'" [valueField]="'HF_Id'"
+                                (valueChange)="dropdownValueChanged($event, 'hf')"
+                                (filterChange)="handleFilter($event, 'hf')" [filterable]="true">
+                            </kendo-dropdownlist>
+                        </label>
+                    </div>
+                    <div class="col-md-2 control-col-end">
+                        <label class="k-form-field
+                mt-2">
+                            <span>&nbsp;</span>
+                            <button class=" btn btn-so-primary btn-block"
+                                (click)="addPreference()" [ladda]="addingPrefs" data-style="zoom-in">Add</button>
+                        </label>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-4 control-col-st">
+                        <h4 *ngIf="preferences.length > 0" class="animated fadeIn">Preferences: <small
+                                class="text-muted">{{preferences.length}} / 15</small></h4>
+                    </div>
+                    <div class="col-md-4 control-col">
+                        <!-- <h4 class="text-danger text-center p-strong" *ngIf="preferences.length < 20">Incomplete
+                </h4> -->
+                    </div>
+                    <!-- <div class="col-md-4 control-col-end">
+                        <button class=" btn btn-so-primary btn-block" [disabled]="preferences.length != 20"
+                            (click)="saveAllPreferences()" [ladda]="addingAllPrefs" data-style="zoom-in">Save
+                            All</button>
+                    </div> -->
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 control-col-st">
+                        <table class="table view-table" style="background: transparent;">
+                            <tbody>
+                                <tr *ngFor="let preference of preferences;let i = index;" class="animated fadeIn">
+                                    <td style="border:none !important;">{{(i + 1)}}.</td>
+                                    <td style="border:none !important;">
+                                        {{preference.FullName}}</td>
+                                    <td style="border:none !important;">
+                                        <button class="btn btn-danger btn-sm"
+                                            (click)="removePreferences(preference.HFMISCode)"><i
+                                                class="fa fa-times"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+
+        </div>
+        <div class="col-md-3 control-col-end">
+            <button type="button" class="btn btn-secondary btn-block btn-lg" routerLink="/ppsc">Logout</button>
+        </div>
+    </div>
+</div>

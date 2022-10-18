@@ -1,0 +1,458 @@
+<div class="animated fadeIn">
+  <!--  <div class="row">
+    <div class="col-sm-12">
+      <kendo-autocomplete [data]="listItems" [valueField]="'Name'" (valueChange)="searchClicked($event)" [filterable]="true"
+        (filterChange)="searchEvent.next($event)" placeholder="Search Health Facility, Employee, File, Order, Application"
+        class="search-auto-complete">
+        <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+          <div class="search-list-item">
+            <i class="fa" [ngClass]="dataItem.Type == 1 ? 'fa-building-o' : dataItem.Type == 2 ? 'fa-user-circle' : dataItem.Type == 3 ? 'fa-file-text-o' : 'fa-search'"></i>
+            &nbsp;{{ dataItem.Name }} - <strong>{{ dataItem.ResultType }}</strong></div>
+        </ng-template>
+      </kendo-autocomplete>
+    </div>
+  </div> -->
+
+  <button
+    *ngIf="currentUser.UserName == 'hisdu.co2' || currentUser.UserName == 'hisdu.co7' || currentUser.UserName == 'hisdu.co8'"
+    class="m-3 pull-right" kendoButton [routerLink]="'/adhoc-applications/verification'" [primary]="true">Adhoc
+    Recruitments</button>
+  <app-hrmis-ftssectiondashboard
+    *ngIf="(currentUser?.RoleName == 'Section Officer') || currentUser?.RoleName == 'Deputy Secretary'">
+  </app-hrmis-ftssectiondashboard>
+  <!-- <app-hrmis-officer-diary-dashboard *ngIf="(currentUser?.RoleName == 'Office Diary')">
+  </app-hrmis-officer-diary-dashboard> -->
+  <app-hrmis-crr-dashboard *ngIf="(currentUser?.RoleName == 'Central Record Room')">
+  </app-hrmis-crr-dashboard>
+  <app-hrmis-facilitationdashboard
+    *ngIf="(currentUser?.UserName == 'managerfc' || currentUser?.UserName.startsWith('fdo') && currentUser?.RoleName != 'Facilitation Centre South')">
+  </app-hrmis-facilitationdashboard>
+  <app-hrmis-ri-branchdashboard *ngIf="currentUser?.RoleName == 'RI Branch'">
+  </app-hrmis-ri-branchdashboard>
+  <app-hrmis-law-wingdashboard *ngIf="currentUser?.RoleName == 'Law wing'">
+  </app-hrmis-law-wingdashboard>
+  <app-hrmis-citizen-portal *ngIf="currentUser?.RoleName == 'Citizen Portal'">
+  </app-hrmis-citizen-portal>
+  <app-hrmis-dashboardhrmis
+    *ngIf="(currentUser?.RoleName == 'Administrator' || currentUser?.RoleName == 'SDP' || currentUser?.RoleName == 'Chief Executive Officer' || currentUser?.RoleName == 'Districts' || currentUser?.RoleName == 'Primary' || currentUser?.RoleName == 'Secondary' || currentUser?.RoleName == 'PHFMC Admin') && currentUser?.UserName != 'managerfc' || currentUser?.RoleName == 'South Punjab'"
+    [currentUser]="currentUser">
+  </app-hrmis-dashboardhrmis>
+  <app-adhoc-scrutiny-dashboard *ngIf="(currentUser?.RoleName == 'AdhocScrutiny')">
+  </app-adhoc-scrutiny-dashboard>
+  <div class="my-3" *ngIf="(currentUser?.RoleName == 'ViewOnly')">
+    <app-department-report>
+    </app-department-report>
+  </div>
+
+  <div class="my-3 animated fadeIn" *ngIf="currentUser.RoleName == 'Employee'">
+    <div class="animated fadeIn my-3 p-3"
+      *ngIf="mutualCode && mutualCode.Id > 0 && mutualCode.Verified == true && !mutualCode.SecondVerified"
+      style="background: #e9e9e9;color: black;border-radius: 9px;">
+      <div class="content-heading mb-3">
+        Mutual Transfer Application <i class="fa fa-exclamation-circle"></i>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-md-12">
+          <h5>
+            You have a mutual transfer application, waiting to be verified. Please verify by entering code you have
+            recieved on SMS or Email.
+          </h5>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3 control-col-st">
+          <label class="k-form-field animated fadeIn">
+            <span>Verification Code <span class="text-danger">*</span></span>
+            <input kendoTextBox type="number" min="0" [(ngModel)]="mutualCode.SecondCode">
+          </label>
+        </div>
+
+        <div class="col-md-3 control-col-end">
+          <label class="k-form-field animated fadeIn"
+            *ngIf="mutualCode.SecondCode && mutualCode.SecondCode.toString().length == 4">
+            <span>&nbsp;</span>
+            <button kendoButton primary=" true" [ladda]="mutualCode.saving" data-style="zoom-in" class="btn-block"
+              (click)="verifySecondMutualCode()"><i class="fa fa-envira"></i> Verify & Submit Application</button>
+          </label>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="row animated fadeIn" *ngIf="profile">
+      <!--       <div class="col-md-7 col-xs-12">
+        <div class="top-h3">
+          E-Transfer Policy
+        </div>
+      </div>
+      <div class="col-md-12">
+        <iframe src="../../../assets/img/TransferPolicyDraft.pdf" width="100%" height="650px">
+        </iframe>
+      </div> -->
+      <div class="col-md-7 col-xs-12">
+        <div class="top-h3">
+          Please Review Your Profile Information
+        </div>
+      </div>
+    </div>
+    <div class="row animated fadeIn" *ngIf="profile && !infoCorrect">
+      <div class="col-md-5">
+        <div class="content-heading mb-3">
+          General Information
+        </div>
+        <table class="table table-50 view-table" style="background: transparent;">
+          <tbody>
+            <tr (click)="openEditDialog('Photo', 'Photo')" class="cursor-p">
+              <td><strong class="p-strong">Photo</strong></td>
+              <td>
+                <img class="pic-shadow" width="100" height="100"
+                  [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + profile.CNIC + '_23.jpg'"
+                  onError="this.src='../../../assets/img/notfound.png'" alt="">
+              </td>
+            </tr>
+            <tr (click)="openEditDialog('EmployeeName', 'First Name')" class="cursor-p">
+              <td><strong class="p-strong">First Name</strong></td>
+              <td>{{profile.EmployeeName}}</td>
+            </tr>
+            <tr (click)="openEditDialog('FatherName', 'Last Name')" class="cursor-p">
+              <td><strong class="p-strong">Last Name</strong></td>
+              <td>{{profile.FatherName}}</td>
+            </tr>
+            <tr (click)="openEditDialog('CNIC', 'CNIC')" class="cursor-p">
+              <td><strong class="p-strong">CNIC</strong></td>
+              <td>{{dashifyCNIC(profile.CNIC)}} </td>
+            </tr>
+            <tr (click)="openEditDialog('DateOfBirth', 'Date of Birth')" class="cursor-p">
+              <td><strong class="p-strong">D.O.B</strong></td>
+              <td>{{profile.DateOfBirth | date:'dd-MM-yyyy'}}<i
+                  class="edit-button fa fa-pencil-square-o animated fadeIn"></i> </td>
+            </tr>
+            <tr (click)="openEditDialog('Gender', 'Gender')" class="cursor-p">
+              <td><strong class="p-strong">Gender</strong></td>
+              <td>{{profile.Gender}} </td>
+            </tr>
+            <tr (click)="openEditDialog('Domicile_Name', 'Domicile')" class="cursor-p">
+              <td><strong class="p-strong">Domicile</strong></td>
+              <td>{{profile.Domicile_Name}}</td>
+            </tr>
+            <tr (click)="openEditDialog('MaritalStatus', 'Marital Status')" class="cursor-p">
+              <td><strong class="p-strong">Marital Status</strong></td>
+              <td>{{profile.MaritalStatus}}</td>
+            </tr>
+            <tr (click)="openEditDialog('Bloodgroup', 'Bloodgroup')" class="cursor-p">
+              <td><strong class="p-strong">Bloodgroup</strong></td>
+              <td>{{profile.BloodGroup}}</td>
+            </tr>
+            <tr (click)="openEditDialog('Religion_Name', 'Religion')" class="cursor-p">
+              <td><strong class="p-strong">Religion</strong></td>
+              <td>{{profile.Religion_Name}}</td>
+            </tr>
+            <tr (click)="openEditDialog('Language_Name', 'Mother Tongue')" class="cursor-p">
+              <td><strong class="p-strong">Mother Tongue</strong></td>
+              <td>{{profile.Language_Name}}</td>
+            </tr>
+            <tr (click)="openEditDialog('MobileNo', 'Mobile Number')" class="cursor-p">
+              <td><strong class="p-strong">Mobile Number</strong></td>
+              <td>{{profile.MobileNo}}</td>
+            </tr>
+            <tr (click)="openEditDialog('EMaiL', 'E-mail')" class="cursor-p">
+              <td><strong class="p-strong">E-mail</strong></td>
+              <td>{{profile.EMaiL}}</td>
+            </tr>
+            <tr (click)="openEditDialog('LandlineNo', 'Landline Number')" class="cursor-p">
+              <td><strong class="p-strong">Landline Number</strong></td>
+              <td>{{profile.LandlineNo}}</td>
+            </tr>
+            <tr (click)="openEditDialog('Faxno', 'Fax Number')" class="cursor-p">
+              <td><strong class="p-strong">Fax Number</strong></td>
+              <td>{{profile.Faxno}}</td>
+            </tr>
+            <tr (click)="openEditDialog('PermanentAddress', 'Permanent Address')" class="cursor-p">
+              <td><strong class="p-strong">Permanent Address</strong></td>
+              <td>{{profile.PermanentAddress}}</td>
+            </tr>
+            <tr (click)="openEditDialog('CorrespondenceAddress', 'Correspondence Address')" class="cursor-p">
+              <td><strong class="p-strong">Correspondence
+                  Address</strong></td>
+              <td>{{profile.CorrespondenceAddress}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="content-heading mb-3">
+          Departmental Information
+        </div>
+        <table class="table table-50 view-table" style="background: transparent;">
+          <tbody>
+            <tr class="cursor-p" (click)="openEditDialog('HealthFacility', 'Health Facility')" routerLink="/e/facility">
+              <td><strong class="p-strong">Health Facility</strong></td>
+              <td>
+                {{profile.HealthFacility ? profile.HealthFacility + ', ' + (profile.Tehsil == profile.District ? profile.Tehsil : profile.Tehsil + ', ' + profile.District) : ''}}<i
+                  class="edit-button fa fa-pencil-square-o animated fadeIn"></i></td>
+            </tr>
+            <tr class="cursor-p" (click)="openEditDialog('WorkingHealthFacility', 'Working Health Facility')"
+              *ngIf="profile.WorkingHealthFacility">
+              <td><strong class="p-strong">Working Health Facility</strong></td>
+              <td>
+                {{profile.WorkingHealthFacility + ', ' + (profile.WorkingTehsil == profile.WorkingDistrict ? profile.WorkingTehsil : profile.WorkingTehsil + ', ' + profile.WorkingDistrict)}}
+              </td>
+            </tr>
+            <tr (click)="openEditDialog('Designation_Name', 'Actual Designation')" class="cursor-p">
+              <td><strong class="p-strong">Actual Designation</strong></td>
+              <td>{{profile.Designation_Name}}</td>
+            </tr>
+            <tr (click)="openEditDialog('WDesignation_Name', 'Working Designation')" class="cursor-p">
+              <td><strong class="p-strong">Working Designation</strong></td>
+              <td>{{profile.WDesignation_Name}}</td>
+            </tr>
+            <tr (click)="openEditDialog('AdditionalCharge', 'Additional Charge')" *ngIf="profile.AdditionalCharge">
+              <td><strong class="p-strong">Additional Charge</strong></td>
+              <td>{{profile.AdditionalCharge}}</td>
+            </tr>
+            <tr (click)="openEditDialog('HoD', 'Head of Department')" *ngIf="profile.HoD == 1">
+              <td><strong class="p-strong">Head of Department</strong></td>
+              <td>Yes</td>
+            </tr>
+            <tr (click)="openEditDialog('CurrentGradeBPS', 'Current BPS')" class="cursor-p">
+              <td><strong class="p-strong">Current Grade BPS</strong></td>
+              <td>{{profile.CurrentGradeBPS}}</td>
+            </tr>
+            <tr (click)="openEditDialog('JoiningGradeBPS', 'Joining BPS')" class="cursor-p">
+              <td><strong class="p-strong">Joining Grade BPS</strong></td>
+              <td>{{profile.JoiningGradeBPS}}</td>
+            </tr>
+            <tr (click)="openEditDialog('StatusName')" class="cursor-p">
+              <td><strong class="p-strong">Status</strong></td>
+              <td>{{profile.StatusName}}</td>
+            </tr>
+            <tr (click)="openEditDialog('SeniorityNo')" class="cursor-p">
+              <td><strong class="p-strong">Seniority Number</strong></td>
+              <td>{{profile.SeniorityNo}}</td>
+            </tr>
+            <tr (click)="openEditDialog('PersonnelNo')" class="cursor-p">
+              <td><strong class="p-strong">Personnel Number</strong></td>
+              <td>{{profile.PersonnelNo}}</td>
+            </tr>
+
+            <tr (click)="openEditDialog('PresentPostingOrderNo', 'Present Posting Order No')" class="cursor-p">
+              <td><strong class="p-strong">Present Posting Order No</strong></td>
+              <td>{{profile.PresentPostingOrderNo}}
+              </td>
+            </tr>
+            <tr (click)="openEditDialog('PresentPostingDate', 'Present Posting Date')" class="cursor-p">
+              <td><strong class="p-strong">Present Posting Date</strong></td>
+              <td>{{profile.PresentPostingDate | date:'dd-MM-yyyy'}}<i
+                  class="edit-button fa fa-pencil-square-o animated fadeIn"></i></td>
+            </tr>
+            <tr (click)="openEditDialog('PresentStationLengthOfService')" class="cursor-p">
+              <td><strong class="p-strong">Present Joining Date</strong></td>
+              <td>{{profile.PresentStationLengthOfService | date:'dd-MM-yyyy'}}<i
+                  class="edit-button fa fa-pencil-square-o animated fadeIn"></i></td>
+            </tr>
+          </tbody>
+        </table>
+        <table class="table table-50 view-table mt-4" style="background: #f7f8fa;">
+          <tbody>
+            <tr (click)="openEditDialog('Department_Name')" class="cursor-p">
+              <td><strong class="p-strong">Department</strong></td>
+              <td>{{profile.Department_Name}}</td>
+            </tr>
+            <tr (click)="openEditDialog('PostType_Name')" class="cursor-p">
+              <td><strong class="p-strong">Post Type</strong></td>
+              <td>{{profile.PostType_Name}}</td>
+            </tr>
+            <tr (click)="openEditDialog('Cadre_Name')" class="cursor-p">
+              <td><strong class="p-strong">Cadre</strong></td>
+              <td>{{profile.Cadre_Name}}</td>
+            </tr>
+            <tr (click)="openEditDialog('EmpMode_Name')" class="cursor-p">
+              <td><strong class="p-strong">Employment Mode</strong></td>
+              <td>{{profile.EmpMode_Name}}</td>
+            </tr>
+            <tr (click)="openEditDialog('LengthOfService')" class="cursor-p">
+              <td><strong class="p-strong">Length of Service</strong></td>
+              <td>{{profile.LengthOfService}}</td>
+            </tr>
+            <tr (click)="openEditDialog('QualificationName')" class="cursor-p">
+              <td><strong class="p-strong">Qualification</strong></td>
+              <td>{{profile.QualificationName}}</td>
+            </tr>
+            <tr (click)="openEditDialog('AdditionalQualification')" class="cursor-p"
+              *ngIf="profile.AdditionalQualification">
+              <td><strong class="p-strong">Additional Qualification</strong></td>
+              <td>{{profile.AdditionalQualification}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table class="table table-50 view-table mt-4" style="background: #f7f8fa;">
+          <tbody>
+            <tr (click)="openEditDialog('DateOfFirstAppointment')" class="cursor-p">
+              <td><strong class="p-strong">Date of First Appointment</strong></td>
+              <td>{{profile.DateOfFirstAppointment | date:'dd-MM-yyyy'}}<i
+                  class="edit-button fa fa-pencil-square-o animated fadeIn"></i>
+              </td>
+            </tr>
+            <tr (click)="openEditDialog('DateOfRegularization')" class="cursor-p">
+              <td><strong class="p-strong">Date of Regularization</strong></td>
+              <td>{{profile.DateOfRegularization | date:'dd-MM-yyyy'}}<i
+                  class="edit-button fa fa-pencil-square-o animated fadeIn"></i>
+              </td>
+            </tr>
+            <tr (click)="openEditDialog('LastPromotionDate')" class="cursor-p">
+              <td><strong class="p-strong">Last Promotion Date</strong></td>
+              <td>{{profile.LastPromotionDate | date:'dd-MM-yyyy'}}<i
+                  class="edit-button fa fa-pencil-square-o animated fadeIn"></i></td>
+            </tr>
+            <tr (click)="openEditDialog('SuperAnnuationDate')" class="cursor-p">
+              <td><strong class="p-strong">Superannuation Date</strong></td>
+              <td>{{profile.SuperAnnuationDate | date:'dd-MM-yyyy'}}<i
+                  class="edit-button fa fa-pencil-square-o animated fadeIn"></i></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-7">
+        <div class="content-heading mb-3">
+          Service History
+        </div>
+        <kendo-grid [data]="serviceHistory" *ngIf="serviceHistory && serviceHistory.length > 0">
+          <kendo-grid-column field="Name" [title]="'Place of Posting'" width="65" [headerClass]="'grid-header-custom'"
+            [class]="{ 'grid-cell-custom': true }">
+            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+              <p class="m-0">{{dataItem.FullName}}
+              </p>
+              <p class="m-0" *ngIf="dataItem.DesignationName">{{dataItem.DesignationName}}<span
+                  *ngIf="dataItem.EmpModeName">{{' - ' + dataItem.EmpModeName}}</span></p>
+              <p class="m-0"><strong class="p-strong">Order Number:</strong>
+                {{dataItem.OrderNumber ? dataItem.OrderNumber : 'N/A'}} - <strong class="p-strong">Dated:</strong>
+                {{dataItem.OrderDate ? (dataItem.OrderDate |  date:'dd/MM/yyyy') : 'N/A'}}</p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="FromDate" [title]="'Period'" width="35" [headerClass]="'grid-header-custom'"
+            [class]="{ 'grid-cell-custom': true }">
+            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+              <p class="m-0"><strong class="p-strong">From</strong> {{dataItem.From_Date | date:'dd/MM/yyyy'}}<span
+                  *ngIf="dataItem.Continued"> - Continue</span></p>
+              <p class="m-0" *ngIf="dataItem.To_Date && !dataItem.Continued"><strong class="p-strong">Date To</strong>
+                {{dataItem.To_Date | date:'dd/MM/yyyy'}}</p>
+              <p class="m-0" *ngIf="dataItem.TotalDays">{{dataItem.TotalDays}} Day<span
+                  *ngIf="dataItem.TotalDays > 1">s</span>
+              </p>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+        <hr>
+        <div class="content-heading mb-3">
+          Leave Record
+        </div>
+        <kendo-grid [data]="leaveRecord" *ngIf="!leaveRecord && leaveRecord.length > 0">
+          <kendo-grid-column field="Name" [title]="'Type of Leave'" width="65" [headerClass]="'grid-header-custom'"
+            [class]="{ 'grid-cell-custom': true }">
+            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+              <p class="m-0">{{dataItem.LeaveType}}</p>
+              <p class="m-0"><strong class="p-strong">Order Number:</strong> {{dataItem.OrderNumber}}</p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="FromDate" [title]="'Period'" width="35" [headerClass]="'grid-header-custom'"
+            [class]="{ 'grid-cell-custom': true }">
+            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+              <p class="m-0"><strong class="p-strong">From</strong> {{dataItem.FromDate | date:'dd/MM/yyyy'}} - <strong
+                  class="p-strong">To</strong> {{dataItem.ToDate | date:'dd/MM/yyyy'}}</p>
+              <p class="m-0">{{dataItem.TotalDays}} Day<span
+                  *ngIf="dataItem.TotalDays && dataItem.TotalDays > 1">s</span></p>
+
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="ToDate" [title]="'To'" width="10" [headerClass]="'grid-header-text'"
+            [style]="{'background-color': '#fff','color': '#000', 'padding': '12px 8px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+              <p class="m-0">{{dataItem.ToDate | date:'dd/MM/yyyy'}}
+              </p>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+    </div>
+    <hr>
+    <div class="row animated fadeIn" *ngIf="profile && !infoCorrect">
+      <div class="col-md-7 control-col-st">
+        <button kendoButton primary="true" routerLink="/e/apply" class="btn-lg btn-block"><i
+            class="fa fa-check-square-o"></i> My
+          Information is Correct. I Accept Terms &
+          Conditions</button>
+      </div>
+      <div class="col-md-5 control-col-end">
+        <button kendoButton primary="true" class="btn-lg btn-block" [routerLink]="['/e/issue']" look="outline"><i
+            class="fa fa-exclamation"></i> Report an Issue</button>
+      </div>
+    </div>
+    <div hidden class="row" *ngIf="profile && infoCorrect">
+      <div class="col-md-12 animated fadeIn">
+        <i>
+          <h5 class="cursor-p text-success" routerLink="/e/apply">Thankyou! Click here to apply for transfer</h5>
+        </i>
+      </div>
+    </div>
+    <hr>
+    <!--  <i class="edit-button fa fa-pencil-square-o animated fadeIn"></i> -->
+
+    <!-- <div class="row">
+      <div class="col-md-7 col-xs-12">
+        <div class="top-h3">
+          Recent Applications
+        </div>
+      </div>
+    </div>
+    <div class="row row-panel">
+      <div class="col-md-4 mb-3" *ngFor="let application of applications; let i = index;"
+        [ngClass]="i % 3 === 0 ? 'control-col-st' : i % 3 === 1 ? 'control-col' : i % 3 === 2 ? 'control-col-end' : ''">
+        <div class="order-thumb">
+          <div class="order-thumb-wrap">
+            <div class="order-thumb-type">
+              {{application.ApplicationTypeName}} <span class="pull-right"><i class="fa fa-barcode"></i>
+                {{application.TrackingNumber}}</span>
+            </div>
+            <hr>
+            <div class="order-thumb-employee mt-1">
+              {{application.ForwardingOfficerName}}
+            </div>
+            <div class="order-thumb-employee">
+              {{application.StatusName}}
+            </div>
+          </div>
+          <div class="order-thumb-log-wrap">
+            <div class="order-thumb-log"> <span>{{application.ApplicationSourceName}}</span> <span class="pull-right"><i
+                  class="fa fa-calendar"></i>
+                {{application.Created_Date | date:'d/M/yy, h:mm a'}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div> -->
+  </div>
+
+  <!--   <div class="card" hidden>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="callout callout-info"><span class="text-muted">Applications</span><br><strong class="h4">9,123</strong>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="callout callout-danger"><span class="text-muted">Orders</span><br><strong class="h4">22,643</strong></div>
+        </div>
+        <div class="col-sm-3">
+          <div class="callout callout-warning"><span class="text-muted">File / ACRs</span><br><strong class="h4">78,623</strong></div>
+        </div>
+        <div class="col-sm-3">
+          <div class="callout callout-success"><span class="text-muted">Employee Profiles</span><br><strong class="h4">49,123</strong></div>
+        </div>
+      </div>
+
+    </div>
+  </div> -->
+</div>

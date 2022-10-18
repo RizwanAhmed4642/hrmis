@@ -1,0 +1,191 @@
+<div class="animated fadeIn app-bg-black">
+  <div class="d-flex">
+    <div class="w-50">
+      <button kendoButton (click)="showTable = !showTable" primary="true">Show Table</button>
+      <button kendoButton (click)="fetchCovidData()" [ladda]="loading" data-style="zoom-in"
+        primary="true">Refresh</button>
+    </div>
+    <div class="w-50">
+      <div class="d-flex">
+        <div class="w-33">
+          <div *ngFor="let covid of covids; let i = index">
+            <div class="c-item" *ngIf="covid.ConfirmedCase >= 5000" (mouseover)="mouseover(covid)"
+              (mouseout)="mouseout(covid)">
+              <table class="nation-table-1">
+                <tbody>
+                  <tr>
+                    <!--   <td rowspan="3">
+
+                    </td> -->
+                    <td colspan="3">
+                      <div class="d-flex">
+                        <img *ngIf="covid.ASCII" class="c-flag-1"
+                          [src]="'https://www.countryflags.io/' + covid.ASCII[0] + covid.ASCII[1] + '/' + (covid.mouseover ? 'shiny' : 'flat') + '/64.png'">
+                        <div class="ml-1 w-100">
+                          <div class="c-name-1">{{covid.Nation}}
+                            <!--  <small
+                              class="pull-right"><i>{{covid.DateTime | amTimeAgo:true}}</i></small> -->
+                          </div>
+                          <table class="nation-table-1 nation-table-stats-1">
+                            <tbody>
+                              <tr>
+                                <td><span class="c-title-1">Case</span></td>
+                                <td><span class="pull-right c-title-1">Death</span></td>
+                                <td><span class="pull-right c-title-1">Recovered</span></td>
+                              </tr>
+                              <tr>
+                                <td class="c-numbers-1">
+                                  <span>{{covid.ConfirmedCase | number}}</span>
+                                </td>
+                                <td class="c-numbers-1"><span class="pull-right">{{covid.Death | number}}</span></td>
+                                <td class="c-numbers-1"><span class="pull-right">{{covid.Recover | number}}</span></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="w-33">
+          <div *ngFor="let covid of covids; let i = index">
+            <div class="c-item" *ngIf="covid.ConfirmedCase >= 700 && covid.ConfirmedCase < 5000"
+              (mouseover)="mouseover(covid)" (mouseout)="mouseout(covid)">
+              <table class="nation-table-1">
+                <tbody>
+                  <tr>
+                    <!--   <td rowspan="3">
+
+                    </td> -->
+                    <td colspan="3">
+                      <div class="d-flex">
+                        <img *ngIf="covid.ASCII" class="c-flag-2"
+                          [src]="'https://www.countryflags.io/' + covid.ASCII[0] + covid.ASCII[1] + '/' + (covid.mouseover ? 'shiny' : 'flat') + '/64.png'">
+                        <div class="ml-1 w-100">
+                          <div class="c-name-2">{{covid.Nation}}</div>
+                          <table class="nation-table-1 nation-table-stats-1">
+                            <tbody>
+                              <tr>
+                                <td class="c-numbers-2" colspan="3">
+                                  <span>{{covid.ConfirmedCase | number}}&nbsp;<span
+                                      class="c-title-2">C</span></span>&nbsp;
+                                  <span class="ml-3">{{covid.Death | number}}&nbsp;<span
+                                      class="c-title-2">D</span></span>&nbsp;
+                                  <span class="ml-3">{{covid.Recover | number}}&nbsp;<span
+                                      class="c-title-2">R</span></span>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="w-33">
+          <div *ngFor="let covid of covids; let i = index">
+            <div class="c-item" *ngIf="covid.ConfirmedCase < 700" (mouseover)="mouseover(covid)"
+              (mouseout)="mouseout(covid)">
+              <table class="nation-table-1">
+                <tbody>
+                  <tr>
+                    <!--   <td rowspan="3">
+
+                    </td> -->
+                    <td colspan="3">
+                      <div class="d-flex">
+                        <img *ngIf="covid.ASCII" class="c-flag-2"
+                          [src]="'https://www.countryflags.io/' + covid.ASCII[0] + covid.ASCII[1] + '/' + (covid.mouseover ? 'shiny' : 'flat') + '/64.png'">
+                        <div class="ml-1 w-100">
+                          <div class="c-name-2">{{covid.Nation}}</div>
+                          <table class="nation-table-1 nation-table-stats-1">
+                            <tbody>
+                              <tr>
+                                <td class="c-numbers-2" colspan="3">
+                                  <span>{{covid.ConfirmedCase | number}}&nbsp;<span
+                                      class="c-title-2">C</span></span>&nbsp;
+                                  <span class="ml-3">{{covid.Death | number}}&nbsp;<span
+                                      class="c-title-2">D</span></span>&nbsp;
+                                  <span class="ml-3">{{covid.Recover | number}}&nbsp;<span
+                                      class="c-title-2">R</span></span>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="animated fadeIn" *ngIf="covids.length > 0 && !loading && showTable">
+        <kendo-grid [data]="covids">
+          <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-text'"
+            [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+              <p class="hoverable-table" (click)="cellCLicked(dataItem, column.field)">{{(rowIndex + 1)}}
+              </p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="Nation" [title]="'Nation'" width="35" [headerClass]="'grid-header-text'"
+            [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+              <p class="hoverable-table" (click)="cellCLicked(dataItem, column.field)">
+                {{dataItem.Nation}}
+              </p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="ConfirmedCase" title="Confirmed Case" width="20"
+            [headerClass]="'grid-header-text-center'"
+            [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+              <p class="hoverable-table" style="text-align: center;" (click)="cellCLicked(dataItem, column.field)">
+                {{dataItem.ConfirmedCase | number}}
+              </p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="Death" width="20" title="Death" [headerClass]="'grid-header-text-center'"
+            [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+              <p class="hoverable-table" style="text-align: center;" (click)="cellCLicked(dataItem, column.field)">
+                {{dataItem.Death | number}}
+              </p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="Recover" width="20" title="Recovered" [headerClass]="'grid-header-text-center'"
+            [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+              <p class="hoverable-table" style="text-align: center;" (click)="cellCLicked(dataItem, column.field)">
+                {{dataItem.Recover | number}}
+              </p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="Recover" width="20" title="Recovered" [headerClass]="'grid-header-text-center'"
+            [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+              <p class="hoverable-table" style="text-align: center;" (click)="cellCLicked(dataItem, column.field)">
+                {{dataItem.DateTime | amTimeAgo}}
+              </p>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+
+</div>

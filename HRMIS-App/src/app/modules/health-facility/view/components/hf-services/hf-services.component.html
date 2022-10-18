@@ -1,0 +1,33 @@
+<kendo-grid [data]="gridView" [sortable]="{
+  allowUnsort: allowUnsort,
+  mode: multiple ? 'multiple' : 'single'
+  }" [sort]="sort" (sortChange)="sortChange($event)">
+  <kendo-grid-column field="asd" title="No." [width]="10" [headerClass]="'grid-header-custom'"
+    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+      <p style="margin: 0;">{{(rowIndex + 1)}}.</p>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="Name" title="Service" [width]="90" [headerClass]="'grid-header-custom'"
+    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+  </kendo-grid-column>
+
+  <kendo-grid-column field="asd" title="Action" [width]="15"
+    *ngIf="currentUser?.UserName.toLowerCase().startsWith('ceo.') && hfTypeCode != '011' && hfTypeCode != '012'"
+    [headerClass]="'grid-header-custom'"
+    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <button class="btn btn-danger btn-sm"
+        (click)="removeHFService(dataItem.HF_Id, dataItem.Services_Id)">Remove</button>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="asd" title="Action" [width]="15"
+    *ngIf="!currentUser?.UserName.toLowerCase().startsWith('ceo.') && currentUser.RoleName != 'Deputy Secretary' && currentUser.RoleName != 'HRView'"
+    [headerClass]="'grid-header-custom'"
+    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <button class="btn btn-danger btn-sm"
+        (click)="removeHFService(dataItem.HF_Id, dataItem.Services_Id)">Remove</button>
+    </ng-template>
+  </kendo-grid-column>
+</kendo-grid>

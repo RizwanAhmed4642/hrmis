@@ -1,0 +1,252 @@
+<div class="animated fadeIn">
+  <div class="row animated fadeIn" *ngIf="!newInquiry">
+    <div class="col-md-12">
+      <button class="" (click)="newInquiry = true" kendoButton primary="true"><i class="fa fa-plus-circle"></i>&nbsp;Inquiry</button>
+    </div>
+  </div>
+  <div class="animated fadeIn" *ngIf="newInquiry">
+    <div class="content-heading mb-2">
+      Penalties
+    </div>
+    <div class="row">
+      <div class="col-md-4 control-col-st">
+        <div>
+          <h4 class="text-center p-strong">Minor Penalties</h4>
+        </div>
+        <div *ngFor="let penalty of minorPenalties;let i = index;" class="p-2 my-2 bg-white border">
+          <div>
+            <input type="checkbox" [(ngModel)]="penalty.checked" [id]="penalty.Id.toString()" class="k-checkbox" />
+            <label class="k-checkbox-label" [for]="penalty.Id.toString()"><strong
+                class="p-strong">{{penalty.Name}}</strong>
+            </label>
+            <div *ngIf="penalty.Name != penalty.Detail" class="mt-1">
+              <p>{{penalty.Detail}}</p>
+            </div>
+
+            <div *ngIf="penalty.checked && penalty.Id == 3" class="animated fadeIn">
+              <label class="k-form-field">
+                <span>Amount (Rs.)&nbsp;<span class="text-danger">*</span></span>
+                <input kendoTextBox type="text" [(ngModel)]="penalty.Amount">
+              </label>
+            </div>
+            <div *ngIf="penalty.checked && penalty.Id == 4" class="animated fadeIn">
+              <label class="k-form-field">
+                <span>Stage <small class="text-muted">(comma seperated names for more than 1
+                    stage, maximum 5)</small>&nbsp;<span class="text-danger">*</span></span>
+                <input kendoTextBox type="text" [(ngModel)]="penalty.Remarks">
+              </label>
+            </div>
+            <div class="row animated fadeIn" *ngIf="penalty.checked && (penalty.Id == 2 || penalty.Id == 5)">
+              <div class="col-md-12">
+                <label class="k-form-field">
+                  <span>Number of Years&nbsp;<span class="text-danger">*</span></span>
+                  <kendo-dropdownlist [data]="years" [defaultItem]="'Select Number of Years'"
+                    [(ngModel)]="penalty.NumberOfYears" [valuePrimitive]="true">
+                  </kendo-dropdownlist>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 control-col">
+        <div>
+          <h4 class="text-center p-strong">Major Penalties</h4>
+        </div>
+        <div *ngFor="let penalty of majorPenalties;let i = index;" class="p-2 my-2 bg-white border">
+          <div>
+            <!--  (change)="allowAll($event)" -->
+            <input type="checkbox" [(ngModel)]="penalty.checked" [id]="penalty.Id.toString()" class="k-checkbox" />
+            <label class="k-checkbox-label" [for]="penalty.Id.toString()"><strong
+                class="p-strong">{{penalty.Name}}</strong>
+            </label>
+            <div *ngIf="penalty.Name != penalty.Detail" class="mt-1">
+              <p>{{penalty.Detail}}</p>
+            </div>
+            <div *ngIf="penalty.checked && penalty.Id == 6" class="animated fadeIn">
+              <!--   <div class="k-form-field">
+                <input type="radio" [id]="'Pay' + penalty.Id.toString()" value="1" [(ngModel)]="penalty.AmountSource_Id"
+                  class="k-radio" />
+                <label class="k-radio-label" [for]="'Pay' + penalty.Id.toString()">From Pay</label>
+              </div>
+              <div class="k-form-field">
+                <input type="radio" [id]="'Pension' + penalty.Id.toString()" value="2"
+                  [(ngModel)]="penalty.AmountSource_Id" class="k-radio" />
+                <label class="k-radio-label" [for]="'Pension' + penalty.Id.toString()">From Pension</label>
+              </div>
+              <div class="k-form-field">
+                <input type="radio" [id]="'Other' + penalty.Id.toString()" value="3"
+                  [(ngModel)]="penalty.AmountSource_Id" class="k-radio" />
+                <label class="k-radio-label" [for]="'Other' + penalty.Id.toString()">Other</label>
+              </div> -->
+              <label class="k-form-field">
+                <span>Amount (Rs.)&nbsp;<span class="text-danger">*</span></span>
+                <input kendoTextBox type="text" [(ngModel)]="penalty.Amount">
+              </label>
+            </div>
+          </div>
+          <!--  <div *ngIf="penalty.checked && penalty.Id == 7" class="animated fadeIn">
+            <label class="k-form-field">
+              <span>Scale&nbsp;<span class="text-danger">*</span></span>
+              <input kendoTextBox type="text" [(ngModel)]="penalty.Scale">
+            </label>
+          </div> -->
+          <div class="row animated fadeIn" *ngIf="penalty.checked && (penalty.Id == 7 || penalty.Id == 8)">
+            <div class="col-md-12">
+              <label class="k-form-field">
+                <span>Number of Years&nbsp;<span class="text-danger">*</span></span>
+                <kendo-dropdownlist [data]="years" [defaultItem]="'Select Number of Years'" [valuePrimitive]="true"
+                  [(ngModel)]="penalty.NumberOfYears">
+                </kendo-dropdownlist>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 control-col-end">
+        <div>
+          <h4 class="text-center p-strong">Penalties after Retirement</h4>
+        </div>
+        <div *ngFor="let penalty of retiredPenalties;let i = index;" class="p-2 my-2 bg-white border">
+          <div>
+            <input type="checkbox" [(ngModel)]="penalty.checked" [id]="penalty.Id.toString()" class="k-checkbox" />
+            <label class="k-checkbox-label" [for]="penalty.Id.toString()"><strong
+                class="p-strong">{{penalty.Name}}</strong>
+            </label>
+            <div *ngIf="penalty.Name != penalty.Detail" class="mt-1">
+              <p>{{penalty.Detail}}</p>
+            </div>
+            <div *ngIf="penalty.checked && penalty.Id == 14" class="animated fadeIn">
+              <label class="k-form-field">
+                <span>Amount (Rs.)&nbsp;<span class="text-danger">*</span></span>
+                <input kendoTextBox type="text" [(ngModel)]="penalty.Amount">
+              </label>
+            </div>
+            <div *ngIf="penalty.checked && (penalty.Id == 12 || penalty.Id == 13)" class="animated fadeIn">
+              <!--     <div class="k-form-field">
+                <input type="radio" [id]="'Pay' + penalty.Id.toString()" value="1" [(ngModel)]="penalty.AmountSource_Id"
+                  class="k-radio" />
+                <label class="k-radio-label" [for]="'Pay' + penalty.Id.toString()">From Pay</label>
+              </div>
+              <div class="k-form-field">
+                <input type="radio" [id]="'Pension' + penalty.Id.toString()" value="2"
+                  [(ngModel)]="penalty.AmountSource_Id" class="k-radio" />
+                <label class="k-radio-label" [for]="'Pension' + penalty.Id.toString()">From Pension</label>
+              </div>
+              <div class="k-form-field">
+                <input type="radio" [id]="'Other' + penalty.Id.toString()" value="3"
+                  [(ngModel)]="penalty.AmountSource_Id" class="k-radio" />
+                <label class="k-radio-label" [for]="'Other' + penalty.Id.toString()">Other</label>
+              </div> -->
+              <label class="k-form-field">
+                <span>Number of Years&nbsp;<span class="text-danger">*</span></span>
+                <input kendoTextBox type="text" [(ngModel)]="penalty.NumberOfYears">
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-md-3 control-col-st">
+        <label class="k-form-field">
+          <span>Order No.</span>
+          <input type="text" kendoTextBox [(ngModel)]="inquiry.OrderNo" />
+        </label>
+      </div>
+      <div class="col-md-3 control-col">
+        <label class="k-form-field">
+          <span>Date of Initiation</span>
+          <kendo-datepicker [format]="'dd/MM/yyyy'" [(ngModel)]="inquiry.DateInitiated"></kendo-datepicker>
+        </label>
+      </div>
+      <div class="col-md-3 control-col">
+        <label class="k-form-field">
+          <span>Finalization Date</span>
+          <kendo-datepicker name="DateOfBirth" [format]="'dd/MM/yyyy'" [(ngModel)]="inquiry.DateFinalized"
+            #DateOfBirth="ngModel" required></kendo-datepicker>
+        </label>
+      </div>
+      <div class="col-md-3 control-col-end">
+        <label class="k-form-field">
+          <span>Status <span class="text-danger">*</span></span>
+          <kendo-dropdownlist name="PrivatePractice" [data]="dropDowns.inquiryStatuses" [textField]="'Name'"
+            [valueField]="'Id'" [valuePrimitive]="true" [(ngModel)]="inquiry.Status_Id" #PrivatePractice="ngModel"
+            [defaultItem]="dropDowns.defultFiltersModel.inquiryStatus">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+    </div>
+    <div class="row">
+
+      <div class="col-md-6 control-col-st">
+        <label class="k-form-field">
+          <span>Charges</span>
+          <textarea kendoTextArea [(ngModel)]="inquiry.Charges"></textarea>
+        </label>
+      </div>
+      <div class="col-md-6 control-col-end">
+        <label class="k-form-field">
+          <span>Remarks</span>
+          <textarea kendoTextArea [(ngModel)]="inquiry.Remarks"></textarea>
+        </label>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-md-3 control-col-st">
+        <button kendoButton primary="true" [disabled]="!inquiry.Status_Id" (click)="saveInquiry()"
+          [ladda]="savingInquiry" data-style="zoom-in" class="btn-block">
+          Save
+        </button>
+      </div>
+      <div class="col-md-3 control-col-end">
+        <button kendoButton primary="true" look="outline" (click)="newInquiry = false" class="btn-block">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div style="margin-left: 33%;margin-top: 80px;" *ngIf="kGrid.data.length == 0 && !newInquiry">
+    <h1 class="text-muted"><i class="fa fa-check-circle"></i> No Inquiries</h1>
+  </div>
+  <div class="row" *ngIf="kGrid.data.length > 0">
+    <div class="col-md-12">
+      <div class="grid-wrapper">
+        <kendo-grid [data]="kGrid.data">
+          <kendo-grid-column field="asd" title="No." [width]="10" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p style="margin: 0;width:100%;cursor:pointer;">{{(rowIndex + 1)}}</p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="asd" title="Title" [width]="80" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <h5 style="margin: 0;width:100%;cursor:pointer;"><strong class="p-strong">Status:
+                </strong>{{dataItem.Status}}</h5>
+              <p style="margin: 0;width:100%;cursor:pointer;" *ngIf="dataItem.Charges"><strong class="p-strong">Charges:
+                </strong>{{dataItem.Charges}}</p>
+              <p style="margin: 0;width:100%;cursor:pointer;" *ngIf="dataItem.Remarks"><strong class="p-strong">Remarks:
+                </strong>{{dataItem.Remarks}}</p>
+              <div *ngIf="showInquiryDetail">
+                <p style="margin: 0;width:100%;cursor:pointer;"
+                  *ngFor="let p of getInquiryPenalties(dataItem.Id);let i = index;">
+                  {{(i + 1)}}. {{p.PenaltyType}}</p>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="asd" title="Action" [width]="10" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <button kendoButton primary="true" class="btn-sm" (click)="showInquiryDetail = !showInquiryDetail">View
+                Detail</button>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+</div>

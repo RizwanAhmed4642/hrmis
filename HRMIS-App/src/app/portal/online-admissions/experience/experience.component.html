@@ -1,0 +1,184 @@
+<div class="animated fadeIn" *ngIf="2 + 2 == 4">
+    <p class="p-strong" style="text-align:center">
+      Portal is closed
+    </p>
+  </div>
+
+<div class="animated fadein">
+    <div class="animated fadeIn">
+        <div class="row mb-2">
+            <div class="col-md-2 control-col-st">
+                <button kendoButton primary="true" look="outline" class="cursor-p btn-block" routerLink="/adhoc/apply">1
+                    - <i class="fa fa-graduation-cap"></i>
+                    Select Post</button>
+            </div>
+            <div class="col-md-2 control-col">
+                <button kendoButton primary="true" look="outline" class="cursor-p btn-block" routerLink="/adhoc/apply">2
+                    - <i class="fa fa-user"></i>
+                    Profile</button>
+            </div>
+            <div class="col-md-2 control-col">
+                <button kendoButton primary="true" look="outline" class="cursor-p btn-block"
+                    routerLink="/adhoc/qualification">3 - <i class="fa fa-file"></i>
+                    Qualification</button>
+            </div>
+            <div class="col-md-2 control-col">
+                <button kendoButton primary="true" class="btn-block" routerLink="/adhoc/experience">4 - <i
+                        class="fa fa-medkit"></i>
+                    Experience</button>
+            </div>
+            <div class="col-md-2 control-col">
+                <button kendoButton primary="true" [disabled]="applicant.Status_Id < 7" look="outline"
+                    class="cursor-p btn-block" routerLink="/adhoc/preferences">5 -<i class="fa fa-building-o"></i>
+                    Preferences</button>
+            </div>
+            <div class="col-md-2 control-col-end">
+                <button kendoButton primary="true" [disabled]="applicant.Status_Id < 7" look="outline"
+                    class="cursor-p btn-block" routerLink="/adhoc/experience">4 - <i class="fa fa-print"></i>
+                    Finalize & Print!</button>
+            </div>
+        </div>
+
+        <div class="row animated fadeIn">
+            <div class="col-md-6">
+                <p class="font-2xl m-0">
+                    {{urdu.infoeng}}
+                    <br>
+                    {{urdu.infoeng2}}
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p class="urdu-text font-3xl m-0 p-strong text-center">
+                    {{urdu.info}}
+                </p>
+            </div>
+        </div>
+        <div class="animated fadeIn">
+            <hr>
+            <div *ngIf="2 + 2 == 4" class="row animated fadeIn p-2"
+                style="background: #e9e9e9;color: black;border-radius: 9px;">
+                <div class="col-md-1 control-col-st">
+                    <input type="radio" value="Public Sector" id="Public" [(ngModel)]="experience.Sector"
+                        kendoRadioButton />
+                    <label class="k-label ml-2" for="Public">Public Sector</label>
+                </div>
+                <div class="col-md-1 control-col-st">
+                    <input type="radio" value="Private Sector" id="Private" [(ngModel)]="experience.Sector"
+                        kendoRadioButton />
+                    <label class="k-label ml-2" for="Private">Private Sector</label>
+                </div>
+                <div class="col-md-4 control-col">
+                    <label class="k-form-field">
+                        <span>Health Facility&nbsp;<span class="text-danger">*</span></span>
+                        <input kendoTextBox type="text" [(ngModel)]="experience.Organization" />
+                    </label>
+                </div>
+                <div class="col-md-4 control-col-end">
+                    <label class="k-form-field">
+                        <span>Job Title <span class="text-danger">*</span></span>
+                        <input kendoTextBox type="text" [(ngModel)]="experience.JobTitle" />
+                    </label>
+                </div>
+                <div class="col-md-2 control-col-end">
+                    <label class="k-form-field">
+                        <span>Experience Type</span>&nbsp;<span class="text-danger">*</span>
+                        <kendo-dropdownlist name="expType" [data]="expTypes" [(ngModel)]="experience.TypeId"
+                            #expType="ngModel" [defaultItem]="{Id: 0, Name: 'Select Type'}" [textField]="'Name'"
+                            [valueField]="'Id'" [valuePrimitive]="true" required>
+                        </kendo-dropdownlist>
+                    </label>
+                </div>
+                <div class="col-md-2 control-col-st">
+                    <label class="k-form-field">
+                        <span>Duration (from)&nbsp;<span class="text-danger">*</span></span>
+                        <kendo-datepicker [format]="'dd/MM/yyyy'" [(ngModel)]="fromDate"></kendo-datepicker>
+                    </label>
+                </div>
+                <div class="col-md-2 control-col">
+                    <label class="k-form-field">
+                        <span>Duration (to)&nbsp;<span class="text-danger">*</span></span>
+                        <kendo-datepicker [format]="'dd/MM/yyyy'" [(ngModel)]="toDate"></kendo-datepicker>
+                    </label>
+                </div>
+                <div class="col-md-5 control-col">
+                    <label class="k-form-field">
+                        <span>{{photoFile.length == 0 ? 'Experience Ceritificate' : photoFile[0].name}}</span>&nbsp;<span
+                            class="text-danger">*</span>&nbsp;<small class="text-muted">(only .jpg, .pdf of maximum
+                            5mb)</small>
+                        <input type="file" accept="image/jpg, image/jpeg, image/png, application/pdf"
+                            (change)="readUrl($event, 'pic')">
+                    </label>
+                </div>
+                <div class="col-md-3 control-col-end">
+                    <label class="k-form-field">
+                        <button kendoButton primary="true" [ladda]="addingExperience" data-style="zoom-in"
+                            [disabled]="!experience.Organization || !experience.JobTitle || photoFile.length == 0 || !fromDate || !toDate"
+                            (click)="addExperience(experience)" class="btn-align-v btn-block">Save</button>
+                    </label>
+                </div>
+            </div>
+            <hr>
+            <kendo-grid [data]="experiences" *ngIf="!loading">
+                <kendo-grid-column field="asd" [title]="'Sr.'" width="10" [headerClass]="'grid-header-custom'"
+                    [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{(rowIndex + 1)}}.
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="Organization" [title]="'Attachment'" width="25"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <img width="50px" [src]="'../../../../../../assets/img/icons/pdf-icon.png'"
+                            (click)="openInNewTab('http://localhost:8913/' + dataItem.UploadPath)" draggable="false"
+                            alt="">
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="Organization" [title]="'Organization'" width="30"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0 p-strong">{{dataItem.Organization}}</p>
+                        <p class="m-0">{{dataItem.JobTitle}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="JobTitle" [title]="'Job Title'" width="40"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0"><strong class="p-strong">From</strong> {{dataItem.FromDate | date:'dd/MM/yyyy'}}
+                            -
+                            <strong class="p-strong">To</strong> {{dataItem.ToDate | date:'dd/MM/yyyy'}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="JobTitle" [title]="'Type'" width="35" [headerClass]="'grid-header-custom'"
+                    [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{dataItem.Sector}}
+                            {{dataItem.Type == null ? '' : '-'}} {{dataItem.Type}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column *ngIf="2 + 2 == 4" field="Job Title" [title]="'Action'" width="15"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <button class="btn btn-sm btn-danger" (click)="removeExperience(dataItem)"
+                            [ladda]="dataItem.removing" data-style="zoom-in">remove</button>
+                    </ng-template>
+                </kendo-grid-column>
+
+            </kendo-grid>
+
+
+            <div class="animated fadeIn">
+                <hr>
+                <div class="row">
+                    <div class="col-md-6 offset-md-3">
+                        <button *ngIf="2 + 2 == 4" style="margin: 0 auto;" (click)="proceed()" class="btn-block btn-lg" kendoButton
+                            primary="true" look="outline">Proceed</button>
+                    </div>
+                    <div class="col-md-3 control-col-end">
+                        <button type="button" class="btn btn-secondary btn-block btn-lg"
+                            routerLink="/adhoc/account">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

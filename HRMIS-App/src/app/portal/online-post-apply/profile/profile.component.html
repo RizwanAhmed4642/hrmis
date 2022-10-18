@@ -1,0 +1,215 @@
+<!-- <div *ngIf="!profile" class="k-i-loading"></div>
+
+<div class="animated fadeIn" *ngIf="profile">
+  <div class="row">
+    <div class="col-md-6 col-sm-12 mt-2 control-col-st">
+      <table class="table table-50 view-table" style="background: transparent;">
+        <tbody>
+          <tr>
+            <td style=""><strong class="p-strong">Photo</strong></td>
+            <td style="">
+              <img class="pic-shadow" width="100" height="100"
+                [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + profile.CNIC + '_23.jpg?v=' + radnom"
+                onError="this.src='../../../assets/img/notfound.png'" alt="">
+            </td>
+          </tr>
+          <tr>
+            <td style=""><strong class="p-strong">Name</strong></td>
+            <td style="">{{profile.EmployeeName}}</td>
+          </tr>
+          <tr>
+            <td style=""><strong class="p-strong">Father Name</strong></td>
+            <td style="">{{profile.FatherName}}</td>
+          </tr>
+          <tr>
+            <td style=""><strong class="p-strong">CNIC</strong></td>
+            <td style="">{{dashifyCNIC(profile.CNIC)}}</td>
+          </tr>
+          <tr>
+            <td style=""><strong class="p-strong">D.O.B</strong></td>
+            <td style="">{{profile.DateOfBirth | date:'dd-MM-yyyy'}}</td>
+          </tr>
+          <tr>
+            <td style=""><strong class="p-strong">Gender</strong></td>
+            <td style="">{{profile.Gender}}</td>
+          </tr>
+          <tr>
+            <td style=""><strong class="p-strong">Domicile</strong></td>
+            <td style="">{{profile.Domicile_Name}}</td>
+          </tr>
+          <tr>
+            <td style=""><strong class="p-strong">Marital Status</strong></td>
+            <td style="">{{profile.MaritalStatus}}</td>
+          </tr>
+          <tr>
+            <td style=""><strong class="p-strong">Bloodgroup</strong></td>
+            <td style="">{{profile.BloodGroup}}</td>
+          </tr>
+          <tr>
+            <td style=""><strong class="p-strong">Religion</strong></td>
+            <td style="">{{profile.Religion_Name}}</td>
+          </tr>
+          <tr>
+            <td style=""><strong class="p-strong">Mother Tongue</strong></td>
+            <td style="">{{profile.Language_Name}}</td>
+          </tr>
+          <tr>
+            <td style=""><strong class="p-strong">Mobile Number</strong></td>
+            <td style="">{{profile.MobileNo}}</td>
+          </tr>
+          <tr>
+            <td style=""><strong class="p-strong">E-mail</strong></td>
+            <td style="">{{profile.EMaiL}}</td>
+          </tr>
+          <tr>
+            <td style=""><strong class="p-strong">Landline Number</strong></td>
+            <td style="">{{profile.LandlineNo}}</td>
+          </tr>
+          <tr>
+            <td style=""><strong class="p-strong">Fax Number</strong></td>
+            <td style="">{{profile.Faxno}}</td>
+          </tr>
+          <tr>
+            <td style=""><strong class="p-strong">Permanent Address</strong></td>
+            <td style="">{{profile.PermanentAddress}}</td>
+          </tr>
+          <tr>
+            <td style=""><strong class="p-strong">Correspondence
+                Address</strong></td>
+            <td style="">{{profile.CorrespondenceAddress}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div> -->
+<div class="animated fadeIn">
+  <div class="animated fadeIn"
+    *ngIf="profile.Status && (profile.Status == 'Accepted' || profile.Status == 'Completed')">
+    <div class="row mb-2">
+      <div class="col-md-4">
+        <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/smo/profile">1-
+          Profile</button>
+      </div>
+      <div class="col-md-4">
+        <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/smo/letter">2- Acceptance
+          Letter</button>
+      </div>
+      <div class="col-md-4">
+        <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/smo/preferences">3-
+          Preferences</button>
+      </div>
+    </div>
+    <hr>
+  </div>
+  <form name="profileform" (ngSubmit)="onSubmit()" #f="ngForm" novalidate>
+    <div class="p-4" style="background: #e9e9e9;color: black;border-radius: 9px;">
+      <div class="row print-not" id="applicantInfo">
+        <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col-st">
+          <label class="k-form-field">
+            <span>Passport Size Photo <span class="text-danger">*</span></span>
+            <div style="width:100%;">
+              <img *ngIf="photoSrc" class="animated fadeIn" style="width:100px;height:100px;border:1px solid;"
+                [src]="photoSrc" onError="this.src='../../../assets/img/notfound.png'" alt="">
+              <!--   <input #photoRef type="file" accept="image/jpg, image/jpeg, image/png" (change)="readUrl($event, 'pic')"
+                hidden>
+             <button kendoButton type="button" [primary]="true" [look]="'outline'" (click)="uploadBtn('pic')"
+                class="btn-sm btn-block" [ngClass]="photoFile.length == 0 ? 'mt-0' : 'mt-2'" style="cursor:pointer;"
+                [ladda]="isUploading" data-style="expand-right">
+                <i class="fa fa-upload"></i> {{photoFile.length == 0 ? 'Choose Photo' : 'Choose other'}}</button> -->
+            </div>
+          </label>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col-st">
+          <label class="k-form-field">
+            <span>CNIC</span>&nbsp;<span class="text-danger">*</span>
+            <kendo-maskedtextbox [mask]="cnicMask" (input)="inputChange.next(CNIC.value)" name="CNIC"
+              [(ngModel)]="profile.CNIC" disabled #CNIC="ngModel" required>
+            </kendo-maskedtextbox>
+          </label>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col">
+          <label class="k-form-field">
+            <span>First Name <span class="text-danger">*</span></span>
+            <input kendoTextBox type="text" disabled name="EmployeeName" [(ngModel)]="profile.EmployeeName"
+              #EmployeeName="ngModel" required />
+          </label>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col-end">
+          <label class="k-form-field">
+            <span>Last Name</span>&nbsp;<span class="text-danger">*</span>
+            <input kendoTextBox type="text" disabled name="FatherName" [(ngModel)]="profile.FatherName"
+              #FatherName="ngModel" required />
+          </label>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col-st">
+          <label class="k-form-field">
+            <span>Date of Birth</span>&nbsp;<span class="text-danger">*</span>
+            <kendo-datepicker name="DOB" disabled [max]="birthDateMax" [format]="'dd/MM/yyyy'"
+              [(ngModel)]="profile.DateOfBirth" #DOB="ngModel" required></kendo-datepicker>
+          </label>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col">
+          <label class="k-form-field">
+            <span>Domicile</span>&nbsp;<span class="text-danger">*</span>
+            <kendo-dropdownlist disabled [data]="dropDowns.domicile" [textField]="'DistrictName'" [valueField]="'Id'"
+              (valueChange)="dropdownValueChanged($event, 'domicile')" [value]="dropDowns.selectedFiltersModel.domicile"
+              [defaultItem]="dropDowns.defultFiltersModel.domicile">
+            </kendo-dropdownlist>
+          </label>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col">
+          <label class="k-form-field">
+            <span>Religion</span>&nbsp;<span class="text-danger">*</span>
+            <kendo-dropdownlist disabled [data]="dropDowns.religions" [textField]="'Name'" [valueField]="'Id'"
+              (valueChange)="dropdownValueChanged($event, 'religion')" [value]="dropDowns.selectedFiltersModel.religion"
+              [defaultItem]="dropDowns.defultFiltersModel.religion">
+            </kendo-dropdownlist>
+          </label>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col-end">
+          <label class="k-form-field">
+            <span>Marital Status</span>&nbsp;<span class="text-danger">*</span>
+            <kendo-dropdownlist disabled name="MaritalStatus" [data]="dropDowns.maritalStatusItems"
+              [(ngModel)]="profile.MaritalStatus" #MaritalStatus="ngModel"
+              [defaultItem]="dropDowns.defultFiltersModel.maritalStatus" [textField]="'text'" [valueField]="'value'"
+              [valuePrimitive]="true">
+            </kendo-dropdownlist>
+          </label>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col-st">
+          <label class="k-form-field">
+            <span>Mobile</span>&nbsp;<span class="text-danger">*</span>
+            <input disabled kendoTextBox type="text" name="MobileNo" [(ngModel)]="profile.MobileNo" #MobileNo="ngModel">
+          </label>
+        </div>
+        <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col">
+          <label class="k-form-field">
+            <span>Email</span>&nbsp;<span class="text-danger">*</span>
+            <input disabled kendoTextBox type="email" name="EMaiL" [(ngModel)]="profile.EMaiL" #EMaiL="ngModel"
+              pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+              [ngClass]="{ 'is-invalid': EMaiL.invalid }">
+          </label>
+        </div>
+        <div class="col-md-5 col-sm-6 col-xs-12 mt-2 control-col-end">
+          <label class="k-form-field">
+            <span>Address</span>&nbsp;<span class="text-danger">*</span>
+            <input disabled kendoTextBox type="text" name="PermanentAddress" [(ngModel)]="profile.PermanentAddress"
+              #PermanentAddress="ngModel">
+          </label>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-md-3 control-col-st">
+          <button [disabled]="!photoSrc" [ladda]="savingProfile" data-style="expand-right" kendoButton primary="true"
+            type="submit" class="btn-block btn-lg">Save &
+            Proceed</button>
+        </div>
+        <div class="col-md-3 offset-md-6  control-col-end">
+          <button type="button" class="btn btn-secondary btn-block" routerLink="/smo">Logout</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

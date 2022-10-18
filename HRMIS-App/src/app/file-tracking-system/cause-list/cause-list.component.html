@@ -1,0 +1,149 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-6 col-xs-12">
+      <div class="top-h3">
+        Cause List
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" [look]="'outline'" class="ml-2"
+          routerLink="/fts/daily-calls-list">Back</button>
+        <button kendoButton [primary]="true" [look]="'outline'" class="ml-2"
+          routerLink="/fts/daily-calls-new">New</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4 col-sm-12 control-col-st">
+      <label class="k-form-field">
+        <span>Case No. / Case Title</span>
+        <input type="text" #searchRef (input)="searchEvent.next({filter: 'data', event: searchRef.value})"
+          placeholder="Search by Case No. / Case Title" kendoTextBox>
+      </label>
+    </div>
+    <div class="col-md-4 col-sm-12 control-col">
+      <label class="k-form-field mt-1">
+        <span>&nbsp;</span>
+        <button kendoButton class="btn-align-v" primary="true" [look]="todayData ? 'outline' : ''"
+          (click)="getTodayData()">{{todayData ? 'All Cause List' : 'Today Cause List'}}</button>
+      </label>
+    </div>
+  </div>
+  <div class="row row-panel">
+    <div class="col-md-12" id="applicationPrint">
+
+      <div class="grid-wrapper">
+        <kendo-grid [data]="kGrid.gridView" [sortable]="{
+                allowUnsort: kGrid.allowUnsort,
+                mode: kGrid.multiple ? 'multiple' : 'single'
+                }" [(pageSize)]="kGrid.pageSize" [skip]="kGrid.skip" [pageable]="true"
+          (pageChange)="pageChange($event)" [scrollable]="true" style="width: 100%;" [resizable]="true">
+          <!--   <kendo-grid-column [width]="7" field="asd" title="Sr." [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              {{(rowIndex + 1)}}
+            </ng-template>
+          </kendo-grid-column> -->
+          <kendo-grid-column [locked]="true" [width]="180" field="CaseNumber" title="W.P No. / Case No."
+            [headerClass]="'grid-header-custom'" [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="employee-info">
+                <p class="m-0">{{dataItem.CaseNumber}}</p>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="180" field="CaseTitle" title="Case Title" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="employee-info">
+                <p class="m-0">{{dataItem.CaseTitle}}</p>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="180" field="CourtName" title="Court Name / Honourable Justice Mr./Mrs."
+            [headerClass]="'grid-header-custom'" [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="employee-info">
+                <p class="m-0">{{dataItem.CourtName}}</p>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="180" field="LastDate" title="Last Date" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="employee-info">
+                <p class="m-0">{{dataItem.LastDate | date: 'dd/MM/yyyy'}}</p>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="180" field="Proceedings" title="Proceedings" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="employee-info">
+                <p class="m-0">{{dataItem.Proceedings}}</p>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="180" field="NextDate" title="Next Date" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="employee-info">
+                <p class="m-0">{{dataItem.NextDate | date: 'dd/MM/yyyy'}}</p>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="180" field="DesignationName" title="Section" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="employee-info">
+                <p class="m-0">{{dataItem.DesignationName}}</p>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="180" field="DealingOfficer" title="Dealing Officer"
+            [headerClass]="'grid-header-custom'" [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="employee-info">
+                <p class="m-0">{{dataItem.DealingOfficer}}</p>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="180" field="Remarks" title="Remarks Officer" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="employee-info">
+                <p class="m-0">{{dataItem.Remarks}}</p>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="150" field="asd" title="Action" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <button [ladda]="dataItem.removing" data-style="zoom-in" (click)="removeCauseList(dataItem)"
+                class="btn btn-sm btn-danger"><i class="fa fa-times"></i></button>
+            </ng-template>
+          </kendo-grid-column>
+          <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+            <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+            <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+            <kendo-pager-next-buttons></kendo-pager-next-buttons>
+            <div class="pager-rows-number">
+              <select #select (change)="changePagesize(select.value)">
+                <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}</option>
+                <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+                  [selected]="page === kGrid.pageSize ? true : undefined">
+                  {{page}}
+                </option>
+              </select>
+              &nbsp; items per page
+            </div>
+            <kendo-pager-info></kendo-pager-info>
+          </ng-template>
+        </kendo-grid>
+        <div *ngIf="kGrid.loading" class="k-i-loading"></div>
+      </div>
+    </div>
+  </div>
+</div>

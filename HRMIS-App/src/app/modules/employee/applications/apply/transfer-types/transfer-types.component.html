@@ -1,0 +1,48 @@
+<div class="animated fadeIn" *ngIf="applicationSubType_Id == 0">
+  <div class="row" *ngIf="!showMessage">
+    <div class="col-md-4 control-col-st">
+      <div class="card card-accent-success">
+        <div class="card-body">
+          <div class="cursor-p" style="height: 77px;">
+            <h4 class="p-strong">General Transfer</h4>
+            <!--   <p class="mt-2">The goal behind this type of transfer is that anyone can apply for an open vacancy and be
+              selected
+              based merit. In case there is an objection against the score determined by the system, you will have the
+              option of registering a complaint. </p> -->
+          </div>
+          <button kendoButton routerLink="/e/apply/open-merit/1" class="pull-right btn-block btn-lg" primary="true"
+            look="outline">Apply</button>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-md-4 control-col">
+      <div class="card card-accent-success">
+        <div class="card-body">
+          <div class="cursor-p" style="height: 77px;">
+            <h4 class="p-strong">Compassionate Grounds</h4>
+            <!--  <p class="mt-2">This option is for exceptional cases that may need special consideration.
+              However, it can
+              only be used once in the lifetime of a doctor’s career. </p> -->
+          </div><!--  (click)="applicationSubtypeSelected(3)" -->
+          <button kendoButton routerLink="/e/apply/compassionate" class="pull-right btn-block btn-lg" primary="true"
+            look="outline">Apply</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 control-col-end">
+      <div class="card card-accent-success">
+        <div class="card-body">
+          <div class="cursor-p" style="height: 77px;">
+            <h4 class="p-strong">Mutual Transfer</h4>
+            <!--  <p class="mt-2">This option is available for applicants who have mutually decided to swap places of posting.
+              Hence, the two applicants do not have to go through the channels of a competitive process. </p> -->
+          </div><!-- (click)="applicationSubtypeSelected(2)"  -->
+          <button kendoButton routerLink="/e/apply/mutual" class="pull-right btn-block btn-lg" primary="true"
+            look="outline">Apply</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

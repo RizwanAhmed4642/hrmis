@@ -1,0 +1,158 @@
+<table class="table table-50 view-table" style="background: #f7f8fa;">
+  <tbody>
+    <tr [routerLink]="'/health-facility/' + profile.HfmisCode">
+      <td><strong class="p-strong">Health Facility</strong></td>
+      <td>{{profile.HealthFacility ? profile.HealthFacility
+        + ', ' + (profile.Tehsil == profile.District ? profile.Tehsil : profile.Tehsil + ', ' +
+        profile.District) : ''}}</td>
+    </tr>
+    <tr *ngIf="profile.WorkingHealthFacility" [routerLink]="'/health-facility/' + profile.WorkingHFMISCode">
+      <td><strong class="p-strong">Working Health Facility</strong></td>
+      <td>{{profile.WorkingHealthFacility
+        + ', ' + (profile.WorkingTehsil == profile.WorkingDistrict ? profile.WorkingTehsil : profile.WorkingTehsil + ', ' +
+        profile.WorkingDistrict)}}</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">Actual Designation</strong></td>
+      <td>{{profile.Designation_Name}}</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">Working Designation</strong></td>
+      <td>{{profile.WDesignation_Name}}</td>
+    </tr>
+    <tr *ngIf="profile.AdditionalCharge">
+      <td><strong class="p-strong">Additional Charge</strong></td>
+      <td>{{profile.AdditionalCharge}}</td>
+    </tr>
+    <tr *ngIf="profile.AttachedWith">
+      <td><strong class="p-strong">Attached With</strong></td>
+      <td>{{profile.AttachedWith}}</td>
+    </tr>
+    <tr *ngIf="profile.HoD == 1">
+      <td><strong class="p-strong">Head of Department</strong></td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">Current Grade BPS</strong></td>
+      <td>{{profile.CurrentGradeBPS}}</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">Joining Grade BPS</strong></td>
+      <td>{{profile.JoiningGradeBPS}}</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">Post Sanctioned with Scale</strong></td>
+      <td>{{profile.Postaanctionedwithscale}}</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">Private Practice</strong></td>
+      <td>{{profile.PrivatePractice}}</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">Status</strong></td>
+      <td>{{profile.StatusName}}</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">Seniority Number</strong></td>
+      <td>{{profile.SeniorityNo}}</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">Personnel Number</strong></td>
+      <td>{{profile.PersonnelNo}}</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">PMDC Number</strong></td>
+      <td>{{profile.PmdcNo}}</td>
+    </tr>
+
+    <tr>
+      <td><strong class="p-strong">Present Posting Order No</strong></td>
+      <td>{{profile.PresentPostingOrderNo}}</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">Present Posting Order Date</strong></td>
+      <td>{{profile.PresentPostingDate | date:'dd-MM-yyyy'}}</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">Present Joining Date</strong></td>
+      <td *ngIf="profile.PresentJoiningDate">{{profile.PresentJoiningDate | date:'dd-MM-yyyy'}}</td>
+      <td *ngIf="!profile.PresentJoiningDate">
+        {{profile.PresentStationLengthOfService ? (profile.PresentStationLengthOfService | date:'dd-MM-yyyy') : ''}}
+      </td>
+    </tr>
+  </tbody>
+</table>
+<table class="table table-50 view-table mt-4" style="background: #f7f8fa;">
+  <tbody>
+    <tr>
+      <td><strong class="p-strong">Department</strong></td>
+      <td>{{profile.Department_Name}}</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">Post Type</strong></td>
+      <td>{{profile.PostType_Name}}</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">Mode</strong></td>
+      <td>
+        {{profile.ModeId == 1 ? 'By Promotion' : profile.ModeId == 2 ? 'PPSC' : profile.ModeId == 3 ? 'Contract' : ''}}
+      </td>
+    </tr>
+    <tr class="animated fadeIn" *ngIf="profile.ModeId == 2">
+      <td><strong class="p-strong">PPSC Merit Number</strong></td>
+      <td>{{profile.PPSCMeritNumber}}</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">First Joining Date (after promotion as Consultant)</strong></td>
+      <td>{{profile.FirstJoiningDate | date:'dd-MM-yyyy'}}</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">Cadre</strong></td>
+      <td>{{profile.Cadre_Name}}</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">Employment Mode</strong></td>
+      <td>{{profile.EmpMode_Name}}</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">Length of Service</strong></td>
+      <td>{{profile.LengthOfService}}</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">Qualification</strong></td>
+      <td>{{profile.QualificationName}}</td>
+    </tr>
+    <tr *ngIf="profile.AdditionalQualification">
+      <td><strong class="p-strong">Additional Qualification</strong></td>
+      <td>{{profile.AdditionalQualification}}</td>
+    </tr>
+  </tbody>
+</table>
+<table class="table table-50 view-table mt-4" style="background: #f7f8fa;">
+  <tbody>
+    <tr>
+      <td><strong class="p-strong">Date of First Appointment</strong></td>
+      <td>{{profile.DateOfFirstAppointment | date:'dd-MM-yyyy'}}</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">Date of Regularization</strong></td>
+      <td>{{profile.DateOfRegularization | date:'dd-MM-yyyy'}}</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">Superannuation Date</strong></td>
+      <td>{{profile.SuperAnnuationDate | date:'dd-MM-yyyy'}}</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">Contract Start Date</strong></td>
+      <td>{{profile.ContractStartDate | date:'dd-MM-yyyy'}}</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">Contract End Date</strong></td>
+      <td>{{profile.ContractEndDate | date:'dd-MM-yyyy'}}</td>
+    </tr>
+    <tr>
+      <td><strong class="p-strong">Last Promotion Date</strong></td>
+      <td>{{profile.LastPromotionDate | date:'dd-MM-yyyy'}}</td>
+    </tr>
+  </tbody>
+</table>

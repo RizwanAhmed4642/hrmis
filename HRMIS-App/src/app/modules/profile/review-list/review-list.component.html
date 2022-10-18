@@ -1,0 +1,134 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-6 col-xs-12">
+      <div class="top-h3">
+        Profile Review
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-12" *ngIf="currentUser?.UserName != 'so.inq' && currentUser.RoleName != 'HRView'">
+      <div class="top-controls">
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-10 col-sm-12 control-col-st">
+      <label class="k-form-field">
+        <span>Search by Name / CNIC</span>
+        <input type="text" (keyup)="inputChange.next(true)" [(ngModel)]="searchTerm" placeholder="Type Name or CNIC"
+          kendoTextBox>
+      </label>
+    </div>
+
+    <div class="col-md-2 col-sm-12 control-col-end">
+      <label class="k-form-field mt-1">
+        <button kendoButton class="btn-block btn-align-v" [ladda]="searching" data-style="zoom-in" (click)="onSearch()"
+          [primary]="true">SEARCH</button>
+      </label>
+    </div>
+  </div>
+  <div class="row row-panel">
+    <div class="col-md-12">
+      <div class="grid-top-header-custom animated fadeIn" *ngIf="totalRecords">
+        <div class="pager-rows-number">
+          <span>
+            {{(skip + 1) + ' - ' + (pageSize <= totalRecords ? (pageSize + skip) : totalRecords) + ' of ' +
+                numberWithCommas(totalRecords) + ' items ' }} </span> <span class="pull-right">
+            <!-- View &nbsp; <select #selectView (change)="changeView(selectView.value)">
+                  <option *ngFor="let viewType of viewTypes" [value]="viewType" [selected]="viewType === userViewType ? true : undefined">
+                    {{viewType}}
+                  </option>
+                </select>
+                &nbsp; -->
+            Show &nbsp; <select #select (change)="changePagesize(select.value)">
+              <option *ngIf="showInitialPageSize" [value]="pageSize">{{pageSize}}</option>
+              <option *ngFor="let page of pageSizes" [value]="page" [selected]="page === pageSize ? true : undefined">
+                {{page}}
+              </option>
+            </select>
+            &nbsp; items per page
+          </span>
+
+        </div>
+      </div>
+      <div class="grid-wrapper">
+        <kendo-grid [data]="gridView" [sortable]="{
+              allowUnsort: allowUnsort,
+              mode: multiple ? 'multiple' : 'single'
+              }" [selectable]="true" [sort]="sort" (sortChange)="sortChange($event)" [(pageSize)]="pageSize"
+          [skip]="skip" [pageable]="true" (pageChange)="pageChange($event)" [scrollable]="false">
+          <kendo-grid-column [width]="7" field="asd" title="No." [headerClass]="'grid-header-custom'">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              {{(rowIndex + 1)}}.
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="28" field="EmployeeName" title="Name" [headerClass]="'grid-header-custom'">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="row" [routerLink]="'/profile/' + dataItem.CNIC">
+                <div class="col-md-12">
+                  <div class="grid-list-item">
+                    <h5 class="m-0 mb-1" style="font-family: Roboto-Medium; color: darkslategray ; font-weight: 100;">
+                      {{dataItem.EmployeeName}}</h5>
+                    <p class="m-0" style="font-family: Roboto-Regular; color: darkslategray ; font-weight: 100;">
+                      <span style="font-family: Roboto-Medium; "> CNIC:</span> {{dashifyCNIC(dataItem.CNIC)}}</p>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="55" field="HealthFacility" title="Place of Posting"
+            [headerClass]="'grid-header-custom'">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="row" [routerLink]="'/profile/' + dataItem.CNIC">
+                <div class="col-md-12">
+                  <div class="grid-list-item">
+                    <h5 class="m-0 mb-1" style="font-family: Roboto-Medium; color: darkslategray ; font-weight: 100;">{{dataItem.HealthFacility
+                        + ', ' + (dataItem.Tehsil == dataItem.District ? dataItem.Tehsil : dataItem.Tehsil + ', ' +
+                        dataItem.District) }}
+                    </h5>
+                    <p class="m-0" style="font-family: Roboto-Regular; color: darkslategray ; font-weight: 100;">
+                      <span
+                        style="font-family: Roboto-Medium; ">Designation:</span>&nbsp;<u>{{dataItem.Designation_Name}}</u>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="10" field="asd" title="Actions" [headerClass]="'grid-header-custom'">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <a (click)="openInNewTab('profile/' + dataItem.CNIC) + '/edit'"
+                *ngIf="currentUser?.RoleName != 'Deputy Secretary'"> <img class="icon-svg"
+                  src="../../../assets/img/icons/edit2.svg" target="_blank" alt=""></a>
+              <a (click)="openInNewTab('profile/' + dataItem.CNIC)"> <img class="icon-svg"
+                  src="../../../assets/img/icons/eye-details.svg" target="_blank" alt=""></a>
+            </ng-template>
+          </kendo-grid-column>
+          <!--   <ng-template kendoGridDetailTemplate let-dataItem>
+                <section>
+                  <p><strong>On Order:</strong> {{dataItem.FullName}}</p>
+                  <p><strong>Reorder Level:</strong> xItem.Reorderl}} units</p>
+                  <p><strong>Discontinued:</strong>aItem.Discontinued}}</p>
+                  <p><strong>Category:</strong> tem.Category?.CategoryName}} - {{dataItem.CDescription}}</p>
+                </section>
+              </ng-template> -->
+          <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+            <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+            <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+            <kendo-pager-next-buttons></kendo-pager-next-buttons>
+            <div class="pager-rows-number">
+              <select #select (change)="changePagesize(select.value)">
+                <option *ngIf="showInitialPageSize" [value]="pageSize">{{pageSize}}</option>
+                <option *ngFor="let page of pageSizes" [value]="page" [selected]="page === pageSize ? true : undefined">
+                  {{page}}
+                </option>
+              </select>
+              &nbsp; items per page
+            </div>
+            <kendo-pager-info></kendo-pager-info>
+          </ng-template>
+        </kendo-grid>
+        <div *ngIf="loading" class="k-i-loading"></div>
+      </div>
+    </div>
+  </div>
+</div>

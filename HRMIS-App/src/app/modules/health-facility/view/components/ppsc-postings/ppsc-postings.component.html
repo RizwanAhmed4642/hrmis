@@ -1,0 +1,180 @@
+<div class="animated fadeIn" *ngIf="!loading">
+  <div class="row">
+    <div [ngClass]="id != 0 ? 'col-md-4' : 'col-md-12'" style="transition: 0.13s all ease-in-out;">
+      <div class="content-heading mb-3">
+        Designations
+      </div>
+      <div class="row">
+        <div *ngFor="let desig of employeeDesignations;let i = index;" [hidden]="!desig.Name"
+          (click)="onSelectDesignation(desig)" style="transition: 0.13s all ease-in-out;" 
+          [ngClass]="id != 0 ? 'col-md-12' : 'col-md-4 ' + (i % 3 === 0 ? 'control-col-st' : i % 3 === 1 ? 'control-col' : i % 3 === 2 ? 'control-col-end' : '')">
+          <div class="k-i-loading" *ngIf="loading"></div>
+          <div class="staff-statement-box" [ngClass]="selectedDesignation?.Id == desig.Id ? 'open' : ''">
+            <span class="title">{{desig.Name}} <span class="text-muted">({{desig.Count}})</span>
+            </span>
+            <i class="view-icon fa fa-arrow-circle-o-right"></i>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div [ngClass]="id != 0 ? 'col-md-8' : 'col-md-12'" style="transition: 0.13s all ease-in-out;">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="content-wrap animated fadeIn">
+            <div class="content-heading mb-3">
+              {{name}}
+            </div>
+            <div class="animated fadeIn" style="box-shadow: 0 0px 5px rgba(0, 0, 0, 0.5);"
+              *ngIf="!loadingEmployeeProfiles && employeeProfiles.length > 0">
+              <kendo-grid [data]="employeeProfiles" [resizable]="true">
+                <kendo-grid-column width="15" field="EmployeeName" title="Photo" [headerClass]="'grid-header-custom'"
+                  [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <img class="pic-shadow" width="75" height="75"
+                      [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + dataItem.CNIC + '_23.jpg'"
+                      onError="this.src='../../../assets/img/notfound.png'" alt="">
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column width="85" field="EmployeeName" title="Name" [headerClass]="'grid-header-custom'"
+                  [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <div class="row employee-info-grid-box" style="cursor: pointer;"
+                      (click)="openInNewTab('profile/' + dataItem.CNIC)">
+                      <div class="col-md-12">
+                        <div class="grid-list-item">
+                          <h5 class="m-0 mb-1" style="font-family: Roboto-Medium; font-weight: 100;">
+                            {{dataItem.Name}}
+                            <span class="pull-right">
+                              Merit # {{dataItem.MeritNumber}}</span></h5>
+                          <div class="row">
+                            <div class="col-md-4">
+                              <p class="m-0" style="font-family: Roboto-Regular; font-weight: 100;">
+                                <span style="font-family: Roboto-Medium; "> CNIC:</span> {{dashifyCNIC(dataItem.CNIC)}}
+                              </p>
+                              <p class="m-0" style="font-family: Roboto-Regular; font-weight: 100;">
+                                <span style="font-family: Roboto-Medium; "> D.O.B:</span> {{dataItem.DOB |
+                                date:'dd-MM-yyyy'}}
+                              </p>
+                            </div>
+                            <div class="col-md-8">
+                              <p class="m-0" style="font-family: Roboto-Regular; font-weight: 100;">
+                                <span style="font-family: Roboto-Medium; "> Designation:</span>
+                                {{dataItem.DesignationName}}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-template>
+                </kendo-grid-column>
+              </kendo-grid>
+            </div>
+
+            <div class="animated fadeIn" style="box-shadow: 0 0px 5px rgba(0, 0, 0, 0.5);"
+              *ngIf="loadingEmployeeProfiles">
+              <kendo-grid [data]="[{},{}, {}, {}, {}, {}, {}, {}, {}, {} ]">
+                <kendo-grid-column width="15" field="EmployeeName" title="Photo" [headerClass]="'grid-header-custom'"
+                  [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <div class="shine shim-controls p-2"></div>
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column width="85" field="EmployeeName" title="Name" [headerClass]="'grid-header-custom'"
+                  [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <div class="row employee-info-grid-box" style="cursor: pointer;"
+                      [routerLink]="'/profile/' + dataItem.CNIC">
+                      <div class="col-md-12">
+                        <div class="grid-list-item">
+                          <h5 class="m-0 mb-1" style="font-family: Roboto-Medium; font-weight: 100;">
+                            <div class="shine shim-controls p-2"></div>
+                            <span class="pull-right">
+                              <div class="shine shim-controls p-2"></div>
+                            </span>
+                          </h5>
+                          <div class="row">
+                            <div class="col-md-4">
+                              <div class="shine shim-controls p-2"></div>
+                              <div class="shine shim-controls p-2"></div>
+                            </div>
+                            <div class="col-md-8">
+                              <div class="shine shim-controls p-2"></div>
+                              <div class="shine shim-controls p-2"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="dataItem.Status_Id == 30">
+                      <hr>
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div class="mt-2 mb-2" style="margin-left: 20px;">
+                            <div class="shine shim-controls p-2"></div>
+                            <div class="shine shim-controls p-2"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-template>
+                </kendo-grid-column>
+              </kendo-grid>
+            </div>
+
+
+
+
+
+
+            <!--   <div class="k-i-loading" *ngIf="loadingEmployeeProfiles"></div>
+            <div class="general-info d-flex animated fadeIn" [hidden]="employeeProfiles.length == 0" *ngFor="let empProfile of employeeProfiles">
+              <div class="employee-wrapper">
+                <div class="employee-pic-list">
+                  <img [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + empProfile.CNIC + '_23.jpg'"
+                    onError="this.src='../../../assets/img/notfound.png'" alt="">
+                </div>
+              </div>
+              <div class="employee-wrapper employee-wrapper-w-100">
+                <div class="employee-info">
+                  {{empProfile.EmployeeName}}
+                  <a class="pull-right" [routerLink]="'/profile/' + empProfile.CNIC">View Profile</a>
+                </div>
+                <div class="employee-info sub-info">
+                  {{empProfile.WDesignation_Name}} - {{empProfile.CurrentGradeBPS}}
+                </div>
+                <div class="employee-info sub-info">
+                  {{dashifyCNIC(empProfile.CNIC)}}
+                </div>
+                <div class="mt-2" style="width: 25%;margin-left: 20px;" *ngIf="empProfile.Status_Id == 30">
+                  <kendo-datepicker placeholder="Joining Date" [format]="'dd/MM/yyyy'" [(ngModel)]="joiningDate">
+                  </kendo-datepicker>
+                  <button kendoButton primary="true" [disabled]="!joiningDate" (click)="confirmJoining(empProfile.Id)"
+                    class="mt-2 btn-block" [look]="'outline'">Confirm Joining</button>
+                </div>
+
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+<!-- 
+<kendo-dialog [title]="'Confirm Joining'" *ngIf="joiningDialogOpened" (close)="closeWindow()" [minWidth]="500">
+  <div class="p-2">
+    <div class="row animated fadeIn" *ngIf="empProfile">
+      <div class="col-md-12">
+        <strong>Employee Name</strong> {{employeeProfile.EmployeeName}}
+        <br>
+        <strong>Father Name</strong> {{employeeProfile.FatherName}}
+        <br>
+        <strong>Designation</strong> {{employeeProfile.Designation_Name ? employeeProfile.Designation_Name : ''}}
+      </div>
+    </div>
+  </div>
+</kendo-dialog> -->

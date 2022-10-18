@@ -1,0 +1,357 @@
+<div class="animated fadeIn" *ngIf="promotionJobApplication != null">
+    <div class="text-right mt-4">
+        <a target="_blank"
+            [href]="'http://hrmis.pshealthpunjab.gov.pk/Uploads/PromotionJobApplication/SignedCopy/' + promotionJobApplication.SignedCopyFielpath"
+            class="k-button k-primary">View Signed Copy</a>
+        <button type="button" kendoButton primary="true" (click)="printReport(rpt)"
+            style="margin-left:10px;">Print</button>
+        <a href="/promotion-applications" class="k-button k-primary" style="margin-left:10px;">Go
+            Back</a>
+        <br>
+    </div>
+    <div #rpt>
+        <table cellpadding="10px" style="width:100%;">
+            <tr>
+                <!-- <td style="border-right-color:transparent;width:30%">
+                </td> -->
+                <td valign="middle">
+                    <img alt="Punjab Government Log"
+                        src="http://hrmis.pshealthpunjab.gov.pk/assets/img/Logo_Black.jpg"
+                        style="display:inline-block; height:50px; float:left;" />
+                    <h3 style="text-align:center;"><u>Promotion Application Form</u></h3>
+                </td>
+                <!-- <td colspan="2" style="text-align:right;width:30%">
+                    <div style="display:inline-block;text-align:center;">
+                        <strong style="font-size:10pt;">
+                              GOVERNMENT OF THE PUNJAB<br />PRIMARY &amp; SECONDARY HEALTHCARE<br />DEPARTMENT
+                            </strong>
+                    </div>
+                </td> -->
+            </tr>
+        </table>
+        <table border="1" cellspacing="0" cellpadding="3px" style="width:100%;">
+            <tr>
+                <td>
+                    <b>1.</b>
+                </td>
+                <td>
+                    <b>
+                        <u>REQUEST FOR PROMOTION AS</u>
+                    </b>
+                </td>
+                <td>{{(promotionJobApplication.RequestedAs)? 'Consultant (BS-18)': 'Senior Registrar (BS-18)'}}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Applied for</td>
+                <td>
+                    <p class="m-0">{{promotionJobApplication.AppliedForDesignationName}}</p>
+                    <p class="m-0">{{promotionJobApplication.AppliedForDesignationSrName}}</p>
+                </td>
+            </tr>
+           
+            <tr>
+                <td>
+                    <b>2.</b>
+                </td>
+                <td>
+                    <b>Speciality</b>
+                </td>
+                <td>{{promotionJobApplication.Speciality}}</td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <u>
+                        <b>BIO DATA OF DOCTOR</b>
+                    </u>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>3.</b>
+                </td>
+                <td>Name of Doctor</td>
+                <td>{{promotionJobApplication.Name}}</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>4.</b>
+                </td>
+                <td>Father Name</td>
+                <td>{{promotionJobApplication.FatherName}}</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>5.</b>
+                </td>
+                <td>District Of Domicile</td>
+                <td>{{promotionJobApplication.DistrictName}}</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>6.</b>
+                </td>
+                <td>Computerized National Identity Card Number</td>
+                <td>{{promotionJobApplication.CNIC}}</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>7.</b>
+                </td>
+                <td>Name of present Insituition/Hospital</td>
+                <td>{{promotionJobApplication.HfName}}</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>8.</b>
+                </td>
+                <td>
+                    <b>Present Designation</b>
+                </td>
+                <td>{{promotionJobApplication.CurrentDesignationName}}</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>9.</b>
+                </td>
+                <td>Date of joining servce as regular MO/WMO</td>
+                <td>{{promotionJobApplication.PromotionToCurrentScale | date}}</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>10.</b>
+                </td>
+                <td>Seniority No. as MO/WMO in notified Seniority List</td>
+                <td>
+                    {{promotionJobApplication.SeniorityNo}}
+                    <span
+                        *ngIf="promotionJobApplication.SeniorityNoFilepath == '' || promotionJobApplication.SeniorityNoFilepath == null">
+
+                    </span>
+                    <a *ngIf="promotionJobApplication.SeniorityNoFilepath != '' && promotionJobApplication.SeniorityNoFilepath != null"
+                        [href]="'http://hrmis.pshealthpunjab.gov.pk/Uploads/PromotionJobApplication/SeniorityNo/' + promotionJobApplication.SeniorityNoFilepath"
+                        target="_blank">
+                        <u>Show Image</u>
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>11.</b>
+                </td>
+                <td>Present Posting Status</td>
+                <td>{{promotionJobApplication.PresentPostingStatus}}</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <b>12.</b>
+                </td>
+                <td>Certificate of working by head of institution</td>
+
+                <td>
+                    <span
+                        *ngIf="promotionJobApplication.CertificateOfWorkingFilepath == '' || promotionJobApplication.CertificateOfWorkingFilepath == null">
+                        No
+                    </span>
+                    <a *ngIf="promotionJobApplication.CertificateOfWorkingFilepath != '' && promotionJobApplication.CertificateOfWorkingFilepath != null"
+                        [href]="'http://hrmis.pshealthpunjab.gov.pk/Uploads/PromotionJobApplication/CertificateOfWorking/' + promotionJobApplication.CertificateOfWorkingFilepath"
+                        target="_blank">
+                        <u>Show Image</u>
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td colspan="2">
+                    <strong>Addtional Information</strong>
+                </td>
+            </tr>
+            <tr>
+            <tr>
+                <td>
+                </td>
+                <td colspan="2">
+                    <p>{{promotionJobApplication.AdditionalInfoWorkingCertificate}}</p>
+                </td>
+            </tr>
+            <tr>
+            <tr>
+                <td>
+                    <b>13.</b>
+                </td>
+                <td>No Enquiy Certificate From the Head of Institution</td>
+                <td>
+                    <span
+                        *ngIf="promotionJobApplication.NoEnquiryCeritificateFilepath == '' || promotionJobApplication.NoEnquiryCeritificateFilepath == null">
+                        No
+                    </span>
+                    <a *ngIf="promotionJobApplication.NoEnquiryCeritificateFilepath != '' && promotionJobApplication.NoEnquiryCeritificateFilepath != null"
+                        [href]="'http://hrmis.pshealthpunjab.gov.pk/Uploads/PromotionJobApplication/NoEnquiryCertificate/' + promotionJobApplication.NoEnquiryCeritificateFilepath"
+                        target="_blank">
+                        <u>Show Image</u>
+                    </a>
+            </tr>
+            <tr *ngFor="let item of serviceStatements; let i=index;">
+                <td *ngIf="i==0" [attr.rowspan]="serviceStatements.length" valign="top">
+                    <b>14.</b>
+                </td>
+                <td *ngIf="i==0" [attr.rowspan]="serviceStatements.length" valign="top">Service Statement(Detail of
+                    postings covering the period of service without gap)</td>
+                <td>{{i+1}}.{{item.Text}}</td>
+            </tr>
+            <!-- <tr>
+                <td>2.{{promotionJobApplication.ServiceStatementSecond}}</td>
+            </tr>
+            <tr>
+                <td>3.{{promotionJobApplication.ServiceStatementThird}}</td>
+            </tr> -->
+            <tr>
+                <td>
+                    <b>15.</b>
+                </td>
+                <td colspan="2">Following documents have been attested.</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="2">
+                    <table cellspacing="10px" style="width:100%;">
+                        <tr>
+                            <td>i.</td>
+                            <td>Matric/FSc/MBBS</td>
+                            <td style="width:50%">
+                                <span
+                                    *ngIf="promotionJobApplication.MatricFScMbbsDegreeFilepath == '' || promotionJobApplication.MatricFScMbbsDegreeFilepath == null">
+                                    No
+                                </span>
+                                <a *ngIf="promotionJobApplication.MatricFScMbbsDegreeFilepath != '' && promotionJobApplication.MatricFScMbbsDegreeFilepath != null"
+                                    [href]="'http://hrmis.pshealthpunjab.gov.pk/Uploads/PromotionJobApplication/MatricFScMbbsCertificate/' + promotionJobApplication.MatricFScMbbsDegreeFilepath"
+                                    target="_blank">
+                                    <u>Show Image</u>
+                                </a>
+
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>ii.</td>
+                            <td>Postgraduate Degree or Diploma</td>
+                            <td>
+                                <span
+                                    *ngIf="promotionJobApplication.PostgraduateDegreeFilepath == '' || promotionJobApplication.PostgraduateDegreeFilepath == null">
+                                    No
+                                </span>
+                                <a *ngIf="promotionJobApplication.PostgraduateDegreeFilepath != '' && promotionJobApplication.PostgraduateDegreeFilepath != null"
+                                    [href]="'http://hrmis.pshealthpunjab.gov.pk/Uploads/PromotionJobApplication/PostgraduateCertificate/' + promotionJobApplication.PostgraduateDegreeFilepath"
+                                    target="_blank">
+                                    <u>Show Image</u>
+                                </a>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>iii.</td>
+                            <td>PMDC registration</td>
+                            <td>
+                                <span
+                                    *ngIf="promotionJobApplication.PmdcFilepath == '' || promotionJobApplication.PmdcFilepath == null">
+                                    No
+                                </span>
+                                <a *ngIf="promotionJobApplication.PmdcFilepath != '' && promotionJobApplication.PmdcFilepath != null"
+                                    [href]="'http://hrmis.pshealthpunjab.gov.pk/Uploads/PromotionJobApplication/PmdcCertificate/' + promotionJobApplication.PmdcFilepath"
+                                    target="_blank">
+                                    <u>Show Image</u>
+                                </a>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>iv.</td>
+                            <td>No Enquiry certificate from the Head of institution (Attested)</td>
+                            <td>
+                                <span
+                                    *ngIf="promotionJobApplication.NoEnquiryCertifcateAttestedFilepath == '' || promotionJobApplication.NoEnquiryCertifcateAttestedFilepath == null">
+                                    No
+                                </span>
+                                <a *ngIf="promotionJobApplication.NoEnquiryCertifcateAttestedFilepath != '' && promotionJobApplication.NoEnquiryCertifcateAttestedFilepath != null"
+                                    [href]="'http://hrmis.pshealthpunjab.gov.pk/Uploads/PromotionJobApplication/NoEnquiryAttestedCertificate/' + promotionJobApplication.NoEnquiryCertifcateAttestedFilepath"
+                                    target="_blank">
+                                    <u>Show Image</u>
+                                </a>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td>v.</td>
+                            <td>Experience Certificate</td>
+                            <td>
+                                <span
+                                    *ngIf="promotionJobApplication.ExperienceCertFilePath == '' || promotionJobApplication.ExperienceCertFilePath == null">
+                                    No
+                                </span>
+                                <a *ngIf="promotionJobApplication.ExperienceCertFilePath != '' && promotionJobApplication.ExperienceCertFilePath != null"
+                                    [href]="'http://hrmis.pshealthpunjab.gov.pk/Uploads/PromotionJobApplication/ExperienceCert/' + promotionJobApplication.ExperienceCertFilePath"
+                                    target="_blank">
+                                    <u>Show Image</u>
+                                </a>
+                            </td>
+
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td colspan="2">
+                    <strong>Addtional Information</strong>
+                </td>
+            </tr>
+            <tr>
+            <tr>
+                <td>
+                </td>
+                <td colspan="2">
+                    <p>{{promotionJobApplication.AdditionalInfo}}</p>
+                </td>
+            </tr>
+            <tr>
+            <tr>
+                <td colspan="3">
+                    <p> I undertake that information given above is correct and hereby request for selection as
+                        <b>{{promotionJobApplication.AppliedForDesignationName}}</b> in accordance with
+                        Rule/Regualtions.</p>
+                </td>
+            </tr>
+            <tr>
+                <td>Date of Birth</td>
+                <td colspan="2">{{promotionJobApplication.DateOfBirth | date}}</td>
+            </tr>
+            <tr>
+                <td>House Address</td>
+                <td colspan="2">{{promotionJobApplication.Address}}</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>{{promotionJobApplication.Email}}</td>
+                <td rowspan="2" valign="bottom" style="text-align:center;">
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <b>
+                        <u>Signature of Candidate</u>
+                    </b>
+                </td>
+            </tr>
+            <tr>
+                <td>Cell No</td>
+                <td>{{promotionJobApplication.MobileNumber}}</td>
+            </tr>
+
+        </table>
+        <br><br><br>
+    </div>
+</div>

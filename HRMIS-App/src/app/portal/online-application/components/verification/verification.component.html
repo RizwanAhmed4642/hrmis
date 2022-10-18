@@ -1,0 +1,145 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-6 col-sm-12 offset-md-3">
+      <div *ngIf="step == 1" class="content-heading animated fadeIn">
+        Transfer Reason
+      </div>
+      <div *ngIf="step == 2" class="content-heading animated fadeIn">
+        Transfer Place
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="animated fadeIn">
+    <div *ngIf="!profile" class="k-i-loading"></div>
+    <div class="animated fadeIn" *ngIf="profile">
+      <div class="row">
+        <div class="col-md-6 col-sm-12 offset-md-3">
+          <div class="animated fadeIn">
+            <div class="jumbotron" *ngIf="showMessage">
+              <h3>{{showMessage}}</h3>
+            </div>
+            <div *ngIf="!showMessage">
+              <div *ngIf="step == 1">
+                <div class="row">
+                  <div class="col-md-6 control-col-st">
+                    <label class="k-form-field">
+                      <span>Select Reason for Transfer</span>
+                      <kendo-dropdownlist [data]="transferReasons"
+                        (valueChange)="dropdownValueChanged($event, 'reason')" [textField]="'Name'" [valueField]="'Id'"
+                        [(ngModel)]="transferReason" [valuePrimitive]="true"
+                        [defaultItem]="{Name: 'Select Reason', Id : null}">
+                      </kendo-dropdownlist>
+                    </label>
+                    <label class="k-form-field" *ngIf="transferReason == 2">
+                      <span>Please Enter Disability</span>
+                      <input type="text" kendoTextBox [(ngModel)]="disabilityReason"
+                        placeholder="Type Disability Here...">
+                    </label>
+                    <label class="k-form-field" *ngIf="transferReason == 7">
+                      <span>Mutual Person CNIC</span>
+                      <kendo-maskedtextbox [mask]="cnicMask" [(ngModel)]="cnicMutual"
+                        (input)="inputChange.next(cnicMutual)">
+                      </kendo-maskedtextbox>
+                    </label>
+                  </div>
+                  <div class="col-md-6 control-col-end">
+                    <label class="k-form-field">
+                      <span>{{photoFile.length == 0 ? 'Supporting Documents (NOC)' : photoFile[0].name}}</span>
+                      <input #photoRef type="file" accept="image/jpg, image/jpeg, image/png"
+                        (change)="readUrl($event, 'pic')" hidden>
+                      <div>
+                        <button kendoButton type="button" [primary]="true" (click)="uploadBtn('pic')"
+                          class="btn-sm btn-block" [ngClass]="photoFile.length == 0 ? 'mt-0' : 'mt-2'"
+                          style="cursor:pointer;" [ladda]="uploadingFile" data-style="expand-right"> <i
+                            class="fa fa-paperclip"></i> Choose
+                          {{photoFile.length == 0 ? 'File' : 'Another File'}}</button>
+                      </div>
+                    </label>
+                    <span class="animated fadeIn lds-ellipsis" *ngIf="loadingMutualCNIC">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </span>
+                    <label class="k-form-field animated fadeIn" *ngIf="transferReason == 7 && otherProfileExist">
+                      <span>Mutual Transfer</span>
+                      <br>
+                      <span class="p-strong">{{mutualProfile.EmployeeName}}</span>
+                    </label>
+                    <label class="k-form-field animated fadeIn"
+                      *ngIf="transferReason == 7 && !otherProfileExist && !mutualProfile">
+                      <span>Mutual Transfer</span>
+                      <br>
+                      <span class="p-strong">No record found.</span>
+                    </label>
+                  </div>
+                </div>
+
+
+                <hr>
+                <button kendoButton primary="true" look="outline" class="btn-align-v btn-block btn-lg"
+                  [disabled]="!transferReason || (transferReason == 2 && !disabilityReason)" (click)="next()"
+                  [ladda]="verifying" data-style="zoom-in">Next</button>
+              </div>
+              <div class="animated fadeIn" *ngIf="step == 2">
+                <label class="k-form-field" *ngIf="transferReason != 7">
+                  <span class="p-strong">Division</span>
+                  <kendo-dropdownlist [data]="dropDowns.divisionsData"
+                    [defaultItem]="dropDowns.defultFiltersModel.division" [textField]="'Name'" [valueField]="'Code'"
+                    [disabled]="dropDowns.divisionsData?.length == 1" [value]="dropDowns.selectedFiltersModel.division"
+                    (valueChange)="dropdownValueChanged($event, 'division')">
+                  </kendo-dropdownlist>
+                </label>
+                <label class="k-form-field" *ngIf="transferReason != 7">
+                  <span class="p-strong">District</span>
+                  <kendo-dropdownlist [data]="dropDowns.districtsData"
+                    [defaultItem]="dropDowns.defultFiltersModel.district" [textField]="'Name'" [valueField]="'Code'"
+                    [disabled]="dropDowns.districtsData?.length == 1" [value]="dropDowns.selectedFiltersModel.district"
+                    (valueChange)="dropdownValueChanged($event, 'district')">
+                  </kendo-dropdownlist>
+                </label>
+                <label class="k-form-field" *ngIf="transferReason != 7">
+                  <span class="p-strong">Tehsil</span>
+                  <kendo-dropdownlist [data]="dropDowns.tehsilsData" [defaultItem]="dropDowns.defultFiltersModel.tehsil"
+                    [textField]="'Name'" [valueField]="'Code'" [value]="dropDowns.selectedFiltersModel.tehsil"
+                    (valueChange)="dropdownValueChanged($event, 'tehsil')">
+                  </kendo-dropdownlist>
+                </label>
+                <label class="k-form-field" *ngIf="transferReason != 7">
+                  <span class="p-strong">Health Facility</span>
+                  <kendo-dropdownlist [data]="dropDowns.healthFacilitiesData"
+                    [defaultItem]="dropDowns.defultFiltersModel.healthFacility" [textField]="'Name'" [valueField]="'Id'"
+                    [value]="dropDowns.selectedFiltersModel.healthFacility"
+                    (valueChange)="dropdownValueChanged($event, 'healthFacility')">
+                  </kendo-dropdownlist>
+                </label>
+                <label class="k-form-field animated fadeIn" *ngIf="vacancyLoaded">
+                  <span class="p-strong">Vacancy Status</span>
+                  <p class="m-0" *ngIf="noVacancyExist">No Vacancy Exist</p>
+                  <p class="m-0" *ngIf="vpMaster">{{vpMaster.Vacant}} seats vacant!</p>
+                </label>
+                <span class="animated fadeIn lds-ellipsis" *ngIf="checkingVacancy">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </span>
+                <!--   <label class="k-form-field">
+                        <span class="p-strong">Select College for Transfer</span>
+                        <kendo-dropdownlist [data]="dropDowns.healthFacilities"
+                          (valueChange)="dropdownValueChanged($event, 'healthFacility')" [textField]="'Name'" [valueField]="'Id'">
+                        </kendo-dropdownlist>
+                      </label> -->
+                <hr *ngIf="!checkingVacancy">
+                <button kendoButton primary="true" *ngIf="!checkingVacancy && !noVacancyExist" (click)="onSubmit()"
+                  [disabled]="!application.ToHF_Id" [ladda]="savingApplication" data-style="zoom-in">Submit
+                  Application</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

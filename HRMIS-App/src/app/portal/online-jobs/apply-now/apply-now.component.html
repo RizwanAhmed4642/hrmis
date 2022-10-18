@@ -1,0 +1,319 @@
+<div class="content animated fadeIn">
+    <div class="animated fadeIn" *ngIf="applicant.Status_Id && applicant.Status_Id > 1">
+        <div class="row mb-2">
+            <div class="col-md-4">
+                <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/job/profile"><i
+                        class="fa fa-user"></i>
+                    Profile</button>
+            </div>
+            <div class="col-md-4">
+                <button kendoButton *ngIf="applicant.Status_Id > 2" primary="true" look="outline" class="btn-block"
+                    routerLink="/job/document"><i class="fa fa-file"></i>
+                    Documents</button>
+            </div>
+            <div class="col-md-4">
+                <button kendoButton *ngIf="applicant.Status_Id > 3" primary="true" look="outline" class="btn-block"
+                    routerLink="/job/experience"><i class="fa fa-file"></i>
+                    Experience</button>
+            </div>
+            <!-- <div class="col-md-3">
+                <button kendoButton *ngIf="applicant.Status_Id && applicant.Status_Id > 4" primary="true" look="outline"
+                    class="btn-block" routerLink="/job/applications"><i class="fa fa-newspaper-o"></i>
+                    Applications</button>
+            </div> -->
+        </div>
+        <hr>
+    </div>
+    <div class="mb-3">
+        <div class="row animated fadeInDownBig" *ngIf="districts.length > 0">
+            <div class="col-md-12 animated fadeIn" *ngIf="!applied">
+                <div class="panelbar-wrapper">
+                    <kendo-panelbar>
+                        <kendo-panelbar-item [expanded]="true" *ngFor="let dist of districts"
+                            [title]="dist.Name + ' (' + dist.Count + ')'">
+                            <ng-template kendoPanelBarContent>
+                                <div class="animated fadeIn" *ngIf="dist.hfs.length > 0">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 control-col-st">
+                                            <table class="w-100" style="background: transparent;">
+                                                <tbody>
+                                                    <tr *ngFor="let hf of dist.hfs;let i = index;"
+                                                        class="animated fadeIn">
+                                                        <td style="border:none !important;">
+                                                            <p class="m-0 ml-1 p-2 h5">{{applicant.appliedFor}},
+                                                                {{hf.Name}}</p>
+                                                        </td>
+                                                        <td style="border:none !important;">
+                                                            <button kendoButton primary="true" *ngIf="!hf.applied"
+                                                                (click)="apply(hf)" class="btn-lg" [ladda]="hf.loading"
+                                                                data-style="zoom-in"> Apply
+                                                                Now</button>
+                                                            <p class="m-0 text-danger" *ngIf="hf.applied == 'limit'">
+                                                                {{'5 limit reached'}}</p>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </kendo-panelbar-item>
+                    </kendo-panelbar>
+                </div>
+            </div>
+            <div class="col-md-12 mt-2 animated fadeIn" *ngIf="applied">
+                <button kendoButton primary="true" style="position: absolute;top:25px;left:88%;"
+                    (click)="printApplication()">Print Form</button>
+                <div class="page preview-order p-4" id="phfmchr">
+                    <small><b>Application No.</b> {{application.Id}} -
+                        {{application.CreatedDate | date: 'dd/MM/yyyy hh:mm a'}}</small>
+                    <p class="heading">INFORMATION OF CANDIDATES</p>
+                    <p class="heading"><b>HEALTH FACILITIES MANAGEMENT COMPANY (PHFMC)</b> </p>
+                    <p class="heading">PRIMARY & SECONDARY HEALTHCARE DEPARTMENT</p>
+                    <br>
+                    <table class="info">
+                        <tr>
+                            <td style="width: 80%;">
+                                <p class="normalPara"><span class="pr-2">Name: <u>{{applicant.Name}}</u></span>
+                                    <span class="pl-2">S/D/W of: <u>{{applicant.FatherName}}</u> </span>
+                                    <span class="pl-2">CNIC: <u>{{dashifyCNIC(applicant.CNIC)}}</u> </span></p>
+
+                                <p class="normalPara"><span class="pr-2">Post Applied for:
+                                        <u>{{applicant.appliedFor}}</u></span> </p>
+
+                                <p class="normalPara"><span class="pr-2">Facility Applied in <u>Human Capital
+                                            Investment
+                                            Program</u></span>
+                                    <span class="pl-2">D.O.B: <u>{{applicant.DOB | date:'dd/MM/yyyy'}}</u>
+                                    </span>
+                                    <span class="pl-2">Age: <u>{{applicant.age}} years</u> </span> </p>
+
+                                <p class="normalPara"><span class="pr-2">Cell No:
+                                        <u>{{applicant.MobileNumber}}</u></span>
+                                    <span class="pl-2">Domicile: <u>{{applicant.DomicileName}}</u> </span>
+                                    <span class="pl-2">Hafiz-e-Quran: <u>No</u> </span> </p>
+
+                                <p class="normalPara">
+                                    <span>Email: <u>{{applicant.Email}}</u> </span> </p>
+
+                                <p class="normalPara"><span class="pr-2">Address:
+                                        <u>{{applicant.Address}}</u></span></p>
+                            </td>
+                            <td style="width: 20%;vertical-align: top;">
+                                <div class="candidate-photo">
+                                    <img onError="this.src='../../../assets/img/notfound.png'"
+                                        [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/PHFMCApplicants/Photo/' + applicant.CNIC + '_23.jpg'"
+                                        alt="">
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+
+                    <p class="normalPara" style="text-decoration: underline;">ACADEMIC INFORMATION: </p>
+                    <table class="doc">
+                        <tr>
+                            <th>Certificate / Degree Level </th>
+                            <th>Name of the Degree</th>
+                            <th>Month & Year of Passin</th>
+                            <th>Obtained Marks /CGPA</th>
+                            <th>Total Marks/ CGPA</th>
+                            <th>Division 1st, 2nd, 3rd</th>
+                            <th>Per. %</th>
+                            <th>Grade</th>
+                        </tr>
+                        <tr *ngFor="let doc of documents;let i = index;">
+                            <td style="background-color: rgb(254,217,102);">{{doc.DocumentName}} </td>
+                            <td>{{doc.Degree}}</td>
+                            <td>{{doc.PassingYear | date:'yyyy'}}</td>
+                            <td>{{doc.ObtainedMarks}}</td>
+                            <td>{{doc.TotalMarks}}</td>
+                            <td>{{doc.Division}}</td>
+                            <td></td>
+                            <td>{{doc.Grade}}</td>
+                        </tr>
+                    </table>
+                    <p class="normalPara" style="text-decoration: underline;">EMPLOYMENT RECORD:</p>
+                    <table class="doc">
+                        <tr>
+                            <th rowspan="2">Sr. No. </th>
+                            <th rowspan="2">ORGANIZATION / EMPLOYER NAME (DESCENDING ORDER) </th>
+                            <th rowspan="2">JOB TITLE </th>
+                            <th rowspan="1" colspan="2">JOB DURATION <br>WRITE ONLY MONTH & YEAR </th>
+                        </tr>
+                        <tr>
+                            <td style="background-color: rgb(254,217,102);">From</td>
+                            <td style="background-color: rgb(254,217,102);">To</td>
+
+
+                        </tr>
+                        <tr *ngFor="let exp of experiences;let i = index;">
+                            <td>{{(i + 1)}}</td>
+                            <td>{{exp.Organization}}</td>
+                            <td>{{exp.JobTitle}}</td>
+                            <td>{{exp.FromDate | date:'MM/yyyy'}}</td>
+                            <td>{{exp.ToDate | date:'MM/yyyy'}}</td>
+                        </tr>
+                    </table>
+                    <br><br>
+                    <div style="width: 50%;">Total Job Experience as on closing date of application: {{applicant.exp}}
+                        year{{applicant.exp > 1 ? 's' : ''}}
+                    </div>
+                    <p>No. of Documents Attached:
+                        {{(documents.length + experiences.length) | number}}</p>
+                    <p style="font-weight: bold; float: right; margin-bottom: 40px;">Applicant’s Signature:
+                        _______________________ </p>
+                </div>
+            </div>
+
+        </div>
+        <div class="animated fadeIn" *ngIf="districts.length == 0">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <label class="k-form-field">
+                        <span>Search</span>
+                        <input kendoTextBox type="text" #search (keyup)="searchDesignations(search.value)">
+                    </label>
+                </div>
+            </div>
+            <div class="k-i-loading" *ngIf="loading"></div>
+            <div class="row animated fadeIn" *ngIf="!loading">
+                <div class="col-md-4 animated fadeIn" *ngFor="let designation of designations">
+                    <div class="card p-0">
+                        <div class="media media--16-9">
+                            <div class="actions">
+                                <div class="action-icons float-right"> <i class="fa fa-user-md"></i> </div>
+                            </div>
+                            <div class="primary-title">
+                                <div class="secondary-text">&nbsp;</div>
+                                <div class="primary-text">{{designation.Name}}</div>
+                            </div>
+
+                        </div>
+                        <div class="actions">
+                            <div class="action-buttons float-right">
+                                <button [routerLink]="'/job/preferences/' + designation.Id" kendoButton primary="true"
+                                    look="outline">{{designation.Vacant}}
+                                    Vacant Post{{designation.Count > 1 ? 's' : ''}} - View</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row mt-2">
+        <div class="col-md-6 offset-md-3">
+
+        </div>
+        <div class="col-md-3 control-col-end">
+            <button type="button" class="btn btn-secondary btn-block btn-lg" routerLink="/job">Logout</button>
+        </div>
+    </div>
+</div>
+
+<div class="login-div" *ngIf="2 + 2 == 5">
+    <!--  <div class="row">
+      <div class="col-md-12">
+        <h3 class="text-center">
+          Closed
+        </h3>
+      </div>
+    </div> -->
+    <div class="animated fadeIn" *ngIf="merit.Status && (merit.Status == 'Accepted' || merit.Status == 'Completed')">
+        <div class="row mb-2">
+            <div class="col-md-4">
+                <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/ppsc/profile">1-
+                    Profile</button>
+            </div>
+            <div class="col-md-4">
+                <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/ppsc/letter">2- Offer
+                    Letter &
+                    Acceptance</button>
+            </div>
+            <div class="col-md-4">
+                <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/ppsc/preferences">3-
+                    Preferences</button>
+            </div>
+        </div>
+        <hr>
+    </div>
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <!--  <h3 class="p-strong"><i class="fa fa-info-circle text-success"></i> Note</h3>
+                <hr> -->
+                <div class="p-3 h4 m-0">
+                    <p class="p-strong">Please Preferences</p>
+                    <!-- <p class="p-strong">For Example: If your PPSC merit number is 64, then you must submit minimum 64 preferences
+                    </p> -->
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-10 control-col-st">
+                <label class="k-form-field mt-2">
+                    <span>Select Preferred Place of Posting</span>
+                    <kendo-dropdownlist [data]="hfs" [textField]="'HealthFacility'" [valueField]="'HF_Id'"
+                        (valueChange)="dropdownValueChanged($event, 'district')"
+                        (filterChange)="handleFilter($event, 'preferences')" [filterable]="true">
+                    </kendo-dropdownlist>
+                </label>
+            </div>
+            <div class="col-md-2 control-col-end">
+                <label class="k-form-field
+                mt-2">
+                    <span>&nbsp;</span>
+                    <button class=" btn btn-so-primary btn-block" (click)="addPreference()" [ladda]="addingPrefs"
+                        data-style="zoom-in">Add</button>
+                </label>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-4 control-col-st">
+                <h4 *ngIf="preferences.length > 0" class="animated fadeIn">Preferences: <small
+                        class="text-muted">{{preferences.length}} / 20</small></h4>
+            </div>
+            <!-- <div class="col-md-4 control-col">
+                <h4 class="text-danger text-center p-strong" *ngIf="preferences.length < merit.MeritNumber">Incomplete
+                </h4>
+            </div>
+            <div class="col-md-4 control-col-end">
+                <button class=" btn btn-so-primary btn-block"
+                    [disabled]="preferences.length != merit.MeritNumber || preferences.length < merit.MeritNumber"
+                    (click)="saveAllPreferences()" [ladda]="addingAllPrefs" data-style="zoom-in">Save All</button>
+            </div> -->
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 control-col-st">
+                <table class="table view-table" style="background: transparent;">
+                    <tbody>
+                        <tr *ngFor="let preference of preferences;let i = index;" class="animated fadeIn">
+                            <td style="border:none !important;">{{(i + 1)}}.</td>
+                            <td style="border:none !important;">
+                                {{preference.FullName}}</td>
+                            <td style="border:none !important;">
+                                <button class="btn btn-danger btn-sm"
+                                    (click)="removePreferences(preference.HFMISCode)"><i
+                                        class="fa fa-times"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+
+        </div>
+        <div class="col-md-3 control-col-end">
+            <button type="button" class="btn btn-secondary btn-block btn-lg" routerLink="/job">Logout</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,223 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3">
+        Vacancy Manager
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" routerLink="/vacancy-position/sts" [look]="'outline'">Back</button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-7 control-col-st">
+      <label class="k-form-field">
+        <span>Health Facility / Office / Institute <span class="text-danger">*</span></span>
+        <kendo-autocomplete [data]="hfsList" [valueField]="'FullName'" (valueChange)="searchClicked($event, 'hfs')"
+          required [filterable]="true" (filterChange)="searchEvent.next({ event: $event, filter: 'hfs'})" [value]="''"
+          placeholder="Search Health Facility" class="k-autocomplete-form">
+          <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+            <div class="search-list-item">
+              {{ dataItem.FullName }}</div>
+          </ng-template>
+        </kendo-autocomplete>
+      </label>
+    </div>
+    <div class="col-md-5 control-col-end">
+      <label class="k-form-field">
+        <span>Designation <span class="text-danger">*</span></span>
+        <kendo-dropdownlist [data]="dropDowns.designationsData" [textField]="'Name'" [valueField]="'Id'"
+          (valueChange)="dropdownValueChanged($event, 'designation')"
+          [value]="dropDowns.selectedFiltersModel.designation" [defaultItem]="dropDowns.defultFiltersModel.designation">
+        </kendo-dropdownlist>
+      </label>
+    </div>
+  </div>
+  <div class="k-i-loading" *ngIf="loading"></div>
+  <div class="animated fadeIn" *ngIf="vpMaster && !loading">
+    <hr>
+    <tabset>
+      <tab [heading]="vpMaster.DsgName + ' - ' + vpMaster.HFName">
+        <div class="row">
+          <div class="col-md-2 ">
+            <p class="m-0">
+              <strong class="p-strong">Sanctioned</strong>
+            </p>
+            <p class="m-0">
+              {{vpMaster.TotalSanctioned}}
+            </p>
+          </div>
+          <div class="col-md-2">
+            <p class="m-0">
+              <strong class="p-strong">Filled</strong>
+            </p>
+            <p class="m-0">
+              {{vpMaster.TotalWorking}}
+            </p>
+          </div>
+          <div class="col-md-2">
+            <p class="m-0">
+              <strong class="p-strong">Vacant</strong>
+            </p>
+            <p class="m-0">
+              {{vpMaster.Vacant}}
+            </p>
+          </div>
+          <div class="col-md-2">
+            <p class="m-0">
+              <strong class="p-strong">Profile</strong>
+            </p>
+            <p class="m-0">
+              {{vpMaster.Profiles}}
+            </p>
+          </div>
+          <div class="col-md-2">
+            <p class="m-0">
+              <strong class="p-strong">WorkingProfile</strong>
+            </p>
+            <p class="m-0">
+              {{vpMaster.WorkingProfiles}}
+            </p>
+          </div>
+        </div>
+        <div class="animated fadeIn" *ngIf="vpDetails.length > 0">
+          <hr>
+          <div class="content-heading mb-2">
+            Filled Status
+          </div>
+          <div class="row">
+            <div class="col-md-2" *ngFor="let vpDetail of vpDetails" (click)="openHolderWindow(vpDetail.Id)">
+              <p class="m-0">
+                <strong class="p-strong">{{vpDetail.EmpModeName}}</strong>
+              </p>
+              <p class="m-0">
+                {{vpDetail.TotalWorking}}
+              </p>
+            </div>
+          </div>
+        </div>
+      </tab>
+      <tab [heading]="'Change Log'" *ngIf="vpMasterLog">
+        <div class="row">
+          <div class="col-md-4 col-xs-12 control-col-st">
+            <h6><strong class="p-strong">Created By</strong> {{vpMasterLog.Created_By}}</h6>
+            <h6><strong class="p-strong">Date and
+                Time</strong>&nbsp;{{vpMasterLog.Created_Date | date:'dd/MM/yyyy, h:mm a'}}</h6>
+          </div>
+        </div>
+        <div *ngIf="vpMasterLogs.length > 0" hidden>
+          <hr>
+          <div class="content-heading mb-2">
+            Edit / Modified Logs
+          </div>
+          <kendo-grid [data]="vpMasterLogs">
+            <kendo-grid-column field="Modified_Date" width="20" title="Status" [headerClass]="'grid-header-text'"
+              [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0">{{vpMasterLog.Created_Date | date:'dd/MM/yyyy, h:mm a'}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Description" width="20" title="Status" [headerClass]="'grid-header-text'"
+              [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0">{{vpMasterLog.Description}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+        </div>
+
+      </tab>
+    </tabset>
+  </div>
+</div>
+
+
+
+
+<kendo-dialog [title]="'Hold Vacancy'" *ngIf="holderWindow" [minWidth]="'450'" [width]="'630'"
+  (close)="closeHolderWindow()">
+  <div class="row">
+    <div class="col-md-2 ">
+      <p class="m-0">
+        <strong class="p-strong">Sanctioned</strong>
+      </p>
+      <p class="m-0">
+        {{vpMaster.TotalSanctioned}}
+      </p>
+    </div>
+    <div class="col-md-2">
+      <p class="m-0">
+        <strong class="p-strong">Filled</strong>
+      </p>
+      <p class="m-0">
+        {{vpMaster.TotalWorking}}
+      </p>
+    </div>
+    <div class="col-md-2">
+      <p class="m-0">
+        <strong class="p-strong">Vacant</strong>
+      </p>
+      <p class="m-0">
+        {{vpMaster.Vacant}}
+      </p>
+    </div>
+    <div class="col-md-2">
+      <p class="m-0">
+        <strong class="p-strong">Profile</strong>
+      </p>
+      <p class="m-0">
+        {{vpMaster.Profiles}}
+      </p>
+    </div>
+    <div class="col-md-2">
+      <p class="m-0">
+        <strong class="p-strong">WorkingProfile</strong>
+      </p>
+      <p class="m-0">
+        {{vpMaster.WorkingProfiles}}
+      </p>
+    </div>
+  </div>
+  <hr>
+  <div class="row mb-1">
+    <div class="col-md-4"><strong class="p-strong pull-right">Tracking Id</strong></div>
+    <div class="col-md-8">
+      <input type="number" [(ngModel)]="vpHolder.TrackingNumber" kendoTextBox>
+    </div>
+  </div>
+  <div class="row mb-1">
+    <div class="col-md-4"><strong class="p-strong pull-right">File Number</strong></div>
+    <div class="col-md-8">
+      <input type="text" [(ngModel)]="vpHolder.FileNumber" kendoTextBox>
+    </div>
+  </div>
+  <div class="row mb-1">
+    <div class="col-md-4"><strong class="p-strong pull-right">Employee Name</strong></div>
+    <div class="col-md-8">
+      <input type="text" [(ngModel)]="vpHolder.EmployeeName" kendoTextBox>
+    </div>
+  </div>
+  <div class="row mb-1">
+    <div class="col-md-4"><strong class="p-strong pull-right">Hold Number of Seats</strong></div>
+    <div class="col-md-8">
+      <input type="number" [(ngModel)]="vpHolder.TotalSeatsHold" kendoTextBox>
+    </div>
+  </div>
+  <div *ngIf="vpHolder.TotalSeatsHold > (vpMaster.TotalSanctioned - vpMaster.TotalWorking)"
+    class="text-danger animated fadeIn">* cannot hold
+    {{vpHolder.TotalSeatsHold + ' seats against ' + (vpMaster.TotalSanctioned - vpMaster.TotalWorking) + ' vacant post' + ((vpMaster.TotalSanctioned - vpMaster.TotalWorking) > 1 ? 's' : '')}}
+  </div>
+  <kendo-dialog-actions
+    *ngIf="holderWindow && vpHolder.TotalSeatsHold <= (vpMaster.TotalSanctioned - vpMaster.TotalWorking)"
+    class="animated fadeIn">
+    <kendo-buttongroup [width]="'100%'">
+      <button kendoButton primary="true" (click)="saveVacancyHolder()">Confirm</button>
+      <button kendoButton (click)="closeHolderWindow()" class="btn btn-secondary"><i class="fa fa-times"></i>
+        Close</button>
+    </kendo-buttongroup>
+  </kendo-dialog-actions>
+</kendo-dialog>

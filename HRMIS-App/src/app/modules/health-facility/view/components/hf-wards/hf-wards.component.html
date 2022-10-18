@@ -1,0 +1,104 @@
+
+
+<kendo-grid [data]="gridView" [sortable]="{
+  allowUnsort: allowUnsort,
+  mode: multiple ? 'multiple' : 'single'
+  }" [sort]="sort" (sortChange)="sortChange($event)">
+  <kendo-grid-column field="asd" title="No." [width]="5" [headerClass]="'grid-header-custom'"
+    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+      <p style="margin: 0;">{{(rowIndex + 1)}}.</p>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="Name" title="Ward" [width]="35" [headerClass]="'grid-header-custom'"
+    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+      <p style="margin: 0;">{{dataItem.Name}}</p>
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column field="NoB" title="Beds" [width]="15" [headerClass]="'grid-header-custom'"
+    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+      <p style="margin: 0;">{{dataItem.NoB}}</p>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="NoGB" title="General Beds" [width]="15" [headerClass]="'grid-header-custom'"
+    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+      <p style="margin: 0;">{{dataItem.NoGB}}</p>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="NoSB" title="Special Beds" [width]="15" [headerClass]="'grid-header-custom'"
+    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+      <p style="margin: 0;">{{dataItem.NoSB}}</p>
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column field="asd" title="Action" [width]="15"
+    *ngIf="currentUser.UserName.toLowerCase().startsWith('ceo.') && hfTypeCode != '011' && hfTypeCode != '012'"
+    [headerClass]="'grid-header-custom'"
+    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <a (click)="openWardWindow(dataItem)"> <img class=" icon-svg" src="../../../assets/img/icons/edit2.svg"
+          alt=""></a>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="asd" title="Action" [width]="15"
+    *ngIf="!currentUser.UserName.toLowerCase().startsWith('ceo.') && currentUser.RoleName != 'Deputy Secretary' && currentUser.RoleName != 'HRView'"
+    [headerClass]="'grid-header-custom'"
+    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <a (click)="openWardWindow(dataItem)"> <img class=" icon-svg" src="../../../assets/img/icons/edit2.svg"
+          alt=""></a>
+    </ng-template>
+  </kendo-grid-column>
+
+</kendo-grid>
+
+<div *ngIf="loadingWards" class="k-i-loading"></div>
+
+
+
+<kendo-dialog [title]="'Application Saved'" *ngIf="wardDialogOpened && selectedWard" (close)="closeWardWindow()"
+  [minWidth]="450" [width]="550">
+  <div class="row p-3">
+    <div class="col-md-12">
+      <label class="k-form-field">
+        <span><strong>Ward Name</strong></span>
+        <input kendoTextBox type="text" [(ngModel)]="selectedWard.Name">
+      </label>
+    </div>
+    <div class="col-md-12">
+      <label class="k-form-field">
+        <span><strong>Beds</strong></span>
+        <input type="number" kendoTextBox name="NoB" [(ngModel)]="selectedWard.NoB" min="0">
+      </label>
+    </div>
+    <div class="col-md-12">
+      <label class="k-form-field">
+        <span><strong>General Beds</strong></span>
+        <input type="number" kendoTextBox name="NoGB" [(ngModel)]="selectedWard.NoGB" min="0">
+      </label>
+    </div>
+    <div class="col-md-12">
+      <label class="k-form-field">
+        <span><strong>Special Beds</strong></span>
+        <input type="number" kendoTextBox name="NoSB" [(ngModel)]="selectedWard.NoSB" min="0">
+      </label>
+    </div>
+  </div>
+  <kendo-dialog-actions *ngIf="wardDialogOpened && selectedWard" class="animated fadeIn">
+
+    <kendo-buttongroup [width]="'100%'">
+      <button kendoButton [ladda]="savingWard" data-style="zoom-in" (click)="editWard()" primary="true"
+        style="height: 100% !important;background: #46a23f !important;color: white !important;">Save</button>
+      <button kendoButton [ladda]="removingWard" data-style="zoom-in" (click)="removeWard()" class="btn-danger"
+        style="height: 100% !important;">Remove</button>
+      <button kendoButton ladda (click)="closeWardWindow()">Cancel</button>
+    </kendo-buttongroup>
+
+
+  </kendo-dialog-actions>
+</kendo-dialog>

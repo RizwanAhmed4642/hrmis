@@ -1,0 +1,312 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3">
+        Job Advertisement
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12">
+      <div class="top-controls">
+        <!--    <button kendoButton [primary]="true" [look]="'outline'" (click)="getHFOpened()"><i
+            class="fa fa-refresh"></i>&nbsp;Refresh</button>
+        <button kendoButton [primary]="true" routerLink="/application/document" class="mr-2"><i
+            class="fa fa-sticky-note"></i>&nbsp;New
+          Document</button> -->
+      </div>
+    </div>
+  </div>
+
+
+  <div class="animated fadeIn">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <label class="k-form-field">
+          <span>Search</span>
+          <input kendoTextBox type="text" #search (keyup)="searchDesignations(search.value)">
+        </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4 animated fadeIn" *ngFor="let designation of designations">
+        <div class="card p-0">
+          <div class="media media--16-9">
+            <div class="actions">
+              <div class="action-icons float-right"> <i class="fa fa-user-md"></i> </div>
+            </div>
+            <div class="primary-title">
+              <div class="secondary-text">&nbsp;</div>
+              <div class="primary-text">{{designation.Name}}</div>
+            </div>
+
+          </div>
+          <div class="actions">
+            <div class="action-buttons float-right">
+              <div class="row p-4">
+                <div class="col-md-4">
+                  <label class="k-form-field">
+                    <span>Age Limit</span>
+                    <input kendoTextBox type="number" [(ngModel)]="designation.AgeLimit">
+                  </label>
+            
+                </div>
+                <div class="col-md-4">
+                  <label class="k-form-field">
+                    <span>Overall Exp</span>
+                    <input kendoTextBox type="number" [(ngModel)]="designation.Experience">
+                  </label>
+            
+                </div>
+                <div class="col-md-4">
+                  <label class="k-form-field">
+                    <span>Relevant Exp</span>
+                    <input kendoTextBox type="number" [(ngModel)]="designation.RelevantExperience">
+                  </label>
+            
+                </div>
+              </div>
+              <kendo-switch (valueChange)="switchValChange(designation, $event)" [(ngModel)]="designation.on"
+                [onLabel]="'ON'" [offLabel]="'OFF'"></kendo-switch>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="2 + 2 == 5">
+    <div class="row">
+      <div class="col-md-6 control-col-st">
+        <label class="k-form-field">
+          <span>Designation</span>&nbsp;<span class="text-danger">*</span>
+          <kendo-dropdownlist [data]="dropDowns.designationsData" [textField]="'Name'" [valueField]="'Id'"
+            (valueChange)="dropdownValueChanged($event, 'designation')"
+            [value]="dropDowns.selectedFiltersModel.designation"
+            [defaultItem]="dropDowns.defultFiltersModel.designation">
+          </kendo-dropdownlist>
+        </label>
+
+      </div>
+      <div class="col-md-2 control-col">
+        <label class="k-form-field">
+          <span>Start Date <span class="text-danger">*</span></span>
+          <kendo-datepicker placeholder="Choose Start Date" [format]="'dd/MM/yyyy'" [(ngModel)]="job.StartDate">
+          </kendo-datepicker>
+        </label>
+
+      </div>
+      <div class="col-md-2 control-col">
+        <label class="k-form-field">
+          <span>End Date <span class="text-danger">*</span></span>
+          <kendo-datepicker placeholder="Choose End Date" [format]="'dd/MM/yyyy'" [(ngModel)]="job.EndDate">
+          </kendo-datepicker>
+        </label>
+      </div>
+      <div class="col-md-2 control-col-end">
+        <label class="k-form-field">
+          <span>No. of Preferences</span>&nbsp;<span class="text-danger">*</span>
+          <input kendoTextBox type="number" [(ngModel)]="job.TotalPreferences">
+        </label>
+      </div>
+    </div>
+    <hr>
+    <div class="animated fadeIn" *ngIf="showHF">
+      <div class="content-heading mb-2">
+        Health Facilities
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-8 control-col-st">
+              <label class="k-form-field">
+                <span>Facility Name</span>
+                <kendo-autocomplete [data]="hfsList" [valueField]="'FullName'"
+                  (valueChange)="searchClicked($event, 'hfs')" required [value]="hfName" [filterable]="true"
+                  (filterChange)="searchEvent.next({ event: $event, filter: 'hfs'})"
+                  placeholder="Search Health Facility" class="k-autocomplete-form">
+                  <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                    <div class="search-list-item">
+                      {{ dataItem.FullName }}</div>
+                  </ng-template>
+                </kendo-autocomplete>
+              </label>
+            </div>
+            <div class="col-md-2 control-col">
+              <label class="k-form-field">
+                <span>No. of Posts</span>&nbsp;<span class="text-danger">*</span>
+                <input kendoTextBox type="number" [(ngModel)]="jobHF.SeatsOpen">
+              </label>
+            </div>
+            <div class="col-md-2 control-col-end">
+              <label class="k-form-field">
+                <span>&nbsp;</span>
+                <button kendoButton class="btn-block" [disabled]="!jobHF.HF_Id || !jobHF.SeatsOpen" primary="true"
+                  type="button" (click)="saveOpenHF()"><i class="fa fa-plus"></i> Add Facility</button>
+              </label>
+            </div>
+          </div>
+          <div class="row animated fadeIn" *ngIf="jobHFs.length > 0">
+            <div class="col-md-12">
+              <kendo-grid [data]="jobHFs">
+                <kendo-grid-column [width]="'5'" field="asd" title="Sr.">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <p class="m-0">{{(rowIndex + 1)}}</p>
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="'50'" field="FullName" title="Health Facility">
+                  <ng-template kendoGridCellTemplate let-dataItem>
+                    <p class="m-0">{{dataItem.HealthFacility}}</p>
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="'10'" field="Seats" title="Seats">
+                  <ng-template kendoGridCellTemplate let-dataItem>
+                    <p class="m-0">{{dataItem.SeatsOpen}}</p>
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="'10'" field="asd" title="Action">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <button class="btn btn-danger btn-sm" (click)="removeOpenedHF(rowIndex)"><i
+                        class="fa fa-times"></i></button>
+                  </ng-template>
+                </kendo-grid-column>
+              </kendo-grid>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+    </div>
+
+    <div class="content-heading mb-2">
+      Documents
+    </div>
+    <div class="row">
+      <div class="col-md-10 col-sm-12 control-col-st">
+        <label class="k-form-field"><span>Required Documents <span class="text-danger">*</span></span>
+          <kendo-dropdownlist [data]="documents" [(ngModel)]="jobDocument" [textField]="'Name'" [valueField]="'Id'"
+            [defaultItem]="dropDowns.defultFiltersModel.applicationDocument">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-2 col-sm-12 control-col-end">
+        <label class="k-form-field">
+          <span>&nbsp;</span>
+          <button kendoButton class="btn-block" [disabled]="!jobDocument.Id" primary="true" type="button"
+            (click)="addJobDocument()"><i class="fa fa-plus"></i> Add Document</button>
+        </label>
+
+      </div>
+    </div>
+    <div class="row animated fadeIn" *ngIf="jobDocuments.length > 0">
+      <div class="col-md-12">
+        <kendo-grid [data]="jobDocuments">
+          <kendo-grid-column [width]="'5'" field="asd" title="Sr.">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p class="m-0">{{(rowIndex + 1)}}</p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="'50'" field="Name" title="Document">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <p class="m-0">{{dataItem.Name}}</p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="'10'" field="asd" title="Action">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <button class="btn btn-danger btn-sm" (click)="removeJobDocument(rowIndex)"><i
+                  class="fa fa-times"></i></button>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <!-- <div class="col-md-4 control-col-st">
+      <label class="k-form-field">
+        <span>Offer Letter (.docx)</span>
+        <input type="file" class="form-control">
+      </label>
+    </div>
+    <div class="col-md-4 control-col">
+      <label class="k-form-field">
+        <span>Acceptance Letter (.docx)</span>
+        <input type="file" class="form-control">
+      </label>
+    </div> -->
+
+      <div class="col-md-2 col-sm-12 control-col-st">
+        <label class="k-form-field">
+          <span>&nbsp;</span>
+          <button kendoButton class="btn-block btn-lg" primary="true" type="button" (click)="saveJob()"><i
+              class="fa fa-save"></i> Submit</button>
+        </label>
+
+      </div>
+    </div>
+
+    <!-- <pre>{{hfOpened | json}}</pre> -->
+    <hr>
+
+    <div class="row animated fadeIn" *ngIf="jobs.length > 0">
+      <div class="col-md-12">
+        <kendo-grid [data]="jobs">
+          <kendo-grid-column [width]="'5'" field="asd" title="Sr.">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p class="m-0">{{(rowIndex + 1)}}</p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="'50'" field="FullName" title="Post">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <p class="m-0">{{dataItem.DesignationName}}</p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="'10'" field="Preferences" title="No. of Preferences">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <p class="m-0">{{dataItem.TotalPreferences}}</p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="'10'" field="asd" title="Action">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <button class="btn btn-danger btn-sm" (click)="removeJob(dataItem)"><i class="fa fa-times"></i></button>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+    </div>
+
+    <div *ngIf="loading" class="k-i-loading"></div>
+  </div>
+
+</div>
+
+
+
+
+
+<kendo-dialog [title]="'Post Details'" *ngIf="saveDialogOpened" (close)="closeWindow()" [minWidth]="450" [width]="650">
+  <div class="row p-4">
+    <div class="col-md-4">
+      <label class="k-form-field">
+        <span>Age Limit</span>
+        <input kendoTextBox type="number" [(ngModel)]="job.AgeLimit">
+      </label>
+
+    </div>
+    <div class="col-md-4">
+      <label class="k-form-field">
+        <span>Overall Experience</span>
+        <input kendoTextBox type="number" [(ngModel)]="job.Experience">
+      </label>
+
+    </div>
+    <div class="col-md-4">
+      <label class="k-form-field">
+        <span>Relevant Experience</span>
+        <input kendoTextBox type="number" [(ngModel)]="job.RelevantExperience">
+      </label>
+
+    </div>
+  </div>
+  <kendo-dialog-actions *ngIf="saveDialogOpened" class="animated fadeIn">
+    <button kendoButton (click)="closeWindow()" primary="true">Save</button>
+  </kendo-dialog-actions>
+</kendo-dialog>

@@ -1,0 +1,101 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-8 col-xs-12">
+            <div class="top-h3">
+                Facilities to be Opened for Adhoc Posting
+            </div>
+        </div>
+        <div class="col-md-4 col-xs-12">
+            <div class="top-controls">
+                <button kendoButton [primary]="true" [look]="'outline'" (click)="getHFOpened()"><i
+                        class="fa fa-refresh"></i>&nbsp;Refresh</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" hidden>
+        <!--  <div class="col-md-3 control-col-st">
+        <label class="k-form-field">
+          <span>Designation</span>&nbsp;<span class="text-danger">*</span>
+          <kendo-dropdownlist [data]="dropDowns.designationsData" [textField]="'Name'" [valueField]="'Id'"
+            (valueChange)="dropdownValueChanged($event, 'designation')"
+            [value]="dropDowns.selectedFiltersModel.designation" [defaultItem]="dropDowns.defultFiltersModel.designation">
+          </kendo-dropdownlist>
+        </label>
+      </div> -->
+        <div class="col-md-5 control-col-st">
+            <label class="k-form-field">
+                <span>Facility Name</span>
+                <kendo-autocomplete [data]="hfsList" [valueField]="'FullName'"
+                    (valueChange)="searchClicked($event, 'hfs')" required [value]="hfName" [filterable]="true"
+                    (filterChange)="searchEvent.next({ event: $event, filter: 'hfs'})"
+                    placeholder="Search Health Facility" class="k-autocomplete-form">
+                    <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                        <div class="search-list-item">
+                            {{ dataItem.FullName }}</div>
+                    </ng-template>
+                </kendo-autocomplete>
+            </label>
+        </div>
+        <div class="col-md-3 control-col">
+            <label class="k-form-field">
+                <span>Seats</span>&nbsp;
+                <input kendoTextBox type="number" [(ngModel)]="hfOpened.Vacant">
+            </label>
+        </div>
+        <div class="col-md-2 control-col-end">
+            <label class="k-form-field">
+                <span>Vacant Initial</span>&nbsp;
+                <input kendoTextBox type="number" [(ngModel)]="hfOpened.VacantInitial">
+            </label>
+        </div>
+        <div class="col-md-2 control-col-end">
+            <label class="k-form-field">
+                <span></span>&nbsp;
+                <button kendoButton class=" btn btn-so-primary btn-block" kendoButton (click)="saveOpenHF()">Save</button>
+            </label>
+        </div>
+    </div>
+    <!-- <pre>{{hfOpened | json}}</pre> -->
+    <hr>
+    <div class="row" *ngIf="hfOpens.length > 0">
+        <div class="col-md-12">
+            <div class="grid-wrapper">
+                <kendo-grid [data]="hfOpens">
+                    <kendo-grid-column [width]="'5'" field="asd" title="Sr.">
+                        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                            <p class="m-0">{{(rowIndex + 1)}}</p>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column [width]="'30'" field="Name" title="Designation">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            <p class="m-0">{{dataItem.Name}}</p>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column [width]="'50'" field="HFName" title="Health Facility">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            <p class="m-0">{{dataItem.HFName}}</p>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column [width]="'10'" field="Vacant" title="Seats">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            <p class="m-0">{{dataItem.Vacant}}</p>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column [width]="'10'" field="VacantInitial" title="Vacant Initial">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            <p class="m-0">{{dataItem.VacantInitial}}</p>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column [width]="'10'" field="asd" title="Action">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            <button class="btn btn-danger btn-sm" (click)="removeOpenedHF(dataItem.Id)"><i
+                                    class="fa fa-times"></i></button>
+                        </ng-template>
+                    </kendo-grid-column>
+                </kendo-grid>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="kGrid.loading" class="k-i-loading"></div>
+</div>

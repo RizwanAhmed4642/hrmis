@@ -1,0 +1,202 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-8 col-xs-12">
+            <div class="top-h3">
+                Add Staff
+            </div>
+        </div>
+        <div class="col-md-4 col-xs-12">
+            <div class="top-controls">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-heading mb-2">
+                Facilities
+            </div>
+            <kendo-grid [data]="covidFacilities" [resizable]="true">
+                <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-text'"
+                    [style]="{'padding': '4px 8px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{ (rowIndex + 1) }}.</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="Name" [title]="'Facility'" width="73" [headerClass]="'grid-header-text'"
+                    [style]="{'padding': '4px 8px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{ dataItem.Name }}</p>
+                        <p class="m-0"><i>{{ dataItem.HealthFacility }}</i></p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="asd" [title]="'Action'" width="22" [headerClass]="'grid-header-text'"
+                    [style]="{'padding': '4px 8px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <button kendoButton [primary]="true" class="btn-sm" look="outline"
+                            (click)="openWindow(dataItem, false)">View Staff</button>
+                        <button kendoButton [primary]="true" class="btn-sm ml-1" (click)="openWindow(dataItem, true)"><i
+                                class="fa fa-plus"></i>&nbsp;Add
+                            Staff</button>
+                    </ng-template>
+                </kendo-grid-column>
+            </kendo-grid>
+        </div>
+    </div>
+</div>
+
+
+
+
+<kendo-dialog
+    [title]="(addNewStaff ? 'New addNewStaff' : 'View') + ' - ' + selectedFacility.Name + ' - ' + selectedFacility.HealthFacility"
+    *ngIf="windowOpen" (close)="closeWindow()" [minWidth]="'450'" [height]="'585'" [width]="'1050'">
+    <div *ngIf="addNewStaff">
+        <div class="content-heading mb-2">
+            Employee Information
+        </div>
+        <div class="row">
+            <div class="col-md-3 control-col-st">
+                <label class="k-form-field">
+                    <span>CNIC <span class="text-danger">*</span></span>
+                    <kendo-autocomplete [data]="profileList" [valueField]="'EmployeeName'"
+                        (valueChange)="searchClicked($event, 'cnic')" required [filterable]="true"
+                        (filterChange)="searchEvent.next({ event: $event, filter: 'cnic'})" [value]="attachedPersonName"
+                        placeholder="Search Employee by CNIC" class="k-autocomplete-form">
+                        <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                            <div class="search-list-item">
+                                {{ dataItem.EmployeeName }}</div>
+                        </ng-template>
+                    </kendo-autocomplete>
+                </label>
+            </div>
+            <div class="col-md-3 control-col animated fadeIn" *ngIf="profile.Id">
+                <label class="k-form-field">
+                    <span>Employee Name</span>
+                    <p class="m-0 p-strong">
+                        {{profile.EmployeeName}}
+                    </p>
+                </label>
+            </div>
+            <div class="col-md-2 control-col animated fadeIn" *ngIf="profile.Id">
+                <label class="k-form-field">
+                    <span>Father Name</span>
+                    <p class="m-0 p-strong">
+                        {{profile.FatherName}}
+                    </p>
+                </label>
+            </div>
+            <div class="col-md-2 control-col animated fadeIn" *ngIf="profile.Id">
+                <label class="k-form-field">
+                    <span>Designation</span>
+                    <p class="m-0 p-strong">
+                        {{profile.Designation_Name}}
+                    </p>
+                </label>
+            </div>
+            <div class="col-md-2 control-col-end animated fadeIn" *ngIf="profile.Id">
+                <label class="k-form-field">
+                    <span>Employment Mode</span>
+                    <p class="m-0 p-strong">
+                        {{profile.EmpMode_Name}}
+                    </p>
+                </label>
+            </div>
+        </div>
+        <div class="content-heading mb-2">
+            Deputed Information
+        </div>
+        <div class="row">
+            <div class="col-md-3 control-col-st">
+                <label class="k-form-field">
+                    <span>Employment Mode <span class="text-danger">*</span></span>
+                    <kendo-dropdownlist [data]="dropDowns.employementModesData" [textField]="'Name'" [valueField]="'Id'"
+                        required (valueChange)="dropdownValueChanged($event, 'employementMode')"
+                        [value]="dropDowns.selectedFiltersModel.employementMode"
+                        [defaultItem]="dropDowns.defultFiltersModel.employementMode">
+                    </kendo-dropdownlist>
+                </label>
+            </div>
+            <div class="col-md-2 control-col-end">
+                <label class="k-form-field">
+                    <span>&nbsp;</span>
+                    <button kendoButton primary="true" class="btn-block" (click)="saveStaff()" [ladda]="saving"
+                        data-style="zoom-in" [disabled]="!newStaff.ProfileId || !newStaff.EmpModeId">Save</button>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-heading mb-2">
+                Staff
+            </div>
+            <kendo-grid [data]="covidStaffList" [resizable]="true">
+                <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-text'"
+                    [style]="{'padding': '4px 8px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{ (rowIndex + 1) }}.</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="Name" [title]="'Employee Info'" width="73" [headerClass]="'grid-header-text'"
+                    [style]="{'padding': '4px 8px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0"><span class="p-strong">Name:</span> {{ dataItem.EmployeeName }}</p>
+                        <p class="m-0"><span class="p-strong">S/D/W of:</span> {{ dataItem.FatherName }}</p>
+                        <p class="m-0"><span class="p-strong">CNIC:</span> {{ dataItem.CNIC }}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="Designation_Name" [title]="'Deputation Info'" width="73"
+                    [headerClass]="'grid-header-text'"
+                    [style]="{'padding': '4px 8px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0"><span class="p-strong">Designation:</span> {{ dataItem.Designation_Name }}</p>
+                        <p class="m-0"><span class="p-strong">Posted At:</span> {{ dataItem.PlaceOfPosting }}</p>
+                        <p class="m-0"><span class="p-strong">Health Facility:</span>
+                            {{ dataItem.OriginHealthFacility }}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="asd" [title]="'Action'" width="22" [headerClass]="'grid-header-text'"
+                    [style]="{'padding': '4px 8px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <button *ngIf="user.UserName == dataItem.CreatedBy" class="btn btn-danger btn-sm" look="outline"
+                            [ladda]="dataItem.removing" data-style="zoom-in" (click)="removeCovidStaff(dataItem)"><i
+                                class="fa fa-times"></i></button>
+                    </ng-template>
+                </kendo-grid-column>
+            </kendo-grid>
+        </div>
+    </div>
+    <!-- <kendo-dialog-actions
+    *ngIf="profilesWindow.dialogOpened && showVacancyControls && !filledExceed && !showLog && !showProfile && !loadingVpMaster && currentUser.RoleName != 'HRView'"
+    class="animated fadeIn">
+    <kendo-buttongroup [width]="'100%'" style="padding: 10px 15px !important;">
+      <button kendoButton ladda style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;"
+        *ngIf="!currentUser.UserName.toLowerCase().startsWith('ceo.') && currentUser.RoleName != 'Deputy Secretary' && currentUser.RoleName != 'Hisdu Order Team' && (!userRight || (userRight && userRight.AddVacancy)) && !saving"
+        class="action-btn-success" primary="true" (click)="saveVacancy()"><i class="fa fa-save"></i>
+        Save</button>
+      <button kendoButton ladda style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;"
+        *ngIf="currentUser.UserName == 'ordercell' && !saving" class="action-btn-success" primary="true"
+        (click)="saveVacancy()"><i class="fa fa-save"></i> Save</button>
+      <button kendoButton ladda style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;"
+        *ngIf="currentUser.UserName.toLowerCase().startsWith('ceo.') && healthFacility?.HFTypeCode != '011' && healthFacility?.HFTypeCode != '012' && healthFacility?.HFAC != 2 && !saving"
+        class="action-btn-success" primary="true" (click)="saveVacancy()"><i class="fa fa-save"></i> Save</button>
+
+      <button kendoButton style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;" *ngIf="saving"
+        [ladda]="true" data-style="zoom-in" class="action-btn-success-load"></button>
+
+      <button kendoButton ladda style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;"
+        *ngIf="!currentUser.UserName.toLowerCase().startsWith('ceo.') && currentUser.RoleName != 'Deputy Secretary' && currentUser.RoleName != 'Hisdu Order Team' && (!userRight || (userRight && userRight.AddVacancy)) && !removing"
+        (click)="removeVacancy()" class="action-btn-danger"><i class="fa fa-trash"></i> Remove</button>
+      <button kendoButton ladda style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;"
+        *ngIf="currentUser.UserName.toLowerCase().startsWith('ceo.') && healthFacility?.HFTypeCode != '011' && healthFacility?.HFTypeCode != '012' && healthFacility?.HFAC != 2 && !removing"
+        class="action-btn-danger" (click)="removeVacancy()"><i class="fa fa-trash"></i> Remove</button>
+
+      <button kendoButton style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;"
+        *ngIf="removing" [ladda]="true" data-style="zoom-in" class="action-btn-danger-load"></button>
+
+      <button kendoButton style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;"
+        class="action-btn-secondary" ladda (click)="closeWindow()"><i class="fa fa-times"></i> Close</button>
+    </kendo-buttongroup>
+  </kendo-dialog-actions> -->
+
+</kendo-dialog>

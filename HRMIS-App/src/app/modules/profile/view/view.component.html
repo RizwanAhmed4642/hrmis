@@ -1,0 +1,1257 @@
+<div class="animated fadeIn" *ngIf="profile && authorized">
+  <div class="row">
+    <div class="col-md-4 col-xs-12">
+      <div class="top-h3">
+        {{profile.EmployeeName ? profile.EmployeeName : 'Employee Profile'}} <small
+          *ngIf="profileReview.ReviewStatusName == 'Verified'"><i class="fa fa-syringe k-text-primary"></i></small>
+      </div>
+    </div>
+    <div class="col-md-8 col-xs-12">
+      <div class="top-controls" *ngIf="currentUser.RoleName != 'Section Officer'">
+        <button kendoButton [primary]="true" class="ml-2" routerLink="/profile/list">Back To List</button>
+        <button type="button"
+          *ngIf="currentUser.RoleName != 'Deputy Secretary' && currentUser.RoleName != 'HRView' && (!userRight || (userRight && userRight.AddVacancy))"
+          kendoButton [primary]="true" [look]="'outline'" class="ml-2"
+          [routerLink]="'/profile/' + profile.CNIC + '/edit'">Edit</button>
+        <button
+          *ngIf="currentUser.RoleName == 'Deputy Secretary' && currentUser.UserName == 'ordercell' && currentUser.RoleName != 'HRView'"
+          type="button" kendoButton [primary]="true" [look]="'outline'" class="ml-2"
+          [routerLink]="'/profile/' + profile.CNIC + '/edit'">Edit</button>
+        <button *ngIf="currentUser.UserName == 'dpd' || currentUser.UserName == 'ordercell' || currentUser.RoleName == 'Hisdu Order Team' || currentUser.RoleName == 'Chief Executive Officer' || currentUser.RoleName == 'Districts' || 
+          ((currentUser.RoleName == 'PHFMC' || currentUser.RoleName == 'PHFMC Admin') && orderRequest.IsApproved)"
+          type="button" kendoButton [primary]="true" [look]="'outline'" class="ml-2"
+          (click)="openOrderWindow()">Generate Order</button>
+
+        <button
+          *ngIf="(currentUser.RoleName == 'PHFMC' || currentUser.RoleName == 'PHFMC Admin') && !orderRequest.IsApproved"
+          type="button" kendoButton [primary]="true" [look]="'outline'" class="ml-2"
+          (click)="generateOrderRequest()">Generate Order Request</button>
+
+        <button *ngIf="currentUser.UserName == 'dpd'" type="button" kendoButton [primary]="true" [look]="'outline'"
+          class="ml-2" (click)="printProfile()">Print</button>
+
+        <button kendoButton type="button" [primary]="true" [look]="'outline'" (click)="openWindow()" class="btn-sm ml-2"
+          style="cursor:pointer;" [ladda]="uploadingFile" data-style="expand-right">
+          <i class="fa fa-upload"></i> Vaccination Certificate</button>
+
+        <button *ngIf="vaccCertificate.FilePath" kendoButton type="button" [primary]="true" [look]="'outline'"
+          (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk' + vaccCertificate.FilePath)" class="btn-sm ml-2"
+          style="cursor:pointer;" [ladda]="uploadingFile" data-style="expand-right">
+          <i class="fa fa-download"></i> Download Certificate</button>
+
+        <!--   <input #photoRef type="file" accept="image/jpg, image/jpeg, image/png, application/pdf"
+          (change)="readUrl($event)" hidden>
+        <button kendoButton type="button" [primary]="true" [look]="'outline'" (click)="readPDFCertificate()"
+          class="btn-sm ml-2" [ngClass]="photoFile.length == 0 ? 'mt-0' : 'mt-2'" style="cursor:pointer;"
+          [ladda]="uploadingFile" data-style="expand-right">
+          <i class="fa fa-upload"></i> Vaccination Certificate</button> -->
+        <!--  <button
+          *ngIf="currentUser.UserName == 'dpd'"
+          type="button" kendoButton [primary]="true" [look]="'outline'" class="ml-2"
+          (click)="submitForReview()">Submit for Review</button> -->
+        <!-- <button type="button" kendoButton [primary]="true" [look]="'outline'" class="ml-2" routerLink="/profile/new-cheque">Generate
+          Cheque</button> -->
+        <!--  <button type="button" kendoButton [primary]="true" [look]="'outline'" class="ml-2" (click)="printProfile()">Print</button> -->
+        <!--    <button type="button" kendoButton [primary]="true" [look]="'outline'" class="ml-2" [routerLink]="'/profile/' + profile.CNIC + '/edit'">Transfer</button>
+        <button type="button" kendoButton [primary]="true" [look]="'outline'" class="ml-2" [routerLink]="'/profile/' + profile.CNIC + '/edit'">Add
+          to Pool</button> -->
+      </div>
+    </div>
+  </div>
+  <tabset *ngIf="profile">
+    <tab heading="Profile">
+      <app-profile-profile-information [profile]="profile"></app-profile-profile-information>
+      <!--  <app-profile-basic-info id="profileInfo" [profile]="profile"></app-profile-basic-info> -->
+
+    </tab>
+    <tab heading="File / ACR" *ngIf="currentUser?.UserName.startsWith('acr')">
+      <app-profile-file [profile]="profile"></app-profile-file>
+    </tab>
+    <tab heading="Applications" *ngIf="currentUser?.UserName != 'so.inq'">
+      <app-profile-applications [profile]="profile"></app-profile-applications>
+    </tab>
+    <tab heading="Leave Record" *ngIf="currentUser?.UserName != 'so.inq'">
+      <app-profile-leave-record [profile]="profile"></app-profile-leave-record>
+    </tab>
+    <tab heading="Service History" *ngIf="currentUser?.UserName != 'so.inq'">
+      <app-profile-service-record [profile]="profile"></app-profile-service-record>
+    </tab>
+    <tab heading="Duplication"
+      *ngIf="(currentUser?.UserName == 'dpd' || currentUser?.RoleName == 'SDP' ) && duplicateprofile.length > 1">
+      <app-profile-duplication [duplicateprofile]="duplicateprofile"></app-profile-duplication>
+    </tab>
+    <!-- 
+    <tab heading="Orders" *ngIf="currentUser?.UserName != 'so.inq'">
+      <app-profile-orders [profile]="profile"></app-profile-orders>
+    </tab> -->
+    <tab heading="Inquiries"
+      *ngIf="currentUser?.UserName == 'dpd' || currentUser?.UserName.startsWith('sdp') || currentUser?.UserName == 'so.inq' || currentUser?.RoleName == 'Deputy Secretary'">
+      <app-profile-inquiry [profile]="profile"></app-profile-inquiry>
+    </tab>
+    <tab heading="Remarks"
+      *ngIf="currentUser?.UserName == 'dpd' || currentUser?.UserName == 'so.inq' || currentUser?.RoleName == 'Deputy Secretary'">
+      <app-profile-remarks [profile]="profile"></app-profile-remarks>
+    </tab>
+    <tab heading="Review" *ngIf="currentUser?.UserName == 'dpd'">
+      <div class="row" *ngIf="!profileReview.Id">
+        <div class="col-md-12">
+          <div class="content-heading mb-2">
+            Submit for Review
+          </div>
+        </div>
+        <div class="col-md-9 control-col-st">
+          <label class="k-form-field">
+            <span>Remarks <span class="text-danger">*</span></span>
+            <textarea kendoTextArea [(ngModel)]="profileReview.Remarks"></textarea>
+          </label>
+        </div>
+        <div class="col-md-3 control-col-end">
+          <label class="k-form-field">
+            <span>&nbsp;</span>
+            <button kendoButton primary="true" class="btn-block btn-lg" [ladda]="submitting" data-style="zoom-in"
+              [disabled]="!profileReview.Remarks" (click)="submitForReview()">Submit</button>
+          </label>
+        </div>
+      </div>
+      <div class="row" *ngIf="profileReview.Id">
+        <div class="col-md-12">
+          <div class="content-heading mb-2">
+            Review Status
+          </div>
+        </div>
+        <div class="col-md-12">
+          <p class="mb-0"><strong class="p-strong">Status:</strong> {{profileReview.ReviewStatusName}}</p>
+          <p class="mb-0"><strong class="p-strong">Submit Time:</strong>
+            {{profileReview.DateTime | date: 'dd/MM/yyyy hh:mm a'}}</p>
+        </div>
+
+      </div>
+
+      <hr *ngIf="profileReviews.length > 0">
+      <div class="row animated fadeIn" *ngIf="profileReviews.length > 0">
+        <div class="col-md-12">
+          <kendo-grid [data]="profileReviews" [resizable]="true" *ngIf="!loadingReview">
+            <kendo-grid-column field="DateTime" [title]="'Date'" width="10" [headerClass]="'grid-header-text-center'"
+              [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0 text-center">{{ dataItem.DateTime | date:'dd/MM/yyyy' }}</p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="DateTime" [title]="'Time'" width="10" [headerClass]="'grid-header-text-center'"
+              [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0 text-center">{{ dataItem.DateTime | date:'h:mm a' }}</p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="ActionName" [title]="'Review By'" width="60" [headerClass]="'grid-header-text'"
+              [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <div class="d-flex flex-column width-full" style="font-weight: 100 !important;">
+                  <div>Profile review & verified by <strong style="font-family: Roboto-Bold !important;"
+                      class="no-underline text-bold wb-break-all d-inline-block" href="">{{dataItem.Username}}</strong>
+                    <!--  application to
+                        {{dataItem.ToOfficerDesignation}} -->
+                  </div>
+                  <div class="Box p-3 mt-2" *ngIf="dataItem.Remarks">
+                    <span>{{dataItem.Remarks}}</span>
+                  </div>
+                </div>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="ToStatus" width="20" title="Status" [headerClass]="'grid-header-text'"
+              [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0"><i class="fa fa-check-circle-o text-primary"></i> {{dataItem.StatusName}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+          <div class="k-i-loading" *ngIf="loadingReview"></div>
+        </div>
+
+      </div>
+      <hr>
+      <div class="row" *ngIf="profileReview.Id">
+        <div class="col-md-12">
+          <div class="content-heading mb-2">
+            Submit Review
+          </div>
+        </div>
+        <div class="col-md-9 control-col-st">
+          <label class="k-form-field">
+            <span>Remarks <span class="text-danger">*</span></span>
+            <textarea kendoTextArea [(ngModel)]="hrReview.Remarks"></textarea>
+          </label>
+        </div>
+        <div class="col-md-3 control-col-end">
+          <label class="k-form-field">
+            <span>&nbsp;</span>
+            <button kendoButton primary="true" class="btn-block btn-lg" [ladda]="submitting" data-style="zoom-in"
+              [disabled]="!hrReview.Remarks" (click)="submitReview()">Verify</button>
+          </label>
+        </div>
+      </div>
+    </tab>
+    <tab heading="Form" *ngIf="currentUser?.UserName == 'dpd'">
+      <div class="row">
+        <div class="col-md-12">
+          <div id="icpchart">
+            <!--  <p class="p-heading-icp-main"><strong>INDIVIDUAL CAREER PLANNING CHART</strong></p> -->
+            <table class="icp-chart">
+              <tbody>
+                <tr>
+                  <td colspan="40" style="padding-bottom: 0px">
+                    <img width="300px" src="https://hrmis.pshealthpunjab.gov.pk/assets/img/brand/mobilelogo.png" alt="">
+                  </td>
+                  <td colspan="16" class="mt-1" style="padding-bottom: 0px">
+                    <!--  <p class="text-center">
+                      <img style="margin-top: 10px;" alt="">
+                    </p> -->
+                    <p class="text-center">
+                      Dated: <span [innerHTML]="dateNow"></span>
+                    </p>
+                    <p class="text-center">
+                      <strong class="p-strong"> # {{profile.Id}}</strong>
+                    </p>
+
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="56" class="p-heading-icp-sub" colspan="56" width="327">
+                    <p class="p-heading-icp"><strong>Basic Information</strong></p>
+                  </td>
+                  <!--    <td colspan="16" width="410">
+                    <p> <strong style=" color: black !important;">Personnel Number:
+                        <u>{{profile.PersonnelNo}}</u></strong></p>
+                  </td> -->
+                </tr>
+                <tr>
+                  <td class="icp-background-heading" colspan="8" width="172">
+                    <p><strong>Name</strong></p>
+                  </td>
+                  <td colspan="35" width="365">
+                    <p>{{profile.EmployeeName}}</p>
+                  </td>
+                  <td colspan="13" rowspan="5" width="200">
+                    <img class="pic-shadow" style="padding: 10px" width="125" height="125"
+                      [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + profile.CNIC + '_23.jpg'">
+                  </td>
+                </tr>
+                <tr>
+                  <td class="icp-background-heading" colspan="8" width="172">
+                    <p><strong>Father Name</strong></p>
+                  </td>
+                  <td colspan="35" width="365">
+                    <p>{{profile.FatherName}}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="icp-background-heading" colspan="8" width="172">
+                    <p><strong>CNIC</strong></p>
+                  </td>
+                  <td colspan="35" width="365">
+                    <p>{{dashifyCNIC(profile.CNIC)}}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="icp-background-heading" colspan="8" width="172">
+                    <p><strong>Date of Birth</strong></p>
+                  </td>
+                  <td colspan="35" width="365">
+                    <p>{{profile.DateOfBirth | date:'dd-MM-yyyy'}}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="icp-background-heading" colspan="8" width="172">
+                    <p><strong>Gender</strong></p>
+                  </td>
+                  <td colspan="15" width="151">
+                    <p>{{profile.Gender}}</p>
+                  </td>
+                  <td class="icp-background-heading" colspan="11" width="94">
+                    <p><strong>Domicile</strong></p>
+                  </td>
+                  <td colspan="9" width="120">
+                    <p>{{profile.Domicile_Name}}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="icp-background-heading" colspan="8" width="172">
+                    <p><strong>Bloodgroup</strong></p>
+                  </td>
+                  <td colspan="15" width="151">
+                    <p>{{profile.BloodGroup}}</p>
+                  </td>
+                  <td class="icp-background-heading" colspan="11" width="94">
+                    <p><strong>Religion</strong></p>
+                  </td>
+                  <td colspan="22" width="172">
+                    <p>{{profile.Religion_Name}}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="icp-background-heading" colspan="8" width="183">
+                    <p><strong>Mother Tongue</strong></p>
+                  </td>
+                  <td colspan="48" width="565">
+                    <p>{{profile.Language_Name}}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="icp-background-heading" colspan="8" width="183">
+                    <p><strong>Qualification</strong></p>
+                  </td>
+                  <td colspan="48" width="565">
+                    <p>{{profile.QualificationName}}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="icp-background-heading" colspan="8" width="172">
+                    <p><strong>Current Posting</strong></p>
+                  </td>
+                  <td colspan="48" width="565">
+                    <p><span *ngIf="profile.Designation_Name">{{profile.Designation_Name}}</span><span
+                        *ngIf="profile.HealthFacility">, {{profile.HealthFacility}}</span>
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="icp-background-heading" colspan="8" width="172">
+                    <p><strong>Date of Present Posting</strong></p>
+                  </td>
+                  <td colspan="35" width="365">
+                    <p>{{profile.PresentStationLengthOfService | date:'dd-MM-yyyy'}}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="p-heading-icp-sub" colspan="56" width="737">
+                    <p class="p-heading-icp"><strong>Departmental Information</strong></p>
+                  </td>
+                </tr>
+                <!--      <tr>
+                  <td class="icp-background-heading" colspan="56" width="737">
+                    <p><strong>1. Date of Joining Govt. Service</strong></p>
+                  </td>
+                </tr> -->
+                <tr>
+                  <td class="icp-background-heading" colspan="9" width="183">
+                    <p><strong>Department</strong></p>
+                  </td>
+                  <td colspan="19" width="185">
+                    <p>{{profile.Department_Name}}</p>
+                  </td>
+                  <td class="icp-background-heading" colspan="17" width="184">
+                    <p><strong>Post Type</strong></p>
+                  </td>
+                  <td colspan="11" width="185">
+                    <p>{{profile.PostType_Name}}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="icp-background-heading" colspan="9" width="183">
+                    <p><strong>Designation</strong></p>
+                  </td>
+                  <td colspan="19" width="185">
+                    <p>{{profile.Designation_Name}}</p>
+                  </td>
+                  <td class="icp-background-heading" colspan="17" width="184">
+                    <p><strong>Employment Mode</strong></p>
+                  </td>
+                  <td colspan="11" width="185">
+                    <p>{{profile.EmpMode_Name}}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="icp-background-heading" colspan="9" width="183">
+                    <p><strong>Current Grade</strong></p>
+                  </td>
+                  <td colspan="19" width="185">
+                    <p>{{profile.CurrentGradeBPS}}</p>
+                  </td>
+                  <td class="icp-background-heading" colspan="17" width="184">
+                    <p><strong>Joining Grade</strong></p>
+                  </td>
+                  <td colspan="11" width="185">
+                    <p>{{profile.JoiningGradeBPS}}</p>
+                  </td>
+                  <!--   <td class="icp-background-heading" colspan="17" width="184">
+                    <p><strong>Post Grade</strong></p>
+                  </td>
+                  <td colspan="11" width="185">
+                    <p>{{profile.Postaanctionedwithscale}}</p>
+                  </td> -->
+                </tr>
+                <tr>
+                  <td class="icp-background-heading" colspan="9" width="183">
+                    <p><strong>Additional Charge</strong></p>
+                  </td>
+                  <td colspan="19" width="185">
+                    <p>{{profile.AdditionalCharge}}</p>
+                  </td>
+                  <td class="icp-background-heading" colspan="17" width="184">
+                    <p><strong>3. Appointment with BS</strong></p>
+                  </td>
+                  <td colspan="11" width="185">
+                    <p>{{profile.CurrentGradeBPS}}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="icp-background-heading" colspan="9" width="183">
+                    <p><strong>Seniority Number: </strong></p>
+                  </td>
+                  <td colspan="19" width="185">
+                    <p>{{profile.SeniorityNo}}</p>
+                  </td>
+                  <td class="icp-background-heading" colspan="17" width="184">
+                    <p><strong>Personnel Number</strong></p>
+                  </td>
+                  <td colspan="11" width="185">
+                    <p>{{profile.PersonnelNo}}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="icp-background-heading" colspan="9" width="183">
+                    <p><strong>Present Posting Order No</strong></p>
+                  </td>
+                  <td colspan="19" width="185">
+                    <p>{{profile.PresentPostingOrderNo}}</p>
+                  </td>
+                  <td class="icp-background-heading" colspan="17" width="184">
+                    <p><strong>Present Posting Order Date</strong></p>
+                  </td>
+                  <td colspan="11" width="185">
+                    <p>{{profile.PresentPostingDate | date:'dd-MM-yyyy'}}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="icp-background-heading" colspan="9" width="183">
+                    <p><strong>Date of First Appointment</strong></p>
+                  </td>
+                  <td colspan="19" width="185">
+                    <p>{{profile.DateOfFirstAppointment}}</p>
+                  </td>
+                  <td class="icp-background-heading" colspan="17" width="184">
+                    <p><strong>Date of Regularization</strong></p>
+                  </td>
+                  <td colspan="11" width="185">
+                    <p>{{profile.DateOfRegularization | date:'dd-MM-yyyy'}}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="icp-background-heading" colspan="9" width="183">
+                    <p><strong>Last Promotion Date</strong></p>
+                  </td>
+                  <td colspan="19" width="185">
+                    <p>{{profile.LastPromotionDate}}</p>
+                  </td>
+                  <td class="icp-background-heading" colspan="17" width="184">
+                    <p><strong>Superannuation Date</strong></p>
+                  </td>
+                  <td colspan="11" width="185">
+                    <p>{{profile.SuperAnnuationDate | date:'dd-MM-yyyy'}}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="p-heading-icp-sub" colspan="56" width="737">
+                    <p class="p-heading-icp"><strong>Service</strong></p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="icp-background-heading" colspan="6" width="65">
+                    <p><strong>Year From</strong></p>
+                  </td>
+                  <td class="icp-background-heading" colspan="6" width="48">
+                    <p><strong>Year To</strong></p>
+                  </td>
+                  <td class="icp-background-heading" colspan="6" width="66">
+                    <p><strong>Order Number</strong></p>
+                  </td>
+                  <td class="icp-background-heading" colspan="12" width="151">
+                    <p><strong>Designation</strong></p>
+                  </td>
+                  <td class="icp-background-heading" colspan="12" width="57">
+                    <p><strong>Employement As </strong></p>
+                  </td>
+                  <td class="icp-background-heading" colspan="14" width="94">
+                    <p><strong>Health Facility / Office / Institute </strong></p>
+                  </td>
+                  <!--  <td class="icp-background-heading" colspan="9" rowspan="2" width="66">
+                    <p><strong>Station </strong></p>
+                  </td>
+                  <td class="icp-background-heading" colspan="6" width="143">
+                    <p><strong>ACR Assessment</strong></p>
+                  </td> -->
+                </tr>
+                <tr>
+                  <td class="p-heading-icp-sub" colspan="56" width="737">
+                    <p class="p-heading-icp"><strong>Leaves</strong></p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="icp-background-heading" colspan="6" width="65">
+                    <p><strong>From</strong></p>
+                  </td>
+                  <td class="icp-background-heading" colspan="6" width="48">
+                    <p><strong>To</strong></p>
+                  </td>
+                  <td class="icp-background-heading" colspan="30" width="151">
+                    <p><strong>Type of Leave</strong></p>
+                  </td>
+                  <td class="icp-background-heading" colspan="14" width="66">
+                    <p><strong>Order Number</strong></p>
+                  </td>
+                  <!--  <td class="icp-background-heading" colspan="9" rowspan="2" width="66">
+                    <p><strong>Station </strong></p>
+                  </td>
+                  <td class="icp-background-heading" colspan="6" width="143">
+                    <p><strong>ACR Assessment</strong></p>
+                  </td> -->
+                </tr>
+                <!--     <tr>
+                  <td class="icp-background-heading" colspan="5" width="76">
+                    <p><strong>Reporting Officer </strong></p>
+                  </td>
+                  <td class="icp-background-heading" width="68">
+                    <p><strong>Counter signing Officer </strong></p>
+                  </td>
+                </tr> -->
+                <!-- <tr>
+                  <td width="47">
+                    <p>&nbsp;</p>
+                  </td>
+                  <td colspan="4" width="66">
+                    <p>&nbsp;</p>
+                  </td>
+                  <td colspan="11" width="151">
+                    <p>&nbsp;</p>
+                  </td>
+                  <td colspan="9" width="65">
+                    <p>&nbsp;</p>
+                  </td>
+                  <td colspan="5" width="48">
+                    <p>&nbsp;</p>
+                  </td>
+                  <td colspan="6" width="57">
+                    <p>&nbsp;</p>
+                  </td>
+                  <td colspan="5" width="94">
+                    <p>&nbsp;</p>
+                  </td>
+                  <td colspan="9" width="66">
+                    <p>&nbsp;</p>
+                  </td>
+                  <td colspan="5" width="76">
+                    <p>&nbsp;</p>
+                  </td>
+                  <td width="68">
+                    <p>&nbsp;</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="47">
+                    <p>&nbsp;</p>
+                  </td>
+                  <td colspan="4" width="66">
+                    <p>&nbsp;</p>
+                  </td>
+                  <td colspan="11" width="151">
+                    <p>&nbsp;</p>
+                  </td>
+                  <td colspan="9" width="65">
+                    <p>&nbsp;</p>
+                  </td>
+                  <td colspan="5" width="48">
+                    <p>&nbsp;</p>
+                  </td>
+                  <td colspan="6" width="57">
+                    <p>&nbsp;</p>
+                  </td>
+                  <td colspan="5" width="94">
+                    <p>&nbsp;</p>
+                  </td>
+                  <td colspan="9" width="66">
+                    <p>&nbsp;</p>
+                  </td>
+                  <td colspan="5" width="76">
+                    <p>&nbsp;</p>
+                  </td>
+                  <td width="68">
+                    <p>&nbsp;</p>
+                  </td>
+                </tr> -->
+              </tbody>
+            </table>
+            <p>&nbsp;</p>
+            <div class="m-0">
+              <p class="m-0 calibri"><strong>Print by user: </strong> {{currentUser?.UserName}}</p>
+              <p class="m-0 calibri"><strong>Designation: </strong>___________________________</p>
+              <p class="m-0 calibri"><strong>&nbsp;</strong></p>
+              <p class="m-0 calibri"><strong>Signature: </strong>___________________________</p>
+              <p class="m-0 calibri"><strong>Date: </strong>___________________________</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!--   <app-profile-icp-chart [profile]="profile"></app-profile-icp-chart> -->
+
+    </tab>
+    <tab heading="Logs" *ngIf="currentUser?.UserName == 'dpd'">
+      <app-profile-logs [profile]="profile"></app-profile-logs>
+    </tab>
+    <tab heading="Vaccination">
+      <div class="row">
+        <div class="col-md-3 control-col-st">
+          <label class="k-form-field">
+            <span>Vaccination <span class="text-danger">*</span></span>
+            <kendo-dropdownlist [data]="dropDowns.profileAttachments" [(ngModel)]="vaccCertificate.type"
+              [textField]="'Name'" [valueField]="'Id'" [valuePrimitive]="false"
+              [value]="dropDowns.selectedFiltersModel.vaccinationType"
+              [defaultItem]="dropDowns.defultFiltersModel.vaccinationType">
+            </kendo-dropdownlist>
+          </label>
+        </div>
+        <div class="col-md-3 control-col">
+          <label class="k-form-field">
+            <span>Ceritificate Number <span class="text-danger">*</span></span>
+            <input kendoTextBox type="text" name="oldPass" [(ngModel)]="vaccCertificate.Number" />
+          </label>
+        </div>
+        <div class="col-md-4 control-col">
+          <label class="k-form-field">
+            <span>{{vaccCertificate.FilePath ? 'Choose Other File' : 'Choose File'}} <span
+                class="text-danger">*</span>&nbsp;<small class="text-muted">(only
+                .jpg, .pdf of maximum 2mb)</small></span>
+            <input #photoRef type="file" accept="image/jpg, image/jpeg, application/pdf" (change)="readUrl($event)">
+          </label>
+        </div>
+        <div class="col-md-2 control-col-end">
+          <label class="k-form-field mt-1">
+            <button kendoButton [ladda]="uploadingFile" data-style="zoom-in" class="btn-align-v btn-block"
+              [disabled]="!vaccCertificate.Number || photoFile.length == 0 || vaccCertificate.type?.Id == 0"
+              primary="true" (click)="uploadFile()" primary="true"><i class="fa fa-upload"></i> Upload</button>
+          </label>
+
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-md-3 cursor-p hover-success" *ngFor="let vc of vaccCertificates">
+          <img class="image--cover d-block zoom animated fadeIn ml-2"
+            [src]="vc.FilePath && vc.FilePath.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/Uploads/AdhocApplicants/Qualification/' + vc.FilePath"
+            (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + vc.FilePath)" draggable="false" alt="">
+          <p class="m-1 text-center">{{vc.DocumentTitle}}</p>
+          <p class="m-1 text-center">{{vc.Number}}</p>
+        </div>
+      </div>
+    </tab>
+    <!--  <tab heading="Service Record">
+      <app-profile-service-record [profile]="profile"></app-profile-service-record>
+    </tab>
+    <tab heading="Logs">
+      <app-profile-logs [profile]="profile"></app-profile-logs>
+    </tab> -->
+  </tabset>
+
+
+  <!--  <kendo-dialog [title]="profile.EmployeeName" *ngIf="chequeBookWindow" [minWidth]="'450'" [width]="'1030'" (close)="closeChequeBookWindow()">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-3">
+            <label class="k-form-field">
+              <span>Officer</span>
+              <input type="text" [(ngModel)]="cheque.designation" placeholder="" kendoTextBox>
+            </label>
+            <label class="k-form-field">
+              <span>Program</span>
+              <input type="text" [(ngModel)]="cheque.program" placeholder="" kendoTextBox>
+            </label>
+            <label class="k-form-field">
+              <span>Government</span>
+              <input type="text" [(ngModel)]="cheque.government" disabled placeholder="" kendoTextBox>
+            </label>
+          </div>
+          <div class="col-md-3">
+            <label class="k-form-field">
+              <span>Dated</span>
+              <kendo-datepicker [format]="'dd/MM/yyyy'" [(ngModel)]="cheque.dated" required></kendo-datepicker>
+            </label>
+            <label class="k-form-field">
+              <span>Pay To</span>
+              <input type="text" [(ngModel)]="cheque.payTo" placeholder="" kendoTextBox>
+            </label>
+            <label class="k-form-field">
+              <span>Salary / Amount</span>
+              <input type="number" [(ngModel)]="cheque.amount" placeholder="Amount in Rs." kendoTextBox>
+            </label>
+          </div>
+
+          <div class="col-md-3">
+            <label class="k-form-field">
+              <span>Project Code</span>
+              <input type="text" [(ngModel)]="cheque.projectCode" placeholder="" kendoTextBox>
+            </label>
+            <label class="k-form-field">
+              <span>Fund / DDO Code</span>
+              <input type="text" [(ngModel)]="cheque.ddoCode" placeholder="" kendoTextBox>
+            </label>
+            <label class="k-form-field">
+              <span>Cost Center</span>
+              <input type="text" [(ngModel)]="cheque.costcenter" placeholder="" kendoTextBox>
+            </label>
+          </div>
+          <div class="col-md-3">
+            <label class="k-form-field">
+              <span>Account Title</span>
+              <input type="text" [(ngModel)]="cheque.accountTitle" placeholder="" kendoTextBox>
+            </label>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-md-12">
+          <div style="width: 600px; height: 342px;">
+            <img style="width: 600px; height: 342px;" src="../../../../assets/img/brand/hisducheckrotate1.jpg" alt="">
+            <span class="cheque payeesac">Payee's A/C</span>
+            <span class="cheque pd-hisdu">{{cheque.designation}}</span>
+            <span class="cheque hisdu">{{cheque.program}}</span>
+            <span class="cheque govtpnj">{{cheque.government}}</span>
+            <span class="cheque pay-to">{{cheque.payTo.toUpperCase()}}</span>
+            <span class="cheque amount-words">**{{toWords(cheque.amount)}} Only**</span>
+            <span class="cheque amount">={{cheque.amount | number}}/-</span>
+            <span class="cheque account-title">{{cheque.accountTitle}}</span>
+            <span class="cheque dated-cheque">{{cheque.dated | date: 'dd.MM.yyyy'}}</span>
+            <span class="cheque project-code">{{cheque.projectCode}}</span>
+            <span class="cheque ddofund">{{cheque.ddoCode}}</span>
+            <span class="cheque costcenter">{{cheque.costcenter}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <kendo-dialog-actions *ngIf="chequeBookWindow" class="animated fadeIn">
+      <kendo-buttongroup [width]="'100%'">
+
+        <button kendoButton (click)="closeChequeBookWindow()">Close</button>
+      </kendo-buttongroup>
+    </kendo-dialog-actions>
+  </kendo-dialog>
+ -->
+  <!-- <div class="row" hidden>
+    <div class="col-md-5">
+      <div class="content-wrap">
+        <div class="content-heading mb-3">
+          General Information
+        </div>
+        <div class="general-info">
+          <div class="info-wrapper">
+            <div class="field-title">
+              Photo
+            </div>
+            <div class="info">
+              <div class="employee-pic">
+                <img [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + profile.CNIC + '_23.jpg'"
+                  alt="">
+              </div>
+            </div>
+
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Name
+            </div>
+            <div class="info">
+              {{profile.EmployeeName}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Father Name
+            </div>
+            <div class="info">
+              {{profile.FatherName}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              CNIC
+            </div>
+            <div class="info">
+              {{dashifyCNIC(profile.CNIC)}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              D.O.B
+            </div>
+            <div class="info">
+              {{profile.DateOfBirth | date:'dd-MM-yyyy'}}
+            </div>
+          </div>
+
+          <div class="info-wrapper">
+            <div class="field-title">
+              Gender
+            </div>
+            <div class="info">
+              {{profile.Gender}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Province
+            </div>
+            <div class="info">
+              {{profile.Province}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Domicile
+            </div>
+            <div class="info">
+              {{profile.Domicile_Name}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Marital Status
+            </div>
+            <div class="info">
+              {{profile.MaritalStatus}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Bloodgroup
+            </div>
+            <div class="info">
+              {{profile.BloodGroup}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Religion
+            </div>
+            <div class="info">
+              {{profile.Religion_Name}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Mother Tongue
+            </div>
+            <div class="info">
+              {{profile.Language_Name}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7">
+      <div class="content-wrap">
+        <div class="content-heading mb-3">
+          Departmental Information
+        </div>
+        <div class="general-info">
+          <div class="info-wrapper">
+            <div class="field-title">
+              Department
+            </div>
+            <div class="info">
+              {{profile.Department_Name}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Post Type
+            </div>
+            <div class="info">
+              {{profile.PostType_Name}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Administrative Control
+            </div>
+            <div class="info">
+              {{profile.Hfac}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Actual Designation
+            </div>
+            <div class="info">
+              {{profile.Designation_Name}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Working Designation
+            </div>
+            <div class="info">
+              {{profile.WDesignation_Name}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Employment Mode
+            </div>
+            <div class="info">
+              {{profile.EmpMode_Name}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Head of Department
+            </div>
+            <div class="info">
+              {{profile.HoD}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Private Practice
+            </div>
+            <div class="info">
+              {{profile.PrivatePractice}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Seniority Number
+            </div>
+            <div class="info">
+              {{profile.SeniorityNo}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Personnel Number
+            </div>
+            <div class="info">
+              {{profile.PersonnelNo}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Current Grade BPS
+            </div>
+            <div class="info">
+              {{profile.CurrentGradeBPS}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Joining Grade BPS
+            </div>
+            <div class="info">
+              {{profile.JoiningGradeBPS}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Post Sanctioned with Scale
+            </div>
+            <div class="info">
+              {{profile.Postaanctionedwithscale}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Present Posting Order No
+            </div>
+            <div class="info">
+              {{profile.PresentPostingOrderNo}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Present Posting Date
+            </div>
+            <div class="info">
+              {{profile.PresentPostingDate | date:'dd-MM-yyyy'}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Qualification
+            </div>
+            <div class="info">
+              {{profile.QualificationName}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Specialization
+            </div>
+            <div class="info">
+              {{profile.SpecializationName}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Additional Qualification
+            </div>
+            <div class="info">
+              {{profile.AdditionalQualification}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Additional Charge
+            </div>
+            <div class="info">
+              {{profile.AdditionalCharge}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Employee Cadre
+            </div>
+            <div class="info">
+              {{profile.Cadre_Name}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Status
+            </div>
+            <div class="info">
+              {{profile.Status}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Length of Service
+            </div>
+            <div class="info">
+              {{profile.LengthOfService}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Date of First Appointment
+            </div>
+            <div class="info">
+              {{profile.DateOfFirstAppointment | date:'dd-MM-yyyy'}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Date of Regularization
+            </div>
+            <div class="info">
+              {{profile.DateOfRegularization | date:'dd-MM-yyyy'}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Superannuation Date
+            </div>
+            <div class="info">
+              {{profile.SuperAnnuationDate | date:'dd-MM-yyyy'}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Contract Start Date
+            </div>
+            <div class="info">
+              {{profile.ContractStartDate | date:'dd-MM-yyyy'}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Contract End Date
+            </div>
+            <div class="info">
+              {{profile.ContractEndDate | date:'dd-MM-yyyy'}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Last Promotion Date
+            </div>
+            <div class="info">
+              {{profile.LastPromotionDate | date:'dd-MM-yyyy'}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Health Facility Name
+            </div>
+            <div class="info">
+              {{profile.HealthFacility}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Working Health Facility
+            </div>
+            <div class="info">
+              {{profile.WorkingHealthFacility}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="content-wrap">
+        <div class="content-heading mb-3">
+          Contact Information
+        </div>
+        <div class="general-info">
+
+          <div class="info-wrapper">
+            <div class="field-title">
+              Landline Number
+            </div>
+            <div class="info">
+              {{profile.LandlineNo}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Fax Number
+            </div>
+            <div class="info">
+              {{profile.Faxno}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Mobile Number
+            </div>
+            <div class="info">
+              {{profile.MobileNo}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              E-mail
+            </div>
+            <div class="info">
+              {{profile.EMaiL}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Permanent Address
+            </div>
+            <div class="info">
+              {{profile.PermanentAddress}}
+            </div>
+          </div>
+          <div class="info-wrapper">
+            <div class="field-title">
+              Correspondence Address
+            </div>
+            <div class="info">
+              {{profile.CorrespondenceAddress}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+
+
+
+
+
+</div>
+
+<div class="animated fadeIn" *ngIf="!profile">
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <div class="shine shim-controls top-h3"></div>
+    </div>
+    <div class="col-md-1 col-xs-12 control-col-st">
+      <div class="top-controls">
+        <div class="shine shim-controls"></div>
+      </div>
+    </div>
+    <div class="col-md-2 col-xs-12 control-col">
+      <div class="top-controls">
+        <div class="shine shim-controls"></div>
+      </div>
+    </div>
+    <div class="col-md-1 col-xs-12 control-col-end">
+      <div class="top-controls">
+        <div class="shine shim-controls"></div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-2 control-col-st">
+      <div class="shine shim-controls btn-align-v"></div>
+    </div>
+    <div class="col-md-2 control-col">
+      <div class="shine shim-controls btn-align-v"></div>
+    </div>
+    <div class="col-md-2 control-col">
+      <div class="shine shim-controls btn-align-v"></div>
+    </div>
+    <div class="col-md-2 control-col">
+      <div class="shine shim-controls btn-align-v"></div>
+    </div>
+    <div class="col-md-2 control-col">
+      <div class="shine shim-controls btn-align-v"></div>
+    </div>
+    <div class="col-md-1 control-col-end">
+      <div class="shine shim-controls btn-align-v"></div>
+    </div>
+  </div>
+</div>
+<div class="animated fadeIn" *ngIf="!profile">
+  <div class="row row-panel">
+    <div class="col-md-7 control-col-st">
+      <div class="shine shim-thumb-lg"></div>
+    </div>
+    <div class="col-md-5 control-col-end">
+      <div class="shine shim-thumb"></div>
+      <div class="shine shim-thumb mt-4"></div>
+    </div>
+  </div>
+</div>
+
+<div class="animated fadeIn" *ngIf="!authorized">
+  <div class="row row-panel">
+    <div class="col-md-6 offset-md-3">
+      <h4 class="pt-3">Unauthorized Access.</h4>
+      <p class="text-muted">You are not authorized to view this profile.</p>
+    </div>
+  </div>
+</div>
+
+
+
+<kendo-dialog [title]="'Vaccination Certificate'" *ngIf="saveDialogOpened" (close)="closeWindow()" [minWidth]="450"
+  [width]="550">
+  <div class="row">
+    <div class="col-md-12">
+      <label class="k-form-field mb-1">
+        <span>Ceritificate Number <span class="text-danger">*</span></span>
+        <input kendoTextBox type="text" name="oldPass" [(ngModel)]="vaccCertificate.Number" />
+      </label>
+      <label class="k-form-field mb-1">
+        <span>{{vaccCertificate.FilePath ? 'Choose Other File' : 'Choose File'}} <span
+            class="text-danger">*</span></span>
+        <input #photoRef type="file" accept="image/jpg, image/jpeg, application/pdf" (change)="readUrl($event)">
+      </label>
+    </div>
+  </div>
+  <kendo-dialog-actions *ngIf="saveDialogOpened" class="animated fadeIn">
+    <button kendoButton [ladda]="uploadingFile" data-style="zoom-in"
+      style="height: 100% !important;background: #46a23f !important;color: white !important;" (click)="uploadFile()"
+      primary="true"><i class="fa fa-upload"></i> Upload</button>
+    <button *ngIf="vaccCertificate.FilePath" kendoButton
+      (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk' + vaccCertificate.FilePath)" primary="true"><i
+        class="fa fa-download"></i> Download</button>
+    <button kendoButton (click)="closeWindow()">Close</button>
+  </kendo-dialog-actions>
+</kendo-dialog>

@@ -1,0 +1,306 @@
+<div *ngIf="!profile" class="k-i-loading"></div>
+<div class="animated fadeIn" *ngIf="profile">
+    <div class="row">
+        <div class="col-md-5 col-xs-12">
+            <div class="top-h3">
+                <!--  {{profile.EmployeeName ? profile.EmployeeName : 'Employee Profile'}} -->
+                Review Your Profile Information
+            </div>
+        </div>
+        <div class="col-md-7 col-xs-12">
+            <div class="mt-4">
+                <button kendoButton primary="true" [routerLink]="['/e/apply']"><i
+                        class="fa fa-check-square-o"></i>&nbsp;My
+                    Information is Correct. Proceed for E-Transfer Application</button>
+                <button kendoButton primary="true" class="ml-2" [routerLink]="['/e/issue']" look="outline"><i
+                        class="fa fa-exclamation"></i> Report an Issue</button>
+            </div>
+        </div>
+    </div>
+</div>
+<tabset *ngIf="profile">
+    <tab heading="Profile">
+        <div class="animated fadeIn" *ngIf="profile">
+            <div class="row">
+                <div class="col-md-6 col-sm-12 control-col-st">
+
+                    <table class="table table-50 view-table" style="background: transparent;">
+                        <tbody>
+                            <tr (click)="openEditDialog('Photo', 'Photo')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Photo</strong></td>
+                                <td>
+                                    <img class="pic-shadow" width="100" height="100"
+                                        [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + profile.CNIC + '_23.jpg'"
+                                        onError="this.src='../../../assets/img/notfound.png'" alt="">
+                                </td>
+                            </tr>
+                            <tr (click)="openEditDialog('EmployeeName', 'First Name')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">First Name</strong></td>
+                                <td>{{profile.EmployeeName}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('FatherName', 'Last Name')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Last Name</strong></td>
+                                <td>{{profile.FatherName}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('CNIC', 'CNIC')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">CNIC</strong></td>
+                                <td>{{dashifyCNIC(profile.CNIC)}} </td>
+                            </tr>
+                            <tr (click)="openEditDialog('DateOfBirth', 'Date of Birth')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">D.O.B</strong></td>
+                                <td>{{profile.DateOfBirth | date:'dd-MM-yyyy'}} </td>
+                            </tr>
+                            <tr (click)="openEditDialog('Gender', 'Gender')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Gender</strong></td>
+                                <td>{{profile.Gender}} </td>
+                            </tr>
+                            <tr (click)="openEditDialog('Domicile_Name', 'Domicile')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Domicile</strong></td>
+                                <td>{{profile.Domicile_Name}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('MaritalStatus', 'Marital Status')"
+                                class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Marital Status</strong></td>
+                                <td>{{profile.MaritalStatus}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('Bloodgroup', 'Bloodgroup')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Bloodgroup</strong></td>
+                                <td>{{profile.BloodGroup}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('Religion_Name', 'Religion')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Religion</strong></td>
+                                <td>{{profile.Religion_Name}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('Language_Name', 'Mother Tongue')"
+                                class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Mother Tongue</strong></td>
+                                <td>{{profile.Language_Name}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('MobileNo', 'Mobile Number')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Mobile Number</strong></td>
+                                <td>{{profile.MobileNo}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('EMaiL', 'E-mail')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">E-mail</strong></td>
+                                <td>{{profile.EMaiL}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('LandlineNo', 'Landline Number')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Landline Number</strong></td>
+                                <td>{{profile.LandlineNo}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('Faxno', 'Fax Number')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Fax Number</strong></td>
+                                <td>{{profile.Faxno}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('PermanentAddress', 'Permanent Address')"
+                                class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Permanent Address</strong></td>
+                                <td>{{profile.PermanentAddress}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('CorrespondenceAddress', 'Correspondence Address')"
+                                class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Correspondence
+                                        Address</strong></td>
+                                <td>{{profile.CorrespondenceAddress}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6 col-sm-12 control-col-end">
+                    <table class="table table-50 view-table" style="background: transparent;">
+                        <tbody>
+                            <tr class="edit-enabler cursor-p"
+                                (click)="openEditDialog('HealthFacility', 'Health Facility')" routerLink="/e/facility">
+                                <td><strong class="p-strong">Health Facility</strong></td>
+                                <td>{{profile.HealthFacility ? profile.HealthFacility + ', ' + (profile.Tehsil == profile.District ? profile.Tehsil : profile.Tehsil + ', ' + profile.District) : ''}}
+                                </td>
+                            </tr>
+                            <tr class="edit-enabler cursor-p"
+                                (click)="openEditDialog('WorkingHealthFacility', 'Working Health Facility')"
+                                *ngIf="profile.WorkingHealthFacility">
+                                <td><strong class="p-strong">Working Health Facility</strong></td>
+                                <td>{{profile.WorkingHealthFacility + ', ' + (profile.WorkingTehsil == profile.WorkingDistrict ? profile.WorkingTehsil : profile.WorkingTehsil + ', ' + profile.WorkingDistrict)}}
+                                </td>
+                            </tr>
+                            <tr (click)="openEditDialog('Designation_Name', 'Actual Designation')"
+                                class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Actual Designation</strong></td>
+                                <td>{{profile.Designation_Name}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('WDesignation_Name', 'Working Designation')"
+                                class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Working Designation</strong></td>
+                                <td>{{profile.WDesignation_Name}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('AdditionalCharge', 'Additional Charge')"
+                                *ngIf="profile.AdditionalCharge">
+                                <td><strong class="p-strong">Additional Charge</strong></td>
+                                <td>{{profile.AdditionalCharge}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('HoD', 'Head of Department')" *ngIf="profile.HoD == 1">
+                                <td><strong class="p-strong">Head of Department</strong></td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr (click)="openEditDialog('CurrentGradeBPS', 'Current BPS')"
+                                class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Current Grade BPS</strong></td>
+                                <td>{{profile.CurrentGradeBPS}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('JoiningGradeBPS', 'Joining BPS')"
+                                class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Joining Grade BPS</strong></td>
+                                <td>{{profile.JoiningGradeBPS}}</td>
+                            </tr>
+                            <!--     <tr (click)="openEditDialog('Postaanctionedwithscale')" class="edit-enabler cursor-p">
+                      <td><strong class="p-strong">Post Sanctioned with Scale</strong></td>
+                      <td>{{profile.Postaanctionedwithscale}}
+                      </td>
+                    </tr> -->
+                            <!--   <tr (click)="openEditDialog('PrivatePractice')" class="edit-enabler cursor-p">
+                      <td><strong class="p-strong">Private Practice</strong></td>
+                      <td>{{profile.PrivatePractice}}</td>
+                    </tr> -->
+                            <tr (click)="openEditDialog('StatusName')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Status</strong></td>
+                                <td>{{profile.StatusName}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('SeniorityNo')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Seniority Number</strong></td>
+                                <td>{{profile.SeniorityNo}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('PersonnelNo')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Personnel Number</strong></td>
+                                <td>{{profile.PersonnelNo}}</td>
+                            </tr>
+
+                            <tr (click)="openEditDialog('PresentPostingOrderNo', 'Present Posting Order No')"
+                                class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Present Posting Order No</strong></td>
+                                <td>{{profile.PresentPostingOrderNo}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('PresentPostingDate', 'Present Posting Date')"
+                                class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Present Posting Date</strong></td>
+                                <td>{{profile.PresentPostingDate | date:'dd-MM-yyyy'}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('PresentStationLengthOfService')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Present Joining Date</strong></td>
+                                <td>{{profile.PresentStationLengthOfService | date:'dd-MM-yyyy'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-50 view-table mt-4" style="background: #f7f8fa;">
+                        <tbody>
+                            <tr (click)="openEditDialog('Department_Name')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Department</strong></td>
+                                <td>{{profile.Department_Name}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('PostType_Name')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Post Type</strong></td>
+                                <td>{{profile.PostType_Name}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('Cadre_Name')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Cadre</strong></td>
+                                <td>{{profile.Cadre_Name}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('EmpMode_Name')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Employment Mode</strong></td>
+                                <td>{{profile.EmpMode_Name}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('LengthOfService')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Length of Service</strong></td>
+                                <td>{{profile.LengthOfService}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('QualificationName')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Qualification</strong></td>
+                                <td>{{profile.QualificationName}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('AdditionalQualification')" class="edit-enabler cursor-p"
+                                *ngIf="profile.AdditionalQualification">
+                                <td><strong class="p-strong">Additional Qualification</strong></td>
+                                <td>{{profile.AdditionalQualification}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-50 view-table mt-4" style="background: #f7f8fa;">
+                        <tbody>
+                            <tr (click)="openEditDialog('DateOfFirstAppointment')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Date of First Appointment</strong></td>
+                                <td>{{profile.DateOfFirstAppointment | date:'dd-MM-yyyy'}}
+                                </td>
+                            </tr>
+                            <tr (click)="openEditDialog('DateOfRegularization')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Date of Regularization</strong></td>
+                                <td>{{profile.DateOfRegularization | date:'dd-MM-yyyy'}}
+                                </td>
+                            </tr>
+                            <tr (click)="openEditDialog('SuperAnnuationDate')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Superannuation Date</strong></td>
+                                <td>{{profile.SuperAnnuationDate | date:'dd-MM-yyyy'}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('ContractStartDate')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Contract Start Date</strong></td>
+                                <td>{{profile.ContractStartDate | date:'dd-MM-yyyy'}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('ContractEndDate')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Contract End Date</strong></td>
+                                <td>{{profile.ContractEndDate | date:'dd-MM-yyyy'}}</td>
+                            </tr>
+                            <tr (click)="openEditDialog('LastPromotionDate')" class="edit-enabler cursor-p">
+                                <td><strong class="p-strong">Last Promotion Date</strong></td>
+                                <td>{{profile.LastPromotionDate | date:'dd-MM-yyyy'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <hr>
+            <div class="row animated fadeIn">
+                <div class="col-md-7 control-col-st">
+                    <button kendoButton primary="true" [routerLink]="['/e/apply']" class="btn-lg btn-block"><i
+                            class="fa fa-check-square-o"></i> My
+                        Information is Correct. Proceed for E-Transfer Application</button>
+                </div>
+                <div class="col-md-5 control-col-end">
+                    <button kendoButton primary="true" class="btn-lg btn-block" [routerLink]="['/e/issue']"
+                        look="outline"><i class="fa fa-exclamation"></i> Report an Issue</button>
+                </div>
+            </div>
+        </div>
+    </tab>
+
+    <tab heading="Qualification">
+        <app-e-profile-qualification [profile]="profile"></app-e-profile-qualification>
+    </tab>
+    <tab heading="Leave Record">
+        <app-e-profile-leave-record [profile]="profile"></app-e-profile-leave-record>
+    </tab>
+    <tab heading="Service History">
+        <app-e-profile-service-record [profile]="profile"></app-e-profile-service-record>
+    </tab>
+</tabset>
+
+<kendo-dialog [title]="'Edit ' + selectedField.FieldLabel" *ngIf="editDialogOpened" [minWidth]="'450'" [height]="'285'"
+    [width]="'530'" (close)="closeEditDialog()">
+    <div class="animated fadeIn p-3">
+        <div class="row">
+            <div class="col-md-12">
+                <label class="k-form-field">
+                    <span class="p-strong">{{selectedField.FieldLabel}}</span>
+                    <input kendoTextBox type="text">
+                </label>
+            </div>
+        </div>
+        <hr>
+        <div class="row px-3">
+            <div class="col-md-4 control-col-st">
+                <button kendoButton class="btn-block" primary="true">Save</button>
+            </div>
+            <div class="col-md-4 control-col-end">
+                <button kendoButton class="btn-block" primary="true" look="outline"
+                    (click)="closeEditDialog()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</kendo-dialog>

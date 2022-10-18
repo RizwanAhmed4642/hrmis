@@ -1,0 +1,223 @@
+<div class="animated fadeIn" *ngIf="loaded">
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3">
+        Vacancy Status
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton class="mr-2" [primary]="true"
+          *ngIf="currentUser.UserName == 'so.toqeer' || currentUser.UserName == 'dpd'"
+          [routerLink]="'/vacancy-position/check'">Vacancy Status</button>
+      </div>
+    </div>
+  </div>
+  <div class="row row-panel">
+    <div class="col-md-12">
+      <!-- <div class="grid-top-header-custom animated fadeIn" *ngIf="kGrid.totalRecords > 0">
+            <div class="pager-rows-number">
+              <span>
+                {{(kGrid.skip + 1) + ' - ' + (kGrid.pageSize <= kGrid.totalRecords ? (kGrid.pageSize + kGrid.skip) :
+                    kGrid.totalRecords) + ' of ' + numberWithCommas(kGrid.totalRecords) + ' items ' }} </span> <button
+                *ngIf="selectedApplicationsIndex.length > 0" kendoButton (click)="generateSlip()" [primary]="true"
+                [ladda]="generatingSlip" data-style="zoom-in" class="ml-2 animated fadeIn btn-sm">Forward
+                ({{selectedApplicationsIndex.length + ') file' + (selectedApplicationsIndex.length == 1 ? '' : 's')}}</button>
+              <span class="pull-right">
+                <select #select (change)="changePagesize(select.value)">
+                  <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}</option>
+                  <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+                    [selected]="page === kGrid.pageSize ? true : undefined">
+                    {{page}}
+                  </option>
+                </select>
+                &nbsp; items per page
+              </span>
+    
+            </div>
+          </div> -->
+      <div class="grid-wrapper">
+        <kendo-grid [data]="kGrid.gridView" [sortable]="{
+                      allowUnsort: kGrid.allowUnsort,
+                      mode: kGrid.multiple ? 'multiple' : 'single'
+                      }" [(pageSize)]="kGrid.pageSize" [skip]="kGrid.skip" [pageable]="true"
+          (pageChange)="pageChange($event)" [scrollable]="true">
+          <kendo-grid-column [width]="6" field="asd" title="Sr." [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              {{(rowIndex + 1)}}.
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="20" field="FileNumber" title="File Number / Tracking Id"
+            [headerClass]="'grid-header-custom'" [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="employee-info">
+                <p class="m-0">{{dataItem.FileNumber}}</p>
+                <p class="m-0"><strong> Tracking # </strong> {{dataItem.TrackingNumber}} <i class="fa fa-barcode"></i>
+                </p>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="22" field="DsgName" title="Designation" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="application-info">
+                <p class="m-0">{{dataItem.DsgName}}</p>
+                <p class="m-0" *ngIf="dataItem.TrackingNumber"><strong class="p-strong">Approved:
+                  </strong>{{dataItem.TotalSeatsHold}} <strong class="p-strong">Vacant:
+                  </strong>{{dataItem.Vacant}}</p>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="39" field="HFName" title="Health Facility" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="application-info">
+                <p class="m-0">{{dataItem.HFName}}</p>
+                <p class="m-0" *ngIf="dataItem.TrackingNumber"><strong class="p-strong">Sanctioned:
+                  </strong>{{dataItem.TotalSanctioned}}</p>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="10" field="asd" title="Action" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <button kendoButton class="mr-2" [primary]="true" look="outline"
+                *ngIf="currentUser.RoleName == 'Hisdu Order Team' || currentUser.UserName == 'ordercell' || currentUser.UserName == 'dpd'"
+                (click)="openHolderWindow(dataItem)">Update</button>
+            </ng-template>
+          </kendo-grid-column>
+          <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+            <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+            <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+            <kendo-pager-next-buttons></kendo-pager-next-buttons>
+            <div class="pager-rows-number">
+              <select #select (change)="changePagesize(select.value)">
+                <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}</option>
+                <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+                  [selected]="page === kGrid.pageSize ? true : undefined">
+                  {{page}}
+                </option>
+              </select>
+              &nbsp; items per page
+            </div>
+            <kendo-pager-info></kendo-pager-info>
+          </ng-template>
+        </kendo-grid>
+        <div *ngIf="kGrid.loading" class="k-i-loading"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<kendo-dialog [title]="'Update Vacancy Status'" *ngIf="holderWindow" [minWidth]="'450'" [width]="'630'"
+  (close)="closeHolderWindow()">
+  <div class="row">
+    <div class="col-md-2 ">
+      <p class="m-0">
+        <strong class="p-strong">Sanctioned</strong>
+      </p>
+      <p class="m-0">
+        {{vpHolder.TotalSanctioned}}
+      </p>
+    </div>
+    <div class="col-md-2">
+      <p class="m-0">
+        <strong class="p-strong">Filled</strong>
+      </p>
+      <p class="m-0">
+        {{vpHolder.TotalWorking}}
+      </p>
+    </div>
+    <div class="col-md-2">
+      <p class="m-0">
+        <strong class="p-strong">Vacant</strong>
+      </p>
+      <p class="m-0">
+        {{vpHolder.Vacant}}
+      </p>
+    </div>
+    <div class="col-md-2">
+      <p class="m-0">
+        <strong class="p-strong">Profile</strong>
+      </p>
+      <p class="m-0">
+        {{vpHolder.Profiles}}
+      </p>
+    </div>
+    <div class="col-md-2">
+      <p class="m-0">
+        <strong class="p-strong">WorkingProfile</strong>
+      </p>
+      <p class="m-0">
+        {{vpHolder.WorkingProfiles}}
+      </p>
+    </div>
+  </div>
+  <hr>
+  <div class="row mb-1">
+    <div class="col-md-4"><strong class="p-strong pull-right">Tracking Id</strong></div>
+    <div class="col-md-8">
+      <input type="number" disabled placeholder="PUC / Application Tracking Id" [(ngModel)]="vpHolder.TrackingNumber"
+        kendoTextBox>
+    </div>
+  </div>
+  <div class="row mb-1">
+    <div class="col-md-4"><strong class="p-strong pull-right">File Number</strong></div>
+    <div class="col-md-8">
+      <input type="text" disabled placeholder="File Number" [(ngModel)]="vpHolder.FileNumber" kendoTextBox>
+    </div>
+  </div>
+  <div class="row mb-1">
+    <div class="col-md-4"><strong class="p-strong pull-right">Employee Name</strong></div>
+    <div class="col-md-8">
+      <input type="text" disabled placeholder="Employee Name" [(ngModel)]="vpHolder.EmployeeName" kendoTextBox>
+    </div>
+  </div>
+  <div class="row mb-1">
+    <div class="col-md-4"><strong class="p-strong pull-right">Approved Number of Seats</strong></div>
+    <div class="col-md-8">
+      <input type="number" disabled placeholder="No. of Approved Applications" [(ngModel)]="vpHolder.TotalSeatsHold"
+        kendoTextBox>
+    </div>
+  </div>
+  <div class="row mb-1">
+    <div class="col-md-4"><strong class="p-strong pull-right">Order Number</strong></div>
+    <div class="col-md-8">
+      <input type="text" placeholder="Order Number / File Number / Diary No." [(ngModel)]="vpHolder.OrderNumber"
+        kendoTextBox>
+    </div>
+  </div>
+  <div class="row mb-1">
+    <div class="col-md-4"><strong class="p-strong pull-right">ESR</strong></div>
+    <div class="col-md-8">
+      <input type="text" placeholder="Order Barcode" [(ngModel)]="vpHolder.ESR" kendoTextBox>
+    </div>
+  </div>
+  <div class="row mb-1">
+    <div class="col-md-4"><strong class="p-strong pull-right">ELR</strong></div>
+    <div class="col-md-8">
+      <input type="text" placeholder="Leave Order Barcode" [(ngModel)]="vpHolder.ELR" kendoTextBox>
+    </div>
+  </div>
+  <div class="row mb-1">
+    <div class="col-md-4"><strong class="p-strong pull-right">Signed Order</strong></div>
+    <div class="col-md-8">
+      <input type="file" kendoTextBox>
+    </div>
+  </div>
+  <div *ngIf="vpHolder.TotalSeatsHold > (vpHolder.TotalSanctioned - vpHolder.TotalWorking)"
+    class="text-danger animated fadeIn">* cannot hold
+    {{vpHolder.TotalSeatsHold + ' seats against ' + (vpHolder.TotalSanctioned - vpHolder.TotalWorking) + ' vacant post' + ((vpHolder.TotalSanctioned - vpHolder.TotalWorking) > 1 ? 's' : '')}}
+  </div>
+  <kendo-dialog-actions
+    *ngIf="holderWindow && vpHolder.TotalSeatsHold <= (vpHolder.TotalSanctioned - vpHolder.TotalWorking)"
+    class="animated fadeIn">
+    <kendo-buttongroup [width]="'100%'">
+      <button kendoButton primary="true" [ladda]="saving" data-style="zoom-in" (click)="saveVacancyHolder()"
+        style="height: 100% !important;background: #46a23f !important;color: white !important;">Confirm</button>
+      <button kendoButton (click)="closeHolderWindow()" class="btn btn-secondary"><i class="fa fa-times"></i>
+        Close</button>
+    </kendo-buttongroup>
+  </kendo-dialog-actions>
+</kendo-dialog>

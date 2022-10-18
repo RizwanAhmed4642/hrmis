@@ -1,0 +1,245 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-6 col-xs-12">
+      <div class="top-h3">
+        Search Order
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-12">
+      <div class="top-controls">
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3 col-sm-6 pb-2 control-col-st">
+      <label class="k-form-field">
+        <span>CNIC</span>
+        <kendo-maskedtextbox [mask]="cnicMask" [(ngModel)]="obj.CNIC" (keyup.enter)="onSearch()">
+        </kendo-maskedtextbox>
+      </label>
+
+    </div>
+    <div class="col-md-3 col-sm-6 pb-2 control-col">
+      <label class="k-form-field">
+        <span>Service Order (ESR)</span>
+        <input type="text" placeholder="ESR-" (keyup.enter)="onSearch()" (input)="obj.CNIC = ''" [(ngModel)]="obj.ESR"
+          kendoTextBox>
+      </label>
+
+    </div>
+    <div class="col-md-3 col-sm-6 pb-2 control-col">
+      <label class="k-form-field">
+        <span>Leave Order (ELR)</span>
+        <input type="text" placeholder="ELR-" (keyup.enter)="onSearch()" (input)="obj.CNIC = ''" [(ngModel)]="obj.ELR"
+          kendoTextBox>
+      </label>
+    </div>
+    <!--  <div class="col-md-2 col-sm-12 mt-1 control-col">
+      <label class="k-form-field">
+        <button kendoButton class="btn-block btn-align-v" (click)="obj = {}" [primary]="true"><i
+            class="fa fa-refresh"></i> CLEAR</button>
+      </label>
+    </div> -->
+    <div class="col-md-3 col-sm-12 mt-1 control-col-end">
+      <label class="k-form-field">
+        <button kendoButton class="btn-block btn-align-v" [ladda]="searching" data-style="zoom-in" (click)="onSearch()"
+          [primary]="true"><i class="fa fa-search"></i> SEARCH</button>
+      </label>
+    </div>
+  </div>
+  <div class="row row-panel animated fadeIn" *ngIf="orders.length > 0">
+    <div class="col-md-4 mb-3" *ngFor="let order of orders;let i = index;"
+      [ngClass]="i % 3 === 0 ? 'control-col-st' : i % 3 === 1 ? 'control-col' : i % 3 === 2 ? 'control-col-end' : ''">
+      <div class="order-thumb" (click)="viewOrder(order)">
+        <div class="order-thumb-wrap">
+          <div class="order-thumb-type">
+            {{order.TransferTypeName ? order.TransferTypeName : order.LeaveTypeName ?  order.LeaveTypeName : 'Order'}}
+            <span class="pull-right"><i class="fa fa-barcode"></i>
+              &nbsp;<span>{{order.tt == 2 ? 'ELR-' + (order.Id + 1003) : 'ESR-' + order.Id}}&nbsp;<i
+                  class="fa fa-external-link cursor-p"
+                  (click)="openInNewTab('/order/editor-view/' + order.Id + '/' + (order.tt == 2 ? '2'  : '1'))"></i></span></span>
+          </div>
+          <div class="order-thumb-employee mt-1">
+            {{order.EmployeeName}}
+          </div>
+          <div class="order-thumb-employee">
+            {{dashifyCNIC(order.CNIC)}}
+          </div>
+          <div class="order-thumb-employee">
+            {{order.Designation}}
+          </div>
+        </div>
+        <div class="order-thumb-log-wrap">
+          <div class="order-thumb-log">
+            <i class="fa fa-user"></i> {{order.tt == 1 ? order.Created_By : order.UserName}} <span class="pull-right">
+              {{ order.tt == 1 ? (order.Created_Date | date:'dd/MM/yyyy h:mm a') : (order.DateTime | date:'dd/MM/yyyy h:mm a')}}</span>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="row row-panel animated fadeIn" *ngIf="serviceOrders.length > 0 || leaveOrders.length > 0">
+    <div class="col-md-6 control-col-st animated fadeIn" *ngIf="serviceOrders.length > 0">
+      <div class="content-heading mb-2" id="deptInfo">
+        Service Orders
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-search"></i></span>
+            </div>
+            <input type="text" class="form-control" [(ngModel)]="serviceOrderQuery" (keyup)="searchServiceOrder()" />
+          </div>
+        </div>
+      </div>
+      <kendo-grid [data]="serviceOrdersData" [resizable]="true" height="440" [scrollable]="true">
+        <kendo-grid-column field="DateTime" [title]="'Date'" width="20" [headerClass]="'grid-header-custom'"
+          [class]="{ 'grid-cell-custom': true }">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="m-0 text-center cursor-p" (click)="viewOrder(dataItem)">
+              {{ dataItem.Created_Date | date:'dd/MM/yyyy hh:mm a' }}</p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="ActionName" [title]="'Description'" width="80" [headerClass]="'grid-header-custom'"
+          [class]="{ 'grid-cell-custom': true }">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <div class="hover-success">
+              <p class="m-0"><i class="fa fa-barcode"></i>&nbsp;{{'ESR-' + dataItem.Id}}&nbsp;<i
+                  class="fa fa-external-link cursor-p"
+                  (click)="openInNewTab('/order/editor-view/' + dataItem.Id + '/1')"></i>
+              </p>
+              <div class="d-flex flex-column width-full cursor-p" (click)="viewOrder(dataItem)"
+                style="font-weight: 100 !important;">
+                <!-- General Transfer -->
+                <div *ngIf="dataItem.TransferTypeID == 4">
+                  {{dataItem.TransferTypeName}} at
+                  <!--       <strong style="font-family: Roboto-Bold !important;"
+                  class="no-underline text-bold wb-break-all d-inline-block" href="">{{dataItem.HF_From}}</strong>
+                <div>{{dataItem.DesigFrom}}</div>
+                <div>to</div> -->
+                  <strong style="font-family: Roboto-Bold !important;"
+                    class="no-underline text-bold wb-break-all d-inline-block" href="">{{dataItem.HF_TO}}</strong>
+                  <div>as <u>{{dataItem.DesigTo}}</u></div>
+                </div>
+                <!-- Adhoc Appointment -->
+                <div *ngIf="dataItem.TransferTypeID == 8">
+                  <div>{{dataItem.TransferTypeName}}</div>
+                  <strong style="font-family: Roboto-Bold !important;"
+                    class="no-underline text-bold wb-break-all d-inline-block" href="">{{dataItem.HF_TO}}</strong>
+                </div>
+                <!-- Disposal -->
+                <div *ngIf="dataItem.TransferTypeID == 2">
+                  {{dataItem.TransferTypeName}}
+                  <strong style="font-family: Roboto-Bold !important;"
+                    class="no-underline text-bold wb-break-all d-inline-block"
+                    href="">{{dataItem.HF_TO ? dataItem.HF_TO : '(missing)' }}</strong>
+                </div>
+                <!-- Suspend -->
+                <div *ngIf="dataItem.TransferTypeID == 3">
+                  <strong style="font-family: Roboto-Bold !important;"
+                    class="no-underline text-bold wb-break-all d-inline-block" href="">
+                    {{dataItem.TransferTypeName}}</strong>
+                </div>
+                <!-- Awaiting Posting -->
+                <div *ngIf="dataItem.TransferTypeID == 6">
+                  {{dataItem.TransferTypeName}} at
+                  <strong style="font-family: Roboto-Bold !important;"
+                    class="no-underline text-bold wb-break-all d-inline-block"
+                    href="">{{dataItem.HF_TO ? dataItem.HF_TO : '(missing)' }}</strong>
+                  <div>as <u>{{dataItem.DesigTo}}</u></div>
+                </div>
+                <!-- Notification -->
+                <div *ngIf="dataItem.TransferTypeID == 7">
+                  {{dataItem.TransferTypeName}}
+                  <!--  <strong style="font-family: Roboto-Bold !important;"
+                  class="no-underline text-bold wb-break-all d-inline-block"
+                  href="">{{dataItem.HF_TO ? dataItem.HF_TO : '(missing)' }}</strong> -->
+                </div>
+                <!-- Termination -->
+                <div *ngIf="dataItem.TransferTypeID == 10">
+                  <strong style="font-family: Roboto-Bold !important;"
+                    class="no-underline text-bold wb-break-all d-inline-block" href="">
+                    {{dataItem.TransferTypeName}}</strong>
+                </div>
+                <!--    <div class="Box p-3 mt-2" *ngIf="dataItem.Remarks">
+                <span>{{dataItem.Remarks}}</span>
+              </div> -->
+              </div>
+            </div>
+
+          </ng-template>
+        </kendo-grid-column>
+      </kendo-grid>
+    </div>
+    <div class="col-md-6 control-col-end" *ngIf="leaveOrders.length > 0">
+      <div class="content-heading mb-2" id="deptInfo">
+        Leave Orders
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-search"></i></span>
+            </div>
+            <input type="text" class="form-control" [(ngModel)]="leaveOrderQuery" (keyup)="searchLeaveOrder()" />
+          </div>
+        </div>
+      </div>
+      <kendo-grid [data]="leaveOrdersData" [resizable]="true" height="440" [scrollable]="true">
+        <kendo-grid-column field="DateTime" [title]="'Date'" width="20" [headerClass]="'grid-header-custom'"
+          [class]="{ 'grid-cell-custom': true }">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="m-0 text-center">{{ dataItem.DateTime | date:'dd/MM/yyyy' }}</p>
+            <p class="m-0 text-center">{{ dataItem.DateTime | date:'hh:mm a' }}</p>
+          </ng-template>
+        </kendo-grid-column>
+        <!--   <kendo-grid-column field="DateTime" [title]="'Time'" width="10" [headerClass]="'grid-header-custom'"
+          [class]="{ 'grid-cell-custom': true }">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="m-0 text-center">{{ dataItem.Created_Date | date:'h:mm a' }}</p>
+          </ng-template>
+        </kendo-grid-column> -->
+        <kendo-grid-column field="ActionName" [title]="'Leave Type'" width="80" [headerClass]="'grid-header-custom'"
+          [class]="{ 'grid-cell-custom': true }">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <div>
+              <div class="d-flex flex-column width-full" style="font-weight: 100 !important;">
+                <p class="m-0"><span class="cursor-p hover-success"
+                    (click)="viewOrder(dataItem)">{{dataItem.LeaveTypeName}}</span> -
+                  <i class="fa fa-barcode"></i>&nbsp;{{'ELR-' + (dataItem.Id + 1003)}}&nbsp;<i
+                    class="fa fa-external-link cursor-p"
+                    (click)="openInNewTab('/order/editor-view/' + dataItem.Id + '/2')"></i>
+                </p>
+              </div>
+              <div class="cursor-p hover-success" (click)="viewOrder(dataItem)"><strong
+                  style="font-family: Roboto-Bold !important;"
+                  class="no-underline text-bold wb-break-all d-inline-block"
+                  href="">{{ dataItem.FromDate | date:'dd/MM/yyyy' }}</strong> - <strong
+                  style="font-family: Roboto-Bold !important;"
+                  class="no-underline text-bold wb-break-all d-inline-block"
+                  href="">{{ dataItem.ToDate | date:'dd/MM/yyyy' }}</strong> - {{dataItem.TotalDays}}
+                day{{dataItem.TotalDays > 1 ? 's' : ''}}</div>
+            </div>
+
+          </ng-template>
+        </kendo-grid-column>
+        <!--  <kendo-grid-column field="ToStatus" width="20" title="Order" [headerClass]="'grid-header-custom'"
+          [class]="{ 'grid-cell-custom': true }">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="m-0 cursor-p" (click)="viewOrder(dataItem)"><u>view order</u>
+            </p>
+          </ng-template>
+        </kendo-grid-column> -->
+      </kendo-grid>
+    </div>
+  </div>
+</div>
+
+
+<kendo-dialog [title]="selectedOrder.EmployeeName" *ngIf="selectedOrder && viewOrderWindow" [minWidth]="'450'"
+  [height]="'585'" [width]="'830'" (close)="closeViewOrderWindow()">
+  <div class="order-view-div" [innerHTML]="transform(selectedOrder.OrderHTML)"></div>
+</kendo-dialog>

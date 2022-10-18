@@ -1,0 +1,140 @@
+<div class="login-div">
+  <!--  <div class="row">
+    <div class="col-md-12">
+      <h3 class="text-center">
+        Closed
+      </h3>
+    </div>
+  </div> -->
+  <div class="animated fadeIn">
+
+    <hr>
+    <div class="row" *ngIf="showProfile">
+      <div class="col-md-12">
+        <h4>Service History as Regular Consultant</h4>
+      </div>
+      <div class="col-md-12">
+        <div class="order-thumb mb-3">
+          <div class="order-thumb-wrap">
+            <div class="p-3">
+              <h4>Note:</h4>
+              <p class="m-0">
+                Please enter your service history as Regular Consultant
+              </p>
+              <p class="m-0">
+                If you have only worked at one place, then after entering from date please select continued
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col-st">
+        <label class="k-form-field">
+          <span>Health Facility Name</span>&nbsp;
+          <input kendoTextBox type="text" [(ngModel)]="service.HFName">
+        </label>
+      </div>
+      <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col">
+        <label class="k-form-field">
+          <span>From Date</span>
+          <kendo-datepicker [format]="'dd/MM/yyyy'" [(ngModel)]="service.FromDate">
+          </kendo-datepicker>
+        </label>
+      </div>
+      <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col-end">
+        <label class="k-form-field">
+          <span>To Date</span>
+          <kendo-datepicker [format]="'dd/MM/yyyy'" [(ngModel)]="service.ToDate">
+          </kendo-datepicker>
+        </label>
+      </div>
+      <div class="col-md-2 control-col-end">
+        <div class="k-form-field">
+          <input type="checkbox" id="continued" class="k-checkbox" [(ngModel)]="service.Continued" />
+          <label class="k-checkbox-label" for="continued">Continued</label>
+        </div>
+      </div>
+      <div class="col-md-2 offset-md-10 control-col-end">
+        <label class="k-form-field
+                mt-2">
+          <span>&nbsp;</span>
+          <button class=" btn btn-so-primary btn-sm btn-block" type="button" (click)="saveServiceTemp()">Add</button>
+        </label>
+      </div>
+    </div>
+    <hr *ngIf="services.length > 0" class="animated fadeIn">
+    <div class="row mx-2" *ngFor="let ser of services">
+      <div class="col-md-6 col-sm-6 col-xs-12 mt-2 control-col-st">
+        <p class="m-0">{{ser.HFName}}</p>
+      </div>
+      <div class="col-md-2 col-sm-6 col-xs-12 mt-2 control-col">
+        <p class="m-0">{{ser.FromDate | date:'dd/MM/yyyy'}}</p>
+      </div>
+      <div class="col-md-2 col-sm-6 col-xs-12 mt-2 control-col">
+        <p class="m-0" *ngIf="ser.ToDate">{{ser.ToDate | date:'dd/MM/yyyy'}}
+        </p>
+        <p class="m-0" *ngIf="ser.Continued">Continued
+        </p>
+      </div>
+      <div class="col-md-2 control-col-end">
+        <button class="btn btn-danger btn-sm btn-block" (click)="removeServiceTemp(ser.Id)"><i
+            class="fa fa-times"></i></button>
+      </div>
+    </div>
+
+
+
+
+    <hr>
+
+    <div class="row">
+      <div class="col-md-10 control-col-st">
+        <label class="k-form-field
+              mt-2">
+          <span>Select Preferred Place of Posting</span>
+          <kendo-dropdownlist [data]="dropDowns.healthFacilities"
+            [defaultItem]="dropDowns.defultFiltersModel.healthFacilityPref" [textField]="'FullName'"
+            [valueField]="'HF_Id'" [value]="dropDowns.selectedFiltersModel.healthFacilityPref"
+            (valueChange)="dropdownValueChanged($event, 'healthFacility')">
+          </kendo-dropdownlist>
+        </label>
+        <label *ngIf="showOther" class="animated fadeIn k-form-field
+        mt-2">
+          <span>Please Type Name of Preferred Place of Posting
+            <!--  <span class="text-muted">(if it is not shown in
+              list)</span> --></span>
+          <input type="text" kendoTextBox [(ngModel)]="other">
+        </label>
+      </div>
+      <div class="col-md-2 control-col-end">
+        <label class="k-form-field
+              mt-2">
+          <span>&nbsp;</span>
+          <button class=" btn btn-so-primary btn-block" (click)="addPreference()" [ladda]="addingPrefs"
+            data-style="zoom-in" [disabled]="!hf_Id || hf_Id == 0">Save</button>
+        </label>
+      </div>
+    </div>
+    <hr>
+    <h4 *ngIf="preferences.length > 0" class="animated fadeIn"> <i class="fa fa-check animated fadeIn text-success"
+        *ngIf="preferences.length >= 5"></i> Preferences {{preferences.length}}/5</h4>
+    <div class="row">
+      <div class="col-md-12 col-sm-12 control-col-st">
+        <table class="table view-table" style="background: transparent;">
+          <tbody>
+            <tr *ngFor="let preference of preferences;let i = index;" class="animated fadeIn">
+              <td style="border:none !important;">{{(i + 1)}}</td>
+              <td style="border:none !important;">
+                {{preference.HF_Id ? preference.FullName : preference.Other}}</td>
+              <td style="border:none !important;">
+                <button class="btn btn-danger btn-sm" (click)="removePreferences(preference.Id)"><i
+                    class="fa fa-times"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

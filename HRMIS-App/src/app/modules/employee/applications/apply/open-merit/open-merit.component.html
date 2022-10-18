@@ -1,0 +1,236 @@
+<div class="animated fadeIn mt-2" *ngIf="applicationSubType_Id == 1">
+  <div class="animated fadeIn mb-2 p-3" *ngIf="preferences.length > 0"
+    style="background: #e9e9e9;color: black;border-radius: 9px;">
+    <div class="content-heading mb-3">
+      Preferences {{preferences.length}} / 1
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <kendo-grid [data]="preferences" [resizable]="true">
+          <kendo-grid-column width="10" field="asd" title="Sr." [headerClass]="'grid-header-custom'"
+            [style]="{'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p class="m-0">
+                {{(rowIndex + 1)}}
+              </p>
+              <!--  <img class="pic-shadow" width="35" height="35"
+                [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/Files/HFPics/' + dataItem.ImagePath"
+                onError="this.src='../../../assets/img/notfound.png'" alt=""> -->
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column width="73" field="HFName" title="Name" [headerClass]="'grid-header-custom'"
+            [style]="{'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              {{dataItem.HFName}}
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column width="27" field="asd" title="Action" [headerClass]="'grid-header-custom'"
+            [style]="{'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div *ngIf="dataItem.saved">
+                <button class="btn-sm"
+                  [routerLink]="'/fts/application/' + dataItem.appId + '/' + dataItem.TrackingNumber" look="outline"
+                  kendoButton primary="true">
+                  View</button>
+              </div>
+              <button class="btn-sm" *ngIf="!dataItem.saved && !dataItem.saving" (click)="removeFromList(rowIndex)"
+                look="outline" kendoButton primary="true">
+                Remove</button>
+              <button *ngIf="dataItem.saving" class="btn-sm" [ladda]="dataItem.saving" data-style="zoom-in" kendoButton
+                primary="true">
+                Saving</button>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+    </div>
+    <div class="row" *ngIf="!showMessage">
+      <div class="col-md-12">
+        <div class="grid-top-header-custom animated fadeIn mt-2">
+          <div class="pager-rows-number">
+            <h5><i><strong class="p-strong">Please review your preferences before submit</strong></i> <button
+                kendoButton primary="true" (click)="applyAll()" class="pull-right mr-4">Submit</button></h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="!showMessage && preferences.length < 1">
+    <div [hidden]="selectedDistrict" [ngClass]="id != 0 ? 'col-md-12' : 'col-md-12'"
+      style="transition: 0.13s all ease-in-out;">
+      <div class="content-heading mb-3">
+        Punjab Districts
+      </div>
+      <div class="row mb-2">
+        <div class="col-md-12">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-search"></i></span>
+            </div>
+            <input type="text" class="form-control" [(ngModel)]="districtQuery" (keyup)="searchDistrict()" />
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="row" *ngIf="districts.length > 0">
+        <div *ngFor="let dist of districts;let i = index;" [hidden]="!dist.Name" (click)="onSelectDistrict(dist)"
+          style="transition: 0.13s all ease-in-out;"
+          [ngClass]="id != 0 ? 'col-md-3' : 'col-md-3 ' + (i % 4 === 0 ? 'control-col-st' : i % 4 === 1 ? 'control-col' : i % 4 === 2 ? 'control-col' : i % 4 === 3 ? 'control-col-end' : '')">
+          <div class="k-i-loading" *ngIf="districts.length == 0"></div>
+          <div class="staff-statement-box">
+            <span class="title">{{dist.Name ? dist.Name : ''}} <span class="text-muted">({{dist.Count}})</span>
+              <!-- <span class="text-muted">({{dist.Count}})</span> -->
+            </span>
+            <i class="view-icon fa fa-arrow-circle-o-right"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="selectedDistrict" [ngClass]="id != 0 ? 'col-md-12' : 'col-md-12'"
+      style="transition: 0.13s all ease-in-out;">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="content-wrap animated fadeIn">
+            <div class="content-heading mb-3">
+              <i class="fa fa-arrow-left cursor-p" (click)="backToDistricts()"></i> {{selectedDistrict.Name}}
+            </div>
+            <div class="row mb-2">
+              <div class="col-md-12">
+                <div class="input-group input-group-sm">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-search"></i></span>
+                  </div>
+                  <input type="text" class="form-control" [(ngModel)]="facilityQuery" (keyup)="searchFacility()" />
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="row animated fadeIn"
+              *ngIf="selectedDistrict.Name == 'Lahore' && !showLahore && !loadingHealthFacilities">
+              <div class="col-md-12">
+                <h2><i class="fa fa-info text-success"></i> Note</h2>
+                <h4 class="ml-2"> Lahore District will open after 3 year service as Regular Employee
+                </h4>
+              </div>
+            </div>
+            <div class="animated fadeIn" style="box-shadow: 0 0px 5px rgba(0, 0, 0, 0.5);"
+              *ngIf="!loadingHealthFacilities && healthFacilities.length > 0 && selectedDistrict.Name == 'Lahore' && showLahore">
+              <kendo-grid [data]="healthFacilities" [resizable]="true">
+                <kendo-grid-column width="7" field="asd" title="Sr." [headerClass]="'grid-header-custom'"
+                  [style]="{'border-bottom' : '1px solid #c8ced3'}">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <p class="m-0">
+                      {{(rowIndex + 1)}}
+                    </p>
+                    <!--  <img class="pic-shadow" width="35" height="35" [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/Files/HFPics/' + dataItem.ImagePath"
+                    onError="this.src='../../../assets/img/notfound.png'" alt=""> -->
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column width="60" field="HFName" title="Name" [headerClass]="'grid-header-custom'"
+                  [style]="{'border-bottom' : '1px solid #c8ced3'}">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <p class="m-0">
+                      {{dataItem.HFName}}
+                    </p>
+                    <!--        <h5 class="m-0" style="cursor: pointer;font-family: Roboto-Regular; color: darkslategray ; font-weight: 100;">
+                        {{dataItem.HFName}}</h5> -->
+                    <!--       <p class="m-0 p-strong" style="cursor: pointer;">
+                    {{dataItem.FullName}}
+                  </p> -->
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column width="33" field="asd" title="Action" [headerClass]="'grid-header-custom'"
+                  [style]="{'border-bottom' : '1px solid #c8ced3'}">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <div *ngIf="!dataItem.added">
+                      <button class="btn-sm" *ngIf="(dataItem.Vacant + dataItem.Adhoc) > 0"
+                        (click)="addToList(dataItem)" [ladda]="dataItem.saving" data-style="zoom-in" kendoButton
+                        primary="true">{{(dataItem.Vacant + dataItem.Adhoc)}}
+                        Vacant - Apply Now {{dataItem.Adhoc}}</button>
+                      <button class="btn-sm" [ladda]="dataItem.saving" data-style="zoom-in"
+                        (click)="subscribeAlert(dataItem)" *ngIf="(dataItem.Vacant + dataItem.Adhoc) <= 0" kendoButton
+                        primary="true" look="outline">No Seat Vacant - Subscribe Alerts <i
+                          class="fa fa-rss"></i></button>
+                    </div>
+                    <div *ngIf="dataItem.added">
+                      <i class="fa fa-check text-success"></i>
+                    </div>
+                  </ng-template>
+                </kendo-grid-column>
+              </kendo-grid>
+            </div>
+            <div class="animated fadeIn" style="box-shadow: 0 0px 5px rgba(0, 0, 0, 0.5);"
+              *ngIf="!loadingHealthFacilities && healthFacilities.length > 0 && selectedDistrict.Name != 'Lahore'">
+              <kendo-grid [data]="healthFacilities" [resizable]="true">
+                <kendo-grid-column width="7" field="asd" title="Sr." [headerClass]="'grid-header-custom'"
+                  [style]="{'border-bottom' : '1px solid #c8ced3'}">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <p class="m-0">
+                      {{(rowIndex + 1)}}
+                    </p>
+                    <!--  <img class="pic-shadow" width="35" height="35" [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/Files/HFPics/' + dataItem.ImagePath"
+                      onError="this.src='../../../assets/img/notfound.png'" alt=""> -->
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column width="60" field="HFName" title="Health Facility"
+                  [headerClass]="'grid-header-custom'" [style]="{'border-bottom' : '1px solid #c8ced3'}">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <p class="m-0">
+                      {{dataItem.HFName}}
+                    </p>
+                    <!--        <h5 class="m-0" style="cursor: pointer;font-family: Roboto-Regular; color: darkslategray ; font-weight: 100;">
+                          {{dataItem.HFName}}</h5> -->
+                    <!--       <p class="m-0 p-strong" style="cursor: pointer;">
+                      {{dataItem.FullName}}
+                    </p> -->
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column width="33" field="asd" title="Action" [headerClass]="'grid-header-custom'"
+                  [style]="{'border-bottom' : '1px solid #c8ced3'}">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <div *ngIf="!dataItem.added">
+                      <button class="btn-sm" *ngIf="(dataItem.Vacant + dataItem.Adhoc) > 0"
+                        (click)="addToList(dataItem)" [ladda]="dataItem.saving" data-style="zoom-in" kendoButton
+                        primary="true">{{(dataItem.Vacant + dataItem.Adhoc)}}
+                        Vacant - Apply Now</button>
+                      <button class="btn-sm" [ladda]="dataItem.saving" data-style="zoom-in"
+                        (click)="subscribeAlert(dataItem)" *ngIf="(dataItem.Vacant + dataItem.Adhoc) <= 0" kendoButton
+                        primary="true" look="outline">No Seat Vacant - Subscribe Alerts <i
+                          class="fa fa-rss"></i></button>
+                    </div>
+                    <div *ngIf="dataItem.added">
+                      <i class="fa fa-check text-success"></i>
+                    </div>
+                  </ng-template>
+                </kendo-grid-column>
+              </kendo-grid>
+            </div>
+
+            <div class="animated fadeIn" style="box-shadow: 0 0px 5px rgba(0, 0, 0, 0.5);"
+              *ngIf="loadingHealthFacilities">
+              <kendo-grid [data]="[{},{}, {}, {}, {}, {}, {}, {}, {}, {} ]">
+                <kendo-grid-column width="10" field="EmployeeName" title="Sr." [headerClass]="'grid-header-custom'"
+                  [style]="{'border-bottom' : '1px solid #c8ced3'}">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <div class="shine shim-controls p-1"></div>
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column width="90" field="EmployeeName" title="Name" [headerClass]="'grid-header-custom'"
+                  [style]="{'border-bottom' : '1px solid #c8ced3'}">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <div class="row employee-info-grid-box" style="cursor: pointer;">
+                      <div class="shine shim-controls p-1">
+                      </div>
+                    </div>
+                  </ng-template>
+                </kendo-grid-column>
+              </kendo-grid>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12 mt-2"><i class="text-success">adhoc is considered vacant</i></div>
+  </div>
+
+</div>

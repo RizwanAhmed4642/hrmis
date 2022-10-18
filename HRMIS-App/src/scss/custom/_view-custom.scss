@@ -1,0 +1,193 @@
+.hf-main-photo img {
+  box-shadow: 0px 1px 1px black;
+}
+
+.hf-main-photo img {
+  width: 100%;
+}
+
+.hf-gallery {
+  margin: 15px 0px;
+  box-shadow: 0px 1px 1px black;
+  width: 100%;
+  overflow-x: scroll;
+}
+
+.hf-photo {
+  width: 75px;
+  min-height: 400px;
+  padding: 0px 10px;
+}
+
+.hf-photo img {
+  width: 75px;
+}
+
+.content-wrap {
+  border-bottom: 1px solid #e2e2e2;
+}
+
+.info-wrapper {
+  width: 33%;
+}
+
+.info-wrapper-2 {
+  width: 49%;
+}
+
+.another-info-wrapper {
+  width: 100% !important;
+  margin-bottom: 15px;
+}
+
+.another-info-wrapper .info {
+  margin-left: 10px !important;
+  color: #111111c2 !important;
+}
+
+.general-info {
+  margin-bottom: 20px;
+}
+
+.info-wrapper .info,
+.info-wrapper-2 .info {
+  font-family: "Roboto-Light";
+  color: #111111c2;
+  font-size: 1.1rem;
+  font-weight: 400;
+  padding-right: 15px;
+  word-break: break-word;
+}
+
+.employee-pic {
+  width: 100px;
+  height: 100px;
+}
+
+.employee-pic img {
+  width: 100px;
+  height: 100px;
+  box-shadow: 0px 1px 1px grey;
+
+}
+
+.employee-pic-list {
+  width: 80px;
+  height: 80px;
+}
+
+.employee-pic-list img {
+  width: 80px;
+  height: 80px;
+  box-shadow: 0px 1px 1px grey;
+}
+img.pic-shadow{
+  box-shadow: 0px 1px 1px grey;
+}
+.employee-wrapper .employee-info {
+  font-family: "Roboto-Medium";
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin-left: 20px;
+  color: #111111cf;
+}
+
+.employee-wrapper .employee-info.sub-info {
+  font-family: "Roboto-LightItalic";
+  color: #111111c2;
+  font-size: 1rem;
+  font-weight: 400;
+  margin-left: 20px;
+}
+
+.employee-wrapper .employee-info a,
+.show-more-info a {
+  font-family: "Roboto-LightItalic";
+  color: #46a23f;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.show-more-info {
+  margin-bottom: 10px;
+}
+
+.employee-wrapper-w-100 {
+  width: 100% !important;
+}
+
+.status {
+  font-family: "Roboto-Light";
+  font-size: 0.89rem;
+  margin: 0px 5px 10px 5px;
+  cursor: pointer;
+  text-align: center;
+  color: #46a23f;
+  float: left;
+  border-radius: 20px;
+  border: 1px solid #46a23f;
+  padding: 3px 10px;
+  font-weight: 500;
+  width: fit-content;
+}
+
+.status.active,
+.status:hover {
+  background: #46a23f;
+  color: white;
+}
+
+.side-table th,
+.employee-table th {
+  font-family: "Roboto-Medium";
+  color: #111111cf;
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1.6rem;
+  border: none !important;
+  padding: 0.25rem !important;
+}
+
+.side-table td,
+.employee-table td {
+  font-family: "Roboto-Light";
+  color: #111111c2;
+  font-size: 0.985rem;
+  font-weight: 400;
+  border: none !important;
+  padding: 0.25rem !important;
+}
+
+.side-table td {
+  font-family: "Roboto-Light";
+  color: #111111c2;
+  font-size: 0.985rem;
+  font-weight: 400;
+  border: none !important;
+  padding: 0.25rem !important;
+}
+
+.employee-table td img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.employee-table td .designation {
+  font-family: "Roboto-Medium" !important;
+  color: #111111cf;
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+.employee-table td .info {
+  font-family: "Roboto-Light" !important;
+  color: #111111c2;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.view-table td {
+  font-family: "Roboto-Regular" !important;
+  color: black !important;
+}

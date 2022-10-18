@@ -1,0 +1,1009 @@
+<div class="container mt-5 mb-5">
+    <div class="animated fadeIn">
+
+        <div class=""
+            style="box-shadow: 0px 0px 4px #afafaf;border-right:1px solid #bfbfbf;border-left:1px solid #bfbfbf;border-bottom:1px solid #bfbfbf;">
+            <div class="p-2"
+                style="background-color: #46a23f;box-shadow: 0px 0px 4px #afafaf;border-right:1px solid #bfbfbf;border-left:1px solid #bfbfbf;border-bottom:1px solid #bfbfbf;">
+                <h3 class="text-white">
+                    <img src="../../assets/img/logo.png" alt="">
+                    <span class="ml-3 mt-1">
+                        Promotion Application Form
+                    </span>
+                </h3>
+            </div>
+            <div *ngIf="bindingData !== null && flags.showSuccessLbl==null">
+                <div class="row mb-3 mt-2">
+                    <div class="col-md-10 offset-md-1">
+                        <div class="well mt-3">
+                            <h6 class="text-center">
+                                <strong class="p-strong">Note:</strong> This portal is only for <strong
+                                    class="p-strong">Regular </strong>
+                                <strong class="p-strong">Medical Officers/Women Medical Officers (BS-17)</strong>
+
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+                <form required #form="ngForm" (ngSubmit)="submitApplication(form.value)">
+                    <div class="form-horizontal">
+
+                        <div class="row mb-2">
+                            <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                for="CNIC">CNIC:</label>
+                            <div class="col-md-3">
+                                <kendo-maskedtextbox [mask]="cnicMask" [(ngModel)]="promotionJobApplication.CNIC"
+                                    name="CNIC" type="text" value="" (keyup.enter)="checkProfile()" required>
+                                </kendo-maskedtextbox>
+                                <p *ngIf="flags.validCnic == false" class="text-danger">
+                                    Entered CNIC is not valid.
+                                </p>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" [ladda]="searching" data-style="zoom-in" (click)="checkProfile()"
+                                    kendoButton primary="true">Next</button>
+                            </div>
+                        </div>
+                        <div *ngIf="flags.profileError != '' && flags.profileError != null" class="row mb-2">
+                            <div class="col-md-10 offset-md-1">
+                                <p class="alert alert-danger">
+                                    {{flags.profileError}}
+                                </p>
+                            </div>
+                        </div>
+                        <div *ngIf="extras.existingApplication != null && extras.existingApplication != false">
+                            <br>
+                            <div class="row mb-2">
+                                <div class="col-md-10 offset-md-1">
+                                    <div class="well">
+                                        <h6 class="text-center">
+                                            <strong class="p-strong">Note:</strong> Your application has already been
+                                            submitted.
+                                            Please review your applicaiton displayed below.
+
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="extras.showForm == true">
+                            <!--  <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="RequestedAs">Request for promotion as:</label>
+                                <div class="col-md-4">
+                                    <div class="checkbox">
+                                        <select class="" required #Designation="ngModel"
+                                            [(ngModel)]="promotionJobApplication.RequestedAs" name="RequestedAs">
+                                            <option disabled value="">Select Designation for Promotion</option>
+                                            <option value="true">Consultant (BS-18)</option>
+                                            <option value="false">Senior Registrar (BS-18)</option>
+                                        </select>
+                                        <div *ngIf="Designation.invalid && Designation.errors?.required &&  Designation.touched === true"
+                                            class="text-danger">
+                                            This field is required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+
+                            <div class="row mb-2">
+                                <div class="col-md-10 offset-1">
+                                    <div class="p-3"
+                                        style="box-shadow: 0px 0px 4px #afafaf;border-right:1px solid #bfbfbf;border-left:1px solid #bfbfbf;border-bottom:1px solid #bfbfbf;">
+                                        <div>
+                                            <h6>
+                                                <strong class="p-strong">Note:</strong>
+                                            </h6>
+                                            <h6>
+                                                <span class="text-danger"><strong class="p-strong">Please upload
+                                                        scanned documents low resolution or unreadable documents will be
+                                                        rejected.</strong></span>
+                                            </h6>
+
+                                            <!-- commented by adnan     10/11/22 -->
+                                            <!-- <p class="text-danger"><strong class="p-strong">Please submit hard copy
+                                                    of
+                                                    your required documents on below address by Post or by Hand:
+                                                </strong></p> -->
+                                            <div style="display:block;">
+                                                <p class="text-success m-0"><strong class="p-strong"></strong></p>
+                                                <!-- <p class="m-0"><i class="fa fa-user-circle-o"></i> Ijaz Butt
+                                                </p> -->
+
+                                                <!-- commented by adnan     10/11/22 -->
+                                                <!-- <p class="m-0"><i class="fa fa-leanpub"></i> Section Officer
+                                                    (Confidential-II)
+                                                </p> -->
+                                                <p class="m-0"><i class="fa fa-building"></i> Primary & Secondary
+                                                    Healthcare Department</p>
+                                                <!-- <p class="m-0"><i class="fa fa-map-marker"></i> 1-Birdwood Road,
+                                                    Lahore</p> -->
+                                                <p class="m-0"><i class="fa fa-phone"></i> 042 99205870</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="AppliedForDesignation_Id">Apply For (Senior Registrar):</label>
+                                <div class="col-md-4">
+                                    <select #AppliedForDesignationDDL="ngModel"
+                                        (change)="AppliedForDesignationDdlSrChanged()" class=""
+                                        [(ngModel)]="promotionJobApplication.AppliedForDesignation_Id"
+                                        name="AppliedForDesignation_Id">
+                                        <option value="">Select Senior Registrar Designation</option>
+                                        <option *ngFor="let item of bindingData.SrDesignations"
+                                            [value]="item.Id">
+                                            {{item.Name}}
+                                        </option>
+                                    </select>
+                                    <div *ngIf="AppliedForDesignationDDL.invalid && AppliedForDesignationDDL.errors?.required &&  AppliedForDesignationDDL.touched === true"
+                                        class="text-danger">
+                                        This field is required.
+                                    </div>
+                                    <div *ngIf="(promotionJobApplication.AppliedForDesignationSR_Id == null || promotionJobApplication.AppliedForDesignationSR_Id == '') && 
+                                        (promotionJobApplication.AppliedForDesignation_Id == null || promotionJobApplication.AppliedForDesignation_Id == '' )
+                                        &&  AppliedForDesignationDDL.touched === true" class="text-danger">
+                                        This field is required.
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="AppliedForDesignationSR_Id">Apply For (Senior Registrar):</label>
+                                <div class="col-md-4">
+                                    <select #AppliedForDesignationDDLSR="ngModel"
+                                        (change)="AppliedForDesignationDdlSrChanged()" class=""
+                                        [(ngModel)]="promotionJobApplication.AppliedForDesignationSR_Id"
+                                        name="AppliedForDesignationSR_Id">
+                                        <option value="">Select Senior Registrar Designation</option>
+                                        <option *ngFor="let item of bindingData.SrDesignations" [value]="item.Id">
+                                            {{item.Name}}
+                                        </option>
+                                    </select>
+                                    <div *ngIf="AppliedForDesignationDDLSR.invalid && AppliedForDesignationDDLSR.errors?.required &&  AppliedForDesignationDDLSR.touched === true"
+                                        class="text-danger">
+                                        This field is required.
+                                    </div>
+                                    <div *ngIf="(promotionJobApplication.AppliedForDesignationSR_Id == null || promotionJobApplication.AppliedForDesignationSR_Id == '') && 
+                                        (promotionJobApplication.AppliedForDesignation_Id == null || promotionJobApplication.AppliedForDesignation_Id == '' )
+                                        &&  AppliedForDesignationDDLSR.touched === true" class="text-danger">
+                                        This field is required.
+                                    </div>
+                                </div>
+                            </div> -->
+
+
+                            <!--  <div class="row mb-2">
+                                        <label class="control-label p-strong text-right col-md-4" style="font-weight:bold" for="Speciality">Speciality:</label>
+                                        <div class="col-md-4">
+                                            <input #Speciality="ngModel" class=" text-box single-line" required  [(ngModel)]="promotionJobApplication.Speciality" name="Speciality" type="text" value="">
+                                            <div *ngIf="Speciality?.invalid" class="text-danger">
+                                                <div *ngIf="Speciality.errors?.required &&  Speciality.touched === true">
+                                                    This field is required.
+                                                </div>
+                                                <div *ngIf="Speciality?.invalid &&  Speciality.touched === true">
+                                                    This field can only contain alphabets and spaces.
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div> -->
+
+                            <h5>BIO DATA OF DOCTOR</h5>
+                            <hr>
+                            <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="Name">Name of Doctor:</label>
+                                <div class="col-md-4">
+                                    <input #DoctorName="ngModel" required minlength="2" maxlength="80" kendoTextBox
+                                        class=" text-box single-line" [(ngModel)]="promotionJobApplication.Name"
+                                        name="Name" type="text" value="">
+                                    <div *ngIf="DoctorName.invalid" class="text-danger">
+                                        <div *ngIf="DoctorName.errors?.required &&  DoctorName.touched === true">
+                                            This field is required.
+                                        </div>
+                                        <div *ngIf="DoctorName.invalid &&  DoctorName.touched === true">
+                                            This field can only be greater than 2 and smaller than 80 characters
+                                            long.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="FatherName">Father Name:</label>
+                                <div class="col-md-4">
+                                    <input kendoTextBox #FatherName="ngModel" required minlength="2" maxlength="80"
+                                        class=" text-box single-line" [(ngModel)]="promotionJobApplication.FatherName"
+                                        name="FatherName" type="text" value="">
+                                    <div *ngIf="FatherName.invalid" class="text-danger">
+                                        <div *ngIf="FatherName.errors?.required &&  FatherName.touched === true">
+                                            This field is required.
+                                        </div>
+                                        <div *ngIf="FatherName.invalid &&  FatherName.touched === true">
+                                            This field can only be greater than 2 and smaller than 80 characters
+                                            long.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="DistrictOfDomicile">District Of Domicile:</label>
+                                <div class="col-md-4">
+                                    <select required #DistrictNameDDL="ngModel" (change)="DistrictNameDdlChanged()"
+                                        class="" [(ngModel)]="promotionJobApplication.DistrictOfDomicile"
+                                        name="DistrictOfDomicile">
+                                        <option disabled value="">Select District</option>
+                                        <option *ngFor="let item of bindingData.Districts.Data" [value]="item.Id">
+                                            {{item.Name}}
+                                        </option>
+                                    </select>
+                                    <div *ngIf="DistrictNameDDL.invalid && DistrictNameDDL.errors?.required &&  DistrictNameDDL.touched === true"
+                                        class="text-danger">
+                                        This field is required.
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <!--      <div class="row mb-2">
+                                    <label class="control-label p-strong text-right col-md-4" style="font-weight:bold">Division
+                                        of Current Health Facility</label>
+                                    <div class="col-md-4" *ngIf="extras!==null && extras.divisions !== null">
+                                        <select #divRef (change)="onChangeDivision(divRef.value)" class="">
+                                            <option value="" disabled selected>Select Division</option>
+                                            <option *ngFor="let div of extras.divisions" [value]="div.Code">{{div.Name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="control-label p-strong text-right col-md-4" style="font-weight:bold">District
+                                        of Current Health Facility</label>
+                                    <div class="col-md-4">
+                                        <select #distRef (change)="onChangeDistricts(distRef.value)"
+                                            class="">
+                                            <option value="" disabled selected>Select District</option>
+                                            <option *ngFor="let dist of extras.districts" [value]="dist.Code">
+                                                {{dist.Name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="control-label p-strong text-right col-md-4" style="font-weight:bold">Tehsil of
+                                        Current Health Facility</label>
+                                    <div class="col-md-4">
+                                        <select class="" #tehsilRef
+                                            (change)="onChangeTehsil(tehsilRef.value)">
+                                            <option selected disabled value="">Select Tehsil</option>
+                                            <option *ngFor="let tehsil of extras.tehsils" [value]="tehsil.Code">
+                                                {{tehsil.Name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="control-label p-strong text-right col-md-4" style="font-weight:bold">Current
+                                        Health Facility</label>
+                                    <div class="col-md-4">
+                                        <select required #HfNameDDL="ngModel" (change)="HfNameDdlChanged()"
+                                            class="" name="HfFrom"
+                                            [(ngModel)]="promotionJobApplication.HFMIS">
+                                            <option selected disabled value="">Select Health Facility</option>
+                                            <option *ngFor="let hf of extras.healthFacilities" [value]="hf.HFMISCode">
+                                                {{hf.FullName}}</option>
+                                        </select>
+                                        <div *ngIf="HfNameDDL.invalid && HfNameDDL.errors?.required &&  HfNameDDL.touched === true"
+                                            class="text-danger">
+                                            This field is required.
+                                        </div>
+                                    </div>
+                                </div> -->
+                            <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="HealthFacilityName">Present Place of Posting:</label>
+                                <div class="col-md-4">
+                                    <input kendoTextBox #HealthFacilityName="ngModel" required minlength="2"
+                                        maxlength="80" class=" text-box single-line"
+                                        placeholder="Type Health Facility Name"
+                                        [(ngModel)]="promotionJobApplication.HealthFacilityName"
+                                        name="HealthFacilityName" type="text" value="">
+                                    <div *ngIf="HealthFacilityName.invalid" class="text-danger">
+                                        <div
+                                            *ngIf="HealthFacilityName.errors?.required &&  HealthFacilityName.touched === true">
+                                            This field is required.
+                                        </div>
+                                        <div *ngIf="HealthFacilityName.invalid &&  HealthFacilityName.touched === true">
+                                            This field can only be greater than 2 and smaller than 80 characters
+                                            long.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="Designation_Id">Present Designation:</label>
+                                <div class="col-md-4">
+                                    <select required #PresentDesignationDDL="ngModel"
+                                        (change)="PresentDesignationDDLChanged()" class=""
+                                        [(ngModel)]="promotionJobApplication.Designation_Id" name="Designation_Id">
+                                        <option disabled value="">Select Present designation</option>
+                                        <option *ngFor="let item of bindingData.EligibleDesignations" [value]="item.Id">
+                                            {{item.Name}}
+                                        </option>
+                                    </select>
+                                    <div *ngIf="PresentDesignationDDL.invalid && PresentDesignationDDL.errors?.required &&  PresentDesignationDDL.touched === true"
+                                        class="text-danger">
+                                        This field is required.
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="PromotionToCurrentScale">Date of joining service as regular MO/WMO:</label>
+                                <div class="col-md-4">
+                                    <kendo-datepicker [format]="'dd/MM/yyyy'"
+                                    name="PromotionToCurrentScale" #PromotionToCurrentScale="ngModel"
+                                        [(ngModel)]="promotionJobApplication.PromotionToCurrentScale"
+                                        >
+                                    </kendo-datepicker>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="SeniorityNo">Seniority No. as MO/WMO in notified Seniority List:</label>
+                                <div class="col-md-4">
+                                    <input kendoTextBox #SeniorityNo="ngModel" class=" text-box single-line"
+                                        minlength="2" maxlength="40" [(ngModel)]="promotionJobApplication.SeniorityNo"
+                                        name="SeniorityNo" type="text" value="">
+
+                                    <div *ngIf="SeniorityNo.invalid" class="text-danger">
+                                        <div *ngIf="SeniorityNo.errors?.required &&  SeniorityNo.touched === true">
+                                            If seniority not allotted, leave empty.
+                                        </div>
+                                        <div *ngIf="SeniorityNo.invalid &&  SeniorityNo.touched === true">
+                                            This field can only contain alphabets and spaces, can only be greater
+                                            than 2 and smaller than 40 characters.
+                                        </div>
+                                    </div>
+                                    <input class="" name="setSeniorityNoFile"
+                                        accept=".png,.PNG,.jpg,.JPG,.jpeg,.JPEG,.pdf,.PDF" type="file"
+                                        (change)="setSeniorityNoFile($event)">
+                                    <p class="text-danger" *ngIf="flags.showSeniorityNoPhotoSizeError">File size
+                                        cannot exceed 4MB. Allowed formats are png,
+                                        jpg,pdf</p>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="CertificateOfWorkingFilepath">Present Status:</label>
+                                <div class="col-md-4">
+                                    <select class=" text-box single-line"
+                                        [(ngModel)]="promotionJobApplication.PresentPostingStatus"
+                                        name="PresentPostingStatus">
+                                        <option value>-Select-</option>
+                                        <option *ngFor="let itm of presentStatues" [value]="itm">{{itm}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="CertificateOfWorkingFilepath">Certificate of working by head of
+                                    institution (NOC):</label>
+                                <div class="col-md-4">
+                                    <label>Yes
+                                        <input type="radio" name="cow" [(ngModel)]="flags.cow" value="true"
+                                            kendoRadioButton /></label>
+                                    <label>No <input type="radio" name="cow" [(ngModel)]="flags.cow" value="false"
+                                            kendoRadioButton /></label>
+
+                                    <input *ngIf="flags.cow == 'true'" class="" name="setCowFile"
+                                        accept=".png,.PNG,.jpg,.JPG,.jpeg,.JPEG,.pdf,.PDF" type="file"
+                                        (change)="setCowFile($event)">
+                                    <p class="text-danger" *ngIf="flags.showCowPhotoSizeError">This is a required
+                                        field and file size cannot exceed 4MB. Allowed formats are png and jpg</p>
+                                </div>
+                            </div>
+                            <div class="row mb-2" *ngIf="flags.cow == 'false'">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="AdditionalInfoWorkingCertificate">Additional Infomration:</label>
+                                <div class="col-md-4">
+                                    <textarea rows="2" class=" text-box"
+                                        [(ngModel)]="promotionJobApplication.AdditionalInfoWorkingCertificate"
+                                        name="AdditionalInfoWorkingCertificate">
+
+                                            </textarea>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="NoEnquiryCeritificateFilepath">No Enquiry Certificate From the Head of
+                                    Institution:</label>
+                                <div class="col-md-4">
+                                    <!--   <p-radioButton name="noe" label="Yes" value="true" [(ngModel)]="flags.noe">
+                                        </p-radioButton>
+                                        <p-radioButton name="noe" [style]="{'margin-left':'10px'}" label="No"
+                                            value="false" [(ngModel)]="flags.noe"></p-radioButton> -->
+
+
+                                    <label>Yes
+                                        <input type="radio" name="noe" [(ngModel)]="flags.noe" value="true"
+                                            kendoRadioButton /></label>
+                                    <label>No <input type="radio" name="noe" [(ngModel)]="flags.noe" value="false"
+                                            kendoRadioButton /></label>
+
+                                    <input *ngIf="flags.noe == 'true'" class="" name="setNoeFile"
+                                        accept=".png,.PNG,.jpg,.JPG,.jpeg,.JPEG,.pdf,.PDF" type="file"
+                                        (change)="setNoeFile($event)">
+                                    <p class="text-danger" *ngIf="flags.showNoePhotoSizeError">This is a required
+                                        field and file size cannot exceed 4MB. Allowed formats are png and jpg</p>
+                                </div>
+                            </div>
+
+                            <div class="row mb-2">
+
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="ServiceStatementFirst">
+                                    Service Statement(Detail of postings covering the period of service without
+                                    gap):
+                                </label>
+                                <div class="col-md-4 text-right">
+                                    <button type="button" (click)="AddServiceStatement()" kendoButton primary="true"
+                                        class="btn-sm">Add</button>
+                                </div>
+                            </div>
+                            <div *ngFor="let item of promotionJobApplication.PromotionJobApplicationServiceStatements;let i=index;"
+                                class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="ServiceStatementFirst">
+
+                                </label>
+                                <div class="col-md-4 mb-1">
+                                    <input kendoTextBox maxlength="150" class=" text-box single-line"
+                                        [(ngModel)]="promotionJobApplication.PromotionJobApplicationServiceStatements[i].Text"
+                                        [name]="'ServiceStatementFirst' + i" type="text">
+                                    <!-- <div *ngIf="ServiceStatementFirst.invalid" class="text-danger">
+                                            <div *ngIf="ServiceStatementFirst.errors?.required &&  ServiceStatementFirst.touched === true">
+                                                This field is required.
+                                            </div>
+                                            <div *ngIf="ServiceStatementFirst.invalid &&  ServiceStatementFirst.touched === true">
+                                                This field can only be greater than 2 and smaller than 40 characters long.
+                                            </div>
+                                        </div> -->
+                                </div>
+                                <div class="col-md-1">
+                                    <button *ngIf="i!=0" type="button" class="btn btn-danger btn-sm"
+                                        (click)="removeServiceStatement(i)">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+
+                            <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4"
+                                    style="font-weight:bold">Following
+                                    documents have been attested.</label>
+                                <label class="control-label p-strong text-center col-md-4"
+                                    style="font-weight:bold;">Check
+                                    list</label>
+                            </div>
+                            <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="MatricFScMbbsDegreeFilepath">Matric/FSc/MBBS:</label>
+                                <div class="col-md-4">
+                                    <!--     <p-radioButton name="Pst" label="Yes" value="true" [(ngModel)]="flags.Pst">
+                                        </p-radioButton>
+                                        <p-radioButton name="Pst" [style]="{'margin-left':'10px'}" label="No"
+                                            value="false" [(ngModel)]="flags.Pst"></p-radioButton>
+ --> <label>Yes
+                                        <input type="radio" name="Pst" [(ngModel)]="flags.Pst" value="true"
+                                            kendoRadioButton /></label>
+                                    <label>No <input type="radio" name="Pst" [(ngModel)]="flags.Pst" value="false"
+                                            kendoRadioButton /></label>
+
+
+                                    <input *ngIf="flags.Pst == 'true'" class="" name="setPstFile"
+                                        accept=".png,.PNG,.jpg,.JPG,.jpeg,.JPEG,.pdf,.PDF" type="file"
+                                        (change)="setPstFile($event)">
+                                    <p class="text-danger" *ngIf="flags.showPstPhotoSizeError">This is a required
+                                        field and file size cannot exceed 4MB. Allowed formats are png and jpg</p>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="PostgraduateDegreeFilepath">Postgraduate Degree or Diploma:</label>
+                                <div class="col-md-4">
+                                    <!--     <p-radioButton name="Postgraduate" label="Yes" value="true"
+                                            [(ngModel)]="flags.Postgraduate"></p-radioButton>
+                                        <p-radioButton name="Postgraduate" [style]="{'margin-left':'10px'}" label="No"
+                                            value="false" [(ngModel)]="flags.Postgraduate"></p-radioButton>
+ -->
+
+                                    <label>Yes
+                                        <input type="radio" name="Postgraduate" [(ngModel)]="flags.Postgraduate"
+                                            value="true" kendoRadioButton /></label>
+                                    <label>No <input type="radio" name="Postgraduate" [(ngModel)]="flags.Postgraduate"
+                                            value="false" kendoRadioButton /></label>
+
+
+                                    <input *ngIf="flags.Postgraduate == 'true'" class="" name="setPostgraduateFile"
+                                        accept=".png,.PNG,.jpg,.JPG,.jpeg,.JPEG,.pdf,.PDF" type="file"
+                                        (change)="setPostgraduateFile($event)">
+                                    <p class="text-danger" *ngIf="flags.showPostgraduatePhotoSizeError">This is a
+                                        required field and file size cannot exceed 4MB. Allowed formats are png and
+                                        jpg</p>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="PmdcFilepath">PMDC registration:</label>
+                                <div class="col-md-4">
+                                    <label>Yes
+                                        <input type="radio" name="Pmdc" [(ngModel)]="flags.Pmdc" value="true"
+                                            kendoRadioButton /></label>
+                                    <label>No <input type="radio" name="Pmdc" [(ngModel)]="flags.Pmdc" value="false"
+                                            kendoRadioButton /></label>
+                                    <input *ngIf="flags.Pmdc == 'true'" class="" name="setPmdcFile"
+                                        accept=".png,.PNG,.jpg,.JPG,.jpeg,.JPEG,.pdf,.PDF" type="file"
+                                        (change)="setPmdcFile($event)">
+                                    <p class="text-danger" *ngIf="flags.showPmdcPhotoSizeError">This is a required
+                                        field and file size cannot exceed 4MB. Allowed formats are png and jpg</p>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="NoEnquiryCertifcateAttestedFilepath">No Enquiry Certificate From the Head
+                                    of Institution (Attested):</label>
+                                <div class="col-md-4">
+                                    <label>Yes
+                                        <input type="radio" name="Noea" [(ngModel)]="flags.Noea" value="true"
+                                            kendoRadioButton /></label>
+                                    <label>No <input type="radio" name="Noea" [(ngModel)]="flags.Noea" value="false"
+                                            kendoRadioButton /></label>
+
+                                    <input *ngIf="flags.Noea == 'true'" class="" name="setNoeaFile"
+                                        accept=".png,.PNG,.jpg,.JPG,.jpeg,.JPEG,.pdf,.PDF" type="file"
+                                        (change)="setNoeaFile($event)">
+                                    <p class="text-danger" *ngIf="flags.showNoeaPhotoSizeError">This is a required
+                                        field and file size cannot exceed 4MB. Allowed formats are png and jpg</p>
+                                </div>
+                            </div>
+
+                            <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="NoEnquiryCertifcateAttestedFilepath">Experience Letter:</label>
+                                <div class="col-md-4">
+                                    <label>Yes
+                                        <input type="radio" name="expc" [(ngModel)]="flags.expc" value="true"
+                                            kendoRadioButton /></label>
+                                    <label>No <input type="radio" name="expc" [(ngModel)]="flags.expc" value="false"
+                                            kendoRadioButton /></label>
+
+                                    <input *ngIf="flags.expc == 'true'" class="" name="setExpCertFile"
+                                        accept=".png,.PNG,.jpg,.JPG,.jpeg,.JPEG,.pdf,.PDF" type="file"
+                                        (change)="setExpCertFile($event)">
+                                    <p class="text-danger" *ngIf="flags.showExpcPhotoSizeError">This is a required
+                                        field and file size cannot exceed 4MB. Allowed formats are png and jpg</p>
+                                </div>
+                            </div>
+
+                            <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="DateOfBirth">Date of Birth:</label>
+                                <div class="col-md-4">
+                                    <kendo-datepicker [format]="'dd/MM/yyyy'" 
+                                        [(ngModel)]="promotionJobApplication.DateOfBirth"
+                                        name="DateOfBirth"
+                                        #DateOfBirth="ngModel" dataType="string" required>
+                                    </kendo-datepicker>
+
+                                    <div *ngIf="DateOfBirth.errors?.required &&  DateOfBirth.touched === true">
+                                        <strong class="text-danger">This field is required.</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="Address">House Address:</label>
+                                <div class="col-md-4">
+                                    <input kendoTextBox #Address="ngModel" required minlength="2" maxlength="200"
+                                        class=" text-box single-line" [(ngModel)]="promotionJobApplication.Address"
+                                        name="Address" type="text" value="">
+                                    <div *ngIf="Address.invalid" class="text-danger">
+                                        <div *ngIf="Address.errors?.required &&  Address.touched === true">
+                                            This field is required.
+                                        </div>
+                                        <div *ngIf="Address.invalid &&  Address.touched === true">
+                                            This field can only contain alphabets and spaces, can only be greater
+                                            than 2 and smaller than 200 characters long.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="Email">Email:</label>
+                                <div class="col-md-4">
+                                    <input class=" text-box single-line" [(ngModel)]="promotionJobApplication.Email"
+                                        #EmailAddress="ngModel" name="EmailAddress" type="email"
+                                        pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$">
+                                    <div *ngIf="EmailAddress.errors?.required &&  EmailAddress.touched === true">
+                                        This field is required.
+                                    </div>
+                                    <div *ngIf="EmailAddress.invalid &&  EmailAddress.touched === true"
+                                        class="text-danger">
+                                        Input data is not a valid Email Address.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="MobileNumber">Cell Number:</label>
+                                <div class="col-md-4">
+                                    <kendo-maskedtextbox [mask]="mobileMask" value=""
+                                        [(ngModel)]="promotionJobApplication.MobileNumber" required
+                                        #MobileNumber="ngModel" name="MobileNumber" pattern="^[0-9-]*$">
+                                    </kendo-maskedtextbox>
+                                    <div *ngIf="MobileNumber.errors?.required &&  MobileNumber.touched === true"
+                                        class="text-danger">
+                                        This field is required.
+                                    </div>
+                                    <div *ngIf="MobileNumber.invalid && MobileNumber.touched === true"
+                                        class="text-danger">
+                                        Input data for this field is not valid
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="MobileNumber">Additional Infomration:</label>
+                                <div class="col-md-4">
+                                    <textarea rows="2" class=" text-box"
+                                        [(ngModel)]="promotionJobApplication.AdditionalInfo" name="AdditionalInfo">
+
+                                        </textarea>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <label class="control-label p-strong text-right col-md-4" style="font-weight:bold"
+                                    for="NoEnquiryCertifcateAttestedFilepath">Signed copy of application:</label>
+                                <div class="col-md-4">
+                                    <input class="" name="signedCopy" accept=".png,.PNG,.jpg,.JPG,.jpeg,.JPEG,.pdf,.PDF"
+                                        type="file" (change)="setSignedCopyFile($event)">
+                                    <p class="text-danger" *ngIf="flags.showSignedCopyPhotoSizeError">This is a
+                                        required field and file size cannot exceed 4MB. Allowed formats are png and
+                                        jpg</p>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" kendoButton primary="true" (click)="showReport()">Download
+                                        Form</button>
+                                </div>
+                                <div class="col-md-8 offset-4">
+                                    <ul style="font-size:9pt;padding:0 20px;margin:0;">
+                                        <li>Please download the filled form by pressing
+                                            <b>Download Form</b> button</li>
+                                        <li>Please
+                                            <b>Print</b> the filled form</li>
+                                        <li>
+                                            <b>Sign</b> the printed copy of downloaded form</li>
+                                        <li>
+                                            <b>Upload</b> the signed copy of downloaded form</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-4 offset-md-4">
+                                    <button type="submit"
+                                        [disabled]="form.invalid || flags.showSeniorityNoPhotoSizeError"
+                                        [ladda]="flags.isLoading" data-style="expand-right" kendoButton primary="true"
+                                        class="pull-right">
+                                        Proceed
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div *ngIf="flags.showSuccessLbl==true">
+                <br>
+                <br>
+                <p class="alert alert-success">
+                    Your application has been submitted successfully.
+                </p>
+            </div>
+
+            <!-- <div *ngIf="extras.AppReport != false">
+                    <br>
+                    <div class="text-right">
+                        <button type="button" style="margin-bottom:10px;" class="btn btn-success btn-sm" (click)="printReport(rpt)">Print</button>
+                    </div>
+                </div> -->
+            <div [ngClass]="{'DisplayNone': flags.HideReport}">
+                <!-- <div> -->
+                <div #rpt>
+                    <div>
+                        <table cellpadding="10px" style="width:100%;">
+                            <tr>
+                                <!-- <td style="border-right-color:transparent;width:30%">
+                                        
+                                    </td> -->
+                                <td valign="middle">
+                                    <img alt="Punjab Government Logo"
+                                        src="http://hrmis.pshealthpunjab.gov.pk/assets/img/Logo_Black.jpg"
+                                        style="display:inline-block; height:50px; float:left;" />
+                                    <h3 style="text-align:center;">
+                                        <u>Promotion Application Form</u>
+                                    </h3>
+                                </td>
+                                <!-- <td colspan="2" style="text-align:right;width:30%">
+                                        <div style="display:inline-block;text-align:center;">
+                                            <strong style="font-size:10pt;">
+                                                  GOVERNMENT OF THE PUNJAB<br />PRIMARY &amp; SECONDARY HEALTHCARE<br />DEPARTMENT
+                                                </strong>
+                                        </div>
+                                    </td> -->
+                            </tr>
+                        </table>
+                        <table border="1" cellspacing="0" cellpadding="5px" style="width:100%;">
+
+                            <tr>
+                                <td>
+                                    <b>1.</b>
+                                </td>
+                                <td>
+                                    <b>
+                                        <u>REQUEST FOR PROMOTION</u>
+                                    </b>
+                                </td>
+                                <td>
+                                    <!-- <span *ngIf="promotionJobApplication.RequestedAs == 'true' || promotionJobApplication.RequestedAs == true">Consultant (BS-18)</span>
+                                        <span *ngIf="promotionJobApplication.RequestedAs == 'false' || promotionJobApplication.RequestedAs == false">Senior Registrar (BS-18)</span> -->
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>Applied for (Senior Registrar)</td>
+                                <td>{{promotionJobApplication.AppliedForDesignationName}}</td>
+                            </tr>
+                            <!-- <tr>
+                                <td></td>
+                                <td>Applied for (senior registrar)</td>
+                                <td>{{promotionJobApplication.AppliedForDesignationSrName}}</td>
+                            </tr> -->
+                            <!-- <tr>
+                                <td></td>
+                                <td>Speciality</td>
+                                <td>{{promotionJobApplication.Speciality}}</td>
+                            </tr> -->
+
+                            <tr>
+                                <td colspan="3">
+                                    <u>
+                                        <b>BIO DATA OF DOCTOR</b>
+                                    </u>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>2.</b>
+                                </td>
+                                <td>Name of Doctor</td>
+                                <td>{{promotionJobApplication.Name}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>3.</b>
+                                </td>
+                                <td>Father Name</td>
+                                <td>{{promotionJobApplication.FatherName}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>4.</b>
+                                </td>
+                                <td>District Of Domicile</td>
+                                <td>{{promotionJobApplication.DistrictName}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>5.</b>
+                                </td>
+                                <td>Computerized National Identity Number</td>
+                                <td>{{promotionJobApplication.CNIC}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>6.</b>
+                                </td>
+                                <td>Name of present Insituition/Hospital</td>
+                                <td>{{promotionJobApplication.HealthFacilityName}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>7.</b>
+                                </td>
+                                <td>
+                                    <b>Present Designation</b>
+                                </td>
+                                <td>
+                                    {{promotionJobApplication.CurrentDesignationName}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>8.</b>
+                                </td>
+                                <td>Date of joining servce as regular MO/WMO</td>
+                                <td>{{promotionJobApplication.PromotionToCurrentScale | date}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>9.</b>
+                                </td>
+                                <td>Seniority No. as MO/WMO in notified Seniority List</td>
+                                <td>{{promotionJobApplication.SeniorityNo}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>10.</b>
+                                </td>
+                                <td>Present Posting Status</td>
+                                <td>{{promotionJobApplication.PresentPostingStatus}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>11.</b>
+                                </td>
+                                <td>Certificate of working by head of institution</td>
+                                <td>{{promotionJobApplication.CertificateOfWorkingFilepathRpt}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                </td>
+                                <td colspan="2">
+                                    <strong class="p-strong">Addtional Information</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                            <tr>
+                                <td>
+                                </td>
+                                <td colspan="2">
+                                    <p>{{promotionJobApplication.AdditionalInfoWorkingCertificate}}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                            <tr>
+                                <td>
+                                    <b>12.</b>
+                                </td>
+                                <td>No Enquiry Certificate From the Head of Institution</td>
+                                <td>{{promotionJobApplication.NoEnquiryCeritificateFilepathRpt}}</td>
+                            </tr>
+                            <tr
+                                *ngFor="let item of promotionJobApplication.PromotionJobApplicationServiceStatements; let i=index;">
+                                <td *ngIf="i==0"
+                                    [attr.rowspan]="promotionJobApplication.PromotionJobApplicationServiceStatements.length"
+                                    valign="top">
+                                    <b>13.</b>
+                                </td>
+                                <td *ngIf="i==0"
+                                    [attr.rowspan]="promotionJobApplication.PromotionJobApplicationServiceStatements.length"
+                                    valign="top">Service Statement(Detail of postings covering the period of service
+                                    without gap)</td>
+                                <td>{{i+1}}.{{item.Text}}</td>
+                            </tr>
+                            <!-- <tr>
+                                    <td>2.{{promotionJobApplication.ServiceStatementSecond}}</td>
+                                </tr>
+                                <tr>
+                                    <td>3.{{promotionJobApplication.ServiceStatementThird}}</td>
+                                </tr> -->
+                            <tr>
+                                <td>
+                                    <b>14.</b>
+                                </td>
+                                <td colspan="2">Following documents have been attested.</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">
+                                    <table cellspacing="10px" style="width:100%;">
+                                        <tr>
+                                            <td>i.</td>
+                                            <td>Matric/FSc/MBBS</td>
+                                            <td style="width:50%">
+                                                {{promotionJobApplication.MatricFScMbbsDegreeFilepathRpt}}</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>ii.</td>
+                                            <td>Postgraduate Degree or Diploma</td>
+                                            <td>{{promotionJobApplication.PostgraduateDegreeFilepathRpt}}</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>iii.</td>
+                                            <td>PMDC registration</td>
+                                            <td>{{promotionJobApplication.PmdcFilepathRpt}}</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>iv.</td>
+                                            <td>No Enquiry certificate from the Head of institution</td>
+                                            <td>{{promotionJobApplication.NoEnquiryCertifcateAttestedFilepathRpt}}
+                                            </td>
+
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                </td>
+                                <td colspan="2">
+                                    <strong class="p-strong">Addtional Information</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                            <tr>
+                                <td>
+                                </td>
+                                <td colspan="2">
+                                    <p>{{promotionJobApplication.AdditionalInfo}}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                            <tr>
+                                <td colspan="3">
+                                    <p> I undertake that information given above is correct and hereby request for
+                                        selection as
+                                        <b>
+                                            {{promotionJobApplication.AppliedForDesignationName}}
+                                            {{(promotionJobApplication.AppliedForDesignationSrName !== null && promotionJobApplication.AppliedForDesignationSrName !== '' )?',':''}}
+                                            {{promotionJobApplication.AppliedForDesignationSrName}}
+                                        </b>
+                                        in accordance with Rule/Regualtions.
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Date of Birth</td>
+                                <td colspan="2">{{promotionJobApplication.DateOfBirth | date}}</td>
+                            </tr>
+                            <tr>
+                                <td>House Address</td>
+                                <td colspan="2">{{promotionJobApplication.Address}}</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>{{promotionJobApplication.Email}}</td>
+                                <td rowspan="2" valign="bottom" style="text-align:center;">
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <b>
+                                        <u>Signature of Candidate</u>
+                                    </b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Cell No</td>
+                                <td>{{promotionJobApplication.MobileNumber}}</td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,99 @@
+<div class="animated fadein">
+    <!-- <div class="animated fadeIn" *ngIf="applicant.Status_Id && applicant.Status_Id > 1">
+        <div class="row mb-2">
+            <div class="col-md-4">
+                <button kendoButton primary="true" look="outline" class="cursor-p btn-block" routerLink="/adhoc/apply">2 - <i
+                        class="fa fa-user"></i>
+                    Profile</button>
+            </div>
+            <div class="col-md-4">
+                <button kendoButton *ngIf="applicant.Status_Id > 2" primary="true" look="outline" class="btn-block"
+                    routerLink="/adhoc/qualification">3 - <i class="fa fa-file"></i>
+                    Qualification</button>
+            </div>
+            <div class="col-md-4">
+                <button kendoButton *ngIf="applicant.Status_Id > 3" primary="true" class="btn-block"
+                    routerLink="/adhoc/experience">4 - <i class="fa fa-file"></i>
+                    Experience</button>
+            </div>
+        </div>
+    </div> -->
+
+    <div class="animated fadeIn">
+        <div class="row mb-2">
+            <div class="col-md-2 control-col-st">
+                <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/adhoc/home"><i
+                        class="fa fa-envelope"></i>
+                    Inbox</button>
+            </div>
+            <div class="col-md-2 control-col">
+                <button kendoButton primary="true" look="outline" [disabled]="2 + 2 == 4" class="btn-block"><i
+                        class="fa fa-plus-circle"></i>
+                    New Application</button>
+            </div>
+            <div class="col-md-2 control-col">
+                <button kendoButton primary="true" look="outline" [disabled]="2 + 2 == 4" class="btn-block"><i
+                        class="fa fa-user"></i>
+                    My Profile</button>
+            </div>
+            <div class="col-md-2 control-col">
+                <button kendoButton primary="true" look="outline" [disabled]="2 + 2 == 4" class="btn-block"><i
+                        class="fa fa-institution"></i>
+                    My Qualification</button>
+            </div>
+            <div class="col-md-2 control-col-end">
+                <button kendoButton primary="true" look="outline" [disabled]="2 + 2 == 4" class="btn-block"><i
+                        class="fa fa-medkit"></i>
+                    My Experience</button>
+            </div>
+            <div class="col-md-2 control-col">
+                <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/adhoc/grievance"><i
+                        class="fa fa-resistance"></i>
+                    Grievance</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="animated fadeIn">
+        <hr>
+        Welcome Back, {{applicant.Name}}
+        <hr>
+        <kendo-grid [data]="grievances" *ngIf="!loading">
+            <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-custom'"
+                [class]="{ 'grid-cell-custom': true }">
+                <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                    <p class="m-0">{{(rowIndex + 1)}}.
+                    </p>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="DesignationName" [title]="'Designation'" width="30"
+                [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                    <p class="m-0 p-strong">{{dataItem.DesignationName}}</p>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Remarks" [title]="'Remarks'" width="45" [headerClass]="'grid-header-custom'"
+                [class]="{ 'grid-cell-custom': true }">
+                <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                    <p class="m-0">{{dataItem.Remarks}}</p>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="CreatedDate" [title]="'Date Time'" width="20" [headerClass]="'grid-header-custom'"
+                [class]="{ 'grid-cell-custom': true }">
+                <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                    <p class="m-0">{{dataItem.Status}}</p>
+                    <p class="m-0">{{dataItem.CreatedDate | date:'dd/MM/yyyy hh:mm a'}}</p>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Job Title" [title]="'Action'" width="15" [headerClass]="'grid-header-custom'"
+                [class]="{ 'grid-cell-custom': true }">
+                <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                    <button *ngIf="!disableGrievance" class="btn btn-danger btn-sm"
+                        (click)="removeGrievance(dataItem.Id)"><i class="fa fa-remove"></i></button>
+                </ng-template>
+            </kendo-grid-column>
+
+        </kendo-grid>
+
+    </div>
+</div>

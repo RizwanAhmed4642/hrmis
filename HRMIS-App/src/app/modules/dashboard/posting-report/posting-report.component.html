@@ -1,0 +1,49 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <h6 class="p-2 animated fadeIn text-center dashboard-table-heading-custom">
+        PPSC Charge Nurse (BS-16) Posting
+      </h6>
+      <kendo-grid *ngIf="data.length > 0 && !loading" [data]="data">
+        <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-text'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table">{{(rowIndex + 1)}}.
+            </p>
+          </ng-template>
+          <ng-template kendoGridFooterTemplate let-column="column">
+            <p class="hoverable-table p-strong text-center">&nbsp;
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="HFName" [title]="'Health Facility'" width="60" [headerClass]="'grid-header-text'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table">{{dataItem.HFName}}
+            </p>
+          </ng-template>
+          <ng-template kendoGridFooterTemplate let-column="column">
+            <p class="hoverable-table p-strong">Total
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column field="Count" title="Count" width="35" [headerClass]="'grid-header-text-center'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table" style="text-align: center;">{{(dataItem.Count ?
+              dataItem.Count : 0) | number}}
+            </p>
+          </ng-template>
+          <ng-template kendoGridFooterTemplate let-column="column">
+            <p class="hoverable-table p-strong" style="text-align: center;">
+              {{totalSumsDept["Count"].sum | number}}
+            </p>
+          </ng-template>
+
+        </kendo-grid-column>
+      </kendo-grid>
+    </div>
+  </div>
+  <div class="k-i-loading" *ngIf="loading"></div>
+</div>

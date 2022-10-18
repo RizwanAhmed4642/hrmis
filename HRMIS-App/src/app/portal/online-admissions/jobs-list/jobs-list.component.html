@@ -1,0 +1,160 @@
+<div class="animated fadeIn" *ngIf="portalClosed">
+  <p class="p-strong" style="font-size: large; text-align:center">
+    Portal has been closed
+  </p>
+</div>
+<div *ngIf="!portalClosed">
+  <div class="animated fadeIn">
+    <div class="row mb-2">
+      <div class="col-md-2 control-col-st">
+        <button kendoButton primary="true" class="btn-block" routerLink="/adhoc/apply">1 - <i
+            class="fa fa-graduation-cap"></i>
+          Select Post</button>
+      </div>
+      <div class="col-md-2 control-col">
+        <button kendoButton class="btn-block">2 - <i class="fa fa-user"></i>&nbsp;
+          Profile</button>
+      </div>
+      <div class="col-md-2 control-col">
+        <button kendoButton class="btn-block">3 - <i class="fa fa-file"></i>&nbsp;
+          Qualification</button>
+      </div>
+      <div class="col-md-2 control-col">
+        <button kendoButton class="btn-block">4 - <i class="fa fa-medkit"></i>&nbsp;
+          Experience</button>
+      </div>
+      <div class="col-md-2 control-col">
+        <button kendoButton class="btn-block">5 - <i class="fa fa-building-o"></i>&nbsp;
+          Preferences</button>
+      </div>
+      <div class="col-md-2 control-col-end">
+        <button kendoButton class="btn-block">6 - <i class="fa fa-print"></i>&nbsp;
+          Finalize & Print!</button>
+      </div>
+    </div>
+    <hr>
+  </div>
+  <div class="animated fadeIn row" *ngIf="step == 1">
+    <div class="col-md-6">
+      <p class="font-2xl m-0">
+        {{urdu.infoeng}}
+      </p>
+    </div>
+    <div class="col-md-6">
+      <p class="urdu-text font-3xl m-0 p-strong text-center">
+        {{urdu.info}}
+      </p>
+    </div>
+  </div>
+  <hr *ngIf="step == 1">
+  <div class="animated fadeIn row" *ngIf="step == 1">
+    <div *ngFor="let cat of designationCategories;let i = index;" class="hover-success"
+      [ngClass]="i == 3 ? 'offset-md-2 col-md-4' : 'col-md-4'" (click)="designationSelected(cat.Id)">
+      <img [src]="cat.Icon" style="width: 190px !important;" class="mx-auto d-block cursor-p zoom animated fadeIn"
+        alt="post-name">
+      <p class="m-0 mt-1 text-center cursor-p p-hoverable font-2xl">{{cat.Name}}</p>
+    </div>
+  </div>
+  <div class="animated fadeIn row" *ngIf="step == 2">
+    <div class="col-md-12">
+      <p class="m-0 hover-success"><span class="text-muted cursor-p hover-success" (click)="step = 1"><i
+            class="fa fa-arrow-left"></i>&nbsp;Back</span>
+      </p>
+    </div>
+    <div class="col-md-6">
+
+      <p class="m-0 animated fadeIn">
+        <span class="font-2xl m-0 pull-right">
+          {{selectedCategoryId == 1 ? urdu.moeng : selectedCategoryId == 2 ? urdu.wmoeng : selectedCategoryId == 3 ? urdu.speng : selectedCategoryId == 5 ? urdu.dseng : selectedCategoryId == 4 ? urdu.cneng : urdu.infoeng}}
+        </span>
+      </p>
+    </div>
+    <div class="col-md-6">
+      <p class="m-0 animated fadeIn">
+        <span class="urdu-text font-3xl m-0 p-strong pull-right">
+          {{selectedCategoryId == 1 ? urdu.mo : selectedCategoryId == 2 ? urdu.wmo : selectedCategoryId == 3 ? urdu.sp : selectedCategoryId == 5 ? urdu.ds : selectedCategoryId == 4 ? urdu.cn : urdu.info}}
+        </span>
+      </p>
+    </div>
+
+  </div>
+  <hr *ngIf="step == 2">
+  <div class="row animated fadeIn" *ngIf="step == 2">
+    <div class="col-md-12">
+      <kendo-grid *ngIf="!loading" [data]="adhocDesignations">
+        <kendo-grid-column [width]="'5'" field="asd" title="Sr." [headerClass]="'grid-header-text'">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <p class="m-0">{{(rowIndex + 1)}}.</p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="'30'" field="FullName" title="Designation" [headerClass]="'grid-header-text'">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <p class="m-0">{{dataItem.DesignationName}}</p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="'30'" field="FullName" title="Required Qualification"
+          [headerClass]="'grid-header-text'">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <small class="animated fadeIn" [innerHTML]="dataItem.OfferLetter"></small>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="'20'" field="FullName" title="No. of Vacant Seats"
+          [headerClass]="'grid-header-text'">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <p class="m-0">{{dataItem.posts}} <small (click)="viewSeats(dataItem.Designation_Id)"
+                class="text-success cursor-p"><i>click to
+                  view details</i></small></p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="'15'" field="asd" title="Action" [headerClass]="'grid-header-text'">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <button kendoButton primary="true" look="outline" (click)="applyNow(dataItem.Designation_Id)">Apply
+              Now</button>
+          </ng-template>
+        </kendo-grid-column>
+      </kendo-grid>
+      <div class="k-i-loading" *ngIf="loading"></div>
+    </div>
+  </div>
+
+  <div class="animated fadeIn row" *ngIf="step == 3">
+    <div class="col-md-12">
+      <p> <span class="urdu-text text-muted cursor-p font-2xl hover-success" (click)="step = 2"><i
+            class="fa fa-arrow-left"></i>&nbsp;واپس</span>
+      </p>
+    </div>
+  </div>
+  <hr *ngIf="step == 2">
+  <div class="mb-3" *ngIf="step == 3">
+    <div class="row animated fadeInDownBig" *ngIf="districts.length > 0">
+      <div class="col-md-12 animated fadeIn">
+
+        <div class="panelbar-wrapper">
+          <kendo-panelbar>
+            <kendo-panelbar-item [expanded]="false" *ngFor="let dist of districts"
+              [title]="dist.Name + ' (' + dist.Count + ')'">
+              <ng-template kendoPanelBarContent>
+                <div class="animated fadeIn" *ngIf="dist.hfs.length > 0">
+                  <div class="row">
+                    <div class="col-md-12 col-sm-12 control-col-st">
+                      <table class="w-100" style="background: transparent;">
+                        <tbody>
+                          <tr *ngFor="let hf of dist.hfs;let i = index;" class="animated fadeIn">
+                            <td style="border:none !important;">
+                              <p class="m-0 ml-1 p-1"><i>{{hf.DsgName}}</i>,
+                                <span class="text-success">{{hf.Name}}</span></p>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </kendo-panelbar-item>
+          </kendo-panelbar>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

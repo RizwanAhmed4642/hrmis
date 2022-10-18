@@ -1,0 +1,199 @@
+<div class="animated fadeIn mt-2" *ngIf="applicationSubType_Id == 3">
+  <div class="row" *ngIf="!showMessage && compassionateType == 0">
+    <div class="col-md-12">
+      <div class="content-heading mb-3">
+        Transfer on Compassionate Grounds
+      </div>
+      <div class="row" *ngIf="!showMessage">
+        <div class="col-md-12">
+          <tabset>
+            <tab heading="Disability">
+              <div class="row">
+                <div class="col-md-5">
+                  <h5 class="p-strong"><u>Major Disability</u></h5>
+                  <p>In case of major disability, the applicant must upload disability certificate. For the first
+                    application, no merit will be applicable. The applicant can avail this facility only once and
+                    afterwards open merit will be applied.</p>
+                </div>
+                <div class="col-md-5">
+
+                  <h5 class="p-strong"><u>Minor Disability</u></h5>
+                  <p> In case of minor disability, the applicant will get 10 additional marks. The applicant can avail
+                    this
+                    facility only once and afterwards open merit will be applied.</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="k-form-field">
+                    <span><strong class="p-strong">Upload Disability Certificate</strong></span>
+                    <input type="file" style="width: 100%;">
+                  </label>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-md-4 mt-1">
+                  <button kendoButton class="btn-lg btn-block" primary="true" routerLink="/e/apply/open-merit/2">Proceed
+                    for Transfer Application</button>
+                </div>
+              </div>
+            </tab>
+            <tab heading="Wedlock">
+              <div class="row">
+                <div class="col-md-5">
+                  <p><u><strong class="p-strong">Wedlock</strong></u>&nbsp;as basis for transfer on compassionate
+                    grounds can be
+                    availed by MOs/WMOs multiple times, only if spouse is a government servant
+                  </p>
+                  <ul>
+                    <li>The applicant will
+                      receive 10 additional marks under wedlock</li>
+                    <li>For the first
+                      application for transfer on wedlock
+                      basis, the applicant must have served for at least one year in the current health facility.
+                      Thereafter, the applicant can apply for transfer under wedlock without completing one year tenure
+                      in one health facility</li>
+                    <li>Employment letter issued by respective department of the spouse along with
+                      copy of last pay slip is required to submit application under wedlock</li>
+                  </ul>
+
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="k-form-field">
+                    <span><strong class="p-strong">Spouse Employement Letter</strong></span>
+                    <input type="file" style="width: 100%;">
+                  </label>
+                </div>
+                <div class="col-md-4">
+                  <label class="k-form-field">
+                    <span><strong class="p-strong">Last Pay Slip</strong></span>
+                    <input type="file" style="width: 100%;">
+                  </label>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-md-4 mt-1">
+                  <button kendoButton class="btn-lg btn-block" primary="true" routerLink="/e/apply/open-merit/3">Proceed
+                    for Transfer Application</button>
+                </div>
+              </div>
+            </tab>
+            <tab heading="Divorce">
+              <div class="row">
+                <div class="col-md-5">
+                  <p><u><strong class="p-strong">Divorce</strong></u>&nbsp;as basis for transfer on compassionate
+                    grounds can be availed only by WMOs and only in case of no re-marriage
+                  </p>
+                  <ul>
+                    <li>The applicant will receive
+                      15 additional marks for the first application
+                      submitted under divorce</li>
+                    <li>Copies of Nikah Nama,
+                      divorce certificate and no re-marriage affidavit must be submitted by the applicant at the time of
+                      submitting the application</li>
+
+                    <li>This facility can be availed only once, and afterwards open merit will be
+                      applied</li>
+                  </ul>
+
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="k-form-field">
+                    <span><strong class="p-strong">Nikah Nama</strong></span>
+                    <input type="file" style="width: 100%;">
+                  </label>
+                </div>
+                <div class="col-md-4">
+                  <label class="k-form-field">
+                    <span><strong class="p-strong">Divorce Certificate</strong></span>
+                    <input type="file" style="width: 100%;">
+                  </label>
+                </div>
+                <div class="col-md-4">
+                  <label class="k-form-field">
+                    <span><strong class="p-strong">No Re-Marriage Affidavit</strong></span>
+                    <input type="file" style="width: 100%;">
+                  </label>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-md-4 mt-1">
+                  <button kendoButton class="btn-lg btn-block" primary="true" routerLink="/e/apply/open-merit/4">Proceed
+                    for Transfer Application</button>
+                </div>
+              </div>
+            </tab>
+            <tab heading="Widow">
+              <div class="row">
+                <div class="col-md-5">
+                  <p><u><strong class="p-strong">Widow</strong></u>&nbsp;as basis for transfer on
+                    compassionate grounds can be availed only by WMOs and only in case of no re-marriage
+                  </p>
+                  <ul>
+                    <li>The applicant will receive 10 additional marks
+                      for the first application submitted
+                      submitted under divorce</li>
+                    <li>Copies of
+                      Nikah Nama, husband’s death certificate and no re-marriage affidavit must be submitted by the
+                      applicant</li>
+
+                    <li>This facility can be availed only once, and
+                      afterwards open merit will be applied</li>
+                  </ul>
+
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="k-form-field">
+                    <span><strong class="p-strong">Nikah Nama</strong></span>
+                    <input type="file" style="width: 100%;">
+                  </label>
+                </div>
+                <div class="col-md-4">
+                  <label class="k-form-field">
+                    <span><strong class="p-strong">Husband’s Death Certificate</strong></span>
+                    <input type="file" style="width: 100%;">
+                  </label>
+                </div>
+                <div class="col-md-4">
+                  <label class="k-form-field">
+                    <span><strong class="p-strong">No Re-Marriage Affidavit</strong></span>
+                    <input type="file" style="width: 100%;">
+                  </label>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-md-4 mt-1">
+                  <button kendoButton class="btn-lg btn-block" primary="true" routerLink="/e/apply/open-merit/5">Proceed
+                    for Transfer Application</button>
+                </div>
+              </div>
+            </tab>
+          </tabset>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row animated fadeIn" *ngIf="showMessage">
+    <div class="col-md-8 offset-md-2">
+      <div class="jumbotron">
+        <h2>{{showMessage}}</h2>
+        <hr>
+        <button class="btn-sm" [routerLink]="'/fts/application/' + application.Id + '/' + application.TrackingNumber"
+          kendoButton look="outline" primary="true" *ngIf="showMessage != 'You are not eligible as per Policy.'">View
+          Application</button>
+        <button class="btn-sm" kendoButton primary="true" *ngIf="showMessage != 'You are not eligible as per Policy.'"
+          (click)="showMessage = null">Back</button>
+      </div>
+    </div>
+  </div>
+</div>

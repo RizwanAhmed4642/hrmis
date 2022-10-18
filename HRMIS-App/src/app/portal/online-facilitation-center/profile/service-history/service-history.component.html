@@ -1,0 +1,80 @@
+<!-- <p>service-history works!</p> -->
+<div *ngIf="!serviceHistories" class="k-i-loading"></div>
+<div class="animated fadeIn" *ngIf="serviceHistories">
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="onlineFts-top-h3">
+                Service History
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+
+<!-- <kendo-grid [data]="serviceHistories">
+    <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-custom'"
+      [class]="{ 'grid-cell-custom': true }">
+      <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+        <p class="m-0">{{(rowIndex + 1)}}.
+        </p>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Name" [title]="'Place of Posting'" width="55" 
+    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+      <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+  
+      </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column field="ToStatus" width="40" title="Period" [headerClass]="'grid-header-custom'"
+    [class]="{ 'grid-cell-custom': true }">
+    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+      <div><strong style="font-family: Roboto-Bold !important;"
+          class="no-underline text-bold wb-break-all d-inline-block"
+          href="">{{ dataItem.FromDate | date:'dd/MM/yyyy' }}</strong> - <strong
+          style="font-family: Roboto-Bold !important;" class="no-underline text-bold wb-break-all d-inline-block"
+          href="">{{ dataItem.ToDate | date:'dd/MM/yyyy' }}</strong> - <u>{{dataItem.TotalDays}}
+          day{{dataItem.TotalDays > 1 ? 's' : ''}}</u></div>
+    </ng-template>
+    </kendo-grid-column>
+
+  </kendo-grid> -->
+
+  <kendo-grid [data]="serviceHistories">
+    <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-text'" [style]="{'background-color': '#fff','color': '#000', 'padding': '12px 8px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="m-0">{{(rowIndex + 1)}}.
+            </p>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="OrderNumber" [title]="'Order Number'" width="10" [headerClass]="'grid-header-text'" [style]="{'background-color': '#fff','color': '#000', 'padding': '12px 8px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+    </kendo-grid-column>
+    <kendo-grid-column field="Name" [title]="'Place of Posting'" width="45" [headerClass]="'grid-header-text'" [style]="{'background-color': '#fff','color': '#000', 'padding': '12px 8px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="m-0">{{dataItem.FullName}}
+            </p>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="DesignationName" [title]="'Designation'" width="15" [headerClass]="'grid-header-text'" [style]="{'background-color': '#fff','color': '#000', 'padding': '12px 8px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+
+    </kendo-grid-column>
+    <kendo-grid-column field="DesignationScale" [title]="'Scale'" width="10" [headerClass]="'grid-header-text'" [style]="{'background-color': '#fff','color': '#000', 'padding': '12px 8px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+
+    </kendo-grid-column>
+    <kendo-grid-column field="From_Date" [title]="'From'" width="10" [headerClass]="'grid-header-text'" [style]="{'background-color': '#fff','color': '#000', 'padding': '12px 8px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="m-0">{{dataItem.From_Date | date:'dd/MM/yyyy'}}
+            </p>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="To_Date" [title]="'To'" width="10" [headerClass]="'grid-header-text'" [style]="{'background-color': '#fff','color': '#000', 'padding': '12px 8px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="m-0" *ngIf="dataItem.To_Date">{{dataItem.To_Date | date:'dd/MM/yyyy'}}
+            </p>
+            <p class="m-0" *ngIf="dataItem.Continued">Continued
+            </p>
+        </ng-template>
+    </kendo-grid-column>
+</kendo-grid>
+
+

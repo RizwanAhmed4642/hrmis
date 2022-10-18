@@ -1,0 +1,18 @@
+<kendo-grid #grid *ngIf="!loading" [selectable]="true" [data]="gridView" [resizable]="true"
+  (dataStateChange)="onDataStateChange($event)" [height]="410" [columnMenu]="true" [sortable]="{
+    allowUnsort: allowUnsort,
+    mode: multiple ? 'multiple' : 'single'
+    }" [selectable]="true" [sort]="sort" (sortChange)="sortChange($event)" [(pageSize)]="pageSize" [skip]="skip"
+  [pageable]="true" (pageChange)="pageChange($event)" [scrollable]="false">
+  <kendo-grid-column [width]="6" field="asd" title="No." [headerClass]="'grid-header-custom'"
+    [style]="{'background-color': '#f5f5f5 ','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+      {{(rowIndex + 1)}}.
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column *ngFor="let column of columns" [field]="column.field" [title]="column.title"
+    [locked]="lock == column.field ? true : false" [width]="'30'" [headerClass]="'grid-header-custom'"
+    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+  </kendo-grid-column>
+</kendo-grid>
+<div *ngIf="loading" class="k-i-loading"></div>

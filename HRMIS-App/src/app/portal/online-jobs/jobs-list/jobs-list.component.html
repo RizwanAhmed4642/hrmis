@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-md-12">
+    <kendo-grid [data]="jobs">
+      <kendo-grid-column [width]="'5'" field="asd" title="Sr.">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <p class="m-0">{{(rowIndex + 1)}}</p>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="'60'" field="FullName" title="Post">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <p class="m-0">{{dataItem.DesignationName}}</p>
+        </ng-template>
+      </kendo-grid-column>
+
+      <kendo-grid-column [width]="'20'" field="FullName" title="Post">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <p class="m-0"><strong class="p-strong">Start Date:</strong> {{dataItem.StartDate | date: 'dd.MM.yyyy'}}</p>
+          <p class="m-0"><strong class="p-strong">End Date:</strong> {{dataItem.EndDate | date: 'dd.MM.yyyy'}}</p>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="'15'" field="asd" title="Apply">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <button kendoButton primary="true" look="outline" [routerLink]="'/job/account/' + dataItem.Id">Apply
+            Now</button>
+        </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+  </div>
+</div>

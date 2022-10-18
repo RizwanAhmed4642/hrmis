@@ -1,0 +1,64 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3">
+        Report an Issue
+      </div>
+    </div>
+  </div>
+</div>
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <label class="k-form-field">
+        <span>Type of Complain <span class="text-danger">*</span></span>
+        <kendo-dropdownlist [data]="issueTypes" [defaultItem]="dropDowns.defultFiltersModel.complaintType"
+          [textField]="'Name'" [valueField]="'Id'" (valueChange)="dropdownValueChanged($event, 'type')"
+          [value]="dropDowns.selectedFiltersModel.complaintType">
+        </kendo-dropdownlist>
+      </label>
+
+    </div>
+    <div class="col-md-12">
+      <label class="k-form-field">
+        <span>Remarks <span class="text-danger">*</span></span>
+        <textarea kendoTextArea [(ngModel)]="complaint.Remarks"></textarea>
+      </label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <label class="k-form-field">
+        <button kendoButton (click)="submit()" [ladda]="saving" (valuePrimitive)="true"
+          [disabled]="!complaint.Remarks || !complaint.Type_Id" data-style="zoom-in"
+          class="btn-lg pull-right btn-align-v" type="button" [primary]="true">Submit</button>
+      </label>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-12">
+      <kendo-grid [data]="list" [resizable]="true">
+        <kendo-grid-column width="30" field="Type" title="Type" [headerClass]="'grid-header-custom'"
+          [style]="{'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+
+            {{dataItem.Type}}
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column width="55" field="Remarks" title="Remarks" [headerClass]="'grid-header-custom'"
+          [style]="{'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            {{dataItem.Remarks}}
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column width="15" field="DateTime" title="Date Time" [headerClass]="'grid-header-custom'"
+          [style]="{'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            {{dataItem.DateTime | date: 'dd/MM/yyyy'}}
+          </ng-template>
+        </kendo-grid-column>
+      </kendo-grid>
+    </div>
+  </div>
+</div>

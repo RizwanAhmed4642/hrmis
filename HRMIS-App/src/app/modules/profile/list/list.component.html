@@ -1,0 +1,354 @@
+<div class="animated fadeIn">
+ 
+  <div class="row">
+    <div class="col-md-6 col-xs-12">
+      <div class="top-h3">
+        {{retirementInOneYear ? 'Employees to be Retired' : retirementAlerted ? 'SMS Sent to Employees to be Retired' :  'Employee Profiles'}}
+        {{isPool ? ' - Pool' : isInactive ? ' - InActive' : ''}}
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-12 animated fadeIn"
+      *ngIf="currentUser.RoleName != 'HRView' && currentUser.RoleName != 'Section Officer' && !retirementInOneYear && !retirementAlerted">
+      <div class="top-controls"
+        *ngIf="currentUser?.RoleName != 'Deputy Secretary' && currentUser?.RoleName != 'Hisdu Order Team' && currentUser?.RoleName != 'PACP'">
+        <button kendoButton [primary]="true" [look]="'outline'" *ngIf="!isPool" class="ml-2"
+          routerLink="/profile/new">Add
+          New</button>
+        <button type="button" kendoButton [primary]="true"
+          *ngIf="!isPool && currentUser.UserName.toLowerCase().startsWith('sdp')" [look]="'outline'"
+          routerLink="/profile/list/pool" class="ml-2">Employee Pool</button>
+        <button kendoButton [primary]="true" class="pull-right mr-2 ml-2 animated fadeIn"
+          *ngIf="profilesAll.length > 0 && !isPool && !isInactive" [look]="'outline'"
+          (click)="excelexport.save()">Export to
+          Excel</button>
+        <button type="button" kendoButton [primary]="true" *ngIf="!isInactive" [look]="'outline'"
+          routerLink="/profile/list/InActive" class="ml-2">InActive Profiles</button>
+        <button type="button" kendoButton [primary]="true" *ngIf="isPool" routerLink="/profile/list/1" class="ml-2">Back
+          to List</button>
+      </div>
+      <div class="top-controls"
+      *ngIf="currentUser?.RoleName == 'PACP' ">
+      <button kendoButton [primary]="true" [look]="'outline'" *ngIf="!isPool" class="ml-2"
+        routerLink="/profile/new">Add
+        New</button>
+      <button type="button" kendoButton [primary]="true" *ngIf="isPool" routerLink="/profile/list/1" class="ml-2">Back
+        to List</button>
+    </div>
+      <div class="top-controls"
+        *ngIf="currentUser?.UserName == 'ordercell' || currentUser?.RoleName == 'Hisdu Order Team'">
+        <button kendoButton [primary]="true" [look]="'outline'" *ngIf="!isPool" class="ml-2"
+          routerLink="/profile/new">Add
+          New</button>
+        <button type="button" kendoButton [primary]="true"
+          *ngIf="!isPool && currentUser.UserName.toLowerCase().startsWith('sdp')" [look]="'outline'"
+          routerLink="/profile/list/pool" class="ml-2">Employee Pool</button>
+        <button type="button" kendoButton [primary]="true" *ngIf="!isInactive" [look]="'outline'"
+          routerLink="/profile/list/InActive" class="ml-2">InActive Profiles</button>
+        <button type="button" kendoButton [primary]="true" *ngIf="isPool" routerLink="/profile/list/1" class="ml-2">Back
+          to List</button>
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-12 animated fadeIn"
+      *ngIf="currentUser.RoleName != 'HRView' && (currentUser.RoleName == 'Section Officer' || retirementInOneYear)">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" *ngIf="retirementInOneYear" [look]="'outline'"
+          routerLink="/profile/list/retireeSms">SMS Sent</button>
+        <button kendoButton [primary]="true" *ngIf="retirementAlerted" [look]="'outline'"
+          routerLink="/profile/list/retiree">Back</button>
+      </div>
+    </div>
+  </div>
+  <!--   <div class="row">
+      <div class="col-md-2 col-sm-12 control-col-st">
+        <label class="k-form-field">
+          <span>Division</span>
+          <kendo-dropdownlist [data]="divisionsData" [defaultItem]="{Name: 'Select Division', Code: '0'}" [filterable]="true" [textField]="'Name'" [valueField]="'Code'" (filterChange)="handleFilter($event, 'division')" (valueChange)="dropdownValueChanged($event, 'division')"
+            [value]="selectedFiltersModel.division">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-2 col-sm-12 control-col">
+        <label class="k-form-field">
+          <span>District</span>
+          <kendo-dropdownlist [data]="districtsData" [defaultItem]="{Name: 'Select District', Code: '0'}" [filterable]="true" [textField]="'Name'" [valueField]="'Code'" (filterChange)="handleFilter($event, 'district')" (valueChange)="dropdownValueChanged($event, 'district')"
+            [value]="selectedFiltersModel.district">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-2 col-sm-12 control-col">
+        <label class="k-form-field">
+          <span>Tehsil</span>
+          <kendo-dropdownlist [data]="tehsilsData" [defaultItem]="{Name: 'Select Tehsil', Code: '0'}" [filterable]="true" [textField]="'Name'" [valueField]="'Code'" (filterChange)="handleFilter($event, 'tehsil')" (valueChange)="dropdownValueChanged($event, 'tehsil')"
+            [value]="selectedFiltersModel.tehsil">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-6 col-sm-12 control-col-end">
+        <label class="k-form-field">
+          <span>Type of Health Facility</span>
+          <kendo-multiselect #hfTypeList [data]="hfTypesData" [(ngModel)]="hfTypeCodes" [filterable]="true" textField="Name" valueField="Code" placeholder="Select Type of Health Facility" (filterChange)="handleFilter($event, 'hftype')">
+          </kendo-multiselect>
+        </label>
+      </div>
+    </div> -->
+  <div class="row animated fadeIn">
+    <div class="col-md-4 col-sm-12 control-col-st">
+      <label class="k-form-field">
+        <span>Search by Name / CNIC</span>
+        <input type="text" (keyup)="inputChange.next(true)" [(ngModel)]="searchTerm" placeholder="Type Name or CNIC"
+          kendoTextBox>
+      </label>
+    </div>
+    <div class="col-md-3 col-sm-12 control-col" [hidden]="retirementInOneYear && retirementAlerted">
+      <label class="k-form-field">
+        <span>Status</span>
+        <kendo-multiselect #statusList [data]="dropDowns.profileStatusesData" [valuePrimitive]="true"
+          (valueChange)="onSearch()" [(ngModel)]="selectedStatuses" [filterable]="true" textField="Name" valueField="Id"
+          placeholder="Select Status" (filterChange)="handleFilter($event, 'status')">
+        </kendo-multiselect>
+      </label>
+      <!-- <label class="k-form-field">
+        <span>Cadre</span>
+        <kendo-multiselect #cadresList [data]="cadresData" [valuePrimitive]="true" (valueChange)="onSearch()"
+          [(ngModel)]="selectedCadres" [filterable]="true" textField="Name" valueField="Id" placeholder="Select Cadre"
+          (filterChange)="handleFilter($event, 'cadre')">
+        </kendo-multiselect>
+      </label> -->
+    </div>
+    <div class="col-md-3 col-sm-12 control-col" [hidden]="retirementInOneYear && retirementAlerted">
+      <label class="k-form-field">
+        <span>Designation</span>
+        <kendo-multiselect #designationsList [data]="designationsData" [valuePrimitive]="true"
+          (valueChange)="onSearch()" [(ngModel)]="selectedDesignations" [filterable]="true" textField="Name"
+          valueField="Id" placeholder="Select Designation" (filterChange)="handleFilter($event, 'designation')">
+        </kendo-multiselect>
+      </label>
+    </div>
+    <div class="col-md-2 col-sm-12 control-col-end" *ngIf="!retirementInOneYear && !retirementAlerted">
+      <label class="k-form-field mt-1">
+        <button kendoButton class="btn-block btn-align-v" [ladda]="searching" data-style="zoom-in" (click)="onSearch()"
+          [primary]="true">SEARCH</button>
+      </label>
+    </div>
+    <!--  <div class="col-md-3 col-sm-12 control-col">
+      <label class="k-form-field">
+        <span>Status</span>
+        <kendo-multiselect #statusList [data]="dropDowns.profileStatusesData" [valuePrimitive]="true"
+          (valueChange)="onSearch()" [(ngModel)]="selectedStatuses" [filterable]="true" textField="Name" valueField="Id"
+          placeholder="Select Status" (filterChange)="handleFilter($event, 'status')">
+        </kendo-multiselect>
+      </label>
+    </div>
+
+    <div class="col-md-3 col-sm-12 control-col">
+      <label class="k-form-field">
+        <span>Employement Mode</span>
+        <kendo-multiselect #employementModesList [data]="dropDowns.employementModesData" [valuePrimitive]="true"
+          (valueChange)="onSearch()" [(ngModel)]="selectedEmployementModes" [filterable]="true" textField="Name"
+          valueField="Id" placeholder="Select Employement Mode"
+          (filterChange)="handleFilter($event, 'employementMode')">
+        </kendo-multiselect>
+      </label>
+    </div>
+
+    <div class="col-md-3 col-sm-12 control-col">
+      <label class="k-form-field">
+        <span>Status</span>
+        <kendo-multiselect #statusList [data]="dropDowns.profileStatusesData" [valuePrimitive]="true"
+          (valueChange)="onSearch()" [(ngModel)]="selectedStatuses" [filterable]="true" textField="Name" valueField="Id"
+          placeholder="Select Status" (filterChange)="handleFilter($event, 'status')">
+        </kendo-multiselect>
+      </label>
+    </div> -->
+
+  </div>
+  <!--   <div class="row">
+    <div class="offset-md-10 col-md-2 col-sm-12 mt-1 control-col-end">
+      <label class="k-form-field">
+        <button kendoButton class="btn-block btn-align-v" [ladda]="searching" data-style="zoom-in" (click)="onSearch()"
+          [primary]="true">SEARCH</button>
+      </label>
+    </div>
+  </div> -->
+  <div class="row row-panel">
+    <div class="col-md-12">
+      <div class="grid-top-header-custom animated fadeIn" *ngIf="totalRecords">
+        <div class="pager-rows-number">
+          <span>
+            {{(skip + 1) + ' - ' + (pageSize <= totalRecords ? (pageSize + skip) : totalRecords) + ' of ' +
+                numberWithCommas(totalRecords) + ' items ' }} </span> <span class="pull-right">
+            <!-- View &nbsp; <select #selectView (change)="changeView(selectView.value)">
+                  <option *ngFor="let viewType of viewTypes" [value]="viewType" [selected]="viewType === userViewType ? true : undefined">
+                    {{viewType}}
+                  </option>
+                </select>
+                &nbsp; -->
+            Show &nbsp; <select #select (change)="changePagesize(select.value)">
+              <option *ngIf="showInitialPageSize" [value]="pageSize">{{pageSize}}</option>
+              <option *ngFor="let page of pageSizes" [value]="page" [selected]="page === pageSize ? true : undefined">
+                {{page}}
+              </option>
+            </select>
+            &nbsp; items per page
+          </span>
+
+        </div>
+      </div>
+      <div class="grid-wrapper">
+        <kendo-grid [data]="gridView" [sortable]="{
+              allowUnsort: allowUnsort,
+              mode: multiple ? 'multiple' : 'single'
+              }" [selectable]="true" [sort]="sort" (sortChange)="sortChange($event)" [(pageSize)]="pageSize"
+          [skip]="skip" [pageable]="true" (pageChange)="pageChange($event)" [scrollable]="false">
+          <kendo-grid-column [width]="7" field="asd" title="No." [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              {{(rowIndex + 1)}}.
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column *ngIf="retirementInOneYear" [width]="10" field="asd" title="Photo"
+            [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <img class="pic-shadow cursor-p" width="75" height="75" [routerLink]="'/profile/' + dataItem.CNIC"
+                [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + dataItem.CNIC + '_23.jpg'"
+                onError="this.src='../../../assets/img/notfound.png'" alt="">
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="28" field="EmployeeName" title="Name" [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="grid-list-item">
+                    <h5 class="m-0 mb-1" style="font-family: Roboto-Medium; color: darkslategray ; font-weight: 100;">
+
+                      <!-- comment out line to comment profile link   07/10/22 -->
+                      <!-- <span [routerLink]="'/profile/' + dataItem.CNIC">{{dataItem.EmployeeName}}</span></h5> -->
+
+                      <!-- Additional info write adnan -->
+                      <span >{{dataItem.EmployeeName}}</span></h5>
+
+
+                    <p class="m-0" style="font-family: Roboto-Regular; color: darkslategray ; font-weight: 100;">
+                      <span style="font-family: Roboto-Medium; "> CNIC:</span> {{dashifyCNIC(dataItem.CNIC)}}</p>
+                    <p class="m-0" *ngIf="!retirementInOneYear && !retirementAlerted"
+                      style="font-family: Roboto-Regular; color: darkslategray ; font-weight: 100;">
+                      <span style="font-family: Roboto-Medium; "> D.O.B:</span> {{dataItem.DateOfBirth |
+                        date:'dd-MM-yyyy'}}
+                    </p>
+                    <p class="m-0" style="font-family: Roboto-Regular; color: darkslategray ; font-weight: 100;">
+                      <span *ngIf="retirementInOneYear"><span style="font-family: Roboto-Medium; "> Super
+                          Annuation:</span>&nbsp;{{dataItem.SuperAnnuationDate | date:'dd-MM-yyyy'}}</span>
+                      <span *ngIf="!retirementInOneYear && !retirementAlerted">
+                        <span style="font-family: Roboto-Medium; "> Employement Mode:</span>
+                        {{dataItem.EmpMode_Name}}</span></p>
+                    <!--   <p class="m-0" style="font-family: Roboto-Regular; color: darkslategray ; font-weight: 100;">
+                        <i class="fa fa-mobile-phone"></i> {{dataItem.MobileNo}}
+                      </p> -->
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="55" field="HealthFacility" title="Place of Posting"
+            [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="grid-list-item">
+
+
+                    <!-- commented by Adnan To disable route link  07/10/2022 -->
+
+                    <!-- <h5 class="m-0 mb-1" style="font-family: Roboto-Medium; color: darkslategray ; font-weight: 100;"
+                      [routerLink]="'/profile/' + dataItem.CNIC">{{dataItem.HealthFacility
+                        + ', ' + (dataItem.Tehsil == dataItem.District ? dataItem.Tehsil : dataItem.Tehsil + ', ' +
+                        dataItem.District) }}
+                    </h5> -->
+
+                    <h5 class="m-0 mb-1" style="font-family: Roboto-Medium; color: darkslategray ; font-weight: 100;"
+                      >{{dataItem.HealthFacility
+                        + ', ' + (dataItem.Tehsil == dataItem.District ? dataItem.Tehsil : dataItem.Tehsil + ', ' +
+                        dataItem.District) }}
+                    </h5>
+
+
+                    <p class="m-0" style="font-family: Roboto-Regular; color: darkslategray ; font-weight: 100;">
+                      <span style="font-family: Roboto-Medium; ">Designation:</span>&nbsp;{{dataItem.Designation_Name}}
+                      <span *ngIf="retirementInOneYear">&nbsp;(BS-{{dataItem.Designation_HrScale_Id}})</span>
+                    </p>
+                    <p class="m-0" *ngIf="!retirementInOneYear && !retirementAlerted"
+                      style="font-family: Roboto-Regular; color: darkslategray ; font-weight: 100;">
+                      <span style="font-family: Roboto-Medium; ">Cadre:</span> {{dataItem.Cadre_Name}} | Scale:
+                      {{dataItem.Designation_HrScale_Id}}</p>
+                    <p class="m-0" style="font-family: Roboto-Regular; color: darkslategray ; font-weight: 100;">
+                      <span style="font-family: Roboto-Medium; "> Status:</span> {{dataItem.StatusName}} <span
+                        class="pull-right" *ngIf="retirementInOneYear">
+                        <!-- <button kendoButton primary="true" [ladda]="dataItem.sendingSMS" data-style="zoom-in"
+                          (click)="sendSMSToEmployee(dataItem, rowIndex)" class="btn-sm"><i
+                            class="fa fa-send"></i>&nbsp;SMS</button> -->
+                      </span></p>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column *ngIf="!retirementInOneYear && !retirementAlerted" [width]="10" field="asd" title="Actions"
+            [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem>
+
+              <!-- comment out view profile or edit profile  07/10/2022  -->
+
+              <!-- <span *ngIf="currentUser.RoleName != 'Section Officer' && !retirementInOneYear && !retirementAlerted">
+                <a (click)="openInNewTab('profile/' + dataItem.CNIC) + '/edit'"
+                  *ngIf="currentUser?.RoleName != 'Deputy Secretary'"> <img class="icon-svg"
+                    src="../../../assets/img/icons/edit2.svg" target="_blank" alt=""></a>
+                <a (click)="openInNewTab('profile/' + dataItem.CNIC)"> <img class="icon-svg"
+                    src="../../../assets/img/icons/eye-details.svg" target="_blank" alt=""></a>
+              </span> -->
+
+
+
+            </ng-template>
+          </kendo-grid-column>
+          <!--   <ng-template kendoGridDetailTemplate let-dataItem>
+                <section>
+                  <p><strong>On Order:</strong> {{dataItem.FullName}}</p>
+                  <p><strong>Reorder Level:</strong> xItem.Reorderl}} units</p>
+                  <p><strong>Discontinued:</strong>aItem.Discontinued}}</p>
+                  <p><strong>Category:</strong> tem.Category?.CategoryName}} - {{dataItem.CDescription}}</p>
+                </section>
+              </ng-template> -->
+          <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+            <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+            <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+            <kendo-pager-next-buttons></kendo-pager-next-buttons>
+            <div class="pager-rows-number">
+              <select #select (change)="changePagesize(select.value)">
+                <option *ngIf="showInitialPageSize" [value]="pageSize">{{pageSize}}</option>
+                <option *ngFor="let page of pageSizes" [value]="page" [selected]="page === pageSize ? true : undefined">
+                  {{page}}
+                </option>
+              </select>
+              &nbsp; items per page
+            </div>
+            <kendo-pager-info></kendo-pager-info>
+          </ng-template>
+        </kendo-grid>
+        <div *ngIf="loading" class="k-i-loading"></div>
+      </div>
+    </div>
+  </div>
+  <kendo-excelexport [data]="profilesAll" fileName="ProfilesHrmis.xlsx" #excelexport>
+    <kendo-excelexport-column field="CNIC" title="CNIC"></kendo-excelexport-column>
+    <kendo-excelexport-column field="EmployeeName" title="Name"></kendo-excelexport-column>
+    <kendo-excelexport-column field="FatherName" title="FatherName"></kendo-excelexport-column>
+  </kendo-excelexport>
+  <!-- <kendo-excelexport [data]="profilesAll" fileName="ProfilesHrmis.xlsx" #excelexport>
+    <kendo-excelexport-column *ngFor="let field of fields" [field]="field" [locked]="field === 'Id'" [width]="200">
+    </kendo-excelexport-column>
+  </kendo-excelexport> -->
+</div>

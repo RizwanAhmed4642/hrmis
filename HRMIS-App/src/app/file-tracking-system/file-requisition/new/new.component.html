@@ -1,0 +1,229 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-6 col-xs-12">
+      <div class="top-h3">
+        New File Request
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" [look]="'outline'" class="ml-2"
+          routerLink="/fts/file-requisition">Back</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row row-panel">
+  <div class="col-md-12">
+    <div class="grid-top-header-custom animated fadeIn" *ngIf="kGrid.totalRecords > 0">
+      <div class="pager-rows-number">
+        <span>
+          {{(kGrid.skip + 1) + ' - ' + (kGrid.pageSize <= kGrid.totalRecords ? (kGrid.pageSize + kGrid.skip) :
+            kGrid.totalRecords) + ' of ' + kGrid.numberWithCommas(kGrid.totalRecords) + ' items ' }} </span> <span
+          class="pull-right">
+          Show &nbsp; <select #select (change)="changePagesize(select.value)">
+            <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}</option>
+            <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+              [selected]="page === kGrid.pageSize ? true : undefined">
+              {{page}}
+            </option>
+          </select>
+          &nbsp; items per page
+        </span>
+      </div>
+    </div>
+    <div class="grid-top-header-custom animated fadeIn" style="border-bottom:1px solid rgba(0, 0, 0, 0.08);">
+      <div class="pager-rows-number">
+        <label class="k-form-field">
+          <span>Search File by Barcode / Name / CNIC / Section / Designation / Batch</span>
+          <input type="text" style="height: 40px !important;" #searchRef
+            (input)="searchEvent.next({ event: searchRef.value, filter: 'files'})"
+            placeholder="Type Barcode / Name / CNIC / Section / Designation / Batch" kendoTextBox>
+        </label>
+      </div>
+    </div>
+
+    <div class="grid-wrapper" *ngIf="kGrid.totalRecords > 0">
+      <kendo-grid [data]="kGrid.gridView" [sortable]="{
+                allowUnsort: kGrid.allowUnsort,
+                mode: kGrid.multiple ? 'multiple' : 'single'
+                }" [sort]="kGrid.sort" (sortChange)="sortChange($event)" [(pageSize)]="kGrid.pageSize"
+        [skip]="kGrid.skip" [pageable]="true" (pageChange)="pageChange($event)" [scrollable]="false">
+        <kendo-grid-column [width]="5" field="asd" title="No." [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            {{(rowIndex + 1)}}.
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column [width]="30" field="FileNumber" title="File Number" [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="application-info">
+              <p style="margin-bottom: 0px;">{{dataItem.FileNumber ? dataItem.FileNumber : ''}}
+                <small class="text-success" *ngIf="dataItem.RequestStatus_Id == 11">(available)</small>
+              </p>
+              <p style="margin-bottom: 0px;">
+                {{dataItem.Rack ? dataItem.Rack : dataItem.Rack}} <strong>-</strong>
+                {{dataItem.Shelf ? dataItem.Shelf : dataItem.Shelf}}
+              </p>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="45" field="Name" title="Name" [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="employee-info">
+              <p style="margin-bottom: 0px;">
+                {{dataItem.Name ? dataItem.Name : ''}}
+              </p>
+              <p style="margin-bottom: 0px;" *ngIf="dataItem.CNIC">
+                <strong> CNIC: </strong>{{dashifyCNIC(dataItem.CNIC)}}
+              </p>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="15" field="asd" title="Action" [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <button kendoButton kendoButton [look]="'outline'" [primary]="true" class="animated fadeIn btn-block"
+              (click)="openRequestDialog(dataItem)">
+              Request File
+            </button>
+          </ng-template>
+        </kendo-grid-column>
+
+        <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+          <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+          <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+          <kendo-pager-next-buttons></kendo-pager-next-buttons>
+          <div class="pager-rows-number">
+            <select #select (change)="changePagesize(select.value)">
+              <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}</option>
+              <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+                [selected]="page === kGrid.pageSize ? true : undefined">
+                {{page}}
+              </option>
+            </select>
+            &nbsp; items per page
+          </div>
+          <kendo-pager-info></kendo-pager-info>
+        </ng-template>
+      </kendo-grid>
+      <div *ngIf="kGrid.loading" class="k-i-loading"></div>
+    </div>
+  </div>
+</div>
+
+
+
+<kendo-dialog [title]="'Request File - Tracking Number '" *ngIf="requestDialogOpened && selectedFile"
+  (close)="closeRequestDialog()" [minWidth]="450" [width]="'600'">
+  <div class="row">
+    <div class="col-md-4 text-right control-col-st">
+      <p class="p-strong">Name / Subject</p>
+    </div>
+    <div class="col-md-7 control-col-end">
+      {{selectedFile.Name}}
+    </div>
+  </div>
+  <div class="row mt-1">
+    <div class="col-md-4 text-right control-col-st">
+      <p class="p-strong">File Number</p>
+    </div>
+    <div class="col-md-7 control-col-end">
+      {{selectedFile.FileNumber}}
+    </div>
+  </div>
+  <div class="row mt-1">
+    <div class="col-md-4 text-right control-col-st">
+      <p class="p-strong">File Request Reason</p>
+    </div>
+    <div class="col-md-7 control-col-end">
+      <textarea #reason kendoTextArea></textarea>
+    </div>
+  </div>
+  <hr>
+  <div class="row" *ngIf="!fileNotAvailable && !fileIssued">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-7">
+      <button *ngIf="!fileNotAvailable && !fileIssued" [ladda]="requestingFile" data-style="zoom-in" kendoButton
+        (click)="sendFileRequest(reason.value, selectedFile.Id)" primary="true">Request</button>
+    </div>
+  </div>
+  <div class="row" *ngIf="fileNotAvailable">
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-10">
+      <button *ngIf="fileNotAvailable && !fileshifted" kendoButton disabled="disabled" primary="true">File request
+        already made by
+        {{fileRequstedBy}}</button>
+      <p *ngIf="fileNotAvailable && fileshifted" class="p-strong">{{fileshiftedTo}}</p>
+    </div>
+  </div>
+  <div class="row" *ngIf="fileIssued">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-8">
+      <button *ngIf="fileIssued" kendoButton disabled="disabled" primary="true">File not available (already
+        issued)</button>
+    </div>
+  </div>
+</kendo-dialog>
+<!-- <div class="animated fadeIn" *ngIf="!healthFacility">
+      <div class="row">
+        <div class="col-md-7 col-xs-12">
+          <div class="shine shim-controls top-h3"></div>
+        </div>
+        <div class="col-md-2 col-xs-12 control-col-st">
+          <div class="top-controls">
+            <div class="shine shim-controls"></div>
+          </div>
+        </div>
+        <div class="col-md-1 col-xs-12 control-col">
+          <div class="top-controls">
+            <div class="shine shim-controls"></div>
+          </div>
+        </div>
+        <div class="col-md-2 col-xs-12 control-col-end">
+          <div class="top-controls">
+            <div class="shine shim-controls"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2 control-col-st">
+          <div class="shine shim-controls btn-align-v"></div>
+        </div>
+        <div class="col-md-2 control-col">
+          <div class="shine shim-controls btn-align-v"></div>
+        </div>
+        <div class="col-md-2 control-col">
+          <div class="shine shim-controls btn-align-v"></div>
+        </div>
+        <div class="col-md-2 control-col">
+          <div class="shine shim-controls btn-align-v"></div>
+        </div>
+        <div class="col-md-2 control-col">
+          <div class="shine shim-controls btn-align-v"></div>
+        </div>
+        <div class="col-md-1 control-col">
+          <div class="shine shim-controls btn-align-v"></div>
+        </div>
+        <div class="col-md-1 control-col-end">
+          <div class="shine shim-controls btn-align-v"></div>
+        </div>
+      </div>
+    </div>
+    <div class="animated fadeIn" *ngIf="!healthFacility">
+      <div class="row row-panel">
+        <div class="col-md-7 control-col-st">
+          <div class="shine shim-thumb-lg"></div>
+        </div>
+        <div class="col-md-5 control-col-end">
+          <div class="shine shim-thumb"></div>
+          <div class="shine shim-thumb mt-4"></div>
+        </div>
+      </div>
+    </div> -->

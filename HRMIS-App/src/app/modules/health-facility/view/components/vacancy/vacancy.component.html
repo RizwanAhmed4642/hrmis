@@ -1,0 +1,792 @@
+<div class="grid-top-header-custom animated fadeIn" style="border-bottom:1px solid rgba(0, 0, 0, 0.08);">
+  <div class="pager-rows-number">
+    <div class="row">
+      <div class="col-md-8 control-col-st">
+        <label class="k-form-field">
+          <span>Search by Designation</span>
+          <input type="text" #searchRef (input)="searchEvent.next({ event: searchRef.value, filter: 'vacancy'})"
+            placeholder="Type designation name..." kendoTextBox>
+        </label>
+      </div>
+      <div class="col-md-2 control-col">
+        <label class="k-form-field mt-1">
+          <button kendoButton [primary]="true" [ladda]="loading" data-style="zoom-in" (click)="getVacancy(hfmisCode)"
+            class="btn-align-v btn-block"><i class="fa fa-refresh"></i>&nbsp;Refresh</button>
+        </label>
+      </div>
+      <div class="col-md-2 control-col-end">
+        <label class="k-form-field mt-1">
+          <button kendoButton [primary]="true" class="pull-right mr-2 ml-2 animated fadeIn"
+            class="btn-align-v btn-block" *ngIf="vacancy.length > 0" [look]="'outline'" (click)="excelexport.save()"><i
+              class="fa fa-file-excel-o"></i> Excel</button>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="animated fadeIn" *ngIf="showVacancy && vacancy.length > 0">
+  <div class="grid-wrapper">
+    <kendo-grid [data]="gridView" [sortable]="{
+  allowUnsort: allowUnsort,
+  mode: 'multiple'
+  }" [sort]="sort" (sortChange)="sortChange($event)">
+      <kendo-grid-column field="asd" title="No." [width]="20" [headerClass]="'grid-header-custom'"
+        [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <p style="margin: 0;width:100%;cursor:pointer;" (click)="openWindow(dataItem)">{{(rowIndex + 1)}}.</p>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="DsgName" title="Designation" [width]="90" [headerClass]="'grid-header-custom'"
+        [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <p style="margin: 0;width:100%;cursor:pointer;" (click)="openWindow(dataItem)">{{dataItem.DsgName}}</p>
+          <p style="margin: 0;width:100%;cursor:pointer;" (click)="openWindow(dataItem)"><span
+              class="text-muted font-weight-light" style="font-size: 12px;">BS-{{dataItem.BPS}} - Cadre:
+              <u>{{dataItem.CadreName}}</u>
+              - Post Type: <u>{{dataItem.PostTypeName}}</u></span></p>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column">
+          <p class="p-strong" style="padding: 8px 12px;margin-bottom: 0px;">Total
+          </p>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="TotalSanctioned" title="Sanctioned" [width]="40"
+        [headerClass]="'grid-header-text-center'" [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <p style="margin: 0;width:100%;cursor:pointer;text-align: center;" (click)="openWindow(dataItem)">
+            {{dataItem.TotalSanctioned}}
+          </p>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column">
+          <p class="p-strong text-center" style="padding: 8px 12px;margin-bottom: 0px;">
+            {{vacancyTotal["TotalSanctioned"].sum | number}}
+          </p>
+        </ng-template>
+      </kendo-grid-column>
+
+
+      <!-- just Only for PHFMC -->
+      <!-- <kendo-grid-column field="TotalSanctionedPHFMC" title="SanctionedPHFMC" [width]="40"
+        [headerClass]="'grid-header-text-center'" [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <p style="margin: 0;width:100%;cursor:pointer;text-align: center;" (click)="openWindow(dataItem)">
+            {{dataItem.TotalSanctionedPHFMC}}
+          </p>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column">
+          <p class="p-strong text-center" style="padding: 8px 12px;margin-bottom: 0px;">
+            {{vacancyTotal["TotalSanctionedPHFMC"].sum | number}}
+          </p>
+        </ng-template>
+      </kendo-grid-column> -->
+
+      <kendo-grid-column field="PSHD" title="PSHD" [width]="30"
+        *ngIf="currentUser.RoleName == 'PHFMC Admin' || currentUser.RoleName == 'PHFMC'"
+        [headerClass]="'grid-header-text-center'" [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <p style="margin: 0;width:100%;cursor:pointer;text-align: center;" (click)="openWindow(dataItem)">
+            {{((dataItem.Adhoc ? dataItem.Adhoc : 0) + (dataItem.Regular ? dataItem.Regular : 0)) ? ((dataItem.Adhoc ? dataItem.Adhoc : 0) + (dataItem.Regular ? dataItem.Regular : 0)) : 0}}
+          </p>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column">
+          <p class="p-strong text-center" style="padding: 8px 12px;margin-bottom: 0px;">
+            {{(vacancyTotal["Adhoc"].sum + vacancyTotal["Regular"].sum) | number}}
+
+          </p>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="PHFMC" title="PHFMC" [width]="30"
+        *ngIf="currentUser.RoleName == 'PHFMC Admin' || currentUser.RoleName == 'PHFMC'"
+        [headerClass]="'grid-header-text-center'" [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <p style="margin: 0;width:100%;cursor:pointer;text-align: center;" (click)="openWindow(dataItem)">
+            {{dataItem.PHFMC}}
+          </p>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column">
+          <p class="p-strong text-center" style="padding: 8px 12px;margin-bottom: 0px;">
+            {{vacancyTotal["PHFMC"].sum | number}}
+          </p>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="Contract" title="IRMNCH" [width]="30"
+        *ngIf="currentUser.RoleName == 'PHFMC Admin' || currentUser.RoleName == 'PHFMC'"
+        [headerClass]="'grid-header-text-center'" [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <p style="margin: 0;width:100%;cursor:pointer;text-align: center;" (click)="openWindow(dataItem)">
+            {{dataItem.Contract}}
+          </p>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column">
+          <p class="p-strong text-center" style="padding: 8px 12px;margin-bottom: 0px;">
+            {{vacancyTotal["Contract"].sum | number}}
+          </p>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="TotalWorking" title="Filled" [width]="30"
+        *ngIf="currentUser.RoleName != 'PHFMC Admin' && currentUser.RoleName != 'PHFMC'"
+        [headerClass]="'grid-header-text-center'" [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <p style="margin: 0;width:100%;cursor:pointer;text-align: center;" (click)="openWindow(dataItem)">
+            {{dataItem.TotalWorking}}
+          </p>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column">
+          <p class="p-strong text-center" style="padding: 8px 12px;margin-bottom: 0px;">
+            {{vacancyTotal["TotalWorking"].sum | number}}
+          </p>
+        </ng-template>
+      </kendo-grid-column>
+      <!-- <kendo-grid-column field="WorkingProfiles" title="Working Profiles" [width]="30"
+          [headerClass]="'grid-header-custom'" [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+  </kendo-grid-column> -->
+      <kendo-grid-column field="Vacant" title="Vacant" [width]="30" [headerClass]="'grid-header-text-center'"
+        [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <p style="margin: 0;width:100%;cursor:pointer;text-align: center;" (click)="openWindow(dataItem)"
+            *ngIf="dataItem.Vacant > 0">
+
+            <button kendoButton look="outline" primary="true"
+              class="animated fadeIn btn-sm text-center">{{dataItem.Vacant}}</button> </p>
+          <p *ngIf="dataItem.Vacant <= 0" class="animated fadeIn"
+            style="margin: 0;width:100%;cursor:pointer;text-align: center;" (click)="openWindow(dataItem)">
+            <span> {{dataItem.Vacant}}</span>
+            <!--   <span *ngIf="dataItem.Vacant > 0" class="badge badge-pill badge-success">{{dataItem.Vacant}}</span> -->
+
+          </p>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column">
+          <p class="p-strong text-center" style="padding: 8px 12px;margin-bottom: 0px;">
+            {{vacancyTotal["Vacant"].sum | number}}
+          </p>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="WorkingProfiles" title="Profiles" [width]="30" [headerClass]="'grid-header-custom'"
+        [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <p style="margin: 0;cursor:pointer;" (click)="openWindow(dataItem, 'profile')">{{dataItem.WorkingProfiles ? dataItem.WorkingProfiles :
+          0}}
+            <span *ngIf="dataItem.WorkingProfiles != dataItem.TotalWorking"
+              class="pull-right details-head-vacancy text-secondary">
+              {{dataItem.WorkingProfiles < dataItem.TotalWorking ? '-' + (dataItem.TotalWorking - dataItem.WorkingProfiles) :
+              dataItem.WorkingProfiles>
+              dataItem.TotalWorking ? '+' + (dataItem.WorkingProfiles - dataItem.TotalWorking) : 0}} </span>
+          </p>
+          <!--  <pre>{{dataItem | json}}</pre> -->
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column">
+          <p class="p-strong" style="padding: 8px 12px;margin-bottom: 0px;">
+            {{vacancyTotal["WorkingProfiles"].sum | number}}
+          </p>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="Created_Date" title="Detail" [width]="30" [headerClass]="'grid-header-custom'"
+        [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <button (click)="openWindow(dataItem)" kendoButton primary="true"
+            class="animated fadeIn btn-sm text-center">Details</button>
+        </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+  </div>
+</div>
+<div class="animated fadeIn" *ngIf="!showVacancy && loading">
+  <div class="grid-wrapper">
+    <kendo-grid [data]="[{},{},{},{},{},{},{},{},{},{},{},{},{},{}]">
+      <kendo-grid-column field="asd" title="" [width]="20" [headerClass]="'grid-header-custom'"
+        [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="shine shim-controls p-2"></div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="DsgName" title="" [width]="90" [headerClass]="'grid-header-custom'"
+        [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="shine shim-controls p-2"></div>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column">
+          <div class="shine shim-controls p-2"></div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="TotalSanctioned" title="" [width]="40" [headerClass]="'grid-header-custom'"
+        [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="shine shim-controls p-2"></div>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column">
+          <div class="shine shim-controls p-2"></div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="TotalWorking" title="" [width]="30" [headerClass]="'grid-header-custom'"
+        [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="shine shim-controls p-2"></div>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column">
+          <div class="shine shim-controls p-2"></div>
+        </ng-template>
+      </kendo-grid-column>
+
+      <!-- <kendo-grid-column field="WorkingProfiles" title="Working Profiles" [width]="30"
+          [headerClass]="'grid-header-custom'" [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+  </kendo-grid-column> -->
+      <kendo-grid-column field="Vacant" title="" [width]="30" [headerClass]="'grid-header-custom'"
+        [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="shine shim-controls p-2"></div>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column">
+          <div class="shine shim-controls p-2"></div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="WorkingProfiles" title="" [width]="30" [headerClass]="'grid-header-custom'"
+        [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="shine shim-controls p-2"></div>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column">
+          <div class="shine shim-controls p-2"></div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="Created_Date" title="" [width]="45" [headerClass]="'grid-header-custom'"
+        [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="shine shim-controls p-2"></div>
+        </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+  </div>
+</div>
+
+<kendo-dialog [title]="profilesWindow.data.DsgName + ' - ' + profilesWindow.data.HFName "
+  *ngIf="profilesWindow.dialogOpened" (close)="closeWindow()" [minWidth]="'450'" [height]="'585'" [width]="'1000'">
+  <div *ngIf="!loadingVpMaster">
+
+    <div class="row">
+      <div class="col-md-4 col-sm-12 control-col-st">
+        <label class="k-form-field">
+          <span class="p-strong">Post Name</span>
+          <kendo-dropdownlist disabled [value]="vpMaster.DsgName">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-3 col-sm-12 control-col">
+        <label class="k-form-field">
+          <span class="p-strong">Cadre</span>
+          <input type="text" [value]="vpMaster.CadreName" kendoTextBox disabled>
+        </label>
+      </div>
+      <div class="col-md-3 control-col col-sm-12">
+        <label class="k-form-field">
+          <span class="p-strong">Post Type</span>
+          <kendo-dropdownlist disabled [value]="vpMaster.PostTypeName">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-2 col-sm-12 control-col-end">
+        <label class="k-form-field">
+          <span class="p-strong">Scale</span>
+          <input type="text" [value]="vpMaster.BPS" kendoTextBox disabled>
+        </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3 col-sm-12 control-col-st" >
+        <label class="k-form-field">
+          <span class="p-strong">Sanctioned </span>
+          <input type="number" min="0" [disabled]="!showVacancyControls" [(ngModel)]="vpMaster.TotalSanctioned"
+            kendoTextBox>
+        </label>
+        <!-- (input)="searchEvent.next({ event: vpMaster.TotalSanctioned, filter: 'TotalSanctioned'})" -->
+      </div>
+
+    <!-- <div class="row">
+      <div class="col-md-3 col-sm-12 control-col-st" *ngIf="!(currentUser.RoleName == 'PHFMC Admin' || currentUser.RoleName == 'PHFMC')">
+        <label class="k-form-field">
+          <span class="p-strong">Sanctioned </span>
+          <input type="number" min="0" [disabled]="!showVacancyControls" [(ngModel)]="vpMaster.TotalSanctioned"
+            kendoTextBox>
+        </label>
+        (input)="searchEvent.next({ event: vpMaster.TotalSanctioned, filter: 'TotalSanctioned'})"
+      </div>
+        -->
+      
+       <!-- Just Only show  By PHFMC  -->
+      <!-- <div class="col-md-3 col-sm-12 control-col-st" *ngIf="currentUser.RoleName == 'PHFMC Admin' || currentUser.RoleName == 'PHFMC'">
+        <label class="k-form-field">
+          <span class="p-strong" >Sanctioned By PHFMC </span>
+          <input type="number" min="0" [disabled]="!showVacancyControls" [(ngModel)]="vpMaster.TotalSanctionedPHMC"
+            kendoTextBox>
+        </label>
+        (input)="searchEvent.next({ event: vpMaster.TotalSanctioned, filter: 'TotalSanctioned'})" 
+      </div> -->
+
+      <div class="col-md-3 col-sm-12 control-col">
+        <label class="k-form-field">
+          <span class="p-strong">Filled</span>
+          <input type="number" min="0" disabled [value]="vpMaster.TotalWorking" kendoTextBox>
+        </label>
+        <!-- (input)="searchEvent.next({ event: vpMaster.TotalSanctioned, filter: 'TotalSanctioned'})" -->
+      </div>
+      <div class="col-md-3 col-sm-12 control-col">
+        <label class="k-form-field">
+          <span class="p-strong">Vacant</span>
+          <input type="number" min="0" disabled [value]="(vpMaster.TotalSanctioned - vpMaster.TotalWorking)"
+            kendoTextBox>
+        </label>
+      </div>
+      <!-- (input)="searchEvent.next({ event: vpMaster.TotalSanctioned, filter: 'TotalSanctioned'})" -->
+      <div
+        [ngClass]="currentUser?.UserName == 'dpd' || currentUser?.UserName == 'so.toqeer' ? 'col-md-2 col-sm-12 control-col' : 'col-md-3 col-sm-12 control-col-end'">
+        <label class="k-form-field">
+          <span class="p-strong">Profile</span>
+          <button kendoButton *ngIf="vpMaster.WorkingProfiles > 0" class="btn-block" (click)="showProfileClicked(0)"
+            [primary]="true" [look]="showProfile ? '' : 'outline'">{{vpMaster.WorkingProfiles}} Profile</button>
+        </label>
+      </div>
+      <div class="col-md-1 col-sm-12 control-col-end"
+        *ngIf="currentUser?.UserName == 'dpd' || currentUser?.UserName == 'so.toqeer'">
+        <label class="k-form-field">
+          <span class="p-strong">Log</span>
+          <button kendoButton *ngIf="vpMasterLogs.length > 0" class="btn-block" (click)="showLogClicked()"
+            [primary]="true"><i class="fa fa-clock-o"></i></button>
+        </label>
+      </div>
+    </div>
+    <div class="animated fadeIn"
+      *ngIf="!showProfile && !showLog && vpMaster.HF_Id > 0 && vpMaster.TotalSanctioned > 0 && vpMaster.Desg_Id > 0 && vpMaster.PostType_Id > 0">
+      <hr>
+      <!--  <div class="content-heading mb-2" id="deptInfo">
+      Employement mode of {{vpMaster.TotalSanctioned}} {{vpMaster.DsgName}}
+    </div> -->
+      <div class="row">
+        <div class="col-md-3 col-sm-12" *ngFor="let employementMode of employementModes; let i = index;"
+          [ngClass]="i % 4 === 0 ? 'control-col-st' : i % 4 === 1 || i % 4 === 2 ? 'control-col' : i % 4 === 3 ? 'control-col-end' : ''">
+          <label class="k-form-field">
+            <span>{{employementMode.Name}}</span>
+            <div *ngIf="employementMode.profiles > 0">
+              <input style="width:48% !important; margin-right:2px !important;" type="number" min="0"
+                [(ngModel)]="employementMode.totalWorking"
+                [ngClass]="(filledExceed && (employementMode.totalWorking && employementMode.totalWorking > 0)) || employementMode.totalWorking < 0 ? 'ng-invalid-only' : ''"
+                (input)="searchEvent.next({ event: $event, filter: 'employementMode', Id: employementMode.Id})"
+                kendoTextBox>
+              <button kendoButton style="width:48% !important; margin-left:2px !important;"
+                (click)="showProfileClicked(employementMode.Id)" [primary]="true"
+                [look]="'outline'">{{employementMode.profiles}}
+                Profile{{employementMode.profiles > 1 ? 's' : ''}}</button>
+            </div>
+            <input *ngIf="!employementMode.profiles || employementMode.profiles == 0" type="number" min="0"
+              [(ngModel)]="employementMode.totalWorking"
+              [ngClass]="(filledExceed && (employementMode.totalWorking && employementMode.totalWorking > 0)) || employementMode.totalWorking < 0 ? 'ng-invalid-only' : ''"
+              (input)="searchEvent.next({ event: $event, filter: 'employementMode', Id: employementMode.Id})"
+              kendoTextBox>
+          </label>
+        </div>
+      </div>
+      <hr>
+      <div class="animated fadeIn mt-2" *ngIf="vpMaster.TotalWorking && filledExceed"
+        class="text-danger animated fadeIn">
+        *
+        cannot fill
+        {{vpMaster.TotalWorking + ' '
+        + vpMaster.DsgName + ' against ' + vpMaster.TotalSanctioned + ' sanctioned posts'}}</div>
+      <p style="margin: 0;width:100%;cursor:pointer;text-align: right;" *ngIf="vpMaster.Modified_Date">
+        Modified at <i>{{vpMaster.Modified_Date
+        | date: 'dd/MM/yy, h:mm a'}}</i></p>
+      <p style="margin: 0;width:100%;cursor:pointer;text-align: right;" *ngIf="!vpMaster.Modified_Date">Created at {{vpMaster.Created_Date
+        | date: 'dd/MM/yy, h:mm a'}}</p>
+      <div class="row mt-3" *ngIf="!filledExceed">
+        <!-- <div class="col-md-2 col-sm-6 col-xs-6 control-col-st">
+          <button *ngIf="!currentUser.UserName.toLowerCase().startsWith('ceo.')" kendoButton class="btn-block"
+            [ladda]="saving" data-style="zoom-in" (click)="saveVacancy()" [primary]="true">Save</button>
+          <button
+            *ngIf="currentUser.UserName.toLowerCase().startsWith('ceo.') && healthFacility?.HFTypeCode != '011' && healthFacility?.HFTypeCode != '012'"
+            kendoButton class="btn-block" [ladda]="saving" data-style="zoom-in" (click)="saveVacancy()"
+            [primary]="true">Save</button>
+        </div>
+
+        <div class="col-md-2 col-sm-6 col-xs-6 offset-md-6 control-col-end">
+          <button *ngIf="!currentUser.UserName.toLowerCase().startsWith('ceo.')" [ladda]="removing" data-style="zoom-in"
+            (click)="removeVacancy()" class="btn btn-danger btn-block">Remove</button>
+          <button
+            *ngIf="currentUser.UserName.toLowerCase().startsWith('ceo.') && healthFacility?.HFTypeCode != '011' && healthFacility?.HFTypeCode != '012'"
+            [ladda]="removing" data-style="zoom-in" (click)="removeVacancy()"
+            class="btn btn-danger btn-block">Remove</button>
+        </div> -->
+      </div>
+      <!-- <hr>
+      <div>
+        <label class="k-form-field">
+          <span>Search by CNIC</span>
+          <input type="text" #searchByCnic (input)="searchEvent.next({ event: searchByCnic.value, filter: ''})"
+            placeholder="Type CNIC.." kendoTextBox>
+        </label>
+      </div>
+      <div class="row">
+        <div class="col-md-3" *ngFor="let profile of suggestedProfiles; let i = index;">
+
+          <div class="employee-wrapper mt-2 mb-1">
+            <div class="employee-pic">
+              <img alt="" onerror="this.src='../../../assets/img/notfound.png'"
+                [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + profile.CNIC + '_23.jpg'">
+            </div>
+          </div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+
+          {{profile.EmployeeName}}<br>
+          {{profile.Designation_Name}}<br>
+          (BS-{{profile.CurrentGradeBPS}})
+
+          <div>
+            <button kendoButton [primary]="true" (click)="fillProfile(i, profile)" *ngIf="!profile.filled"
+              class="btn-align-v btn-block" [look]="'outline'">Fill</button>
+            <button style="height: 30px;" *ngIf="profile.filled" (click)="removeProfile(profile)"
+              class="btn btn-danger btn-align-v btn-block">Remove</button>
+          </div>
+
+        </div>
+
+      </div> -->
+
+
+    </div>
+    <div class="animated fadeIn"
+      *ngIf="showProfile && vpMaster.HF_Id > 0 && vpMaster.TotalSanctioned > 0 && vpMaster.Desg_Id > 0 && vpMaster.PostType_Id > 0">
+      <hr>
+      <!--   <div class="content-heading mb-2" id="deptInfo">
+      {{profiles.length ? profiles.length : 0}} profile{{profiles.length > 1
+      ?
+      's' : ''}} against {{profilesWindow.data.TotalWorking}} filled post{{profilesWindow.data.TotalWorking > 1 ?
+      's'
+      :
+      ''}}.
+    </div> -->
+
+      <div class="animated fadeIn" *ngIf="profiles.length > 0">
+        <kendo-grid [data]="profiles" [resizable]="true">
+          <kendo-grid-column width="5" field="asd" title="Sr." [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              {{(rowIndex + 1)}}
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column width="12" field="EmployeeName" title="Photo" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <img class="pic-shadow" width="75" height="75"
+                [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + dataItem.CNIC + '_23.jpg'"
+                onError="this.src='../../../assets/img/notfound.png'" alt="">
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column width="87" field="EmployeeName" title="Name" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="row employee-info-grid-box" style="cursor: pointer;"
+                (click)="openInNewTab('profile/' + dataItem.CNIC)">
+                <div class="col-md-12">
+                  <div class="grid-list-item">
+                    <h5 class="m-0 mb-1" style="font-family: Roboto-Medium; font-weight: 100;">{{dataItem.EmployeeName}}
+                      <span class="pull-right">
+                        {{dataItem.EmpMode_Name}}</span></h5>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <p class="m-0" style="font-family: Roboto-Regular; font-weight: 100;">
+                          <span style="font-family: Roboto-Medium; "> CNIC:</span> {{dashifyCNIC(dataItem.CNIC)}}</p>
+                        <p class="m-0" style="font-family: Roboto-Regular; font-weight: 100;">
+                          <span style="font-family: Roboto-Medium; "> D.O.B:</span> {{dataItem.DateOfBirth |
+                        date:'dd-MM-yyyy'}}
+                        </p>
+                      </div>
+                      <div class="col-md-5">
+                        <p class="m-0" style="font-family: Roboto-Regular; font-weight: 100;">
+                          <span style="font-family: Roboto-Medium; "> Designation:</span>
+                          {{dataItem.Designation_Name}} - {{dataItem.CurrentGradeBPS}}</p>
+                        <p class="m-0" *ngIf="dataItem.Designation_Name !== dataItem.WDesignation_Name"
+                          style="font-family: Roboto-Regular; font-weight: 100;">
+                          <span style="font-family: Roboto-Medium; ">
+                            Working Designation:</span>
+                          {{dataItem.WDesignation_Name}}
+                        </p>
+                      </div>
+                      <div class="col-md-3">
+                        <p class="m-0" style="font-family: Roboto-Regular; font-weight: 100;">
+                          <span style="font-family: Roboto-Medium; "> Status:</span>
+                          {{dataItem.StatusName}}</p>
+                        <p class="m-0" style="font-family: Roboto-Regular; font-weight: 100;">
+                          <span style="font-family: Roboto-Medium; ">
+                            Cadre:</span> {{dataItem.Cadre_Name}}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column *ngIf="currentUser.UserName.startsWith('sdp')" width="12" field="EmployeeName"
+            title="Photo" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <button kendoButton primary="true" class="btn-sm" (click)="shiftProfileToPSH(dataItem)"
+                [ladda]="dataItem.shifting" data-style="zoom-in">Shift Profile</button>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+
+      <!-- <div class="content-heading">
+        Filled Profiles
+      </div>
+      <div class="animated fadeIn" *ngIf="vpMaster.VPProfiles.length > 0">
+        <kendo-grid [data]="vpMaster.VPProfiles" [resizable]="true">
+          <kendo-grid-column width="5" field="asd" title="Sr." [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              {{(rowIndex + 1)}}
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column width="12" field="EmployeeName" title="Photo" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <img class="pic-shadow" width="75" height="75"
+                [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + dataItem.CNIC + '_23.jpg'"
+                onError="this.src='../../../assets/img/notfound.png'" alt="">
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column width="87" field="EmployeeName" title="Name" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="row employee-info-grid-box" style="cursor: pointer;"
+                (click)="openInNewTab('profile/' + dataItem.CNIC)">
+                <div class="col-md-12">
+                  <div class="grid-list-item">
+                    <h5 class="m-0 mb-1" style="font-family: Roboto-Medium; font-weight: 100;">{{dataItem.EmployeeName}}
+                      <span class="pull-right">
+                        {{dataItem.EmpMode_Name}}</span></h5>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <p class="m-0" style="font-family: Roboto-Regular; font-weight: 100;">
+                          <span style="font-family: Roboto-Medium; "> CNIC:</span> {{dashifyCNIC(dataItem.CNIC)}}</p>
+                        <p class="m-0" style="font-family: Roboto-Regular; font-weight: 100;">
+                          <span style="font-family: Roboto-Medium; "> D.O.B:</span> {{dataItem.DateOfBirth |
+                        date:'dd-MM-yyyy'}}
+                        </p>
+                      </div>
+                      <div class="col-md-5">
+                        <p class="m-0" style="font-family: Roboto-Regular; font-weight: 100;">
+                          <span style="font-family: Roboto-Medium; "> Designation:</span>
+                          {{dataItem.Designation_Name}} - {{dataItem.CurrentGradeBPS}}</p>
+                        <p class="m-0" *ngIf="dataItem.Designation_Name !== dataItem.WDesignation_Name"
+                          style="font-family: Roboto-Regular; font-weight: 100;">
+                          <span style="font-family: Roboto-Medium; ">
+                            Working Designation:</span>
+                          {{dataItem.WDesignation_Name}}
+                        </p>
+                      </div>
+                      <div class="col-md-3">
+                        <p class="m-0" style="font-family: Roboto-Regular; font-weight: 100;">
+                          <span style="font-family: Roboto-Medium; "> Status:</span>
+                          {{dataItem.StatusName}}</p>
+                        <p class="m-0" style="font-family: Roboto-Regular; font-weight: 100;">
+                          <span style="font-family: Roboto-Medium; ">
+                            Cadre:</span> {{dataItem.Cadre_Name}}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div> -->
+    </div>
+    <div class="animated fadeIn"
+      *ngIf="showLog && vpMaster.HF_Id > 0 && vpMaster.TotalSanctioned > 0 && vpMaster.Desg_Id > 0 && vpMaster.PostType_Id > 0">
+      <hr>
+      <div class="content-heading mb-2" id="deptInfo">
+        Vacancy Log <button kendoButton class="pull-right" (click)="systemLog = !systemLog" [primary]="true"
+          look="outline">{{systemLog ? 'Vacancy' : 'System'}} Log</button>
+      </div>
+      <div class="animated fadeIn" *ngIf="vpMasterLogs.length > 0 && !systemLog">
+        <kendo-grid [data]="vpMasterLogs" [resizable]="true">
+          <kendo-grid-column width="5" field="asd" title="Sr." [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              {{(rowIndex + 1)}}
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column width="25" field="SanctionedAfter" title="Sanctioned" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p class="m-0" *ngIf="!dataItem.SanctionedBefore && !dataItem.SanctionedAfter">
+                {{vpMaster.TotalSanctioned}}
+              </p>
+              <p class="m-0" *ngIf="dataItem.SanctionedBefore || dataItem.SanctionedAfter">
+                {{dataItem.SanctionedBefore}} <i class="fa fa-arrow-right font-sm"></i> {{dataItem.SanctionedAfter}}
+                <small class="pull-right"
+                  [ngClass]="dataItem.SanctionedBefore < dataItem.SanctionedAfter ? 'text-success' : 'text-danger'">
+                  <i class="fa"
+                    [ngClass]="dataItem.SanctionedBefore < dataItem.SanctionedAfter ? 'fa-arrow-up' : 'fa-arrow-down'"></i>&nbsp;
+                  {{dataItem.SanctionedBefore < dataItem.SanctionedAfter ? '+' : '-'}}{{dataItem.SanctionedBefore > dataItem.SanctionedAfter ? (dataItem.SanctionedBefore - dataItem.SanctionedAfter) : dataItem.SanctionedAfter - dataItem.SanctionedBefore}}
+                </small>
+              </p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column width="25" field="FilledAfter" title="Filled" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p class="m-0" *ngIf="!dataItem.FilledBefore && !dataItem.FilledAfter">
+                {{vpMaster.TotalWorking}}
+              </p>
+              <p class="m-0" *ngIf="dataItem.FilledBefore || dataItem.FilledAfter">
+                {{dataItem.FilledBefore}} <i class="fa fa-arrow-right font-sm"></i> {{dataItem.FilledAfter}}
+                <small class="pull-right"
+                  [ngClass]="dataItem.FilledBefore < dataItem.FilledAfter ? 'text-success' : 'text-danger'">
+                  <i class="fa"
+                    [ngClass]="dataItem.FilledBefore < dataItem.FilledAfter ? 'fa-arrow-up' : 'fa-arrow-down'"></i>&nbsp;
+                  {{dataItem.FilledBefore < dataItem.FilledAfter ? '+' : '-'}}{{dataItem.FilledBefore > dataItem.FilledAfter ? (dataItem.FilledBefore - dataItem.FilledAfter) : dataItem.FilledAfter - dataItem.FilledBefore}}
+                </small>
+              </p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column width="20" field="CreatedBy" title="User" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p class="m-0">
+                {{dataItem.CreatedBy.replace('dpd', 'Admin')}}
+              </p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column width="25" field="DateTime" title="Date Time" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p class="m-0">
+                {{dataItem.DateTime | date:'hh:mm a dd/MM/yyyy'}}
+              </p>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+      <div class="animated fadeIn" *ngIf="entityModifiedLogs.length > 0 && systemLog">
+        <kendo-grid [data]="entityModifiedLogs" [resizable]="true">
+          <kendo-grid-column width="5" field="asd" title="Sr." [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              {{(rowIndex + 1)}}
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column width="25" field="DateTime" title="Date Time" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p class="m-0">
+                {{dataItem.Modified_Date | date:'hh:mm a dd/MM/yyyy'}}
+              </p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column width="20" field="CreatedBy" title="User" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p class="m-0">
+                {{dataItem.UserName ? dataItem.UserName.replace('dpd', 'Admin') : ''}}
+              </p>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column width="50" field="Description" title="Remarks" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p class="m-0">
+                {{dataItem.Description ? dataItem.Description.replace('EmpMode_Id : 3', 'Adhoc changed')
+                .replace('EmpMode_Id : 13', 'Regular changed')
+                .replace('EmpMode_Id : 6', 'Contract changed')
+                .replace('EmpMode_Id : 11', 'On Pay Scale')
+                .replace('EmpMode_Id :', 'Filled changed, Employment Mode:')
+                .replace('TotalWorkingAllBefore', 'Filled')
+                .replace(',TotalWorkingAllAfter:', ' > ') : ''}} <span
+                  *ngIf="dataItem.Description == 'Order Generated'">
+                  - No. {{dataItem.orderSum}}
+                </span>
+              </p>
+
+            </ng-template>
+          </kendo-grid-column>
+          <!--    <kendo-grid-column width="20" field="FilledAfter" title="Filled" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p class="m-0">
+                {{dataItem.FilledBefore}}<i class="fa fa-cart-arrow-down"></i>{{dataItem.FilledAfter}} 
+                <small class="pull-right" [ngClass]="dataItem.FilledBefore < dataItem.FilledAfter ? 'text-success' : 'text-danger'">
+                  <i class="fa" [ngClass]="dataItem.FilledBefore < dataItem.FilledAfter ? 'fa-arrow-up' : 'fa-arrow-down'"></i>&nbsp;
+                  {{dataItem.FilledBefore < dataItem.FilledAfter ? '+' : '-'}}{{dataItem.FilledBefore > dataItem.FilledAfter ? (dataItem.FilledBefore - dataItem.FilledAfter) : dataItem.FilledAfter - dataItem.FilledBefore}}
+                </small>
+              </p>
+            </ng-template>
+          </kendo-grid-column> -->
+
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="loadingVpMaster" style="height: 500px !important;">
+    <div class="k-i-loading"></div>
+  </div>
+  <kendo-dialog-actions
+    *ngIf="profilesWindow.dialogOpened && showVacancyControls && !filledExceed && !showLog && !showProfile && !loadingVpMaster && currentUser.RoleName != 'HRView'"
+    class="animated fadeIn">
+    <kendo-buttongroup [width]="'100%'" style="padding: 10px 15px !important;">
+      <button kendoButton ladda style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;"
+        *ngIf="!currentUser.UserName.toLowerCase().startsWith('ceo.') && currentUser.RoleName != 'Deputy Secretary' && currentUser.RoleName != 'Facilitation Centre' && currentUser.RoleName != 'Hisdu Order Team' && (!userRight || (userRight && userRight.AddVacancy)) && !saving"
+        class="action-btn-success" primary="true" (click)="saveVacancy()"><i class="fa fa-save"></i>
+        Save</button>
+      <button kendoButton ladda style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;"
+        *ngIf="currentUser.UserName == 'ordercell' && !saving" class="action-btn-success" primary="true"
+        (click)="saveVacancy()"><i class="fa fa-save"></i> Save</button>
+      <button kendoButton ladda style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;"
+        *ngIf="currentUser.UserName.toLowerCase().startsWith('ceo.') && healthFacility?.HFTypeCode != '011' && healthFacility?.HFTypeCode != '012' && healthFacility?.HFAC != 2 && !saving"
+        class="action-btn-success" primary="true" (click)="saveVacancy()"><i class="fa fa-save"></i> Save</button>
+
+      <button kendoButton style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;" *ngIf="saving"
+        [ladda]="true" data-style="zoom-in" class="action-btn-success-load"></button>
+
+      <button kendoButton ladda style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;"
+        (click)="removeVacancy()" class="action-btn-danger"><i class="fa fa-trash"></i> Remove</button>
+      <button kendoButton ladda style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;"
+        *ngIf="currentUser.UserName.toLowerCase().startsWith('ceo.') && healthFacility?.HFTypeCode != '011' && healthFacility?.HFTypeCode != '012' && healthFacility?.HFAC != 2 && !removing"
+        class="action-btn-danger" (click)="removeVacancy()"><i class="fa fa-trash"></i> Remove</button>
+
+      <button kendoButton style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;"
+        *ngIf="removing" [ladda]="true" data-style="zoom-in" class="action-btn-danger-load"></button>
+
+      <button kendoButton style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;"
+        class="action-btn-secondary" ladda (click)="closeWindow()"><i class="fa fa-times"></i> Close</button>
+    </kendo-buttongroup>
+  </kendo-dialog-actions>
+
+</kendo-dialog>
+
+
+
+
+
+<kendo-excelexport [data]="vacancy" [fileName]="'Vacancy_' + healthFacility?.HFTypeName + '.xlsx'" #excelexport>
+  <kendo-excelexport-column field="DsgName" title="Designation"></kendo-excelexport-column>
+  <kendo-excelexport-column field="TotalSanctioned" title="Sanctioned"></kendo-excelexport-column>
+  <kendo-excelexport-column field="TotalWorking" title="Filled"></kendo-excelexport-column>
+  <kendo-excelexport-column field="Regular" title="Regular"></kendo-excelexport-column>
+  <kendo-excelexport-column field="Adhoc" title="Adhoc"></kendo-excelexport-column>
+  <kendo-excelexport-column field="Contract" title="Contract"></kendo-excelexport-column>
+  <kendo-excelexport-column field="PHFMC" title="PHFMC"></kendo-excelexport-column>
+  <kendo-excelexport-column field="Vacant" title="Vacant"></kendo-excelexport-column>
+  <kendo-excelexport-column field="WorkingProfiles" title="Profile"></kendo-excelexport-column>
+  <kendo-excelexport-column field="CadreName" title="Cadre"></kendo-excelexport-column>
+  <kendo-excelexport-column field="BPSWorking" title="BPS"></kendo-excelexport-column>
+  <kendo-excelexport-column field="PostTypeName" title="Post Type"></kendo-excelexport-column>
+  <!-- <kendo-excelexport-column field="DistrictName" title="District"></kendo-excelexport-column>
+  <kendo-excelexport-column field="TehsilName" title="Tehsil"></kendo-excelexport-column>
+  <kendo-excelexport-column field="HFName" title="Health Facility"></kendo-excelexport-column>
+  <kendo-excelexport-column field="HFMISCode" title="HFMIS Code"></kendo-excelexport-column> -->
+  <kendo-excelexport-column field="Created_By" title="Created By"></kendo-excelexport-column>
+  <kendo-excelexport-column field="Created_Date" title="Created Date"></kendo-excelexport-column>
+  <kendo-excelexport-column field="Last_Modified_By" title="Last Modified By"></kendo-excelexport-column>
+  <kendo-excelexport-column field="Modified_Date" title="Modified Date"></kendo-excelexport-column>
+</kendo-excelexport>

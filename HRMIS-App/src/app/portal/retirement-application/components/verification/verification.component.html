@@ -1,0 +1,431 @@
+<div class="animated fadeIn">
+  <div class="row" *ngIf="!application || !application.Id || application.Status_Id == 9">
+    <div class="col-md-7">
+      <div class="content-heading animated fadeIn">
+        Upload Documents
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="content-heading animated fadeIn">
+        Recently Uploaded ({{applicationAttachments.length}})
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="animated fadeIn">
+    <div *ngIf="!profile" class="k-i-loading"></div>
+    <div class="animated fadeIn" *ngIf="profile">
+      <div class="row" *ngIf="!application || !application.Id || application.Status_Id == 9">
+        <div class="col-md-12 col-sm-12">
+          <div class="animated fadeIn">
+            <div class="jumbotron" *ngIf="showMessage">
+              <h3>{{showMessage}}</h3>
+            </div>
+            <div *ngIf="!showMessage">
+              <div class="row">
+                <div class="col-md-7">
+                  <div style="height: 64vh;overflow-y: scroll;">
+                    <div class="row mx-0">
+                      <div class="col-md-6 animated fadeIn" *ngFor="let doc of applicationDocuments; let i = index;">
+                        <div class=" p-2 my-2 bg-white border">
+                          <label class="k-form-field">
+                            <span><strong class="p-strong">{{(i + 1)}}. {{doc.Name}}</strong>&nbsp;<small><i
+                                  class="text-success cursor-p"><a
+                                    [href]="doc.Name == 'Affidavit' ? 'http://localhost:8913/Uploads/Files/ApplicationAttachments/affidavit.pdf' : 'http://localhost:4200/qweqwe'"
+                                    target="_black">specimen</a></i></small>
+                            </span>
+                            <span><input type="checkbox" disabled [(ngModel)]="doc.attached"
+                                class="k-checkbox pull-right" /></span>
+                            <input type="file" [ngClass]="doc.attached ? 'text-success p-strong' : ''"
+                              (change)="selectFile($event, doc)" style="width: 100%;" [name]="doc.Name">
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-md-8">
+                      <button kendoButton primary="true" class="btn-lg btn-block"
+                        *ngIf="!showMessage && totalDocsRequired != applicationAttachments.length" (click)="onSubmit()"
+                        [disabled]="" [ladda]="savingApplication" data-style="zoom-in"><i class="fa fa-upload"></i>
+                        Upload
+                        Documents</button>
+                    </div>
+                    <div class="col-md-4">
+                      <button kendoButton primary="true" class="btn-lg btn-block" (click)="logout()" [disabled]="" ladda
+                        look="outline"><i class="fa fa-sign-out"></i>
+                        Logout</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-5">
+                  <div style="height: 64vh;overflow-y: scroll;">
+                    <div class="row mx-0" *ngIf="applicationAttachments.length > 0">
+                      <!--  <div class="col-md-12">
+                      <div id="documents">
+                        <div class="content-heading mb-2">
+                          Documents <small>({{applicationAttachments.length}})</small>
+                        </div>
+                      </div>
+                    </div> -->
+                      <div class="col-md-12">
+                        <div class="d-flex flex-wrap">
+                          <div *ngFor="let doc of applicationAttachments;let i = index;">
+                            <div class="mx-2 mb-2" *ngIf="doc.Id" style="cursor: pointer !important;"
+                              (click)="openWindow(doc.UploadPath, i, doc.Id)">
+                              <img width="100px" height="125px" class="border"
+                                [src]="'http://localhost:8913/' + doc.UploadPath" alt="">
+                              <div class="text-center mt-1">
+                                <small class="p-strong">{{doc.DocName}}</small>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr>
+                  <div class="row" *ngIf="application?.Id && totalDocsRequired == applicationAttachments.length">
+                    <div class="col-md-12">
+                      <button kendoButton primary="true" class="btn-lg btn-block" *ngIf="!showMessage"
+                        (click)="finalizeApplication()" [disabled]="" [ladda]="savingApplication"
+                        data-style="zoom-in"><i class="fa fa-upload"></i> Finalize Application</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <!--    <hr>
+              <button kendoButton primary="true" class="btn-lg btn-block" *ngIf="!showMessage" (click)="onSubmit()"
+                [disabled]="" [ladda]="savingApplication" data-style="zoom-in"><i class="fa fa-upload"></i> Upload
+                Documents</button>
+              <button kendoButton primary="true" class="btn-lg btn-block" *ngIf="showMessage" (click)="logout()"
+                [disabled]="" [ladda]="savingApplication" look="outline" data-style="zoom-in"><i
+                  class="fa fa-sign-out"></i>
+                Logout</button> -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row"
+        *ngIf="application && application.Id > 0 && application.Status_Id != 9 && !savingApplication && totalDocsRequired == applicationAttachments.length">
+        <div class="col-md-6 offset-md-2">
+          <button kendoButton primary="true" class="btn-lg btn-block" (click)="printApplication()"
+            [ladda]="savingApplication" data-style="zoom-in"><i class="fa fa-print"></i>
+            Print</button>
+        </div>
+        <div class="col-md-2">
+          <button kendoButton primary="true" class="btn-lg btn-block" (click)="logout()" [disabled]="" ladda
+            look="outline"><i class="fa fa-sign-out"></i>
+            Logout</button>
+        </div>
+      </div>
+      <hr>
+      <div class="row animated fadeIn"
+        *ngIf="application && application.Id > 0 && application.Status_Id != 9 && !savingApplication && totalDocsRequired == applicationAttachments.length">
+        <div class="col-md-8 offset-md-2 border-primary">
+          <div style="height: 72vh;overflow-y: scroll;">
+            <div class="page preview" id="applicationPrint">
+              <div class="application-page">
+
+                <table border="0" class="header-pshealth" cellspacing="0">
+                  <tbody>
+                    <tr>
+                      <td class="gop-logo-a4-header"><img alt="Punjab Government Log"
+                          src="http://hrmis.pshealthpunjab.gov.pk/assets/img/brand/govlogoUpdated.png" />
+                      </td>
+                      <td class="pshealth-right-a4-td-header">
+                        <div class="pshealth-right-a4-text-header"><strong class="p-strong">GOVERNMENT OF THE
+                            PUNJAB<br />
+                            PRIMARY &amp; SECONDARY HEALTHCARE<br />
+                            DEPARTMENT </strong><br />
+                          Dated Lahore, {{application.Created_Date | date:'dd-MM-yyyy'}}</div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="2">
+                        &nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td class="app-type-preview" colspan="2">
+                        <p *ngIf="application.ApplicationSource_Id != 5"> <strong class="p-strong"><strong
+                              class="p-strong">{{capitalize(application.ApplicationTypeName)}}
+                              #
+                              {{application.TrackingNumber
+                        ?
+                        application.TrackingNumber : '00000'}}</strong> </strong></p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <table border="0" *ngIf="application.ApplicationType_Id != 11 && application.ApplicationSource_Id != 5"
+                  cellspacing="0" class="applicant-information">
+                  <tbody>
+                    <tr>
+                      <td colspan="4" class="applicant-info-heading">
+                        <strong class="p-strong">Applicant Information</strong></td>
+                    </tr>
+                    <tr>
+                      <td class="applicant-info-detail-1">
+                        <p class="mb-0 mt-2"> <strong class="p-strong">Name </strong></p>
+                        <p class="mb-0"> <strong class="p-strong">Father Name </strong></p>
+                        <p class="mb-0" *ngIf="application.Department_Id && application.Department_Id != 25">
+                          <strong class="p-strong">Department
+                          </strong></p>
+                      </td>
+                      <td class="applicant-info-detail-2">
+                        <p class="mb-0 mt-2">{{application.EmployeeName ? application.EmployeeName : '-'}}</p>
+                        <p class="mb-0">{{application.FatherName ? application.FatherName : '-'}}</p>
+                        <p class="mb-0" *ngIf="application.Department_Id && application.Department_Id != 25">{{application.DepartmentName
+                    ?
+                    application.DepartmentName : '-'}}</p>
+                      </td>
+                      <td class="applicant-info-detail-3">
+                        <p class="mb-0 mt-2"> <strong class="p-strong">CNIC </strong></p>
+
+                        <p class="mb-0" *ngIf="application.MobileNo"> <strong class="p-strong">Contact </strong></p>
+                      </td>
+                      <td class="applicant-info-detail-4">
+                        <p class="mb-0 mt-2">{{application.CNIC ? dashifyCNIC(application.CNIC) : '-'}} </p>
+                        <p class="mb-0" *ngIf="application.MobileNo">
+                          {{application.MobileNo ? application.MobileNo : ''}}
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="1">
+                        <p class="mb-0"><strong class="p-strong">Designation </strong></p>
+                      </td>
+                      <td colspan="3">
+                        <p class="mb-0">{{application.designationName ? application.designationName : '-'}}</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="1">
+                        <p><strong class="p-strong">Health Facility </strong></p>
+                      </td>
+                      <td colspan="3">
+                        <p>{{application.HealthFacilityName ? application.HealthFacilityName : '-'}}</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <table border="0" *ngIf="application.ApplicationSource_Id == 5" cellspacing="0"
+                  class="applicant-information">
+                  <tbody>
+                    <tr>
+                      <td colspan="4" class="applicant-info-heading">
+                        <strong class="p-strong">R & I Branch Applicant Information</strong></td>
+                    </tr>
+                    <tr>
+                      <td class="applicant-info-detail-1">
+                        <p class="mb-0 mt-2"> <strong class="p-strong">Dispatch # </strong></p>
+                        <p class="mb-0"> <strong class="p-strong">Dated </strong></p>
+                        <p class="mb-0"> <strong class="p-strong">CNIC </strong></p>
+                        <p class="mb-0"> <strong class="p-strong">Subject </strong></p>
+                        <p class="mb-0"> <strong class="p-strong">Address </strong></p>
+                      </td>
+                      <td class="applicant-info-detail-2">
+                        <p class="mb-0 mt-2">{{application.DispatchNumber ? application.DispatchNumber : '-'}} </p>
+                        <p class="mb-0">
+                          {{application.DispatchDated ? (application.DispatchDated | date:'dd/MM/yyyy') : '-'}} </p>
+                        <p class="mb-0">{{application.CNIC ? dashifyCNIC(application.CNIC) : '-'}}</p>
+                        <p class="mb-0">{{application.DispatchSubject ? application.DispatchSubject : '-'}}</p>
+                        <p class="mb-0">{{application.DispatchFrom ? application.DispatchFrom : '-'}}</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <table border="0" *ngIf="application.ApplicationType_Id == 1 || application.ApplicationType_Id == 2 || 
+                  application.ApplicationType_Id == 3 || application.ApplicationType_Id == 4 || 
+                  application.ApplicationType_Id == 9 || application.ApplicationType_Id == 10" cellspacing="0"
+                  class="application-type-detail-preview">
+                  <tbody>
+                    <tr>
+                      <td colspan="2" class="application-type-detail-preview-heading">
+                        <strong class="p-strong">{{application.ApplicationTypeName}} Detail</strong> </td>
+                    </tr>
+                    <tr *ngIf="application.ApplicationType_Id == 1">
+                      <td>
+                        <p class="mb-0 mt-2"> <strong class="p-strong">Leave Type</strong>
+                          &nbsp;<u>{{application.leaveType}}</u></p>
+                        <p> <strong class="p-strong">From Date</strong>
+                          &nbsp;<u>{{application.FromDate | date:'dd/MM/yyyy'}}</u></p>
+                      </td>
+                      <td>
+                        <p class="mb-0 mt-2"> <strong class="p-strong">Period </strong> &nbsp;{{application.TotalDays}}
+                          day{{application.TotalDays
+                    <= 1 ? '' : 's' }} </p>
+                        <p> <strong class="p-strong">To Date</strong>
+                          &nbsp;<u>{{application.ToDate | date:'dd/MM/yyyy'}}</u></p>
+                      </td>
+                    </tr>
+                    <tr *ngIf="application.ApplicationType_Id == 2">
+                      <td class="w-20">
+                        <p class="mb-0 mt-2"> <strong class="p-strong">Type</strong></p>
+                        <p class="mb-0"> <strong class="p-strong">From</strong></p>
+                        <p> <strong class="p-strong">To</strong></p>
+                      </td>
+                      <td class="w-80">
+                        <p class="mb-0 mt-2"><u>General Transfer</u></p>
+                        <p class="mb-0">{{application.fromHealthFacility ? application.fromHealthFacility : '-'}}</p>
+                        <p>{{application.toHealthFacility ? application.toHealthFacility : '-'}}</p>
+                      </td>
+                    </tr>
+                    <tr *ngIf="application.ApplicationType_Id == 3">
+                      <td class="w-20">
+                        <p class="mb-0 mt-2"> <strong class="p-strong">Seniority #</strong></p>
+                        <p> <strong class="p-strong">Current Scale</strong></p>
+                      </td>
+                      <td class="w-80">
+                        <p class="mb-0 mt-2">{{application.SeniorityNumber ? application.SeniorityNumber : '-'}}</p>
+                        <p>{{application.CurrentScale ? application.CurrentScale : '-'}}</p>
+                      </td>
+                    </tr>
+                    <tr *ngIf="application.ApplicationType_Id == 4">
+                      <td class="w-20">
+                        <p class="mt-2"> <strong class="p-strong">Type</strong></p>
+                      </td>
+                      <td class="w-80">
+                        <p class="mt-2">{{application.RetirementType_Id ? application.RetirementType_Id : '-'}}</p>
+                      </td>
+                    </tr>
+                    <tr *ngIf="application.ApplicationType_Id == 8">
+                      <td class="w-20">
+                        <p class="mb-0 mt-2"> <strong class="p-strong">Designation</strong></p>
+                        <p> <strong class="p-strong">Health Facility</strong></p>
+                      </td>
+                      <td class="w-80">
+                        <p class="mb-0 mt-2">{{application.toDesignationName ? application.toDesignationName : '-'}}</p>
+                        <p>{{application.toHealthFacility ? application.toHealthFacility : '-'}}</p>
+                      </td>
+                    </tr>
+                    <tr *ngIf="application.ApplicationType_Id == 10">
+                      <td class="w-30">
+                        <p class="mt-2"> <strong class="p-strong">Contract Expire Date</strong></p>
+                      </td>
+                      <td class="w-70">
+                        <p class="mt-2">{{application.AdhocExpireDate | date:'dd/MM/yyyy'}}</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <table *ngIf="applicationAttachments?.length > 0" border="0" cellspacing="0" class="attached-document">
+                  <tbody>
+                    <tr>
+                      <td colspan="2" class="attached-document-heading">
+                        <strong class="p-strong">Scanned Documents</strong></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2">
+                        <p class="mt-2">
+                          <span *ngFor="let attachment of applicationAttachments;let i = index;">
+                            <strong class="p-strong">{{(i + 1) + ' - '}}</strong>
+                            <span (click)="openWindow(attachment.UploadPath, i, attachment.Id)"
+                              style="cursor:pointer;">{{attachment.DocName}}</span>
+                            <br *ngIf="i == 4"> &nbsp;
+                          </span>
+                        </p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <table *ngIf="application.Remarks" border="0" cellspacing="0" class="remarks-preview">
+                  <tbody>
+                    <tr>
+                      <td colspan="2" class="remarks-heading">
+                        <strong class="p-strong">Remarks</strong> </td>
+                    </tr>
+                    <tr>
+                      <td colspan="2">
+                        <p class="mt-2">{{application.Remarks}}</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <br>
+                <table border="0" cellspacing="0" class="info-application-preview">
+                  <tbody>
+                    <tr>
+                      <td colspan="3" class="info-application-preview-heading">
+                        <strong class="p-strong">Tracking ID :
+                          {{application.TrackingNumber ? application.TrackingNumber : '0000'}}</strong>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="info-application-preview-left">
+                        <p class="ml-1 mb-0 mt-2"><small><i>Track this application through Department's official Website
+                              or
+                              Mobile App</i></small></p>
+                        <p class="ml-1 mb-0"><small><i>Website link: <strong
+                                class="p-strong">pshealthpunjab.gov.pk</strong></i></small></p>
+                        <p class="ml-1 mb-0"><small><i>Mobile App: <strong class="p-strong">FTS -
+                                hisduapps.pshealthpunjab.gov.pk</strong></i></small></p>
+                        <p class="ml-1"><small><i>Helpline: <strong>1033</strong></i></small></p>
+                      </td>
+                      <td class="info-application-preview-right">
+                        <img *ngIf="barcodeImgSrc" alt="IMAGE AREA" class="mb-2 mt-2" [src]="barcodeSrc()" />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <table border="0" cellspacing="0" class="application-route-detail">
+                  <tbody>
+                    <tr>
+                      <td class="application-route-detail-header">
+                        <strong class="p-strong">Marked To</strong> </td>
+                      <td class="application-route-detail-header">
+                        <strong class="p-strong">Date Time</strong>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="w-50">
+                        <p class="mt-10">{{application.ForwardingOfficerName ? application.ForwardingOfficerName
+                    : '____________________________'}}</p>
+                      </td>
+                      <td class="w-50">
+                        <p class="mt-10">{{application.Created_Date | date:'dd/MM/yyyy, h:mm a'}}</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--   <div class="col-md-8 offset-md-2 border-primary">
+          <app-application-details [trackingNo]="application.TrackingNumber"></app-application-details>
+        </div> -->
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+<kendo-dialog [title]="'Application Attachment'" *ngIf="imageWindowOpened" [minWidth]="'450'" [width]="'950'"
+  (close)="closeWindow()" [height]="'585'">
+  <div class="row">
+    <!--  <div class="col-md-12" *ngIf="application.Users_Id == user.Id">
+      <button class="btn btn-danger pull-right" (click)="removeApplicationAttachment()" data-style="zoom-in"
+        [ladda]="removingApplicationAttachment">
+        <i class="fa fa-times" style="cursor: pointer;"></i> Remove
+      </button>
+    </div>
+    <hr *ngIf="application.Users_Id == user.Id"> -->
+    <div class="col-md-12">
+      <ngx-image-zoom [thumbImage]="'http://localhost:8913/' + imagePath"
+        [fullImage]="'http://localhost:8913/' + imagePath" [magnification]="'2'" [zoomMode]="'toggle'">
+      </ngx-image-zoom>
+    </div>
+  </div>
+</kendo-dialog>

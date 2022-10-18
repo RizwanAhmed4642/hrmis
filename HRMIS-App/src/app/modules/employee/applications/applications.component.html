@@ -1,0 +1,89 @@
+<!-- <pre *ngFor="let order of orders; let i = index;">{{order | json}}</pre>
+<hr> -->
+
+<div *ngIf="!profile" class="k-i-loading"></div>
+<div class="animated fadeIn" *ngIf="profile">
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3">
+        {{'My Applications'}}
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12" *ngIf="currentUser.RoleName != 'HRView'">
+      <div class="top-controls" *ngIf="!currentUser.UserName.toLowerCase().startsWith('ceo.')">
+        <button kendoButton [primary]="true" routerLink="/e/apply">Apply for Transfer</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="animated fadeIn" *ngIf="profile && recentApplications.length > 0">
+  <div class="row">
+    <div class="col-md-12">
+      <kendo-grid [data]="recentApplications" [resizable]="true">
+        <kendo-grid-column [width]="5" field="asd" title="No." [headerClass]="'grid-header-text-center'"
+          [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            {{(rowIndex + 1)}}.
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="DateTime" [title]="'Date'" width="20" [headerClass]="'grid-header-text-center'"
+          [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="m-0"><strong> Tracking # </strong> {{dataItem.TrackingNumber}} <i class="fa fa-barcode"></i></p>
+            <p class="m-0"><strong> Status: </strong>
+              <u>{{dataItem.StatusName}}</u>
+            </p>
+            <p class="m-0">{{ dataItem.Created_Date | date:'dd/MM/yyyy hh:mm a' }}</p>
+          </ng-template>
+        </kendo-grid-column>
+        <!--   <kendo-grid-column field="DateTime" [title]="'Time'" width="10" [headerClass]="'grid-header-text-center'"
+    [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+      <p class="m-0 text-center">{{ dataItem.Created_Date | date:'h:mm a' }}</p>
+    </ng-template>
+  </kendo-grid-column> -->
+        <kendo-grid-column field="ActionName" [title]="'Description'" width="60" [headerClass]="'grid-header-text'"
+          [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <div class="d-flex flex-column width-full" style="font-weight: 100 !important;">
+              <div *ngIf="dataItem.ApplicationTypeName">
+                {{dataItem.ApplicationTypeName}}
+              </div>
+              <!-- General Transfer -->
+              <div *ngIf="dataItem.ApplicationType_Id == 2">
+                From:
+                <strong style="font-family: Roboto-Bold !important;"
+                  class="no-underline text-bold wb-break-all d-inline-block"
+                  href="">{{dataItem.fromHealthFacility}}</strong>
+              </div>
+              <div *ngIf="dataItem.ApplicationType_Id == 2">
+                To:
+                <strong style="font-family: Roboto-Bold !important;"
+                  class="no-underline text-bold wb-break-all d-inline-block"
+                  href="">{{dataItem.toHealthFacility}}</strong>
+                <div></div>
+              </div>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="ToStatus" width="15" title="Status" [headerClass]="'grid-header-text'"
+          [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <button *ngIf="!dataItem.MutualCNIC"
+              [routerLink]="'/application/transfer-applications/' + dataItem.ToHF_Id + '/' + dataItem.ToDesignation_Id"
+              kendoButton [primary]="true" target="_blank" [look]="'outline'" class="ml-2 animated fadeIn btn-sm">View
+              Result</button>
+            <button *ngIf="dataItem.MutualCNIC"
+              [routerLink]="'/fts/application/' + dataItem.Id + '/' + dataItem.TrackingNumber" kendoButton [primary]="true"
+              target="_blank" [look]="'outline'" class="ml-2 animated fadeIn btn-sm">View</button>
+          </ng-template>
+        </kendo-grid-column>
+      </kendo-grid>
+    </div>
+  </div>
+</div>
+
+<kendo-dialog [title]="selectedApplication.EmployeeName" *ngIf="selectedApplication && viewOrderWindow"
+  [minWidth]="'450'" [height]="'585'" [width]="'830'" (close)="closeViewOrderWindow()">
+  <div class="order-view-div" [innerHTML]="transform(selectedApplication.RawText)"></div>
+</kendo-dialog>

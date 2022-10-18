@@ -1,0 +1,107 @@
+<div class="animated fadeIn mt-5">
+  <!-- <div class="row">
+    <div class="col-md-4 col-xs-12">
+      <div class="top-h3">
+        Dashboard
+      </div>
+    </div>
+  </div> -->
+
+  <tabset>
+    <tab heading="\" (selectTab)="onTabSelect(null)">
+    </tab>
+    <tab heading="CO 1" (selectTab)="onTabSelect('b2d606b3-ff84-40f0-96fa-ff3228326259')">
+    </tab>
+    <tab heading="CO 2" (selectTab)="onTabSelect('d97140d3-14e9-4d0f-89c8-5a570d86fc55')">
+    </tab>
+    <tab heading="CO 3" (selectTab)="onTabSelect('fd7f3362-0da8-4844-a9f8-6d3960465cba')">
+    </tab>
+    <tab heading="CO 4" (selectTab)="onTabSelect('f505d7ee-7df0-42a6-8a58-21a8367086a0')">
+    </tab>
+    <tab heading="Department Report" (selectTab)="onTabSelect($event)">
+      <app-department-report></app-department-report>
+    </tab>
+  </tabset>
+  <div class="k-i-loading" *ngIf="loading"></div>
+  <div class="animated fadeIn" *ngIf="riBranchReport.length > 0 && totalSums && !loading">
+    <kendo-grid [data]="riBranchReport">
+      <kendo-grid-column field="ForwadingOfficerName" [title]="'Sr.'" width="30" [headerClass]="'grid-header-text'"
+        [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+          <p class="hoverable-table" (click)="cellCLicked(dataItem, column.field)">{{(rowIndex + 1)}}
+          </p>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column">
+          <p class="hoverable-table p-strong">
+          </p>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="ForwadingOfficerName" [title]="'Marked To Officer'" width="200"
+        [headerClass]="'grid-header-text'"
+        [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+          <p class="hoverable-table" (click)="cellCLicked(dataItem, column.field)">
+            {{dataItem.ForwadingOfficerName}}
+          </p>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column">
+          <p class="hoverable-table p-strong" (click)="colCLicked(column.field)">Total
+          </p>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="Total" title="Total" width="80" [headerClass]="'grid-header-text-center'"
+        [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+          <p class="hoverable-table" style="text-align: center;" (click)="cellCLicked(dataItem, column.field)">{{dataItem.Total ?
+          (dataItem.Total | number) : 0}}
+          </p>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column">
+          <p class="hoverable-table p-strong" style="text-align: center;" (click)="colCLicked(column.field)">
+            {{totalSums["Total"].sum | number}}
+          </p>
+        </ng-template>
+
+      </kendo-grid-column>
+      <kendo-grid-column field="Today" width="128" title="Today" [headerClass]="'grid-header-text-center'"
+        [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+          <p class="hoverable-table" style="text-align: center;" (click)="cellCLicked(dataItem, column.field)">{{dataItem.Today ?
+          (dataItem.Today | number) : 0}}
+          </p>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column">
+          <p class="hoverable-table p-strong" style="text-align: center;" (click)="colCLicked(column.field)">
+            {{totalSums["Today"].sum | number}}
+          </p>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="InProcess" width="100" title="In Process" [headerClass]="'grid-header-text-center'"
+        [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+          <p class="hoverable-table" style="text-align: center;" (click)="cellCLicked(dataItem, column.field)">{{dataItem.InProcess ?
+          (dataItem.InProcess | number) : 0}}
+          </p>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column">
+          <p class="hoverable-table p-strong" style="text-align: center;" (click)="colCLicked(column.field)">
+            {{totalSums["InProcess"].sum | number}}
+          </p>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="Disposed" width="120" title="Disposed" [headerClass]="'grid-header-text-center'"
+        [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+          <p class="hoverable-table" style="text-align: center;" (click)="cellCLicked(dataItem, column.field)">{{dataItem.Disposed ?
+          (dataItem.Disposed | number) : 0}}
+          </p>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column">
+          <p class="hoverable-table p-strong" style="text-align: center;" (click)="colCLicked(column.field)">
+            {{totalSums["Disposed"].sum | number}}
+          </p>
+        </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+  </div>
+</div>

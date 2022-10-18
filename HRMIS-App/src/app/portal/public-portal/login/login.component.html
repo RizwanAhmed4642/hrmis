@@ -1,0 +1,96 @@
+<div class="login-div">
+  <div class="animated fadeIn">
+    <div class="row">
+      <div class="col-md-12">
+        <p class="text-center mb-0"><i class="fa fa-info-circle text-success"></i> This portal is only for Regular
+          Consultants (BS-18) with 5 Years Service</p>
+        <p class="text-center">Please register your account for login</p>
+
+      </div>
+    </div>
+    <hr>
+    <!--  <div class="row">
+      <div class="col-md-12">
+        <h3 class="text-center">
+          Closed
+        </h3>
+      </div>
+    </div> -->
+    <div class="row">
+      <div class="col-md-7">
+        <h4 class="text-center">Account Register</h4>
+        <div class="row">
+          <div class="col-md-12">
+            <label class="k-form-field
+                      mt-2">
+              <span>CNIC <span class="text-danger">*</span></span>
+              <kendo-maskedtextbox [mask]="CnicMask" [(ngModel)]="user.Cnic" required>
+              </kendo-maskedtextbox>
+            </label>
+          </div>
+          <div class="col-md-12">
+            <label class="k-form-field
+                      mt-2">
+              <span>E-Mail <span class="text-danger">*</span> <span class="text-muted">&nbsp;(Password will be sent on
+                  Email)</span></span>
+              <input kendoTextBox type="email" [(ngModel)]="user.Email"
+                pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?">
+            </label>
+          </div>
+          <div class="col-md-12">
+            <label class="k-form-field
+                      mt-2">
+              <span>Mobile No. <span class="text-danger">*</span> <span class="text-muted">&nbsp;(Password will be sent
+                  on Number)</span></span>
+              <kendo-maskedtextbox [mask]="mobileMask" [(ngModel)]="user.PhoneNumber" required>
+              </kendo-maskedtextbox>
+            </label>
+          </div>
+          <div class="col-md-12 mt-2">
+            <label class="k-form-field">
+              <span class="animated fadeIn text-success" *ngIf="passwordGenerated">A System generated password has been
+                sent to
+                above email and mobile
+                number</span>
+              <span class="animated fadeIn text-danger" *ngIf="eligible == false">you are not eligible as per policy <br>
+              </span>
+              <button class="btn btn-so-primary" *ngIf="!passwordGenerated"
+                [disabled]="!user.Cnic || !user.Email || !user.PhoneNumber" (click)="getProfileAndVerify()"
+                [ladda]="generatingPassword" data-style="zoom-in" type="submit">Get
+                Password</button>
+            </label>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5" style="background: #e9e9e9;
+      padding: 10px;
+      border-radius: 5px;">
+        <h4 class="text-center">Account Login</h4>
+        <div class="row">
+          <div class="col-md-12">
+            <label class="k-form-field
+                      mt-2">
+              <span>CNIC</span>
+              <kendo-maskedtextbox [mask]="CnicMask" [(ngModel)]="user.Cnic" required>
+              </kendo-maskedtextbox>
+            </label>
+          </div>
+          <div class="col-md-12 animated fadeIn">
+            <label class="k-form-field mt-2">
+              <span>Password</span>
+              <input kendoTextBox type="password" (keyup.enter)="login()" [(ngModel)]="user.password">
+            </label>
+          </div>
+          <div class="col-md-12 mt-3">
+            <div class="register-wrapper">
+              <button class=" btn btn-so-primary btn-block" [disabled]="!user.Cnic || !user.password" (click)="login()"
+                [ladda]="sigingin" data-style="zoom-in">Sign
+                in</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

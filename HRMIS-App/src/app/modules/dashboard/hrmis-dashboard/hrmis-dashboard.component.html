@@ -1,0 +1,2291 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3">
+        Dashboard
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12"
+      *ngIf="currentUser.UserName == 'dpd' || currentUser.RoleName == 'SDP' || currentUser.UserName == 'so.toqeer'">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" [look]="'outline'" (click)="openWindow()">Add Profile to Pool</button>
+        <button kendoButton class="mr-2" [primary]="true" *ngIf="currentUser.UserName == 'so.toqeer'"
+          [routerLink]="'/vacancy-position/check'">Vacancy Status</button>
+        <!-- <button kendoButton [primary]="true"
+          *ngIf="currentUser.UserName == 'dpd' || currentUser.UserName.startsWith('sdp')" class="pull-right mr-2 ml-2"
+          [look]="'outline'" routerLink="/health-facility/new-facility"><i class="fa fa-plus"></i>&nbsp;New
+          Facility</button>
+        <button kendoButton [primary]="true"
+          *ngIf="currentUser.UserName == 'dpd' || currentUser.UserName.startsWith('sdp')" class="pull-right ml-2"
+          [look]="'outline'" routerLink="/health-facility/facility-staff"><i class="fa fa-plus"></i>&nbsp;New
+          Staff</button> -->
+        <!--  <button kendoButton class="mr-2" [primary]="true"
+          *ngIf="currentUser.UserName == 'dpd' || currentUser.RoleName == 'SDP' || currentUser.UserName == 'so.toqeer'"
+          [routerLink]="'/map'"><i class="fa fa-map"></i>&nbsp;Map</button> -->
+        <button *ngIf="currentUser.UserName == ''" class="mr-2" kendoButton
+          [routerLink]="'/adhoc-applications/verification'" [primary]="true">Adhoc Recruitments</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+<tabset>
+  <!--   <tab heading="File Tracking System" *ngIf="currentUser.UserName == 'dpd'">
+    <app-hrmis-puc-chart></app-hrmis-puc-chart>
+  </tab> -->
+  <!-- <tab heading="APMO Preferences" *ngIf="currentUser.UserName == 'dpd'">
+    <app-hrmis-puc-chart></app-hrmis-puc-chart>
+  </tab> -->
+  <tab heading="Search Tracking" *ngIf="currentUser.UserName == 'dpd'">
+    <div class="animated fadeIn">
+      <div class="row">
+        <div class="col-md-3 col-sm-12 control-col-st">
+          <label class="k-form-field">
+            <span>Enter Tracking No.</span>
+            <input type="text" #trackingSearchRef kendoTextBox (input)="showTrackingDetail = false"
+              (input)="trackingSearchRef.value?.length == 6 && searchApplication(trackingSearchRef.value)"
+              (keyup.enter)="searchApplication(trackingSearchRef.value)">
+          </label>
+        </div>
+        <div class="col-md-3 col-sm-12 control-col-end">
+          <label class="k-form-field mt-1">
+            <button kendoButton class="btn-block btn-align-v" [ladda]="searchingTrack" data-style="zoom-in"
+              (click)="searchApplication(trackingSearchRef.value)" [primary]="true">SEARCH</button>
+          </label>
+        </div>
+
+      </div>
+      <hr>
+      <app-application-details *ngIf="showTrackingDetail" [trackingNo]="trackingNumber"></app-application-details>
+    </div>
+  </tab>
+  <tab heading="PPSC Posting" *ngIf="currentUser.UserName == 'dpd' && 2 + 2 == 5">
+    <app-posting-report></app-posting-report>
+  </tab>
+  <tab heading="Department Report" *ngIf="currentUser.UserName == 'dpd'">
+    <!--  <div class="animated fadeIn">
+      <div class="row">
+        <div class="col-md-3 col-sm-12 control-col-st">
+          <label class="k-form-field">
+            <span>Select Date Range</span>
+            <kendo-daterange>
+              <label hidden>
+                <span class="label">Start</span>
+                <kendo-dateinput kendoDateRangeStartInput [(value)]="range.start"></kendo-dateinput>
+              </label>
+              <label hidden>
+                <span class="label">End</span>
+                <kendo-dateinput kendoDateRangeEndInput [(value)]="range.end"></kendo-dateinput>
+              </label>
+              <button #anchor [look]="'outline'" class="btn-block" (click)="popup.toggle()" kendoButton
+                [primary]="true">
+                <i class="fa fa-calendar"></i>&nbsp;Date Range
+              </button>
+              <kendo-daterange-popup id="popupcal" #popup [anchor]="anchor">
+                <ng-template kendoDateRangePopupTemplate>
+                  <div class="pt-2 pb-2 pl-4 pr-4">
+                    <span *ngIf="range.start"><strong>Start Date:</strong>&nbsp;<u>{{range.start | date:'d, MMMM -
+                        yyyy'}}</u>&nbsp;</span>
+                    <span *ngIf="range.end">&nbsp;<strong>End Date:</strong>&nbsp;<u>{{range.end | date:'d, MMMM -
+                        yyyy'}}</u></span>
+
+                    &nbsp; <button kendoButton class="animated fadeIn" *ngIf="range.start" [ladda]="loadingPSO"
+                      data-style="zoom-in" (click)="getDashboardFcAppFwdCounts()" [primary]="true">APPLY
+                      RANGE</button>
+                  </div>
+                  <kendo-multiviewcalendar kendoDateRangeSelection>
+                  </kendo-multiviewcalendar>
+                </ng-template>
+              </kendo-daterange-popup>
+            </kendo-daterange>
+          </label>
+        </div>
+        <div class="col-md-4 col-sm-12 control-col">
+          <label class="k-form-field">
+            <span>Select Program</span>
+            <kendo-dropdownlist [data]="dropDowns.programs" (valueChange)="dropdownValueChanged($event, 'program')"
+              [value]="dropDowns.selectedFiltersModel.program" [defaultItem]="dropDowns.defultFiltersModel.program">
+            </kendo-dropdownlist>
+          </label>
+        </div>
+        <div class="col-md-5 col-sm-12 control-col-end">
+          <input type="checkbox" id="liverep" [(ngModel)]="liveReporting" class="k-checkbox" />
+          <label class="k-checkbox-label" for="liverep">Live reporting</label>
+        </div>
+      </div>
+      <div class="row row-panel">
+        <div class="col-md-12">
+          <h6 class="p-2 animated fadeIn text-center dashboard-table-heading-custom">
+            Primary and Secondary Healthcare Department
+            <br *ngIf="range.start">
+            <small *ngIf="range.start" class="animated fadeIn">{{range.start | date:'dd/MM/yyyy'}} - {{range.end |
+              date:'dd/MM/yyyy'}}</small>
+          </h6>
+          <kendo-grid *ngIf="dashboardFcAppFwdCounts.length > 0 && !loadingPSO" [data]="dashboardFcAppFwdCounts">
+            <kendo-grid-column field="ApplicationType" [title]="'Office'" width="250" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLickedFc(dataItem, 0)">{{(rowIndex + 1)}}. {{dataItem.OfficerDesignation}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p (click)="colCLicked(column.field)">Total
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Total" title="Total" width="80" [headerClass]="'grid-header-text-center'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <p style="text-align: center;" (click)="cellCLickedFc(dataItem, 0)">{{(dataItem.Total ?
+                  dataItem.Total : 0) | number}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p style="text-align: center;" (click)="colCLicked(column.field)" class="p-strong">{{totalSums["Total"].sum | number}}
+                </p>
+              </ng-template>
+
+            </kendo-grid-column>
+            <kendo-grid-column field="NoProcessInitiated" width="128" title="No Process Initiated"
+              [headerClass]="'grid-header-text-center'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <p style="text-align: center;" (click)="cellCLickedFc(dataItem, 10)">{{dataItem.NoProcessInitiated ?
+                  dataItem.NoProcessInitiated : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p style="text-align: center;" (click)="colCLicked(column.field)" class="p-strong">{{totalSums["NoProcessInitiated"].sum
+                  | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="UnderProcess" width="100" title="Under Process"
+              [headerClass]="'grid-header-text-center'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <p style="text-align: center;" (click)="cellCLickedFc(dataItem, 1)">{{(dataItem.UnderProcess ?
+                  dataItem.UnderProcess : 0) | number}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p style="text-align: center;" (click)="colCLicked(column.field)" class="p-strong">{{totalSums["UnderProcess"].sum |
+                  number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Waiting_Documents" width="120" title="Waiting Documents"
+              [headerClass]="'grid-header-text-center'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <p style="text-align: center;" (click)="cellCLickedFc(dataItem, 8)">{{(dataItem.Waiting_Documents ?
+                  dataItem.Waiting_Documents : 0) | number}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p style="text-align: center;" (click)="colCLicked(column.field)" class="p-strong">{{totalSums["Waiting_Documents"].sum
+                  |
+                  number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="FileRequested" width="140" title="Pending File Requests"
+              [headerClass]="'grid-header-text-center'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <p style="text-align: center;" (click)="cellCLickedFc(dataItem, 111)">{{(dataItem.FileRequested ?
+                  dataItem.FileRequested : 0) | number}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p style="text-align: center;" (click)="colCLicked(column.field)" class="p-strong">{{totalSums["FileRequested"].sum |
+                  number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Approved" title="Approved" width="120" [headerClass]="'grid-header-text-center'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <p style="text-align: center;" (click)="cellCLickedFc(dataItem, 2)">{{((dataItem.Approved) ?
+                  (dataItem.Approved) : 0) | number}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p style="text-align: center;" (click)="colCLicked(column.field)">{{(totalSums["Approved"].sum)}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Rejected" title="Rejected" width="120" [headerClass]="'grid-header-text-center'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <p style="text-align: center;" (click)="cellCLickedFc(dataItem, 3)">{{((dataItem.Rejected) ?
+                  (dataItem.Rejected) : 0) | number}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p style="text-align: center;" (click)="colCLicked(column.field)">{{(totalSums["Rejected"].sum) |
+                  number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="FileReturned" width="140" title="Disposed"
+              [headerClass]="'grid-header-text-center'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <p style="text-align: center;" (click)="cellCLickedFc(dataItem, 4)">
+                  {{(dataItem.FileReturned +
+                  dataItem.AReturn + dataItem.RReturn) | number}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p style="text-align: center;" (click)="colCLicked(column.field)">{{(totalSums["FileReturned"].sum +
+                  totalSums["AReturn"].sum + totalSums["RReturn"].sum) | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+          </kendo-grid>
+        </div>
+      </div>
+      <div class="k-i-loading" *ngIf="loadingPSO"></div>
+    </div>
+ -->
+
+    <app-department-report></app-department-report>
+
+  </tab>
+  <tab heading="Health Facilities">
+    <br *ngIf="!currentUser.UserName.toLowerCase().startsWith('sdp')">
+    <div class="animated fadeIn" *ngIf="records.length > 0">
+      <div class="row">
+        <div class="col-md-12"
+          *ngIf="currentUser && currentUser.UserName == 'dpd' || currentUser.UserName == 'so.toqeer'">
+          <h6 class="p-2 text-center animated fadeIn dashboard-table-heading-custom">Primary & Secondary Health
+            Facilities</h6>
+          <kendo-grid [data]="records" style="width: 100%;" [resizable]="true">
+            <kendo-grid-column field="AreaName" [locked]="true"
+              [title]="currentUser?.HfmisCode.length == 1 ? 'Division' : currentUser?.HfmisCode.length == 3 ? 'District' : currentUser?.HfmisCode.length == 6 ? 'Tehsil' : 'Name'"
+              width="180" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '0')">{{(rowIndex + 1)}}. {{dataItem.AreaName}}
+                </p>
+              </ng-template>
+              <ng-template style="background-color: #fff;color: #000; border-bottom : 1px solid #c8ced3"
+                kendoGridFooterTemplate let-column="column">
+                <p class="text-center p-strong" pTooltip="Total">Total</p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="District_Headquarter_Hospital" title="DHQ" width="53"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '011')">{{dataItem.District_Headquarter_Hospital ?
+                  dataItem.District_Headquarter_Hospital : 0}}
+                </p>
+              </ng-template>
+              <ng-template style="background-color: #fff;color: #000; border-bottom : 1px solid #c8ced3"
+                kendoGridFooterTemplate let-column="column">
+                <p class="p-strong" class="p-strong">{{total["District_Headquarter_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+
+            </kendo-grid-column>
+            <kendo-grid-column field="Tehsil_Headquarter_Hospital" width="53" title="THQ"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '012')">{{dataItem.Tehsil_Headquarter_Hospital ?
+                  dataItem.Tehsil_Headquarter_Hospital : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong" class="p-strong">{{total["Tehsil_Headquarter_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+            
+
+            <!-- //// THQ Level Hospital add -->
+            <kendo-grid-column field="Tehsil_Headquarter_Level_Hospital" width="53" title="THQlevel"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '068')">{{dataItem.Tehsil_Headquarter_Level_Hospital ?
+                  dataItem.Tehsil_Headquarter_Level_Hospital : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong" class="p-strong">{{total["Tehsil_Headquarter_Level_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+            <!-- /////THQ Level Hospital End -->
+
+
+            <kendo-grid-column field="Rural_Health_Center" title="RHC" width="65" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '013')">{{dataItem.Rural_Health_Center ? dataItem.Rural_Health_Center
+                  :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">{{total["Rural_Health_Center"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Basic_Health_Unit" title="BHU" width="65" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '014')">{{dataItem.Basic_Health_Unit ? dataItem.Basic_Health_Unit :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">{{total["Basic_Health_Unit"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Dispensary" title="Dispensary" width="96" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '015')">{{dataItem.Dispensary ? dataItem.Dispensary : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">{{total["Dispensary"].sum | number}}
+                </p>
+
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Specialized_Hospital" title="Specialized Hospital" width="154"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '016')">{{dataItem.Specialized_Hospital ?
+                  dataItem.Specialized_Hospital :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">{{total["Specialized_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="MCH_Center" title="MCH Center" width="110" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '017')">{{dataItem.MCH_Center ? dataItem.MCH_Center : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">{{total["MCH_Center"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Trauma_Center" title="Trauma Center" width="120"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '021')">{{dataItem.Trauma_Center ? dataItem.Trauma_Center : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">{{total["Trauma_Center"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Mobile_Dispensary" title="Mobile Dispensary" width="145"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '022')">{{dataItem.Mobile_Dispensary ? dataItem.Mobile_Dispensary :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">{{total["Mobile_Dispensary"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Town_Hospital" title="Town Hospital" width="120"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '023')">{{dataItem.Town_Hospital ? dataItem.Town_Hospital : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">{{total["Town_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Eye_Hospital" title="Eye Hospital" width="105" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '024')">{{dataItem.Eye_Hospital ? dataItem.Eye_Hospital : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">{{total["Eye_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="TB_Clinic" title="TB Clinic" width="90" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '025')">{{dataItem.TB_Clinic ? dataItem.TB_Clinic : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">{{total["TB_Clinic"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Institute" title="Institute" width="80" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '026')">{{dataItem.Institute ? dataItem.Institute : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">{{total["Institute"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Flying_Squad" title="Flying Squad" width="110" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '027')">{{dataItem.Flying_Squad ? dataItem.Flying_Squad : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">{{total["Flying_Squad"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Police_Hospital" title="Police Hospital" width="125"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '028')">{{dataItem.Police_Hospital ? dataItem.Police_Hospital : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">{{total["Police_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Civil_Hospital" title="Civil Hospital" width="110"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '029')">{{dataItem.Civil_Hospital ? dataItem.Civil_Hospital : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">{{total["Civil_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Filter_Clinic" title="Filter Clinic" width="100"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '030')">{{dataItem.Filter_Clinic ? dataItem.Filter_Clinic : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">{{total["Filter_Clinic"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="District_Health_Developement_Center" title="District Health Developement Center"
+              width="255" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '032')">{{dataItem.District_Health_Developement_Center ?
+                  dataItem.District_Health_Developement_Center : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">{{total["District_Health_Developement_Center"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Mother_and_Child_Emergency_Unit" title="Mother and Child Emergency Unit"
+              width="240" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '033')">{{dataItem.Mother_and_Child_Emergency_Unit ?
+                  dataItem.Mother_and_Child_Emergency_Unit : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">{{total["Mother_and_Child_Emergency_Unit"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="School_of_Paramedics" title="School of Paramedics" width="170"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '034')">{{dataItem.School_of_Paramedics ?
+                  dataItem.School_of_Paramedics :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["School_of_Paramedics"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Maternity_Hospital" title="Maternity Hospital" width="150"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '036')">{{dataItem.Maternity_Hospital ? dataItem.Maternity_Hospital :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Maternity_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Infectious_Diseases_Hospital_" title="Infectious Diseases Hospital" width="210"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '037')">{{dataItem.Infectious_Diseases_Hospital_ ?
+                  dataItem.Infectious_Diseases_Hospital_ : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Infectious_Diseases_Hospital_"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Dental_Clinic" title="Dental Clinic" width="110"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '038')">{{dataItem.Dental_Clinic ? dataItem.Dental_Clinic : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Dental_Clinic"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="City_Medical_Center" title="City Medical Center" width="150"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '039')">{{dataItem.City_Medical_Center ? dataItem.City_Medical_Center
+                  :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["City_Medical_Center"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Sub_Health___Center" title="Sub Health & Center" width="160"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '040')">{{dataItem.Sub_Health___Center ? dataItem.Sub_Health___Center
+                  :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Sub_Health___Center"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+          </kendo-grid>
+          <br>
+          <h6 class="p-2 text-center animated fadeIn dashboard-table-heading-custom">Adminstrative Offices / Programs /
+            Units</h6>
+          <kendo-grid [data]="records" [scrollable]="false">
+            <kendo-grid-column field="AreaName" [locked]="true"
+              [title]="currentUser?.RoleName == 'South Punjab' ? 'District' : currentUser?.HfmisCode.length == 1 ? 'Division' : currentUser?.HfmisCode.length == 3 ? 'District' : currentUser?.HfmisCode.length == 6 ? 'Tehsil' : 'Name'"
+              width="180" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '0')">{{(rowIndex + 1)}}. {{dataItem.AreaName}}
+                </p>
+              </ng-template>
+              <ng-template style="background-color: #fff;color: #000; border-bottom : 1px solid #c8ced3"
+                kendoGridFooterTemplate let-column="column">
+                <p class="text-center p-strong">Total
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Administrative_Office_District__CEO_" title="Administrative Office District (CEO)"
+              width="154" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '049')">{{dataItem.Administrative_Office_District__CEO_ ?
+                  dataItem.Administrative_Office_District__CEO_ : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Administrative_Office_District__CEO_"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Administrative_Office_District__DOH_P__"
+              title="Administrative Office District (DOH(P))" width="154" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '050')">{{dataItem.Administrative_Office_District__DOH_P__ ?
+                  dataItem.Administrative_Office_District__DOH_P__ : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Administrative_Office_District__DOH_P__"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Administrative_Office_District__DOH_MS__"
+              title="Administrative Office District (DOH(MS))" width="154" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '051')">{{dataItem.Administrative_Office_District__DOH_MS__ ?
+                  dataItem.Administrative_Office_District__DOH_MS__ : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Administrative_Office_District__DOH_MS__"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Administrative_Office_District__DC_IRMNCH_"
+              title="Administrative Office District (DC-IRMNCH)" width="154" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '052')">{{dataItem.Administrative_Office_District__DC_IRMNCH_ ?
+                  dataItem.Administrative_Office_District__DC_IRMNCH_ : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Administrative_Office_District__DC_IRMNCH_"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Administrative_Office_District__DM_PHFMC_"
+              title="Administrative Office District (DM-PHFMC)" width="154" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '053')">{{dataItem.Administrative_Office_District__DM_PHFMC_ ?
+                  dataItem.Administrative_Office_District__DM_PHFMC_ : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Administrative_Office_District__DM_PHFMC_"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Administrative_Office_District__DOH_HR_MIS__"
+              title="Administrative Office District (DOH(HR&MIS))" width="154" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '054')">{{dataItem.Administrative_Office_District__DOH_HR_MIS__ ?
+                  dataItem.Administrative_Office_District__DOH_HR_MIS__ : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Administrative_Office_District__DOH_HR_MIS__"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+
+            <kendo-grid-column field="Primary___Secondary_Health_Care_Department"
+              title="Primary & Secondary Health Care Department" width="154" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '001')">{{dataItem.Primary___Secondary_Health_Care_Department ?
+                  dataItem.Primary___Secondary_Health_Care_Department : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Primary___Secondary_Health_Care_Department"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+
+            <kendo-grid-column field="Directorate_General_of_Health_Services"
+              title="Directorate General of Health Services" width="154" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '002')">{{dataItem.Directorate_General_of_Health_Services ?
+                  dataItem.Directorate_General_of_Health_Services : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Directorate_General_of_Health_Services"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+
+            <kendo-grid-column field="Vertical_Program" title="Vertical Program" width="154"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '003')">{{dataItem.Vertical_Program ? dataItem.Vertical_Program : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Vertical_Program"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Administrative_Office_Tehsil__DDOH_" title="Administrative Office Tehsil (DDOH)"
+              width="154" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '005')">{{dataItem.Administrative_Office_Tehsil__DDOH_ ?
+                  dataItem.Administrative_Office_Tehsil__DDOH_ : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Administrative_Office_Tehsil__DDOH_"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Administrative_Office_Division__DHS_" title="Administrative Office Division (DHS)"
+              width="154" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '009')">{{dataItem.Administrative_Office_Division__DHS_ ?
+                  dataItem.Administrative_Office_Division__DHS_ : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Administrative_Office_Division__DHS_"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Administrative_Office__District_" title="Administrative Office (District)"
+              width="154" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '010')">{{dataItem.Administrative_Office__District_ ?
+                  dataItem.Administrative_Office__District_ : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Administrative_Office__District_"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+          </kendo-grid>
+        </div>
+        <div class="col-md-12"
+          *ngIf="currentUser?.RoleName == 'SDP' || currentUser?.RoleName == 'Chief Executive Officer' || currentUser?.RoleName == 'Districts'|| currentUser?.RoleName == 'PHFMC Admin' || currentUser?.RoleName == 'South Punjab'">
+          <h6 class="p-2 text-center animated fadeIn dashboard-table-heading-custom">Primary Health Facilities</h6>
+          <kendo-grid [data]="records" style="width: 100%;" [resizable]="true">
+            <kendo-grid-column field="AreaName" [locked]="true"
+              [title]="currentUser?.RoleName == 'South Punjab' ? 'District' : currentUser?.HfmisCode.length == 1 ? 'Division' : currentUser?.HfmisCode.length == 3 ? 'District' : currentUser?.HfmisCode.length == 6 ? 'Tehsil' : 'Name'"
+              width="180" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '0')">{{(rowIndex + 1)}}. {{dataItem.AreaName}}
+                </p>
+              </ng-template>
+              <ng-template style="background-color: #fff;color: #000; border-bottom : 1px solid #c8ced3"
+                kendoGridFooterTemplate let-column="column">
+                <p class="text-center p-strong">Total</p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Basic_Health_Unit" title="Basic Health Unit" width="154"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '014')">{{dataItem.Basic_Health_Unit ? dataItem.Basic_Health_Unit :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Basic_Health_Unit"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Dispensary" title="Dispensary" width="96" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '015')">{{dataItem.Dispensary ? dataItem.Dispensary : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Dispensary"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Specialized_Hospital" title="Specialized Hospital" width="154"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '016')">{{dataItem.Specialized_Hospital ?
+                  dataItem.Specialized_Hospital :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Specialized_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="MCH_Center" title="MCH Center" width="110" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '017')">{{dataItem.MCH_Center ? dataItem.MCH_Center : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["MCH_Center"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Trauma_Center" title="Trauma Center" width="120"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '021')">{{dataItem.Trauma_Center ? dataItem.Trauma_Center : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Trauma_Center"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Mobile_Dispensary" title="Mobile Dispensary" width="145"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '022')">{{dataItem.Mobile_Dispensary ? dataItem.Mobile_Dispensary :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Mobile_Dispensary"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Town_Hospital" title="Town Hospital" width="120"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '023')">{{dataItem.Town_Hospital ? dataItem.Town_Hospital : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Town_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Eye_Hospital" title="Eye Hospital" width="105" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '024')">{{dataItem.Eye_Hospital ? dataItem.Eye_Hospital : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Eye_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="TB_Clinic" title="TB Clinic" width="90" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '025')">{{dataItem.TB_Clinic ? dataItem.TB_Clinic : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["TB_Clinic"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Institute" title="Institute" width="80" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '026')">{{dataItem.Institute ? dataItem.Institute : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Institute"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Flying_Squad" title="Flying Squad" width="110" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '027')">{{dataItem.Flying_Squad ? dataItem.Flying_Squad : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Flying_Squad"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Police_Hospital" title="Police Hospital" width="125"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '028')">{{dataItem.Police_Hospital ? dataItem.Police_Hospital : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Police_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Civil_Hospital" title="Civil Hospital" width="110"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '029')">{{dataItem.Civil_Hospital ? dataItem.Civil_Hospital : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Civil_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Filter_Clinic" title="Filter Clinic" width="100"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '030')">{{dataItem.Filter_Clinic ? dataItem.Filter_Clinic : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Filter_Clinic"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="District_Health_Developement_Center" title="District Health Developement Center"
+              width="255" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '032')">{{dataItem.District_Health_Developement_Center ?
+                  dataItem.District_Health_Developement_Center : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["District_Health_Developement_Center"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Mother_and_Child_Emergency_Unit" title="Mother and Child Emergency Unit"
+              width="240" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '033')">{{dataItem.Mother_and_Child_Emergency_Unit ?
+                  dataItem.Mother_and_Child_Emergency_Unit : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Mother_and_Child_Emergency_Unit"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="School_of_Paramedics" title="School of Paramedics" width="170"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '034')">{{dataItem.School_of_Paramedics ?
+                  dataItem.School_of_Paramedics :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["School_of_Paramedics"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Maternity_Hospital" title="Maternity Hospital" width="150"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '036')">{{dataItem.Maternity_Hospital ? dataItem.Maternity_Hospital :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Maternity_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Infectious_Diseases_Hospital_" title="Infectious Diseases Hospital" width="210"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '037')">{{dataItem.Infectious_Diseases_Hospital_ ?
+                  dataItem.Infectious_Diseases_Hospital_ : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Infectious_Diseases_Hospital_"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Dental_Clinic" title="Dental Clinic" width="110"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '038')">{{dataItem.Dental_Clinic ? dataItem.Dental_Clinic : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Dental_Clinic"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="City_Medical_Center" title="City Medical Center" width="150"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '039')">{{dataItem.City_Medical_Center ? dataItem.City_Medical_Center
+                  :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["City_Medical_Center"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Sub_Health___Center" title="Sub Health & Center" width="160"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '040')">{{dataItem.Sub_Health___Center ? dataItem.Sub_Health___Center
+                  :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Sub_Health___Center"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+          </kendo-grid>
+          <br>
+          <h6 class="p-2 text-center animated fadeIn dashboard-table-heading-custom">Secondary Health Facilities</h6>
+          <kendo-grid [data]="records" [scrollable]="false">
+            <kendo-grid-column field="AreaName"
+              [title]="currentUser?.RoleName == 'South Punjab' ? 'District' : currentUser?.HfmisCode.length == 1 ? 'Division' : currentUser?.HfmisCode.length == 3 ? 'District' : currentUser?.HfmisCode.length == 6 ? 'Tehsil' : 'Name'"
+              width="180" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '0')">{{(rowIndex + 1)}}. {{dataItem.AreaName}}
+                </p>
+              </ng-template>
+              <ng-template style="background-color: #fff;color: #000; border-bottom : 1px solid #c8ced3"
+                kendoGridFooterTemplate let-column="column">
+                <p class="text-center p-strong">Total</p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="District_Headquarter_Hospital" title="District Headquarter Hospital" width="200"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '011')">{{dataItem.District_Headquarter_Hospital ?
+                  dataItem.District_Headquarter_Hospital : 0}}
+                </p>
+              </ng-template>
+              <ng-template style="background-color: #fff;color: #000; border-bottom : 1px solid #c8ced3"
+                kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["District_Headquarter_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+
+            </kendo-grid-column>
+            <kendo-grid-column field="Tehsil_Headquarter_Hospital" width="200" title="Tehsil Headquarter Hospital"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '012')">{{dataItem.Tehsil_Headquarter_Hospital ?
+                  dataItem.Tehsil_Headquarter_Hospital : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Tehsil_Headquarter_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- ////THQ Level Add -->
+            <kendo-grid-column field="Tehsil_Headquarter_Level_Hospital" width="200" title="Tehsil Headquarter Level Hospital"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '068')">{{dataItem.Tehsil_Headquarter_Level_Hospital ?
+                  dataItem.Tehsil_Headquarter_Level_Hospital : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Tehsil_Headquarter_Level_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+
+
+
+
+            <!-- /////THQ Level End -->
+            <kendo-grid-column field="Rural_Health_Center" title="Rural Health Center" width="190"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '013')">{{dataItem.Rural_Health_Center ? dataItem.Rural_Health_Center
+                  :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Rural_Health_Center"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+          <br>
+          <h6 class="p-2 text-center animated fadeIn dashboard-table-heading-custom">Adminstrative Offices / Programs /
+            Units</h6>
+          <kendo-grid [data]="records" [scrollable]="false">
+            <kendo-grid-column field="AreaName" [locked]="true"
+              [title]="currentUser?.RoleName == 'South Punjab' ? 'District' : currentUser?.HfmisCode.length == 1 ? 'Division' : currentUser?.HfmisCode.length == 3 ? 'District' : currentUser?.HfmisCode.length == 6 ? 'Tehsil' : 'Name'"
+              width="180" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '0')">{{(rowIndex + 1)}}. {{dataItem.AreaName}}
+                </p>
+              </ng-template>
+              <ng-template style="background-color: #fff;color: #000; border-bottom : 1px solid #c8ced3"
+                kendoGridFooterTemplate let-column="column">
+                <p class="text-center p-strong">Total</p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Administrative_Office_District__CEO_" title="Administrative Office District (CEO)"
+              width="154" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '049')">{{dataItem.Administrative_Office_District__CEO_ ?
+                  dataItem.Administrative_Office_District__CEO_ : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Administrative_Office_District__CEO_"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Administrative_Office_District__DOH_P__"
+              title="Administrative Office District (DOH(P))" width="154" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '050')">{{dataItem.Administrative_Office_District__DOH_P__ ?
+                  dataItem.Administrative_Office_District__DOH_P__ : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Administrative_Office_District__DOH_P__"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Administrative_Office_District__DOH_MS__"
+              title="Administrative Office District (DOH(MS))" width="154" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '051')">{{dataItem.Administrative_Office_District__DOH_MS__ ?
+                  dataItem.Administrative_Office_District__DOH_MS__ : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Administrative_Office_District__DOH_MS__"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Administrative_Office_District__DC_IRMNCH_"
+              title="Administrative Office District (DC-IRMNCH)" width="154" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '052')">{{dataItem.Administrative_Office_District__DC_IRMNCH_ ?
+                  dataItem.Administrative_Office_District__DC_IRMNCH_ : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Administrative_Office_District__DC_IRMNCH_"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Administrative_Office_District__DM_PHFMC_"
+              title="Administrative Office District (DM-PHFMC)" width="154" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '053')">{{dataItem.Administrative_Office_District__DM_PHFMC_ ?
+                  dataItem.Administrative_Office_District__DM_PHFMC_ : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Administrative_Office_District__DM_PHFMC_"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Administrative_Office_District__DOH_HR_MIS__"
+              title="Administrative Office District (DOH(HR&MIS))" width="154" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '054')">{{dataItem.Administrative_Office_District__DOH_HR_MIS__ ?
+                  dataItem.Administrative_Office_District__DOH_HR_MIS__ : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Administrative_Office_District__DOH_HR_MIS__"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+
+            <kendo-grid-column field="Primary___Secondary_Health_Care_Department"
+              title="Primary & Secondary Health Care Department" width="154" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '001')">{{dataItem.Primary___Secondary_Health_Care_Department ?
+                  dataItem.Primary___Secondary_Health_Care_Department : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Primary___Secondary_Health_Care_Department"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+
+            <kendo-grid-column field="Directorate_General_of_Health_Services"
+              title="Directorate General of Health Services" width="154" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '002')">{{dataItem.Directorate_General_of_Health_Services ?
+                  dataItem.Directorate_General_of_Health_Services : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Directorate_General_of_Health_Services"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+
+            <kendo-grid-column field="Vertical_Program" title="Vertical Program" width="154"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '003')">{{dataItem.Vertical_Program ? dataItem.Vertical_Program : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Vertical_Program"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Administrative_Office_Tehsil__DDOH_" title="Administrative Office Tehsil (DDOH)"
+              width="154" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '005')">{{dataItem.Administrative_Office_Tehsil__DDOH_ ?
+                  dataItem.Administrative_Office_Tehsil__DDOH_ : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Administrative_Office_Tehsil__DDOH_"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Administrative_Office_Division__DHS_" title="Administrative Office Division (DHS)"
+              width="154" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '009')">{{dataItem.Administrative_Office_Division__DHS_ ?
+                  dataItem.Administrative_Office_Division__DHS_ : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Administrative_Office_Division__DHS_"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Administrative_Office__District_" title="Administrative Office (District)"
+              width="154" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '010')">{{dataItem.Administrative_Office__District_ ?
+                  dataItem.Administrative_Office__District_ : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Administrative_Office__District_"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+        </div>
+        <div class="col-md-12" *ngIf="currentUser?.RoleName == 'Secondary'">
+          <h6 class="p-2 text-center animated fadeIn dashboard-table-heading-custom">Secondary Health Facilities</h6>
+          <kendo-grid [data]="records" [scrollable]="false">
+            <kendo-grid-column field="AreaName"
+              [title]="currentUser?.HfmisCode.length == 1 ? 'Division' : currentUser?.HfmisCode.length == 3 ? 'District' : currentUser?.HfmisCode.length == 6 ? 'Tehsil' : 'Name'"
+              width="180" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '0')">{{(rowIndex + 1)}}. {{dataItem.AreaName}}
+                </p>
+              </ng-template>
+              <ng-template style="background-color: #fff;color: #000; border-bottom : 1px solid #c8ced3"
+                kendoGridFooterTemplate let-column="column">
+                <p class="text-center p-strong">Total</p>
+              </ng-template>
+            </kendo-grid-column>
+
+            
+
+
+            <kendo-grid-column field="District_Headquarter_Hospital" title="District Headquarter Hospital" width="200"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '011')">{{dataItem.District_Headquarter_Hospital ?
+                  dataItem.District_Headquarter_Hospital : 0}}
+                </p>
+              </ng-template>
+              <ng-template style="background-color: #fff;color: #000; border-bottom : 1px solid #c8ced3"
+                kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["District_Headquarter_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Tehsil_Headquarter_Hospital" width="200" title="Tehsil Headquarter Hospital"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '012' )">{{dataItem.Tehsil_Headquarter_Hospital ?
+                  dataItem.Tehsil_Headquarter_Hospital : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Tehsil_Headquarter_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <!-- ///Add THQ Level Hospital -->
+
+            <kendo-grid-column field="Tehsil_Headquarter_Level_Hospital" title="Tehsil Headquarter Level Hospital" width="200"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                
+                <p (click)="cellCLicked(dataItem, '068')" >{{dataItem.Tehsil_Headquarter_Level_Hospital ?
+                  dataItem.Tehsil_Headquarter_Level_Hospital : '0'}}
+                </p>
+              </ng-template>
+
+              <ng-template style="background-color: #fff;color: #000; border-bottom : 1px solid #c8ced3"
+                kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Tehsil_Headquarter_Level_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+
+            </kendo-grid-column>
+
+            <!-- ///Add THQ Level Hospital ENd -->
+
+
+            <kendo-grid-column field="Rural_Health_Center" title="Rural Health Center" width="190"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '013')">{{dataItem.Rural_Health_Center ? dataItem.Rural_Health_Center
+                  :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Rural_Health_Center"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+        </div>
+        <div class="col-md-12" *ngIf="currentUser?.RoleName == 'Primary'">
+          <h6 class="p-2 text-center animated fadeIn dashboard-table-heading-custom">Primary Health Facilities</h6>
+          <kendo-grid [data]="records" style="width: 100%;" [resizable]="true">
+            <kendo-grid-column field="AreaName" [locked]="true"
+              [title]="currentUser?.HfmisCode.length == 1 ? 'Division' : currentUser?.HfmisCode.length == 3 ? 'District' : currentUser?.HfmisCode.length == 6 ? 'Tehsil' : 'Name'"
+              width="180" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '0')">{{(rowIndex + 1)}}. {{dataItem.AreaName}}
+                </p>
+              </ng-template>
+              <ng-template style="background-color: #fff;color: #000; border-bottom : 1px solid #c8ced3"
+                kendoGridFooterTemplate let-column="column">
+                <p class="text-center p-strong">Total</p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Basic_Health_Unit" title="Basic Health Unit" width="154"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '014')">{{dataItem.Basic_Health_Unit ? dataItem.Basic_Health_Unit :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Basic_Health_Unit"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Dispensary" title="Dispensary" width="96" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '015')">{{dataItem.Dispensary ? dataItem.Dispensary : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Dispensary"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Specialized_Hospital" title="Specialized Hospital" width="154"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '016')">{{dataItem.Specialized_Hospital ?
+                  dataItem.Specialized_Hospital :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Specialized_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="MCH_Center" title="MCH Center" width="110" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '017')">{{dataItem.MCH_Center ? dataItem.MCH_Center : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["MCH_Center"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Trauma_Center" title="Trauma Center" width="120"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '021')">{{dataItem.Trauma_Center ? dataItem.Trauma_Center : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Trauma_Center"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Mobile_Dispensary" title="Mobile Dispensary" width="145"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '022')">{{dataItem.Mobile_Dispensary ? dataItem.Mobile_Dispensary :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Mobile_Dispensary"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Town_Hospital" title="Town Hospital" width="120"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '023')">{{dataItem.Town_Hospital ? dataItem.Town_Hospital : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Town_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Eye_Hospital" title="Eye Hospital" width="105" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '024')">{{dataItem.Eye_Hospital ? dataItem.Eye_Hospital : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Eye_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="TB_Clinic" title="TB Clinic" width="90" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '025')">{{dataItem.TB_Clinic ? dataItem.TB_Clinic : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["TB_Clinic"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Institute" title="Institute" width="80" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '026')">{{dataItem.Institute ? dataItem.Institute : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Institute"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="Flying_Squad" title="Flying Squad" width="110" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '027')">{{dataItem.Flying_Squad ? dataItem.Flying_Squad : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Flying_Squad"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Police_Hospital" title="Police Hospital" width="125"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '028')">{{dataItem.Police_Hospital ? dataItem.Police_Hospital : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Police_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Civil_Hospital" title="Civil Hospital" width="110"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '029')">{{dataItem.Civil_Hospital ? dataItem.Civil_Hospital : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Civil_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Filter_Clinic" title="Filter Clinic" width="100"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '030')">{{dataItem.Filter_Clinic ? dataItem.Filter_Clinic : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Filter_Clinic"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="District_Health_Developement_Center" title="District Health Developement Center"
+              width="255" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '032')">{{dataItem.District_Health_Developement_Center ?
+                  dataItem.District_Health_Developement_Center : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["District_Health_Developement_Center"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Mother_and_Child_Emergency_Unit" title="Mother and Child Emergency Unit"
+              width="240" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '033')">{{dataItem.Mother_and_Child_Emergency_Unit ?
+                  dataItem.Mother_and_Child_Emergency_Unit : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Mother_and_Child_Emergency_Unit"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="School_of_Paramedics" title="School of Paramedics" width="170"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '034')">{{dataItem.School_of_Paramedics ?
+                  dataItem.School_of_Paramedics :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["School_of_Paramedics"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Maternity_Hospital" title="Maternity Hospital" width="150"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '036')">{{dataItem.Maternity_Hospital ? dataItem.Maternity_Hospital :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Maternity_Hospital"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Infectious_Diseases_Hospital_" title="Infectious Diseases Hospital" width="210"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '037')">{{dataItem.Infectious_Diseases_Hospital_ ?
+                  dataItem.Infectious_Diseases_Hospital_ : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Infectious_Diseases_Hospital_"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Dental_Clinic" title="Dental Clinic" width="110"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '038')">{{dataItem.Dental_Clinic ? dataItem.Dental_Clinic : 0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Dental_Clinic"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="City_Medical_Center" title="City Medical Center" width="150"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '039')">{{dataItem.City_Medical_Center ? dataItem.City_Medical_Center
+                  :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["City_Medical_Center"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Sub_Health___Center" title="Sub Health & Center" width="160"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p (click)="cellCLicked(dataItem, '040')">{{dataItem.Sub_Health___Center ? dataItem.Sub_Health___Center
+                  :
+                  0}}
+                </p>
+              </ng-template>
+              <ng-template kendoGridFooterTemplate let-column="column">
+                <p class="p-strong">
+                  {{total["Sub_Health___Center"].sum | number}}
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+
+
+          </kendo-grid>
+        </div>
+      </div>
+    </div>
+  </tab>
+  <tab heading="Vacancy Position" (selectTab)="onTabSelect($event)">
+    <kendo-grid [data]="vacancyReport" style="height: 74vh; width: 100%;" [scrollable]="true"
+      *ngIf="currentUser && vacancyLoaded && vacancyReport.length > 0 && activeTab == 'Vacancy Position'">
+      <kendo-grid-column field="asd" title="Sr." width="6" [headerClass]="'grid-header-text'"
+        [style]="{'color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <p class="p-non-hover">{{(rowIndex + 1)}}</p>
+        </ng-template>
+        <ng-template style="background-color: #fff;padding:0px;color: #000; border-bottom : 1px solid #c8ced3"
+          kendoGridFooterTemplate let-column="column">
+          <p class="p-non-hover">&nbsp;</p>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="DesignationName" title="Designation" width="49" [headerClass]="'grid-header-text'"
+        [style]="{'color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+
+          <p class="p-non-hover">{{dataItem.DesignationName}}
+            <span style="margin: 0;"><span class="text-secondary font-weight-light"
+                style="font-size: 12px;">{{dataItem.CadreName}}
+                - {{dataItem.BPS}}</span></span>
+          </p>
+
+        </ng-template>
+        <ng-template style="background-color: #fff;padding:0px;color: #000; border-bottom : 1px solid #c8ced3"
+          kendoGridFooterTemplate let-column="column">
+          <p class="p-strong p-non-hover">Total</p>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="TotalSanctioned" title="Sanctioned" width="10"
+        [headerClass]="'grid-header-text text-center'"
+        [style]="{'color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <p class="text-center p-non-hover">{{numberWithCommas(dataItem.TotalSanctioned)}}</p>
+        </ng-template>
+        <ng-template style="background-color: #fff;padding:0px;color: #000; border-bottom : 1px solid #c8ced3"
+          kendoGridFooterTemplate let-column="column">
+          <p class="text-center p-strong p-non-hover">{{numberWithCommas(vacancyTotal["TotalSanctioned"].sum)}}</p>
+        </ng-template>
+
+      </kendo-grid-column>
+      <kendo-grid-column field="TotalWorking" title="Filled" width="10" [headerClass]="'grid-header-text text-center'"
+        [style]="{'color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <p class="text-center p-non-hover"> {{numberWithCommas(dataItem.TotalWorking)}}</p>
+        </ng-template>
+        <ng-template style="background-color: #fff;padding:0px;color: #000; border-bottom : 1px solid #c8ced3"
+          kendoGridFooterTemplate let-column="column">
+          <p class="text-center p-strong p-non-hover">{{numberWithCommas(vacancyTotal["TotalWorking"].sum)}}</p>
+        </ng-template>
+
+      </kendo-grid-column>
+      <kendo-grid-column field="TotalVacant" title="Vacant" width="10" [headerClass]="'grid-header-text text-center'"
+        [style]="{'color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <p class="text-center p-non-hover"> {{numberWithCommas(dataItem.TotalVacant)}}</p>
+        </ng-template>
+        <ng-template style="background-color: #fff;padding:0px;color: #000; border-bottom : 1px solid #c8ced3"
+          kendoGridFooterTemplate let-column="column">
+          <p class="text-center p-strong p-non-hover">{{numberWithCommas(vacancyTotal["TotalVacant"].sum)}}</p>
+        </ng-template>
+
+      </kendo-grid-column>
+      <!--  <kendo-grid-column field="TotalProfile" title="Profile" width="15" [headerClass]="'grid-header-text'"
+        [style]="{'color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <p class="p-non-hover"> {{dataItem.TotalProfile ? numberWithCommas(dataItem.TotalProfile) :
+            0}}
+            <span
+              *ngIf="dataItem.Profiles != dataItem.TotalWorking && dataItem.Profiles != 0 && dataItem.TotalWorking != 0"
+              class="pull-right text-secondary">
+              {{dataItem.TotalProfile < dataItem.TotalWorking ? '-' + numberWithCommas((dataItem.TotalWorking -
+                dataItem.TotalProfile)) : dataItem.TotalProfile>
+                dataItem.TotalWorking ? '+' + numberWithCommas((dataItem.TotalProfile - dataItem.TotalWorking)) :
+                0}} </span></p>
+        </ng-template>
+        <ng-template style="background-color: #fff;padding:0px;color: #000; border-bottom : 1px solid #c8ced3"
+          kendoGridFooterTemplate let-column="column">
+          <p class="p-strong p-non-hover">{{numberWithCommas(vacancyTotal["TotalProfile"].sum)}}
+            <span class="pull-right text-secondary">
+              {{numberWithCommas((vacancyTotal["TotalWorking"].sum) - (vacancyTotal["TotalProfile"].sum))}}
+            </span>
+          </p>
+        </ng-template>
+
+      </kendo-grid-column> -->
+    </kendo-grid>
+  </tab>
+  <tab heading="User Activity" *ngIf="currentUser.RoleName == 'SDP' || currentUser.RoleName == 'PHFMC Admin'">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="grid-top-header-custom animated fadeIn" *ngIf="kGrid.totalRecords > 0">
+          <div class="pager-rows-number">
+            <span>
+              {{(kGrid.skip + 1) + ' - ' + (kGrid.pageSize <= kGrid.totalRecords ? (kGrid.pageSize + kGrid.skip) :
+                kGrid.totalRecords) + ' of ' + kGrid.numberWithCommas(kGrid.totalRecords) + ' items ' }} </span> <span
+              class="pull-right">
+              Show &nbsp; <select #select (change)="changePagesize(select.value)">
+                <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}</option>
+                <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+                  [selected]="page === kGrid.pageSize ? true : undefined">
+                  {{page}}
+                </option>
+              </select>
+              &nbsp; items per page
+            </span>
+          </div>
+        </div>
+        <div class="grid-top-header-custom animated fadeIn" style="border-bottom:1px solid rgba(0, 0, 0, 0.08);">
+          <div class="pager-rows-number">
+            <label class="k-form-field">
+              <span>Search User Activity</span>
+              <input type="text" style="height: 40px !important;" #searchRef (input)="searchEvent.next(searchRef.value)"
+                placeholder="Type Anything..." kendoTextBox>
+            </label>
+          </div>
+        </div>
+        <div class="grid-wrapper">
+          <kendo-grid [data]="kGrid.gridView" [(pageSize)]="kGrid.pageSize" [skip]="kGrid.skip" [pageable]="true"
+            (pageChange)="pageChange($event)" [scrollable]="false">
+            <kendo-grid-column [width]="80" field="Created_By" title="Username" [headerClass]="'grid-header-text'">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <div class="employee-info">
+                  {{dataItem.Created_By}}<br>
+                  <i class="fa fa-clock-o"></i> {{dataItem.Created_Date | date:'d/M/yy, h:mm a'}}
+                </div>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="80" field="nlog" title="Created" [headerClass]="'grid-header-text'">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <div class="employee-info">
+                  <i class="fa" [ngClass]="dataItem.nlog == 'Transfer Posting' ? 'fa-exchange' : 
+                      dataItem.nlog == 'Health facility' ? 'fa-building-o' : 
+                      dataItem.nlog == 'Vacancy Position' ? 'fa-table' : 
+                      dataItem.nlog == 'Employee Profile' ? 'fa-user-circle' : 
+                      ''"></i>
+                  {{dataItem.nlog}}
+                </div>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column *ngIf="currentUser.RoleName == 'SDP'" [width]="80" field="Param1" title="..."
+              [headerClass]="'grid-header-text'">
+            </kendo-grid-column>
+            <kendo-grid-column *ngIf="currentUser.RoleName == 'SDP'" [width]="80" field="Param2" title="..."
+              [headerClass]="'grid-header-text'">
+            </kendo-grid-column>
+            <kendo-grid-column *ngIf="currentUser.RoleName == 'PHFMC Admin'" [width]="80" field="HFName" title="..."
+              [headerClass]="'grid-header-text'">
+            </kendo-grid-column>
+            <kendo-grid-column *ngIf="currentUser.RoleName == 'PHFMC Admin'" [width]="80" field="DsgName" title="..."
+              [headerClass]="'grid-header-text'">
+            </kendo-grid-column>
+            <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+              <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+              <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+              <kendo-pager-next-buttons></kendo-pager-next-buttons>
+              <div class="pager-rows-number">
+                <select #select (change)="changePagesize(select.value)">
+                  <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}</option>
+                  <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+                    [selected]="page === kGrid.pageSize ? true : undefined">
+                    {{page}}
+                  </option>
+                </select>
+                &nbsp; items per page
+              </div>
+              <kendo-pager-info></kendo-pager-info>
+            </ng-template>
+          </kendo-grid>
+          <div *ngIf="kGrid.loading" class="k-i-loading"></div>
+        </div>
+      </div>
+    </div>
+  </tab>
+
+  <tab heading="Adhoc Recruitments" *ngIf="(currentUser.RoleName == 'Chief Executive Officer' || currentUser.RoleName == 'Districts') && 2 + 2 == 5">
+
+    <div class="animated fadeIn">
+      <div class="row">
+        <div class="col-3">
+          <div class="card">
+            <div class="card-body p-3 clearfix"><i class="fa fa-user-md bg-primary p-3 font-2xl mr-3 float-left"></i>
+              <div class="h5 text-primary mb-0 mt-2 p-strong">
+                {{adhocApplicantCounts.applicants ? adhocApplicantCounts.applicants : 0}}</div>
+              <div class="text-muted text-uppercase font-weight-bold p-strong">Applicants</div>
+            </div>
+            <div class="card-footer px-3 py-2"><a href="#"
+                class="font-weight-bold font-xs btn-block text-muted p-strong">View
+                All <i class="fa fa-angle-right float-right font-lg"></i></a></div>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="card">
+            <div class="card-body p-3 clearfix"><i class="fa fa-users bg-secondary p-3 font-2xl mr-3 float-left"></i>
+              <div class="h5 text-secondary mb-0 mt-2 p-strong">
+                {{adhocApplicantCounts.applicants ? adhocApplicantCounts.applicantsPending : 0}}</div>
+              <div class="text-muted text-uppercase font-weight-bold p-strong">Pending</div>
+            </div>
+            <div class="card-footer px-3 py-2"><a href="#"
+                class="font-weight-bold font-xs btn-block text-muted p-strong">View
+                All <i class="fa fa-angle-right float-right font-lg"></i></a></div>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="card">
+            <div class="card-body p-3 clearfix"><i
+                class="fa fa-user-secret bg-success p-3 font-2xl mr-3 float-left"></i>
+              <div class="h5 text-success mb-0 mt-2 p-strong">
+                {{adhocApplicantCounts.applicants ? adhocApplicantCounts.applicantsEligible : 0}}</div>
+              <div class="text-muted text-uppercase font-weight-bold p-strong">Eligible</div>
+            </div>
+            <div class="card-footer px-3 py-2"><a href="#"
+                class="font-weight-bold font-xs btn-block text-muted p-strong">View
+                All <i class="fa fa-angle-right float-right font-lg"></i></a></div>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="card">
+            <div class="card-body p-3 clearfix"><i class="fa fa-user-times bg-danger p-3 font-2xl mr-3 float-left"></i>
+              <div class="h5 text-danger mb-0 mt-2 p-strong">
+                {{adhocApplicantCounts.applicants ? adhocApplicantCounts.applicantsRejected : 0}}</div>
+              <div class="text-muted text-uppercase font-weight-bold p-strong">Rejected</div>
+            </div>
+            <div class="card-footer px-3 py-2"><a href="#"
+                class="font-weight-bold font-xs btn-block text-muted p-strong">View
+                All <i class="fa fa-angle-right float-right font-lg"></i></a></div>
+          </div>
+        </div>
+      </div>
+      <hr>
+
+      <kendo-grid [data]="adhocReport" *ngIf="!loading && totalSums">
+        <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-text'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table" (click)="cellCLicked(dataItem, 0)">{{(rowIndex + 1)}}.
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="DesignationName" [title]="'Designation'" width="25" [headerClass]="'grid-header-text'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table" (click)="cellCLicked(dataItem, 0)">{{dataItem.DesignationName}}
+            </p>
+          </ng-template>
+          <ng-template kendoGridFooterTemplate let-column="column">
+            <p class="hoverable-table p-strong">Total
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="Applications" title="Applications" width="10"
+          [headerClass]="'grid-header-text-center'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table" style="text-align: center;" (click)="cellCLicked(dataItem, 0)">{{dataItem.Applications
+              ?
+              dataItem.Applications : 0}}
+            </p>
+          </ng-template>
+          <ng-template kendoGridFooterTemplate let-column="column">
+            <p class="hoverable-table p-strong" style="text-align: center;" (click)="colCLicked(0)">
+              {{totalSums["Applications"] ? totalSums["Applications"].sum : 0}}
+            </p>
+          </ng-template>
+
+        </kendo-grid-column>
+        <!-- <kendo-grid-column field="ApplicationsApproved" width="10" title="Accepted"
+          [headerClass]="'grid-header-text-center'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table" style="text-align: center;" (click)="cellCLicked(dataItem, 10)">{{dataItem.ApplicationsApproved
+              ?
+              dataItem.ApplicationsApproved : 0}}
+            </p>
+          </ng-template>
+          <ng-template kendoGridFooterTemplate let-column="column">
+            <p class="hoverable-table p-strong" style="text-align: center;" (click)="colCLicked(10)">
+              {{totalSums["ApplicationsApproved"] ? totalSums["ApplicationsApproved"].sum : 0}}
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="ApplicationsRejected" width="10" title="Rejected"
+          [headerClass]="'grid-header-text-center'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table" style="text-align: center;" (click)="cellCLicked(dataItem, 1)">{{dataItem.ApplicationsRejected
+              ?
+              dataItem.ApplicationsRejected : 0}}
+            </p>
+          </ng-template>
+          <ng-template kendoGridFooterTemplate let-column="column">
+            <p class="hoverable-table p-strong" style="text-align: center;" (click)="colCLicked(1)">
+              {{totalSums["ApplicationsRejected"] ? totalSums["ApplicationsRejected"].sum : 0}}
+            </p>
+          </ng-template> 
+        </kendo-grid-column>
+        <kendo-grid-column field="ApplicationsPending" width="10" title="Pending"
+          [headerClass]="'grid-header-text-center'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table" style="text-align: center;" (click)="cellCLicked(dataItem, 8)">{{dataItem.ApplicationsPending
+              ?
+              dataItem.ApplicationsPending : 0}}
+            </p>
+          </ng-template>
+          <ng-template kendoGridFooterTemplate let-column="column">
+            <p class="hoverable-table p-strong" style="text-align: center;" (click)="colCLicked(8)">
+              {{totalSums["ApplicationsPending"] ? totalSums["ApplicationsPending"].sum : 0}}
+            </p>
+          </ng-template>
+        </kendo-grid-column>-->
+      </kendo-grid>
+      <div class="k-i-loading" *ngIf="loading"></div>
+    </div>
+  </tab>
+
+</tabset>
+<kendo-dialog [title]="'Enter CNIC'" *ngIf="poolDialogOpened" (close)="closeWindow()" [minWidth]="500">
+  <div class="p-2">
+    <div class="row animated fadeIn" *ngIf="profileExist">
+      <div class="col-md-12">
+        <strong>Employee Name</strong> {{profile.EmployeeName}}
+        <br>
+        <strong>Father Name</strong> {{profile.FatherName}}
+        <br>
+        <strong>Designation</strong> {{profile.Designation_Name ? profile.Designation_Name : ''}}
+        <br>
+        <strong>Health Facility</strong> {{profile.HealthFacility ? profile.HealthFacility : ''}}, {{profile.Tehsil ?
+        profile.Tehsil : ''}}, {{profile.District ? profile.District : ''}}
+        <br>
+        <strong>Access Status</strong> {{profile.AddToEmployeePool ? 'In pool' : 'Not in pool'}}
+      </div>
+    </div>
+    <div class="row animated fadeIn" *ngIf="profileNotExist">
+      <div class="col-md-12 text-danger">
+        Profile does not exist in our system.
+      </div>
+    </div>
+    <hr class="animated fadeIn" *ngIf="profile">
+    <div class="row">
+      <div class="col-md-8 control-col-st">
+        <label class="k-form-field">
+          <span>CNIC</span>
+          <kendo-maskedtextbox [mask]="cnicMask" (input)="cnicValueChange()"
+            (keyup.enter)="!profile ? getAnyProfile() : profileExist && !profile.AddToEmployeePool ? addProfileToPool() : profileExist && profile.AddToEmployeePool ? removeProfileToPool() : nothing()"
+            [(ngModel)]="cnic" required></kendo-maskedtextbox>
+        </label>
+      </div>
+      <div class="col-md-4 control-col-end">
+        <label class="k-form-field mt-1">
+          <button kendoButton primary="true" [ladda]="searchingProfile" data-style="zoom-in" (click)="getAnyProfile()"
+            class="btn-align-v btn-block" *ngIf="!profile">Search
+            Profile</button>
+          <button kendoButton primary="true" [ladda]="addingToPool" data-style="zoom-in" (click)="addProfileToPool()"
+            class="btn-align-v btn-block" *ngIf="profileExist && !profile.AddToEmployeePool">Add
+            to Pool</button>
+          <button [ladda]="removingFromPool" data-style="zoom-in" class="btn btn-sm btn-align-v btn-block btn-danger"
+            (click)="removeProfileToPool()" *ngIf="profileExist && profile.AddToEmployeePool">Remove
+            From Pool</button>
+        </label>
+      </div>
+    </div>
+  </div>
+</kendo-dialog>

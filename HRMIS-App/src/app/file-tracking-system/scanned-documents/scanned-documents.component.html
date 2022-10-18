@@ -1,0 +1,206 @@
+<div *ngIf="kGrid.firstLoad" class="k-i-loading"></div>
+<div class="animated fadeIn" *ngIf="!kGrid.firstLoad">
+  <div class="row">
+    <div class="col-md-4 col-xs-12">
+      <div class="top-h3">
+        Barcoded Files / Documents
+      </div>
+    </div>
+    <div class="col-md-8 col-xs-12">
+      <div class="top-controls">
+        <kendo-daterange>
+          <label hidden>
+            <span class="label">Start</span>
+            <kendo-dateinput kendoDateRangeStartInput [(value)]="range.start"></kendo-dateinput>
+          </label>
+          <label hidden>
+            <span class="label">End</span>
+            <kendo-dateinput kendoDateRangeEndInput [(value)]="range.end"></kendo-dateinput>
+          </label>
+          <button #anchor [look]="'outline'" (click)="popup.toggle()" kendoButton [primary]="true" class="ml-2">
+            <i class="fa fa-calendar"></i>&nbsp;Calendar&nbsp;<span *ngIf="range.start">Start Date:&nbsp;{{range.start
+              |
+              date:'d, MMMM - yyyy'}}&nbsp;</span>
+            <span *ngIf="range.end">&nbsp;End Date:&nbsp;{{range.end | date:'d, MMMM - yyyy'}}</span>
+          </button>
+          <kendo-daterange-popup id="popupcal" #popup [anchor]="anchor">
+            <ng-template kendoDateRangePopupTemplate>
+              <div class="pt-2 pb-2 pl-4 pr-4">
+                <span *ngIf="range.start"><strong class="p-strong">Start
+                    Date:</strong>&nbsp;<u>{{range.start | date:'d, MMMM - yyyy'}}</u>&nbsp;</span>
+                <span *ngIf="range.end">&nbsp;<strong class="p-strong">End
+                    Date:</strong>&nbsp;<u>{{range.end | date:'d, MMMM - yyyy'}}</u></span>
+
+                &nbsp; <button kendoButton class="animated fadeIn" *ngIf="range.start" [ladda]="kGrid.loading"
+                  data-style="zoom-in" (click)="getApplications()" [primary]="true">APPLY
+                  RANGE</button>
+              </div>
+              <kendo-multiviewcalendar kendoDateRangeSelection>
+              </kendo-multiviewcalendar>
+            </ng-template>
+          </kendo-daterange-popup>
+        </kendo-daterange>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <!--  <div class="col-md-4 col-sm-12 control-col-st">
+
+      <label class="k-form-field"> <span>Date of Birth</span>
+        <kendo-datepicker placeholder="From Date" [format]="'dd/MM/yyyy'" [(ngModel)]="fromDate"></kendo-datepicker>
+      </label>
+    </div>
+ -->
+    <div class="col-md-5 col-sm-12 control-col-st">
+      <label class="k-form-field">
+        <span>Search by Subject / Title / Tracking Number</span>
+        <input type="text" #searchRef (input)="inputChange.next(searchRef.value)"
+          placeholder="Tracking Number, Name, CNIC" kendoTextBox>
+      </label>
+    </div>
+
+    <div class="col-md-5 col-sm-12 control-col">
+      <label class="k-form-field">
+        <span>Status</span>
+        <kendo-dropdownlist [data]="dropDowns.applicationStatusData" [textField]="'Name'" [valueField]="'Id'"
+          (valueChange)="dropdownValueChanged($event, 'status')"
+          [value]="dropDowns.selectedFiltersModel.applicationStatus"
+          [defaultItem]="dropDowns.defultFiltersModel.applicationStatus">
+        </kendo-dropdownlist>
+      </label>
+    </div>
+
+    <div class="col-md-2 col-sm-12 mt-1 control-col-end">
+      <label class="k-form-field">
+        <button kendoButton class="btn-block btn-align-v" (click)="getApplications()" [primary]="true">SEARCH</button>
+      </label>
+    </div>
+
+  </div>
+  <div class="row row-panel">
+    <div class="col-md-12">
+      <div class="grid-top-header-custom animated fadeIn" *ngIf="kGrid.totalRecords">
+        <div class="pager-rows-number">
+          <span>
+            {{(kGrid.skip + 1) + ' - ' + (kGrid.pageSize <= kGrid.totalRecords ? (kGrid.pageSize + kGrid.skip) :
+              kGrid.totalRecords) + ' of ' + kGrid.numberWithCommas(kGrid.totalRecords) + ' items ' }} </span>
+          <!--
+              <button kendoButton [primary]="true" [look]="'outline'" class="ml-2 animated fadeIn btn-sm">Before 3 Days</button>
+              <button kendoButton [primary]="true" [look]="'outline'" class="ml-2 animated fadeIn btn-sm">Before 1 Week</button>
+              <button kendoButton [primary]="true" [look]="'outline'" class="ml-2 animated fadeIn btn-sm">Before 2
+                Weeks</button>
+              <button kendoButton [primary]="true" [look]="'outline'" class="ml-2 animated fadeIn btn-sm">Before 3
+                Weeks</button>
+              <button kendoButton [primary]="true" [look]="'outline'" class="ml-2 animated fadeIn btn-sm">Before 1
+                month</button> -->
+          <span class="pull-right">
+            Show &nbsp; <select #select (change)="changePagesize(select.value)">
+              <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}</option>
+              <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+                [selected]="page === kGrid.pageSize ? true : undefined">
+                {{page}}
+              </option>
+            </select>
+            &nbsp; items per page
+          </span>
+
+        </div>
+      </div>
+      <div class="grid-wrapper">
+        <kendo-grid [data]="kGrid.gridView" [(pageSize)]="kGrid.pageSize" [skip]="kGrid.skip" [pageable]="true"
+          (pageChange)="pageChange($event)" [scrollable]="false">
+          <kendo-grid-column [width]="20" field="asd" title="No." [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              {{(rowIndex + 1)}}.
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="80" field="EmployeeName" title="Unit / Wing" [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="employee-info"
+                *ngIf="dataItem.ApplicationSource_Id == 10">
+
+                <p class="m-0"><strong class="p-strong">Subject:
+                  </strong>{{dataItem.DispatchSubject}}</p>
+                <p class="m-0"><strong class="p-strong">Created Date:
+                  </strong>{{dataItem.Created_Date | date:'d/M/yy, h:mm a'}} <small class="pull-right"
+                    [ngClass]="dataItem.Limit == 6 ? 'text-warning' : dataItem.Limit == 7 ? 'text-red' : ''">
+                    <span>{{dataItem.DateDiff | durationMoment}}</span></small></p>
+
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="80" field="TrackingNumber" title="Information"
+            [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="application-info">
+                <p class="m-0"><strong class="p-strong">Dated:
+                  </strong>{{dataItem.DispatchDated | date:'dd/MM/yyyy'}}</p>
+                <p class="m-0"><strong class="p-strong"> Tracking # </strong> <span
+                    [ngClass]="dataItem.Limit >= 3 && dataItem.Limit <= 6  ? 'text-gold' : dataItem.Limit >= 7 ? 'text-red' : ''">{{dataItem.TrackingNumber}}</span>
+                  &nbsp;<i class="fa fa-barcode"></i></p>
+                <p class="m-0"><u> {{dataItem.ApplicationSourceName}}</u></p>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <!--     <kendo-grid-column [width]="80" field="PandSOfficerName" title="Current Office" [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="application-info">
+                <p class="m-0"><strong class="p-strong">{{dataItem.PandSOfficerName}}</strong> </p>
+                <p class="m-0"><strong class="p-strong"> Status: </strong> <u
+                  [ngClass]="dataItem.Limit >= 3 && dataItem.Limit <= 6  ? 'text-gold' : dataItem.Limit >= 7 ? 'text-red' : ''">{{dataItem.StatusName}}</u> </p>
+                <p class="m-0"><strong class="p-strong">Forward Time:</strong> {{dataItem.ForwardTime | date:'d/M/yy, h:mm a'}}</p>
+              </div>
+            </ng-template>
+          </kendo-grid-column> -->
+          <kendo-grid-column [width]="80" field="ToOfficerName" title="Current Office"
+            [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="application-info">
+                <p class="m-0">
+                  <strong
+                    class="p-strong">{{dataItem.ToOfficerName ? dataItem.ToOfficerName : dataItem.PandSOfficerName}}</strong>
+                </p>
+                <p class="m-0"><strong class="p-strong">Forward Time:</strong> {{dataItem.ForwardTime |
+                  date:'d/M/yy, h:mm a'}}</p>
+            <!--     <p class="m-0"><strong class="p-strong"> Status: </strong> <u
+                    [ngClass]="dataItem.Limit >= 3 && dataItem.Limit <= 6  ? 'text-gold' : dataItem.Limit >= 7 ? 'text-red' : ''">{{dataItem.StatusName}}</u>
+                </p> -->
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="50" field="asd" title="Action" [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <button style="width: 88%;
+              height: 57px;
+              padding: 6px;" [routerLink]="'/fts/summary/' + dataItem.Id + '/' + dataItem.TrackingNumber" kendoButton
+                [primary]="true" [look]="'outline'" class="ml-2 animated fadeIn btn-sm">View</button>
+            </ng-template>
+          </kendo-grid-column>
+          <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+            <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+            <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+            <kendo-pager-next-buttons></kendo-pager-next-buttons>
+            <div class="pager-rows-number">
+              <select #select (change)="changePagesize(select.value)">
+                <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}</option>
+                <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+                  [selected]="page === kGrid.pageSize ? true : undefined">
+                  {{page}}
+                </option>
+              </select>
+              &nbsp; items per page
+            </div>
+            <kendo-pager-info></kendo-pager-info>
+          </ng-template>
+        </kendo-grid>
+        <div *ngIf="kGrid.loading" class="k-i-loading"></div>
+      </div>
+    </div>
+  </div>
+</div>

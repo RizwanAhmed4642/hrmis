@@ -1,0 +1,30 @@
+.article-toc {
+    right: 0;
+    font-size: 14px;
+    position: absolute;
+    border-left: 1px solid #d9d9d9;
+}
+.article-toc.affix-top {
+    position: relative;
+    top: 160px;
+}
+.article-toc.affix {
+    margin-top: 70px;
+    position: fixed;
+    top: 0;
+    z-index: 1015;
+}
+.article-toc .side-title {
+    padding-top: 10px;
+}
+.article-toc ul {
+    margin: 10px 0 10px -15px;
+}
+.nav:before, .nav:after {
+    content: " ";
+    display: table;
+}
+.article-toc .anchor-h1, .article-toc .anchor-h2 {
+    font-family: "Roboto", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+}

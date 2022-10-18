@@ -1,0 +1,189 @@
+<hr>
+<div class="content-heading mb-2" id="deptInfo">
+    Qualification <button kendoButton primary="true" class="pull-right" (click)="addNew = !addNew">Add New</button>
+</div>
+<hr>
+<div *ngIf="addNew" class="row animated fadeIn p-2" style="background: #e9e9e9;color: black;border-radius: 9px;">
+    <div class="col-md-5 control-col-st">
+        <label class="k-form-field">
+            <span>Institute / University</span>
+            <input kendoTextBox type="text" [(ngModel)]="serviceHistory.Institute" />
+        </label>
+    </div>
+    <div class="col-md-3 control-col">
+        <label class="k-form-field">
+            <span>Qualification Type <span class="text-danger">*</span></span>
+            <kendo-dropdownlist [data]="dropDowns.qualificationTypes" [textField]="'QualificationType1'"
+                [valueField]="'Id'" required (valueChange)="dropdownValueChanged($event, 'qualificationType')"
+                (filterChange)="handleFilter($event, 'qualificationType')" [filterable]="true"
+                [value]="dropDowns.selectedFiltersModel.qualificationType"
+                [defaultItem]="dropDowns.defultFiltersModel.qualificationType">
+            </kendo-dropdownlist>
+        </label>
+    </div>
+    <div class="col-md-4 control-col-end">
+        <label class="k-form-field">
+            <span>Degree <span class="text-danger">*</span></span>
+            <kendo-dropdownlist [data]="dropDowns.degrees" [textField]="'DegreeName'" [valueField]="'Id'" required
+                (valueChange)="dropdownValueChanged($event, 'degree')" (filterChange)="handleFilter($event, 'degree')"
+                [filterable]="true" [value]="dropDowns.selectedFiltersModel.degree"
+                [defaultItem]="dropDowns.defultFiltersModel.degree">
+            </kendo-dropdownlist>
+        </label>
+    </div>
+    <div class="col-md-3 control-col-st">
+        <label class="k-form-field">
+            <span>Total Marks / CGPA</span>
+            <input kendoTextBox type="text" [(ngModel)]="serviceHistory.TotalMarks" />
+        </label>
+    </div>
+    <div class="col-md-3 control-col">
+        <label class="k-form-field">
+            <span>Obtained Marks / CGPA</span>
+            <input kendoTextBox type="text" [(ngModel)]="serviceHistory.ObtainedMarks" />
+        </label>
+    </div>
+    <div class="col-md-3 control-col">
+        <label class="k-form-field">
+            <span>Passing Year</span>
+            <kendo-datepicker [format]="'yyyy'" [(ngModel)]="serviceHistory.PassingYear"></kendo-datepicker>
+        </label>
+    </div>
+    <div class="col-md-3 control-col-end">
+        <label class="k-form-field">
+            <span>{{photoFile.length == 0 ? 'Document' : photoFile[0].name}}</span>
+            <input type="file" accept="image/jpg, image/jpeg, image/png, application/pdf"
+                (change)="readUrl($event, 'pic')">
+        </label>
+    </div>
+    <div class="col-md-2 control-col-st">
+        <label class="k-form-field mt-1">
+            <button kendoButton primary="true" [ladda]="saving" data-style="zoom-in"
+                [disabled]="!serviceHistory.PassingYear ||  !serviceHistory.ObtainedMarks || !serviceHistory.TotalMarks
+                 || !serviceHistory.Institute || !serviceHistory.QualificationTypeId || !serviceHistory.Required_Degree_Id" (click)="submitServiceHistory()"
+                class="btn-align-v btn-block">Save</button>
+        </label>
+    </div>
+</div>
+<hr *ngIf="addNew">
+
+<div class="row row-panel" *ngIf="profile.DateOfBirth && profile.DateOfFirstAppointment && 2 + 2 == 5">
+    <div class="col-md-12">
+        <div class="grid-wrapper">
+            <kendo-grid [data]="serviceTotalHistroy">
+                <kendo-grid-column field="asd" title="No." [width]="'7'" [headerClass]="'grid-header-custom'"
+                    [class]="{'grid-cell-custom': true}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <p>{{(rowIndex + 1)}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+
+                <kendo-grid-column field="Name" title="Year" [width]="'8'" [headerClass]="'grid-header-custom'"
+                    [class]="{'grid-cell-custom': true}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <p>{{dataItem.From_Date | date:'yyyy'}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="Name" title="Period" [width]="'30'" [headerClass]="'grid-header-custom'"
+                    [class]="{'grid-cell-custom': true}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <p>{{dataItem.From_Date | date:'dd.MM.yyyy'}} - {{dataItem.To_Date | date:'dd.MM.yyyy'}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="Name" title="Status" [width]="'10'" [headerClass]="'grid-header-custom'"
+                    [class]="{'grid-cell-custom': true}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <p><span class="badge" [ngClass]="dataItem.Id == 0 ? 'badge-danger' : 'badge-success'" style="font-family: 'Roboto-Bold';
+              font-weight: 100;">{{dataItem.Id
+                  == 0 ? 'Missing' : 'OK'}}</span>
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="Name" title="Document Type" [width]="'30'"
+                    [headerClass]="'grid-header-custom'" [class]="{'grid-cell-custom': true}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <p>{{dataItem.Remarks}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+            </kendo-grid>
+        </div>
+    </div>
+</div>
+
+<kendo-grid [data]="serviceHistories" *ngIf="!loading">
+    <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-custom'"
+        [class]="{ 'grid-cell-custom': true }">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="m-0">{{(rowIndex + 1)}}.
+            </p>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Name" [title]="'Document'" width="55
+    " [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <div class="row">
+                <div class="col-md-12" style="overflow: hidden;" [ngClass]="dataItem.OrderFilePath ? 'cursor-p' : ''"
+                    (click)="dataItem.OrderFilePath && openInNewTab(dataItem.OrderFilePath.toLowerCase().startsWith('http') ? dataItem.OrderFilePath : '/' + dataItem.OrderFilePath)">
+                    <button kendoButton primary="true" class="btn-block" *ngIf="dataItem.uploadingFile"
+                        [ladda]="dataItem.uploadingFile" data-style="zoom-in"></button>
+                    <input *ngIf="!dataItem.OrderFilePath && !dataItem.uploadingFile && profile?.Tenure != 'Completed'"
+                        type="file" accept="image/jpg, image/jpeg, image/png, application/pdf"
+                        (change)="readUrlAndUpload($event, dataItem)">
+                    <img *ngIf="dataItem.OrderFilePath && !dataItem.uploadingFile" width="50px"
+                        [src]="dataItem.OrderFilePath?.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : dataItem.OrderFilePath?.toLowerCase().startsWith('http') ? dataItem.OrderFilePath : '/' + dataItem.OrderFilePath"
+                        draggable="false" alt="">
+                </div>
+            </div>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Name" [title]="'Institute / University'" width="55
+    " [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="m-0">{{dataItem.Institute}}
+            </p>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Qualification" [title]="'Qualification'" width="55
+    " [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="m-0">{{dataItem.Institute}}
+            </p>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="PassingYear" [title]="'Passing Year'" width="25" [headerClass]="'grid-header-custom'"
+        [class]="{ 'grid-cell-custom': true }">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <div class="animated fadeIn">
+                <p class="m-0">{{dataItem.PassingYear | date:'yyyy'}}</p>
+            </div>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="TotalMarks" [title]="'Total Marks'" width="25" [headerClass]="'grid-header-custom'"
+        [class]="{ 'grid-cell-custom': true }">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <div class="animated fadeIn">
+                <p class="m-0">{{dataItem.TotalMarks}}</p>
+            </div>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ObtainedMarks" [title]="'Obtained Marks'" width="25" [headerClass]="'grid-header-custom'"
+        [class]="{ 'grid-cell-custom': true }">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <div class="animated fadeIn">
+                <p class="m-0">{{dataItem.ObtainedMarks}}</p>
+            </div>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column *ngIf="2 + 2 == 4" field="References" [title]="'Action'" width="15"
+        [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <button class="btn btn-sm btn-danger animated fadeIn" (click)="removeServiceHistory(dataItem)"
+                [ladda]="dataItem.removing" data-style="zoom-in">Remove</button>
+        </ng-template>
+    </kendo-grid-column>
+
+</kendo-grid>

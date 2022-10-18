@@ -1,0 +1,86 @@
+<div class="row">
+  <div class="col-md-9 control-col-st">
+    <label class="k-form-field">
+      <span>Title</span>
+      <input type="text" [(ngModel)]="profileRemarks.Title" kendoTextBox>
+    </label>
+  </div>
+  <div class="col-md-3 control-col-end">
+    <label class="k-form-field">
+      <span>{{photoFile.length == 0 ? 'Attachment' : photoFile[0].name}}</span>
+      <input #photoRef type="file" accept="image/jpg, image/jpeg, image/png" (change)="readUrl($event, 'pic')">
+    </label>
+  </div>
+  <div class="col-md-9 control-col-st">
+    <label class="k-form-field">
+      <span>Remarks <span class="text-danger">*</span></span>
+      <textarea kendoTextArea [(ngModel)]="profileRemarks.Remarks"></textarea>
+    </label>
+  </div>
+  <div class="col-md-3 control-col-end">
+    <label class="k-form-field">
+      <span>&nbsp;</span>
+      <button kendoButton primary="true" class="btn-block btn-lg" [disabled]="!profileRemarks.Remarks"
+        (click)="saveRemarks()">Save
+      </button>
+    </label>
+  </div>
+</div>
+<hr *ngIf="remarks.length > 0">
+<div *ngIf="remarks.length > 0" class="content-heading mb-2" id="contactInfo">
+  Recent Remarks
+</div>
+<div class="row animated fadeIn" *ngIf="remarks.length > 0">
+  <div class="col-md-4 mb-3" *ngFor="let dataItem of remarks; let i = index;"
+    [ngClass]="i % 3 === 0 ? 'control-col-st' : i % 3 === 1 ? 'control-col' : i % 3 === 2 ? 'control-col-end' : ''">
+    <div class="order-thumb p-2">
+      <div class="order-thumb-wrap-2">
+        <div class="order-thumb-log-wrap">
+          <div class="order-thumb-log mb-1">
+            {{dataItem.Created_By}} <span
+              class="pull-right">{{dataItem.Created_Date | date: 'dd/MM/yyyy hh:mm aa'}}</span>
+          </div>
+        </div>
+        <hr>
+        <div *ngIf="!dataItem.edit" class="order-thumb-type">
+          {{dataItem.Title}}</div>
+        <div class="order-thumb-employee mt-1">
+          <span *ngIf="!dataItem.edit"> <span class="m-0 p-strong">Remarks:</span>
+            {{dataItem.Remarks}}
+          </span>
+          <label *ngIf="dataItem.edit" class="k-form-field">
+            <span>Title</span>
+            <input type="text" [(ngModel)]="dataItem.Title" kendoTextBox>
+          </label>
+          <hr *ngIf="dataItem.edit">
+          <label *ngIf="dataItem.edit" class="k-form-field">
+            <span>Remarks</span>
+            <textarea kendoTextArea [(ngModel)]="dataItem.Remarks"></textarea>
+          </label>
+
+        </div>
+        <hr>
+        <div class="order-thumb-log-wrap">
+          <div class="order-thumb-log">
+            <a *ngIf="dataItem.FilePath" [href]="'https://hrmis.pshealthpunjab.gov.pk/' + dataItem.FilePath"
+              target="_blank">Attachment</a>
+            <span class="pull-right mb-2">
+              <button *ngIf="dataItem.edit" class="btn btn-primary btn-sm mx-2">
+                <i class="fa fa-save" (click)="editRemarks(dataItem)"></i>
+              </button>
+              <button *ngIf="!dataItem.edit" class="btn btn-primary btn-sm mx-2">
+                <i class="fa fa-pencil" (click)="dataItem.edit = true"></i>
+              </button>
+              <button *ngIf="!dataItem.edit" class="btn btn-danger btn-sm mx-2">
+                <i class="fa fa-times" (click)="removeRemarks(dataItem.Id)"></i>
+              </button>
+
+              <button *ngIf="dataItem.edit" class="btn btn-secondary btn-sm mx-2">
+                <i class="fa fa-times" (click)="dataItem.edit = false"></i>
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

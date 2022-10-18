@@ -1,0 +1,119 @@
+<kendo-dialog [title]="'Search Profile & Select Order Type'" *ngIf="orderDialogOpened" (close)="closeWindow()"
+  [minWidth]="'450'" [width]="'700'">
+  <div class="row">
+    <div class="control-col-st" [ngClass]="mutualTransfer ? 'col-md-4' : 'col-md-8'">
+      <label class="k-form-field">
+        <span>CNIC </span><span
+          *ngIf="currentUser.RoleName == 'Hisdu Order Team' || currentUser.RoleName == 'Chief Executive Officer' || currentUser.RoleName == 'Districts' || currentUser.RoleName == 'DG Health' || currentUser.UserName == 'dpd' || currentUser.UserName == 'ordercell'"
+          class="pull-right cursor-p text-primary" (click)="combineOrder('/order/combine/4')">combine order</span>
+        <span
+          *ngIf="currentUser.RoleName == 'Hisdu Order Team' || currentUser.RoleName == 'Chief Executive Officer' || currentUser.RoleName == 'Districts' || currentUser.RoleName == 'DG Health' || currentUser.UserName == 'dpd' || currentUser.UserName == 'ordercell'"
+          class="pull-right cursor-p text-primary"
+          (click)="mutualTransfer = !mutualTransfer">{{mutualTransfer ? 'single order' : 'mutual transfer'}}&nbsp;|&nbsp;</span>
+        <kendo-maskedtextbox [mask]="cnicMask" (input)="cnicValueChange()" (keyup.enter)="getProfileByCNIC()"
+          [(ngModel)]="cnic"></kendo-maskedtextbox>
+      </label>
+    </div>
+    <div class="col-md-4 control-col animated fadeIn" *ngIf="mutualTransfer">
+      <label class="k-form-field">
+        <span>CNIC 2</span>
+        <kendo-maskedtextbox [mask]="cnicMask" (input)="cnicValueChange()" (keyup.enter)="getProfileByCNIC()"
+          [(ngModel)]="cnic2"></kendo-maskedtextbox>
+      </label>
+    </div>
+    <div class="col-md-4 control-col-end">
+      <label class="k-form-field mt-1">
+        <button kendoButton primary="true" [ladda]="searchingProfile" data-style="zoom-in" class="btn-align-v btn-block"
+          (click)="getProfileByCNIC()">Search
+          Profile</button>
+      </label>
+    </div>
+  </div>
+  <hr class="animated fadeIn">
+  <div class="row animated fadeIn" *ngIf="profileExist == false && searchStarted">
+    <div class="col-md-12">
+      <h5 class="text-center p-strong">
+        No Profile Exist.</h5>
+    </div>
+  </div>
+  <div class="row animated fadeIn" *ngIf="profileExist && outRangeProfile">
+    <div class="col-md-12">
+      <h5 class="text-center p-strong">
+        Profile does not exist in your district.</h5>
+    </div>
+  </div>
+  <div class="row animated fadeIn" *ngIf="profileExist && !outRangeProfile">
+    <div class="col-md-9">
+      <div class="row">
+        <div class="col-md-12">
+          <span><strong class="p-strong">Employee Name</strong> {{profile.EmployeeName}}</span>
+
+        </div>
+        <div class="col-md-12">
+          <strong class="p-strong">Father Name</strong> {{profile.FatherName}}
+        </div>
+        <div class="col-md-12">
+          <strong class="p-strong">Designation</strong> {{profile.Designation_Name ? profile.Designation_Name : ''}}
+        </div>
+        <div class="col-md-12">
+          <strong class="p-strong">Employement Mode</strong> {{profile.EmpMode_Name ? profile.EmpMode_Name : ''}}
+          <a *ngIf="!profile.EmpMode_Name" [routerLink]="'/profile/' + profile.CNIC + '/edit'" (click)="closeWindow()"
+            class="text-danger"> Add Employement Mode</a>
+        </div>
+        <div class="col-md-12">
+          <strong class="p-strong">Health Facility</strong> {{profile.HealthFacility ? profile.HealthFacility : ''}}, {{profile.Tehsil ?
+                profile.Tehsil : ''}}, {{profile.District ? profile.District : ''}}
+        </div>
+        <div class="col-md-12">
+          <strong class="p-strong">Status</strong> {{profile.StatusName ? profile.StatusName : ''}}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <img width="100" height="100"
+        [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + profile.CNIC + '_23.jpg'"
+        onError="this.src='../../../assets/img/notfound.png'" alt="">
+      <hr>
+      <a [routerLink]="'/profile/' + profile.CNIC + '/edit'" (click)="closeWindow()" class="text-success"><i
+          class="fa fa-pencil"></i> Edit
+        Profile</a>
+    </div>
+  </div>
+  <hr *ngIf="profileExist">
+  <div class="row" *ngIf="profileExist && !outRangeProfile && profile.EmpMode_Name">
+    <div class="col-md-4" *ngFor="let type of orderTypes;let i = index;"
+      [ngClass]="i % 3 === 0 ? 'control-col-st' : i % 3 === 1 ? 'control-col' : i % 3 === 2 ? 'control-col-end' : ''">
+      <button class="mb-3 btn-block" kendoButton [primary]="true" [look]="'outline'"
+        (click)="openOrderType('order/new/' + cnic + '/' + type.Id)">{{type.Name}}</button>
+    </div>
+  </div>
+  <!--  <div class="row" *ngIf="profileExist && !outRangeProfile && currentUser?.UserName.toLowerCase().startsWith('ceo.')">
+    <div class="col-md-6 control-col-st">
+      <button class="mb-3 btn-block" kendoButton [primary]="true" [look]="'outline'" (click)="openOrderType('/order/new/' + cnic + '/5')"
+        (click)="selectedTypeId = 5">Leave Order</button>
+    </div>
+    <div class="col-md-6 control-col-end">
+      <button class="mb-3 btn-block" kendoButton [primary]="true" disabled="disabled" [look]="'outline'" [routerLink]="['/order/new/' + cnic + '/4']"
+        (click)="selectedTypeId = 4">Transfer</button>
+    </div>
+  </div> -->
+
+</kendo-dialog>
+
+
+<kendo-dialog [title]="'Select Application Type'" *ngIf="applicatonDialogOpened" (close)="closeApplicationWindow()"
+  [minWidth]="'450'" [width]="'800'" height="440">
+  <div class="row">
+    <div class="col-md-4 offset-md-4">
+      <input kendoTextBox type="text" placeholder="Search..." #searchRef (input)="typeSearch(searchRef.value)">
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-4" *ngFor="let type of applicationTypesData;let i = index;"
+      [ngClass]="i % 3 === 0 ? 'control-col-st' : i % 3 === 1 ? 'control-col' : i % 3 === 2 ? 'control-col-end' : ''">
+      <button [tabIndex]="i" class="mb-3 btn-block" kendoButton [primary]="true"
+        (click)="openApplicationType('application/new/' + type.Id)" [look]="'outline'">{{type.Name}}</button>
+    </div>
+  </div>
+</kendo-dialog>

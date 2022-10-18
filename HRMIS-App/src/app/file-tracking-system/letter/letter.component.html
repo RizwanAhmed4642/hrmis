@@ -1,0 +1,207 @@
+<div *ngIf="loading" class="k-i-loading"></div>
+<div class="animated fadeIn" *ngIf="!loading && application">
+  <!-- <div class="row">
+    <div class="col-md-12 col-xs-12">
+      <div class="top-h3">
+        <p class="m-0">
+          {{application.ApplicationTypeName}} # {{application.TrackingNumber}}
+        </p>
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-12">
+          <div class="top-controls">
+            <button kendoButton [primary]="true" [look]="'outline'" class="ml-2" (click)="openWindow('')">New
+              Application</button>
+          </div>
+        </div>
+  </div> -->
+  <div class="row mt-4">
+    <div class="col-md-4" style="background: #e9e9e9;color: black;border-radius: 9px;">
+      <div class="content-heading mb-2">
+        Letter
+      </div>
+      <label class="k-form-field">
+        <span>Message</span>
+        <textarea type="text" [(ngModel)]="Message" rows="10" placeholder="type message here..." kendoTextArea> </textarea>
+      </label>
+      <button kendoButton type="button" [disabled]="!Message" [primary]="true" class="btn-block btn-lg mt-4" (click)="printLetter()">
+        Print Letter</button>
+    </div>
+    <div class="col-md-8">
+      <!--  <div class="content-heading mb-2 text-center">
+        Application
+      </div> -->
+      <div class="page preview" id="applicationPrint">
+
+        <div style="text-align:center;position:absolute;left:0;width:100%;z-index:-1; font-weight: normal; line-height: 1.5;opacity: 0.2;">
+          <img alt="HISDU" src="../../../assets/img/brand/Watermark.png" style="display:inline-block" />
+        </div>
+        <div class="animated fadeIn mb-2" style="margin-top: 20px;">
+          <table class="table">
+            <tbody>
+              <tr>
+                <td colspan="2" style="padding-bottom: 0px">
+                  <img width="300px" src="https://hrmis.pshealthpunjab.gov.pk/assets/img/brand/mobilelogo.png" alt="">
+                </td>
+                <td class="mt-1" style="padding-bottom: 0px">
+                  <p class="text-center">
+                    <img style="margin-top: 10px;" alt="">
+                  </p>
+                  <p class="text-center">
+                    Dated, Lahore <span [innerHTML]="dateNow"></span>
+                  </p>
+                  <p class="text-center">
+                    <strong class="p-strong">Application # {{application.TrackingNumber}}</strong>
+                  </p>
+
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <hr>
+          <div class="row mb-1">
+            <div class="col-md-12">
+              <p class="ml-1">
+                <strong class="p-strong">To,</strong>
+              </p>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-md-12">
+              <p class="ml-2">
+                <strong class="p-strong">Name:</strong> {{application.EmployeeName}}
+              </p>
+              <p class="ml-2">
+                <strong class="p-strong">CNIC:</strong> {{this.dashifyCNIC(application.CNIC)}}
+              </p>
+              <p class="ml-2">
+                <strong class="p-strong">Designation: </strong> {{application.designationName}}
+              </p>
+              <p class="ml-2">
+                <strong class="p-strong">Place of Posting: </strong> {{application.fromHealthFacility}}
+              </p>
+              <p class="ml-2">
+                <strong class="p-strong">Address: </strong> {{application.DispatchFrom}}
+              </p>
+            </div>
+          </div>
+          <div class="row smb-1">
+            <div class="col-sm-12 col-md-12 ml-2">
+              <p>
+                <strong class="p-strong">Subject: </strong><u>{{application.ApplicationTypeName}} / {{letterTypeName}} </u>
+              </p>
+            </div>
+          </div>
+          <div class="row mb-1">
+            <div class="col-sm-12 col-md-12 ml-2">
+              <p>
+                <strong class="p-strong">Message: </strong>
+              </p>
+              <p>
+                <span style="margin-left:20px;">{{Message}}</span>
+              </p>
+              <br>
+            </div>
+          </div>
+
+         <!--  <br>
+
+          <table class="table ml-2" style="margin-top: 10px;">
+            <tbody>
+              <tr>
+                <td style="border: 0px solid #c1c1c1;">
+                  <strong class="p-strong"><u>Number &amp; Date Even</u></strong>
+
+                  <p>A copy is forwarded for information and necessary action to:</p>
+                  <ol>
+                    <li>PSO to Secretarty, Primary and Secondary Healthcare Department.</li>
+                    <li>PA to {{CC2 ? CC2 : 'Additional Secretary Concerned'}}</li>
+                    <li>PA to {{CC3 ? CC3 : 'Deputy Secretary Concerned'}}</li>
+                    <li>Section Officer / Support Coordinator Concerned</li>
+                    <li>Personal File</li>
+                  </ol>
+
+                </td>
+              </tr>
+            </tbody>
+          </table> -->
+          <table class="table" style="margin-top: 10px;">
+            <tbody>
+              <tr>
+                <td style="text-align:right;border: 0px solid #c1c1c1;">
+                  <div style="text-align:center; display:inline-block;">
+
+                    <p class="ml-1">
+                      ______________________
+                    </p>
+                    <p class="ml-1 mt-1">
+                      {{signedBy ? signedBy : 'Deputy Secretary '}}
+                    </p>
+
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<kendo-window [title]="'Application Attachment'" [state]="'maximized'" *ngIf="imageWindowOpened" [keepContent]="true"
+  (close)="closeWindow()" [minWidth]="450">
+  <img [src]="imagePath" alt="">
+  <kendo-scrollview [data]="applicationAttachments" [activeIndex]="activeIndex" [width]="'100%'" [height]="'500px'"
+    [animate]="true" [arrows]="true" [pageable]="true">
+    <ng-template let-item="item">
+      <h2 class="demo-title text-center">{{item.DocName}}</h2>
+      <!-- <img src='{{item.url}}' alt='{{item.title}}' [ngStyle]="{minWidth: width}" draggable="false" /> -->
+      <img height="100%" src="https://www.pulpmags.org/contexts/images/office-dummy/Office%20Dummy-002.jpg" draggable="false"
+        alt="">
+    </ng-template>
+  </kendo-scrollview>
+</kendo-window>
+
+<kendo-dialog [title]="'Application Updated'" *ngIf="successDialogOpened" (close)="closeSuccessDialog()" [width]="550"
+  [minWidth]="450">
+  <table class="table animated fadeIn">
+    <thead>
+      <tr>
+        <th colspan="2" style="width:85%">
+          Action
+        </th>
+        <th style="width:15%">
+          Status
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="applicationLog.ToOfficerName">
+        <td>Forwarded to</td>
+        <td>{{applicationLog.ToOfficerName}}</td>
+        <td>
+          <div class="badge badge-success">success</div>
+        </td>
+      </tr>
+      <tr *ngIf="applicationLog.ToStatus">
+        <td>Status</td>
+        <td>{{applicationLog.ToStatus}}</td>
+        <td>
+          <div class="badge badge-success">success</div>
+        </td>
+      </tr>
+      <tr *ngIf="applicationLog.Remarks">
+        <td>Remarks</td>
+        <td>{{applicationLog.Remarks}}</td>
+        <td>
+          <div class="badge badge-success">success</div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <kendo-dialog-actions *ngIf="successDialogOpened" class="animated fadeIn">
+    <button kendoButton (click)="closeSuccessDialog()" primary="true">Back to Applications</button>
+  </kendo-dialog-actions>
+</kendo-dialog>

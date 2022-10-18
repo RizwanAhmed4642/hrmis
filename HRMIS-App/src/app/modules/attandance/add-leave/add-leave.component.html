@@ -1,0 +1,126 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-6 col-xs-12">
+      <div class="top-h3">
+        {{!editLeave ? 'New' : 'Edit'}} Leave Application Form
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" class="ml-2" routerLink="/attandance/leaveList"> Back to Leave
+          Applications</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-2 col-xs-12"><label class="k-form-field">
+        <b>Leave applied for : </b> </label> </div>
+    <div class="col-md-2 col-xs-12">
+      <input type="radio" id="leaveType1" class="k-radio" [value]="1" [(ngModel)]="addLeave.LeaveTypeID"
+        (change)="leaveInputsChanged(4)">
+      <label class="k-radio-label" for="leaveType1">Sick</label>
+    </div>
+    <div class="col-md-2 col-xs-12">
+      <input type="radio" id="leaveType2" class="k-radio" [value]="2" [(ngModel)]="addLeave.LeaveTypeID"
+        (change)="leaveInputsChanged(4)">
+      <label class="k-radio-label" for="leaveType2">Casual</label>
+    </div>
+    <div class="col-md-2 col-xs-12">
+      <input type="radio" id="leaveType3" class="k-radio" [value]="3" [(ngModel)]="addLeave.LeaveTypeID"
+        (change)="leaveInputsChanged(3)">
+      <label class="k-radio-label" for="leaveType3">Short</label>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-md-2 col-xs-12"><label class="k-form-field"><span>Employee CNIC <span
+            class="text-danger">*</span></span></label></div>
+    <div class="col-md-3 col-xs-12">
+      <label class="k-form-field">
+        <kendo-maskedtextbox [mask]="cnicMask" [(ngModel)]="addLeave.Cnic" required>
+        </kendo-maskedtextbox>
+        <!-- <input kendoTextBox type="number" [(ngModel)]="addLeave.Cnic" required> -->
+      </label>
+
+    </div>
+    <div class="col-md-0.5 col-xs-12">
+      <!-- || !addLeave.Cnic?.length == 13 -->
+      <button kendoButton (click)="profileSearch1()" [disabled]="!addLeave?.Cnic" data-style="zoom-in"
+        class="btn btn-search-success" [primary]="true"><i class="fa fa-search"></i></button>
+    </div>
+    <div class="col-md-2 col-xs-12"><label class="k-form-field"><span>Employee Name <span
+            class="text-danger">*</span></span></label> </div>
+    <div class="col-md-3 col-xs-12"><label class="k-form-field"><input kendoTextBox type="text" disabled
+          [(ngModel)]="addLeave.EmployeeName" required></label>
+    </div>
+    <div class="col-md-1 col-xs-12"></div>
+    <div class="col-md-1 col-xs-12"></div>
+  </div>
+  <div class="row">
+    <div class="col-md-2 col-xs-12"><label class="k-form-field"><span>Designation <span
+            class="text-danger">*</span></span></label></div>
+    <div class="col-md-3 col-xs-12"><label class="k-form-field"><input kendoTextBox type="text" disabled
+          [(ngModel)]="addLeave.Designation_Name" required></label>
+    </div>
+    <div class="col-md-2 col-xs-12"><label class="k-form-field"><span>Department<span
+            class="text-danger">*</span></span></label> </div>
+    <div class="col-md-5 col-xs-12"><label class="k-form-field"><input kendoTextBox type="text" disabled
+          [(ngModel)]="addLeave.HealthFacility" required></label> </div>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-2 col-xs-12"><label class="k-form-field"><span>From Date <span
+            class="text-danger">*</span></span></label></div>
+    <div class="col-md-3 col-xs-12"><label class="k-form-field">
+        <kendo-datepicker placeholder="Starting from" [format]="'dd/MM/yyyy'" [(ngModel)]="addLeave.LeaveFrom"
+          #LeaveFrom="ngModel" (valueChange)="leaveInputsChanged(3)">
+        </kendo-datepicker>
+      </label> </div>
+    <div class="col-md-2 col-xs-12"><label class="k-form-field"><span>To Date<span
+            class="text-danger">*</span></span></label> </div>
+    <div class="col-md-3 col-xs-12"><label class="k-form-field">
+        <kendo-datepicker placeholder="Leave end date" [format]="'dd/MM/yyyy'" (valueChange)="leaveInputsChanged(1)"
+          [(ngModel)]="addLeave.LeaveTo" #LeaveTo="ngModel" [disabled]="addLeave.TotalDays == 0.5">
+        </kendo-datepicker>
+      </label> </div>
+    <div class="col-md-1 col-xs-12"><label class="k-form-field"><span>Days</span> </label></div>
+    <div class="col-md-1 col-xs-12">
+      <label class="k-form-field">
+        <input kendoTextBox [(ngModel)]="addLeave.TotalDays" [disabled]="addLeave.TotalDays == 0.5">
+      </label></div>
+  </div>
+  <div class="row">
+    <div class="col-md-2 col-xs-12"><label class="k-form-field"><span>Reason<span
+            class="text-danger">*</span></span></label></div>
+    <div class="col-md-10 col-xs-12"><label class="k-form-field"> <textarea kendoTextArea type="text"
+          [(ngModel)]="addLeave.Reason"></textarea></label></div>
+  </div>
+  <div class="row">
+    <div class="col-md-2 col-xs-12"><label class="k-form-field"><span> Phone No. / Address while on leave<span
+            class="text-danger">*</span></span></label></div>
+    <div class="col-md-10 col-xs-12"><label class="k-form-field"> <textarea kendoTextArea type="text"
+          [(ngModel)]="addLeave.ContactInfo"></textarea></label></div>
+  </div>
+  <div class="row">
+    <div class="col-md-2 col-xs-12"></div>
+    <div class="col-md-2 col-xs-12"><label class="k-form-field"><span><b>Availed Short Leave</b></span>
+        <br>{{ addLeave.TotalSL }}</label></div>
+    <div class="col-md-2 col-xs-12"><label class="k-form-field"><span><b>Availed Sick</b></span>
+        <br>{{ addLeave.TotalSick }}</label></div>
+    <div class="col-md-2 col-xs-12"><label class="k-form-field"><span><b>Availed Casual</b></span>
+        <br>{{ addLeave.TotalCasual }}</label></div>
+    <div class="col-md-2 col-xs-12"><label class="k-form-field"><span><b>Availed Leaves</b></span>
+        <br>{{ addLeave.TotalLev }}</label></div>
+   <!--  <div class="col-md-2 col-xs-12"><label class="k-form-field"><span><b>Remaining Balance</b></span>
+        <br>{{ addLeave.Bal }}</label></div> -->
+  </div>
+  <div class="row">
+    <div class="col-md-12 col-sm-12">
+      <button kendoButton (click)="saveLeave()" data-style="zoom-in" class="ml-2 btn-align-v" [primary]="true">
+        Save Leave
+      </button>
+    </div>
+  </div>
+</div>

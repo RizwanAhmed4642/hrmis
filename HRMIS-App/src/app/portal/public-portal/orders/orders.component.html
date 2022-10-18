@@ -1,0 +1,251 @@
+<div class="text-center p-2" style="background: #46a23f;color:white;">
+  <h2 class="m-0 p-strong">Administrative Cadre - Order Generation</h2>
+</div>
+<div class="d-flex" style="height: 93vh;overflow-y: auto;">
+  <div style="width: 25%;">
+    <div class="row">
+      <div class="col-md-4 offset-md-8">
+        <!--    <button kendoButton class="btn-block mt-1" primary="true" (click)="showFilters = !showFilters"><i class="fa"
+            [ngClass]="showFilters ? 'fa-arrow-up' : 'fa-arrow-down'"></i> Filters</button> -->
+      </div>
+    </div>
+    <div class="row animated fadeIn" *ngIf="showFilters">
+      <div class="col-md-12">
+        <label class="k-form-field">
+          <span class="p-strong">Designation</span>
+          <kendo-dropdownlist [data]="designationsData" [defaultItem]="{Name: 'Select Designation', Id: null}"
+            [textField]="'Name'" [valueField]="'Id'" (filterChange)="handleFilter($event, 'designation')"
+            [filterable]="true" (valueChange)="dropdownValueChanged($event, 'designation')"
+            [value]="{Id: null, Name: 'Select Designation'}">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-12">
+        <label class="k-form-field">
+          <span class="p-strong">Batch Number</span>
+          <kendo-dropdownlist [data]="jobBatches" [defaultItem]="{BatchNo: 'Select Batch', Id: null}"
+            [textField]="'BatchNo'" [valueField]="'Id'" (filterChange)="handleFilter($event, 'district')"
+            (valueChange)="dropdownValueChanged($event, 'batch')" [value]="{BatchNo : 'Select Batch', Id : null}">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-12">
+        <label class="k-form-field">
+          <span class="p-strong">Preference / Health Facility</span>
+          <kendo-dropdownlist [data]="[]" [defaultItem]="{Name: 'Select District', Code: currentUser?.HfmisCode}"
+            [textField]="'Name'" [valueField]="'Code'" (filterChange)="handleFilter($event, 'district')"
+            (valueChange)="dropdownValueChanged($event, 'district')" [value]="{}">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-12">
+        <label class="k-form-field ml-1">
+          <span class="p-strong">Search Name / CNIC</span>
+          <input type="text" #searchRef (input)="inputChange.next(searchRef.value)" placeholder="Type Name, CNIC..."
+            kendoTextBox>
+        </label>
+      </div>
+    </div>
+
+    <div style="height: 82vh;overflow-y: auto;">
+      <div *ngIf="kGrid.loading" class="k-i-loading"></div>
+      <div class="mx-1 my-2" *ngFor="let dataItem of kGrid.data;let i = index;">
+        <div class="order-thumb" (click)="selectApplicant(dataItem.Applicant_Id)"
+          [ngClass]="dataItem.Applicant_Id == selectedApplicant?.Applicant_Id ? 'active' : ''">
+
+          <div class="order-thumb-employee mt-1 p-2">
+            <h5>{{dataItem.Name ? dataItem.Name : ''}}<span class="pull-right"> Merit 
+              {{(i + 1)}}</span>
+            </h5>
+            <p class="m-0"><strong class="p-strong"> Father Name: </strong>
+              {{dataItem.FatherName ? dataItem.FatherName : ''}}
+              <!-- <span class="pull-right"><strong class="p-strong">
+                  Status: </strong> {{dataItem.Status}}</span> -->
+            </p>
+            <p class="m-0"><strong class="p-strong"> CNIC: </strong> {{dashifyCNIC(dataItem.CNIC)}}</p>
+            <!--  <p class="m-0"><strong class="p-strong"> PNC # </strong> {{dataItem.PMDCNumber}}</p>
+              <p class="m-0"><strong class="p-strong"> Application # </strong> {{dataItem.ApplicationNumber}}</p> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="width: 75%;height: 92vh;overflow-y: auto;">
+    <div class="animated fadeIn pl-3 pb-3 pt-2" *ngIf="selectedApplicant">
+      <div class="row m-0">
+        <div class="col-md-12">
+          <h4 class="mb-2"><span class="p-strong">Basic Information
+            </span>
+          </h4>
+          <table class="table table-sm table-striped">
+            <tr>
+              <td>Photo</td>
+              <td colspan="3">
+                <img class="img-fluid mb-1" style="width: 75px; height: 75px;"
+                  [src]="selectedApplicant.PhotoPath ? 'https://onlinejobs.pshealthpunjab.gov.pk/Uploads/ApplicantImages/'+ selectedApplicant.PhotoPath: '../../../../../../../assets/notfound.png'"
+                  onerror="'../../../../../../../assets/notfound.png'" alt="">
+
+              </td>
+            </tr>
+            <tr>
+              <td>Name</td>
+              <td class="font-weight-bold text-capitalize">{{selectedApplicant.Name}}</td>
+              <td>Father Name</td>
+              <td class="font-weight-bold text-capitalize">{{selectedApplicant.FatherName}}</td>
+            </tr>
+            <tr>
+              <td>CNIC</td>
+              <td class="font-weight-bold">{{selectedApplicant.CNIC}}</td>
+              <td>Mobile</td>
+              <td class="font-weight-bold">{{selectedApplicant.MobileNumber}}</td>
+            </tr>
+            <tr>
+              <td>Date of Birth</td>
+              <td class="font-weight-bold">{{selectedApplicant.DOB | date}}</td>
+              <td>Email</td>
+              <td class="font-weight-bold">{{selectedApplicant.Email}}</td>
+            </tr>
+            <tr>
+              <td>Gender</td>
+              <td>{{selectedApplicant.Gender}}</td>
+              <td>Religion</td>
+              <td>{{selectedApplicant.Religion}} </td>
+            </tr>
+            <tr>
+              <td>Mobile Sec</td>
+              <td>{{selectedApplicant.MobileSec}}</td>
+              <td>Address</td>
+              <td>{{selectedApplicant.Address}}</td>
+            </tr>
+            <tr>
+              <td>Department</td>
+              <td>
+                {{selectedApplicant.DepartmentMode == 1 ? 'Primary & Secondary Healthcare Department': 'Specialized Healcare Department'}}
+              </td>
+              <td>Current Working Facility</td>
+              <td>
+                {{selectedApplicant.CurrentlyWorkingFacility}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Mode/Scale
+              </td>
+              <td>
+                {{selectedApplicant.workingMode}} - {{selectedApplicant.workingScale}}
+              </td>
+              <td>Domicile</td>
+              <td>{{selectedApplicant.DomicileName}}</td>
+            </tr>
+          </table>
+
+          <tabset>
+            <tab heading="Qualification">
+              <span class="pull-right text-muted"><i>not verified</i></span>
+              <table class="table table-sm table-striped">
+                <thead>
+                  <tr>
+                    <th class="p-strong">Sr.</th>
+                    <th class="p-strong">Institue</th>
+                    <th class="p-strong">Qualification</th>
+                    <th class="p-strong">Passing Year</th>
+                    <th class="p-strong">Total Marks</th>
+                    <th class="p-strong">Obt. Marks</th>
+                    <th class="p-strong">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let qualification of selectedApplicant.Qualifications;let i = index;">
+                    <td>{{i + 1}}.</td>
+                    <td>
+                      {{qualification.Institute}}
+                    </td>
+                    <td>
+                      {{qualification.DegreeName}}
+                    </td>
+                    <td>
+                      {{qualification.PassingYear | date}}
+                    </td>
+                    <td>
+                      {{qualification.TotalMarks}}
+                    </td>
+                    <td>
+                      {{qualification.ObtainedMarks}}
+                    </td>
+                    <td>
+                      <img style="width: 100px; height: 100px; cursor: pointer;"
+                        [ngStyle]="{'box-shadow': qualification.UploadPath != null && qualification.UploadPath.toLowerCase().endsWith('.pdf') ? '' : '1px 2px 3px #00000061' }"
+                        [src]="qualification.UploadPath != null && qualification.UploadPath.toLowerCase().endsWith('.pdf') ? '../../../assets/img/pdf-icon.png' : 'https://onlinejobs.pshealthpunjab.gov.pk/Uploads/ApplicantDegree/' + qualification.UploadPath"
+                        alt="" onError="this.src='../../../assets/img/notfound.png'">
+
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </tab>
+            <tab heading="Experience">
+              <span class="pull-right text-muted"><i>not verified</i></span>
+              <table class="table table-sm table-striped">
+                <thead>
+                  <tr>
+                    <th class="p-strong" style="width:20%;">Sr.</th>
+                    <th class="p-strong" style="width:100%;">Organization</th>
+                    <th class="p-strong" style="width:90%;">Title</th>
+                    <th class="p-strong" style="width:90%;">From</th>
+                    <th class="p-strong" style="width:90%;">To</th>
+                    <th class="p-strong" style="width:90%;">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let exp of selectedApplicant.Experiences;let i = index;">
+                    <td>{{i + 1}}.</td>
+                    <td>
+                      {{exp.Organization}}
+                    </td>
+                    <td>
+                      {{exp.JobTitle}}
+                    </td>
+                    <td>
+                      {{exp.FromDate | date:'dd/MM/yyyy'}}
+                    </td>
+                    <td>
+                      {{exp.ToDate | date:'dd/MM/yyyy' }}
+                    </td>
+                    <td>
+                      <img style="width: 100px; height: 100px; cursor: pointer;"
+                        [ngStyle]="{'box-shadow': exp.UploadPath != null && exp.UploadPath.toLowerCase().endsWith('.pdf') ? '' : '1px 2px 3px #00000061' }"
+                        [src]="exp.UploadPath != null && exp.UploadPath.toLowerCase().endsWith('.pdf') ? '../../../assets/img/pdf-icon.png' : 'https://onlinejobs.pshealthpunjab.gov.pk/Uploads/ExperienceCertificates/' + exp.UploadPath"
+                        onError="this.src='../../../assets/img/notfound.png'" alt="">
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </tab>
+            <tab heading="Preference">
+              <span class="pull-right text-muted"><i>not verified</i></span>
+              <h4 class="mb-2"><span class="p-strong">Preferences
+                </span>
+              </h4>
+              <table class="table table-sm table-striped">
+                <thead>
+                  <tr>
+                    <th class="p-strong">Sr.</th>
+                    <th class="p-strong">Health Facility</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let pref of selectedApplicant.Preferences;let i = index;">
+                    <td>{{i + 1}}.</td>
+                    <td>
+                      {{pref.FullName}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </tab>
+          </tabset>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,47 @@
+body .ui-multiselect .ui-multiselect-label {
+  padding: 4px 8px !important;
+}
+
+.ui-multiselect .ui-multiselect-label,
+input.ui-inputtext .ui-widget .ui-state-default .ui-corner-all {
+  padding: 4px !important;
+}
+
+label.ui-multiselect-label.ui-corner-all,
+label.ng-star-inserted {
+  border-radius: none !important;
+  margin: 0px !important;
+}
+
+body .ui-multiselect-panel .ui-multiselect-header .ui-multiselect-filter-container {
+  width: 85% !important;
+}
+
+body .ui-corner-all {
+  border-radius: 8px !important;
+}
+
+body .ui-multiselect {
+  border: 1px solid #d8d8d8 !important;
+}
+
+body .ui-multiselect:not(.ui-state-disabled):hover {
+  box-shadow: 0 2px 2px 1px rgba(0, 0, 0, .06) !important;
+  border: 1px solid rgba(0, 0, 0, .15) !important;
+}
+
+.ui-multiselect .ui-multiselect-panel {
+  top: 32px !important;
+}
+
+.vpmgrtable th {
+  font-family: "Roboto-Bold";
+  font-weight: 100 !important;
+  color: #111111 !important;
+}
+
+.vpmgrtable td {
+  font-family: "Roboto-Regular";
+  font-weight: 100 !important;
+  color: #111111 !important;
+}

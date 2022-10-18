@@ -1,0 +1,9 @@
+<div class="animated fadeIn">
+  <!--  <div class="animated fadeIn" class="card-header card-header-success">
+    <span class="text-white card-title"> Generated Order </span>
+    <button type="button" (click)="SaveOrderHtml()" class="btn btn-success pull-right btn-sm"><i class="fa fa-print"></i> Save and Print</button>
+  </div> -->
+  <ckeditor *ngIf="showOrder" (change)="textChanged($event)" [(ngModel)]="orderText" [config]="{
+    height: 1005
+  }" debounce="300"></ckeditor>
+</div>

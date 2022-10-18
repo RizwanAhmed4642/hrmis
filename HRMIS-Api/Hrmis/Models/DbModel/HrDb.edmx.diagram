@@ -1,0 +1,808 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8895ddd70a5c4ff89c760b6dbb5630e7" Name="Diagram1" ZoomLevel="59">
+        <EntityTypeShape EntityType="HR_SystemModel.C__EFMigrationsHistory" Width="1.5" PointX="2.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.C__MigrationHistory" Width="1.5" PointX="7.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.C_ErpComponent" Width="1.5" PointX="7.75" PointY="24.875" />
+        <EntityTypeShape EntityType="HR_SystemModel.C_ErpField" Width="1.5" PointX="7.75" PointY="18.875" />
+        <EntityTypeShape EntityType="HR_SystemModel.C_ErpModule" Width="1.5" PointX="7.75" PointY="15.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.C_ErpModuleComponents" Width="1.5" PointX="10" PointY="25" />
+        <EntityTypeShape EntityType="HR_SystemModel.C_ErpUserFields" Width="1.5" PointX="10" PointY="21.875" />
+        <EntityTypeShape EntityType="HR_SystemModel.C_ErpUserModuleComponents" Width="1.5" PointX="7.75" PointY="21.875" />
+        <EntityTypeShape EntityType="HR_SystemModel.C_Role" Width="1.5" PointX="14.75" PointY="7.125" />
+        <EntityTypeShape EntityType="HR_SystemModel.C_SessionLog" Width="1.5" PointX="0.75" PointY="16.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.C_User" Width="1.5" PointX="17" PointY="4.125" />
+        <EntityTypeShape EntityType="HR_SystemModel.C_UserAuth" Width="1.5" PointX="2.75" PointY="16.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.C_UserClaim" Width="1.5" PointX="19.25" PointY="8.25" />
+        <EntityTypeShape EntityType="HR_SystemModel.C_UserContact" Width="1.5" PointX="12.75" PointY="21.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.C_UserLogin" Width="1.5" PointX="19.25" PointY="5.625" />
+        <EntityTypeShape EntityType="HR_SystemModel.C_UserRight" Width="1.5" PointX="14.75" PointY="23.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocApplicant" Width="1.5" PointX="22.75" PointY="20.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocApplicantDocument" Width="1.5" PointX="0.75" PointY="26.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocApplicantExperience" Width="1.5" PointX="16.75" PointY="26.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocApplicantLog" Width="1.5" PointX="18.75" PointY="26.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocApplicantPMC" Width="1.5" PointX="2.75" PointY="27.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocApplicantPMCQualification" Width="1.5" PointX="4.75" PointY="27.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocApplicantQualification" Width="1.5" PointX="6.75" PointY="27.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocApplicantStatu" Width="1.5" PointX="21.75" PointY="9.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocApplication" Width="1.5" PointX="8.75" PointY="27.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocApplicationGrievance" Width="1.5" PointX="10.75" PointY="27.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocApplicationGrievanceStatu" Width="1.5" PointX="23.75" PointY="9.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocApplicationLog" Width="1.5" PointX="24.75" PointY="20.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocApplicationMark" Width="1.5" PointX="24.75" PointY="25.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocApplicationPreference" Width="1.5" PointX="25.75" PointY="9.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocApplicationStatu" Width="1.5" PointX="25.75" PointY="13.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocApplicationVerification" Width="1.5" PointX="26.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocDescription" Width="1.5" PointX="25.75" PointY="16.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocDistrictOpenedBHU" Width="1.5" PointX="12.75" PointY="29.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocDistrictOpenedBHU2" Width="1.5" PointX="26.75" PointY="19.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocDistrictQuota" Width="1.5" PointX="26.75" PointY="23.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocDocument" Width="1.5" PointX="26.75" PointY="26.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocDocumentRequired" Width="1.5" PointX="27.75" PointY="8.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocGreivanceUpload" Width="1.5" PointX="27.75" PointY="12.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocHF" Width="1.5" PointX="26.75" PointY="30.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocHFOpened" Width="1.5" PointX="28.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocHFOpened2" Width="1.5" PointX="28.75" PointY="16.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocInterview" Width="1.5" PointX="0.75" PointY="21.5" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocInterviewBatch" Width="1.5" PointX="3" PointY="21.5" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocInterviewBatchApplication" Width="1.5" PointX="5.25" PointY="20.125" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocInterviewBatchCommittee" Width="1.5" PointX="28.75" PointY="21.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocJob" Width="1.5" PointX="18.75" PointY="31.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocLog" Width="1.5" PointX="28.75" PointY="25.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocMerit" Width="1.5" PointX="28.75" PointY="29.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocMeritLocked" Width="1.5" PointX="0.75" PointY="32.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocMeritVerification" Width="1.5" PointX="2.75" PointY="32.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocPosting" Width="1.5" PointX="29.75" PointY="8.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocPostingFinal" Width="1.5" PointX="14.75" PointY="32.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocPostingLog" Width="1.5" PointX="29.75" PointY="13.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocRecruitementCommittee" Width="1.5" PointX="30.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocScrutiny" Width="1.5" PointX="8.75" PointY="33.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocScrutinyCommittee" Width="1.5" PointX="10.75" PointY="33.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocScrutinyMinute" Width="1.5" PointX="30.75" PointY="16.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocScrutinyReason" Width="1.5" PointX="30.75" PointY="21.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocSelectedMerit" Width="1.5" PointX="30.75" PointY="24.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.APMOPref" Width="1.5" PointX="30.75" PointY="28.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicantQualification" Width="1.5" PointX="30.75" PointY="31.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationAction" Width="1.5" PointX="31.75" PointY="7.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationAttachment" Width="1.5" PointX="18" PointY="18.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationDocument" Width="1.5" PointX="15.75" PointY="18.25" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationDueDate" Width="1.5" PointX="31.75" PointY="10.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationFileRecosition" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationFileRecositionLog" Width="1.5" PointX="3" PointY="8.5" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationLog" Width="1.5" PointX="20.75" PointY="34.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationMaster" Width="1.5" PointX="16.5" PointY="85.625" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationMutualCode" Width="1.5" PointX="22.75" PointY="34.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationPersonAppeared" Width="1.5" PointX="14.25" PointY="120.125" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationPreference" Width="1.5" PointX="24.75" PointY="34.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationPurpose" Width="1.5" PointX="32.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationRequest" Width="1.5" PointX="5.25" PointY="98" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationSource" Width="1.5" PointX="4.75" PointY="35.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationStatu" Width="1.5" PointX="14.25" PointY="77.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationTracking" Width="1.5" PointX="32.75" PointY="14.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationType" Width="1.5" PointX="14.25" PointY="80.25" />
+        <EntityTypeShape EntityType="HR_SystemModel.AppOrder" Width="1.5" PointX="32.75" PointY="18.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AppRoute" Width="1.5" PointX="32.75" PointY="22.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AppTypeDoc" Width="1.5" PointX="18" PointY="49.375" />
+        <EntityTypeShape EntityType="HR_SystemModel.AppTypePendancy" Width="1.5" PointX="32.75" PointY="25.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AwaitingPosting" Width="1.5" PointX="32.75" PointY="28.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Cadre" Width="1.5" PointX="9" PointY="116.375" />
+        <EntityTypeShape EntityType="HR_SystemModel.City" Width="1.5" PointX="32.75" PointY="35.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.CLR" Width="1.5" PointX="33.75" PointY="6.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.COVID19Orders" Width="1.5" PointX="33.75" PointY="9.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.CovidFacility" Width="1.5" PointX="34.75" PointY="14.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.CovidFacilityType" Width="1.5" PointX="34.75" PointY="18.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.CovidStaff" Width="1.5" PointX="16.75" PointY="37.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.COVIDTrend" Width="1.5" PointX="34.75" PointY="22.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.CovidTrendLog" Width="1.5" PointX="34.75" PointY="26.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.DDS_Attachments" Width="1.5" PointX="34.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.DDS_Files" Width="1.5" PointX="0.75" PointY="83.25" />
+        <EntityTypeShape EntityType="HR_SystemModel.DDsDetail" Width="1.5" PointX="3" PointY="92" />
+        <EntityTypeShape EntityType="HR_SystemModel.DDSSouth" Width="1.5" PointX="34.75" PointY="30.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Degree" Width="1.5" PointX="34.75" PointY="33.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.DermaApplication" Width="1.5" PointX="34.75" PointY="36.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.DeviceRegistration" Width="1.5" PointX="2.75" PointY="38.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Disability" Width="1.5" PointX="35.75" PointY="6.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.DisposalOf" Width="1.5" PointX="4.75" PointY="38.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.DistrictLatLong" Width="1.5" PointX="35.75" PointY="9.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.District" Width="1.5" PointX="6" PointY="113" />
+        <EntityTypeShape EntityType="HR_SystemModel.DistrictsDistance" Width="1.5" PointX="8.25" PointY="112.25" />
+        <EntityTypeShape EntityType="HR_SystemModel.DivisionLatLong" Width="1.5" PointX="12.75" PointY="38.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Division" Width="1.5" PointX="24.75" PointY="38.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Domicile" Width="1.5" PointX="30.75" PointY="38.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Emp_Shift" Width="1.5" PointX="36.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Empattendance" Width="1.5" PointX="6.75" PointY="39.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.EmpLeaveForm" Width="1.5" PointX="36.75" PointY="12.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.EmpLeaveStatu" Width="1.5" PointX="36.75" PointY="17.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.EmpLeaveType" Width="1.5" PointX="36.75" PointY="20.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.EmployeePosting" Width="1.5" PointX="36.75" PointY="23.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.EmpRoster" Width="1.5" PointX="36.75" PointY="29.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.EmpTask_Status" Width="1.5" PointX="36.75" PointY="34.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.EmpTask" Width="1.5" PointX="36.75" PointY="37.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Entity" Width="1.5" PointX="37.75" PointY="6.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Entity_Lifecycle" Width="1.5" PointX="0.75" PointY="92.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Entity_Log" Width="1.5" PointX="8.75" PointY="40.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Entity_Modified_Log" Width="1.5" PointX="3" PointY="108" />
+        <EntityTypeShape EntityType="HR_SystemModel.EntityField" Width="1.5" PointX="37.75" PointY="9.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.EPIDataTemp" Width="1.5" PointX="32.75" PointY="40.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.EpiFacilitiesTemp" Width="1.5" PointX="2.75" PointY="41.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ESR" Width="1.5" PointX="5.25" PointY="62.375" />
+        <EntityTypeShape EntityType="HR_SystemModel.EsrAttachment" Width="1.5" PointX="38.75" PointY="12.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ESRDetail" Width="1.5" PointX="10.75" PointY="41.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.EsrForwardToOfficer" Width="1.5" PointX="7.5" PointY="66.875" />
+        <EntityTypeShape EntityType="HR_SystemModel.EsrSectionOfficer" Width="1.5" PointX="3" PointY="83.875" />
+        <EntityTypeShape EntityType="HR_SystemModel.EsrSigned" Width="1.5" PointX="12.75" PointY="41.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.FCLEAVETDTL" Width="1.5" PointX="21.75" PointY="124.25" />
+        <EntityTypeShape EntityType="HR_SystemModel.FCLEAVETYP" Width="1.5" PointX="38.75" PointY="16.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.FCPromotion" Width="1.5" PointX="21.75" PointY="114.25" />
+        <EntityTypeShape EntityType="HR_SystemModel.FCRequest" Width="1.5" PointX="19.5" PointY="102.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.FCTransfer" Width="1.5" PointX="21.75" PointY="119" />
+        <EntityTypeShape EntityType="HR_SystemModel.FileDetail" Width="1.5" PointX="23" PointY="16.375" />
+        <EntityTypeShape EntityType="HR_SystemModel.FileMoveDetail" Width="1.5" PointX="24" PointY="4" />
+        <EntityTypeShape EntityType="HR_SystemModel.FileMoveMaster" Width="1.5" PointX="21.75" PointY="4.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.FileRequestStatu" Width="1.5" PointX="0.75" PointY="13.875" />
+        <EntityTypeShape EntityType="HR_SystemModel.FilesMaster" Width="1.5" PointX="20.75" PointY="16" />
+        <EntityTypeShape EntityType="HR_SystemModel.FilesUpdated" Width="1.5" PointX="14.75" PointY="41.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.FileType" Width="1.5" PointX="38.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.FingerPrint" Width="1.5" PointX="16.75" PointY="41.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Grading" Width="1.5" PointX="22.5" PointY="77" />
+        <EntityTypeShape EntityType="HR_SystemModel.GradingVal" Width="1.5" PointX="22.5" PointY="74.5" />
+        <EntityTypeShape EntityType="HR_SystemModel.GSMNETWORK" Width="1.5" PointX="17.25" PointY="117.125" />
+        <EntityTypeShape EntityType="HR_SystemModel.HealthFacility" Width="1.5" PointX="3" PointY="98.5" />
+        <EntityTypeShape EntityType="HR_SystemModel.HF_Code_Map" Width="1.5" PointX="38.75" PointY="20.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFAC" Width="1.5" PointX="17.75" PointY="23.25" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFBlock" Width="1.5" PointX="5.25" PointY="175.375" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFCategory" Width="1.5" PointX="20.75" PointY="12.125" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFDistance" Width="1.5" PointX="38.75" PointY="23.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFMode" Width="1.5" PointX="22.75" PointY="41.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFOpenedLHR" Width="1.5" PointX="24.75" PointY="41.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFOpenedPosting" Width="1.5" PointX="38.75" PointY="29.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFPhoto" Width="1.5" PointX="5.25" PointY="94.875" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFRecord" Width="1.5" PointX="26.75" PointY="41.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFService" Width="1.5" PointX="8.25" PointY="108.875" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFTown" Width="1.5" PointX="38.75" PointY="33.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFType" Width="1.5" PointX="23" PointY="11.875" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFUC" Width="1.5" PointX="38.75" PointY="36.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFUCM" Width="1.5" PointX="38.75" PointY="40.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFWardBed" Width="1.5" PointX="3" PointY="111" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFWard" Width="1.5" PointX="5.25" PointY="172.25" />
+        <EntityTypeShape EntityType="HR_SystemModel.HISDU_DataFrequency" Width="1.5" PointX="39.75" PointY="6.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HISDU_Department" Width="1.5" PointX="39.75" PointY="9.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HISDU_EmpStatus" Width="1.5" PointX="18.75" PointY="42.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HISDU_Holidays" Width="1.5" PointX="28.75" PointY="42.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HISDU_HrProfile" Width="1.5" PointX="34.75" PointY="42.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HISDU_MonthlyLeave" Width="1.5" PointX="4.75" PointY="43.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HISDU_Project_Type" Width="1.5" PointX="40.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HISDU_Projects" Width="1.5" PointX="40.75" PointY="12.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HISDU_Projects_CurrentStatus" Width="1.5" PointX="40.75" PointY="17.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HISDU_Team_Members" Width="1.5" PointX="40.75" PointY="20.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HISDU_Teams" Width="1.5" PointX="40.75" PointY="24.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrAcceptance" Width="1.5" PointX="40.75" PointY="28.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrApplication" Width="1.5" PointX="40.75" PointY="32.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrAttachedPerson" Width="1.5" PointX="40.75" PointY="36.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrAttendance" Width="1.5" PointX="40.75" PointY="40.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrComplain" Width="1.5" PointX="40.75" PointY="43.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrDepartment" Width="1.5" PointX="9" PointY="120.5" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrDesignation" Width="1.5" PointX="9" PointY="127.25" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrDesignationTemp" Width="1.5" PointX="41.75" PointY="6.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrDuplicationLog" Width="1.5" PointX="20.75" PointY="44.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrEmpMode" Width="1.5" PointX="12" PointY="80.5" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrFile" Width="1.5" PointX="22.75" PointY="44.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrFileDetail" Width="1.5" PointX="30.75" PointY="44.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrFocalPerson" Width="1.5" PointX="36.75" PointY="44.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrFp" Width="1.5" PointX="6.75" PointY="45.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrHealthWorker" Width="1.5" PointX="42.75" PointY="10.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrInquiry" Width="1.5" PointX="13.5" PointY="106.125" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrInquiryPenalty" Width="1.5" PointX="15.75" PointY="112.25" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrLanguage" Width="1.5" PointX="42.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrLeaveRecord" Width="1.5" PointX="8.75" PointY="45.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrMarking" Width="1.5" PointX="42.75" PointY="22.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrPost_Type" Width="1.5" PointX="9" PointY="74.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrPosting" Width="1.5" PointX="24.75" PointY="45.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrPostingMode" Width="1.5" PointX="16.75" PointY="45.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrPostingStatu" Width="1.5" PointX="26.75" PointY="45.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrProfile" Width="1.5" PointX="11.25" PointY="87.875" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrProfileEditRequest" Width="1.5" PointX="42.75" PointY="32.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrProfileReq" Width="1.5" PointX="5.25" PointY="90" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrProfileSp" Width="1.5" PointX="42.75" PointY="36.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrProfileStatu" Width="1.5" PointX="9" PointY="88.5" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrQualification" Width="1.5" PointX="0.75" PointY="46.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrReligion" Width="1.5" PointX="9" PointY="78.625" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrReview" Width="1.5" PointX="43.75" PointY="6.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrReviewStatu" Width="1.5" PointX="10.75" PointY="46.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrReviewSubmission" Width="1.5" PointX="44.75" PointY="10.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrScale" Width="1.5" PointX="6.75" PointY="129.375" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrSeniority" Width="1.5" PointX="44.75" PointY="14.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrSeniorityApplication" Width="1.5" PointX="13.75" PointY="47.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrSeniorityApplication_Fixed" Width="1.5" PointX="44.75" PointY="18.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrSeniorityApplicationLog" Width="1.5" PointX="38.75" PointY="47.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrSeniorityDCPharmApplication" Width="1.5" PointX="44.75" PointY="43.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrSeniorityDCPharmApplicationFixed" Width="1.5" PointX="28.75" PointY="48.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrServiceHistory" Width="1.5" PointX="45.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrSMSEmployee" Width="1.5" PointX="30.75" PointY="48.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.InquiryStatu" Width="1.5" PointX="11.25" PointY="116.25" />
+        <EntityTypeShape EntityType="HR_SystemModel.Job" Width="1.5" PointX="5.75" PointY="5.875" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobApplicant" Width="1.5" PointX="5.75" PointY="12.625" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobApplicantDocument" Width="1.5" PointX="2.75" PointY="49.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobApplicantExperience" Width="1.5" PointX="4.75" PointY="49.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobApplicantStatu" Width="1.5" PointX="46.75" PointY="9.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobApplication" Width="1.5" PointX="8" PointY="6.375" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobApplicationPreference" Width="1.5" PointX="10.25" PointY="8.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobDescription" Width="1.5" PointX="6.75" PointY="49.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobDocument" Width="1.5" PointX="8.75" PointY="49.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobDocumentRequired" Width="1.5" PointX="46.75" PointY="12.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobHF" Width="1.5" PointX="8" PointY="11.125" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobLog" Width="1.5" PointX="10.75" PointY="49.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobPosting" Width="1.5" PointX="12.5" PointY="6.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawBench" Width="1.5" PointX="46.75" PointY="16.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawCallsList" Width="1.5" PointX="46.75" PointY="20.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawCallsListOfficer" Width="1.5" PointX="20.75" PointY="49.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawCallsListRemark" Width="1.5" PointX="46.75" PointY="25.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawCasePetitioner" Width="1.5" PointX="46.75" PointY="29.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawCaseRepresentative" Width="1.5" PointX="46.75" PointY="32.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawCas" Width="1.5" PointX="46.75" PointY="35.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawCaseStatu" Width="1.5" PointX="46.75" PointY="40.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawCaseStatusModifiedLog" Width="1.5" PointX="46.75" PointY="43.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawCaseType" Width="1.5" PointX="46.75" PointY="46.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawCourt" Width="1.5" PointX="46.75" PointY="49.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawDepartment" Width="1.5" PointX="47.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawFile" Width="1.5" PointX="10.75" PointY="14.125" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawFilesImage" Width="1.5" PointX="13" PointY="15.5" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawFilesOfficer" Width="1.5" PointX="48.75" PointY="7.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawFilesPetitioner" Width="1.5" PointX="13" PointY="13.125" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawFilesRepresentative" Width="1.5" PointX="13" PointY="19" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawHearing" Width="1.5" PointX="48.75" PointY="10.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawHearingJudge" Width="1.5" PointX="48.75" PointY="15.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawHearingLawyer" Width="1.5" PointX="48.75" PointY="18.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawJudge" Width="1.5" PointX="48.75" PointY="21.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawLawyer" Width="1.5" PointX="48.75" PointY="25.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawOnBehalfOf" Width="1.5" PointX="48.75" PointY="30.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawPetitioner" Width="1.5" PointX="48.75" PointY="33.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawRepresentative" Width="1.5" PointX="48.75" PointY="38.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LeaveApplication" Width="1.5" PointX="16.5" PointY="105.125" />
+        <EntityTypeShape EntityType="HR_SystemModel.LeaveHistory" Width="1.5" PointX="48.75" PointY="43.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LeaveOrder" Width="1.5" PointX="19.5" PointY="96.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LeaveStatu" Width="1.5" PointX="14.25" PointY="124.25" />
+        <EntityTypeShape EntityType="HR_SystemModel.LeaveType" Width="1.5" PointX="14.25" PointY="84.125" />
+        <EntityTypeShape EntityType="HR_SystemModel.MedicineMaster" Width="1.5" PointX="48.75" PointY="50.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.MeritActiveDesignation" Width="1.5" PointX="6" PointY="84.875" />
+        <EntityTypeShape EntityType="HR_SystemModel.MeritDiplomaCandidate" Width="1.5" PointX="15.75" PointY="52.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.MeritDiplomaCandidateDetail" Width="1.5" PointX="49.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.MeritGrievience" Width="1.5" PointX="10.5" PointY="112.875" />
+        <EntityTypeShape EntityType="HR_SystemModel.MeritMark" Width="1.5" PointX="17.75" PointY="52.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.MeritPG" Width="1.5" PointX="13.5" PointY="101.125" />
+        <EntityTypeShape EntityType="HR_SystemModel.MeritPGDistrict" Width="1.5" PointX="18.75" PointY="108.25" />
+        <EntityTypeShape EntityType="HR_SystemModel.MeritPosting" Width="1.5" PointX="19.75" PointY="52.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.MeritPreference" Width="1.5" PointX="13.5" PointY="97.5" />
+        <EntityTypeShape EntityType="HR_SystemModel.MeritPreferencesFinal" Width="1.5" PointX="21.75" PointY="52.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Merit" Width="1.5" PointX="8.25" PointY="98.25" />
+        <EntityTypeShape EntityType="HR_SystemModel.MeritsVp" Width="1.5" PointX="25" PointY="102.375" />
+        <EntityTypeShape EntityType="HR_SystemModel.MeritsVpDistrict" Width="1.5" PointX="8.25" PointY="85.25" />
+        <EntityTypeShape EntityType="HR_SystemModel.MessageLog" Width="1.5" PointX="23.75" PointY="52.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.MobileApp" Width="1.5" PointX="25.75" PointY="52.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Monthlydate" Width="1.5" PointX="30.75" PointY="52.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.MWPointType" Width="1.5" PointX="36.75" PointY="52.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.MWRoute" Width="1.5" PointX="38.75" PointY="52.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.MWRouteDetail" Width="1.5" PointX="50.75" PointY="7.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.NotificationLog" Width="1.5" PointX="6.75" PointY="53.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.NotificationProject" Width="1.5" PointX="50.75" PointY="11.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.NotificationSM" Width="1.5" PointX="8.75" PointY="53.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.NotificationType" Width="1.5" PointX="10.75" PointY="53.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.NursesVPTemp26" Width="1.5" PointX="50.75" PointY="14.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Office" Width="1.5" PointX="10.75" PointY="3.875" />
+        <EntityTypeShape EntityType="HR_SystemModel.Officer" Width="1.5" PointX="13" PointY="3.875" />
+        <EntityTypeShape EntityType="HR_SystemModel.OrderTracking" Width="1.5" PointX="50.75" PointY="17.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.P_SConcernedCadres" Width="1.5" PointX="11.25" PointY="62.875" />
+        <EntityTypeShape EntityType="HR_SystemModel.P_SConcernedDesignations" Width="1.5" PointX="11.25" PointY="69.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.P_SConcernedOfficers" Width="1.5" PointX="3" PointY="13.25" />
+        <EntityTypeShape EntityType="HR_SystemModel.P_SOfficers" Width="1.5" PointX="0.75" PointY="8.125" />
+        <EntityTypeShape EntityType="HR_SystemModel.PenaltyType" Width="1.5" PointX="50.75" PointY="21.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.PensionDocument" Width="1.5" PointX="50.75" PointY="24.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.PensionDocumentAttached" Width="1.5" PointX="50.75" PointY="27.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.PER" Width="1.5" PointX="19.5" PointY="88.625" />
+        <EntityTypeShape EntityType="HR_SystemModel.PerDeferment" Width="1.5" PointX="13.5" PointY="116.125" />
+        <EntityTypeShape EntityType="HR_SystemModel.PerGrading" Width="1.5" PointX="24.75" PointY="94.875" />
+        <EntityTypeShape EntityType="HR_SystemModel.PerImage" Width="1.5" PointX="21.75" PointY="111.5" />
+        <EntityTypeShape EntityType="HR_SystemModel.PerInquiry" Width="1.5" PointX="13.5" PointY="158.5" />
+        <EntityTypeShape EntityType="HR_SystemModel.PerPrfmAssment" Width="1.5" PointX="24.75" PointY="88" />
+        <EntityTypeShape EntityType="HR_SystemModel.PerTargetAchievement" Width="1.5" PointX="21.75" PointY="86.5" />
+        <EntityTypeShape EntityType="HR_SystemModel.PerTraining" Width="1.5" PointX="24.75" PointY="90.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.PerType" Width="1.5" PointX="17.25" PointY="79.25" />
+        <EntityTypeShape EntityType="HR_SystemModel.PHFMCOrder" Width="1.5" PointX="50.75" PointY="30.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.PrfmAssment" Width="1.5" PointX="22.5" PointY="83.25" />
+        <EntityTypeShape EntityType="HR_SystemModel.ProfileAttachment" Width="1.5" PointX="50.75" PointY="37.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ProfileAttachmentType" Width="1.5" PointX="50.75" PointY="40.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ProfileRemark" Width="1.5" PointX="50.75" PointY="43.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Project" Width="1.5" PointX="50.75" PointY="46.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.PromotedCandidate" Width="1.5" PointX="50.75" PointY="49.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.PromotionApply" Width="1.5" PointX="50.75" PointY="52.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.PromotionJobApplication" Width="1.5" PointX="22.5" PointY="95.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.PromotionJobApplicationServiceStatement" Width="1.5" PointX="24.75" PointY="99.125" />
+        <EntityTypeShape EntityType="HR_SystemModel.PSHealthFacility" Width="1.5" PointX="5.25" PointY="108.125" />
+        <EntityTypeShape EntityType="HR_SystemModel.PSHealthProgram" Width="1.5" PointX="0.75" PointY="115.375" />
+        <EntityTypeShape EntityType="HR_SystemModel.PSHealthProject" Width="1.5" PointX="3" PointY="115.125" />
+        <EntityTypeShape EntityType="HR_SystemModel.PunjabOfficer" Width="1.5" PointX="51.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Qualification" Width="1.5" PointX="9" PointY="124.375" />
+        <EntityTypeShape EntityType="HR_SystemModel.QualificationType" Width="1.5" PointX="0.75" PointY="54.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ScrutinyExperience" Width="1.5" PointX="2.75" PointY="54.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ScrutinyQualification" Width="1.5" PointX="52.75" PointY="7.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.SeniorityBatch" Width="1.5" PointX="52.75" PointY="11.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.SeniorityDetail" Width="1.5" PointX="22.5" PointY="89.625" />
+        <EntityTypeShape EntityType="HR_SystemModel.SeniorityMaster" Width="1.5" PointX="20.25" PointY="78.875" />
+        <EntityTypeShape EntityType="HR_SystemModel.Service" Width="1.5" PointX="6" PointY="117" />
+        <EntityTypeShape EntityType="HR_SystemModel.ServiceTemp" Width="1.5" PointX="52.75" PointY="14.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.SHMEDVP" Width="1.5" PointX="52.75" PointY="18.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ShowOfficerStamp" Width="1.5" PointX="52.75" PointY="22.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.SignedOrder" Width="1.5" PointX="52.75" PointY="25.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.SMS_Log" Width="1.5" PointX="25.75" PointY="55.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.SMS_Session" Width="1.5" PointX="52.75" PointY="30.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.SMSType" Width="1.5" PointX="52.75" PointY="33.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Specialization" Width="1.5" PointX="9" PointY="82" />
+        <EntityTypeShape EntityType="HR_SystemModel.Subscriber" Width="1.5" PointX="30.75" PointY="55.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Subscription" Width="1.5" PointX="52.75" PointY="36.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.SwmoPromotion" Width="1.5" PointX="52.75" PointY="39.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.SwmoPromotionDetail" Width="1.5" PointX="40.75" PointY="55.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.sysdiagram" Width="1.5" PointX="52.75" PointY="44.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.TehsilLatLong" Width="1.5" PointX="52.75" PointY="47.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Tehsil" Width="1.5" PointX="15.75" PointY="13.125" />
+        <EntityTypeShape EntityType="HR_SystemModel.TehsilsDistance" Width="1.5" PointX="18" PointY="12.875" />
+        <EntityTypeShape EntityType="HR_SystemModel.TempProfilePhoto" Width="1.5" PointX="52.75" PointY="50.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Town" Width="1.5" PointX="52.75" PointY="53.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Training" Width="1.5" PointX="22.5" PointY="80.25" />
+        <EntityTypeShape EntityType="HR_SystemModel.TransferAppliationStatu" Width="1.5" PointX="20.25" PointY="129.25" />
+        <EntityTypeShape EntityType="HR_SystemModel.TransferApplication" Width="1.5" PointX="22.5" PointY="105.625" />
+        <EntityTypeShape EntityType="HR_SystemModel.TransferOrder" Width="1.5" PointX="53.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.TransferType" Width="1.5" PointX="10.75" PointY="56.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.User_Activity_Log" Width="1.5" PointX="20" PointY="22.875" />
+        <EntityTypeShape EntityType="HR_SystemModel.UserDetail" Width="1.5" PointX="5.25" PointY="82" />
+        <EntityTypeShape EntityType="HR_SystemModel.UserInformation" Width="1.5" PointX="21.75" PointY="56.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.UserLevel" Width="1.5" PointX="36.75" PointY="56.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.UserLog" Width="1.5" PointX="46.75" PointY="56.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.userlogtest" Width="1.5" PointX="52.75" PointY="56.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.VacancyQuota" Width="1.5" PointX="54.75" PointY="7.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.VP" Width="1.5" PointX="5.25" PointY="103.125" />
+        <EntityTypeShape EntityType="HR_SystemModel.VPChartsCount" Width="1.5" PointX="54.75" PointY="10.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.VPDetail" Width="1.5" PointX="13.5" PointY="87.875" />
+        <EntityTypeShape EntityType="HR_SystemModel.VpDetailLog" Width="1.5" PointX="4.75" PointY="57.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.VPHolder" Width="1.5" PointX="18.75" PointY="82.5" />
+        <EntityTypeShape EntityType="HR_SystemModel.VPMaster" Width="1.5" PointX="8.25" PointY="92.625" />
+        <EntityTypeShape EntityType="HR_SystemModel.VpMasterLog" Width="1.5" PointX="54.75" PointY="16.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.VPostMast" Width="1.5" PointX="11.25" PointY="119.25" />
+        <EntityTypeShape EntityType="HR_SystemModel.VPProfile" Width="1.5" PointX="10.5" PointY="85" />
+        <EntityTypeShape EntityType="HR_SystemModel.VPProfileLog" Width="1.5" PointX="54.75" PointY="21.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.VpProfileStatu" Width="1.5" PointX="11.25" PointY="77.25" />
+        <EntityTypeShape EntityType="HR_SystemModel.VPQ" Width="1.5" PointX="54.75" PointY="25.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.VPSP" Width="1.5" PointX="14.25" PointY="92.125" />
+        <EntityTypeShape EntityType="HR_SystemModel.VpSpecialized" Width="1.5" PointX="54.75" PointY="30.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.VpSubscriber" Width="1.5" PointX="54.75" PointY="34.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Ward" Width="1.5" PointX="54.75" PointY="37.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.WMO_Grievances" Width="1.5" PointX="54.75" PointY="40.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationForwardLog" Width="1.5" PointX="54.75" PointY="43.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AppStatusLog" Width="1.5" PointX="54.75" PointY="48.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Cours" Width="1.5" PointX="48.75" PointY="57.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HealthFacilities_15_04_17" Width="1.5" PointX="54.75" PointY="52.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HealthFacilitiesWithHFAC" Width="1.5" PointX="0.75" PointY="58.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFOpenedPosting_10_12_2019" Width="1.5" PointX="55.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HISDU_HrProfile_8dec" Width="1.5" PointX="15.75" PointY="58.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrProfile6feb18" Width="1.5" PointX="30.75" PointY="58.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.MeritPreferences_10_12_2019" Width="1.5" PointX="6.75" PointY="58.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.MeritPreferencesFinal_10_12_2019" Width="1.5" PointX="54.75" PointY="58.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.UserLog_bkp" Width="1.5" PointX="56.75" PointY="6.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.UserLog25feb22" Width="1.5" PointX="56.75" PointY="11.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.userlog286" Width="1.5" PointX="56.75" PointY="16.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.UserLog3Feb22" Width="1.5" PointX="17.75" PointY="59.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.VPostDtl" Width="1.5" PointX="18.25" PointY="112.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AAA_SCRIPT_TRANSER_HF" Width="1.5" PointX="8.75" PointY="59.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocApplicantDocumentView" Width="1.5" PointX="56.75" PointY="21.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocApplicantQualificationView" Width="1.5" PointX="56.75" PointY="26.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocApplicantView" Width="1.5" PointX="23.75" PointY="59.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocApplicationGrievanceV" Width="1.5" PointX="25.75" PointY="59.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocApplicationMarksView" Width="1.5" PointX="56.75" PointY="35.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocApplicationPreferenceView" Width="1.5" PointX="36.75" PointY="59.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocApplicationView" Width="1.5" PointX="38.75" PointY="59.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocDistrictOpenedBHUView" Width="1.5" PointX="40.75" PointY="59.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocDistrictOpenedBHUView2" Width="1.5" PointX="10.75" PointY="59.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocGreivanceUploadView" Width="1.5" PointX="56.75" PointY="45.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocHFOpenedView" Width="1.5" PointX="56.75" PointY="50.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocHFOpenedView2" Width="1.5" PointX="56.75" PointY="56.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocInterviewBatchApplicationV" Width="1.5" PointX="19.75" PointY="60.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocInterviewView" Width="1.5" PointX="32.75" PointY="60.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocJobView" Width="1.5" PointX="48.75" PointY="60.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocMeritLockedView" Width="1.5" PointX="58.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocMeritView" Width="1.5" PointX="58.75" PointY="24.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocMeritView2" Width="1.5" PointX="58.75" PointY="42.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocPostingFinalView" Width="1.5" PointX="50.75" PointY="61.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AdhocScrutinyView" Width="1.5" PointX="52.75" PointY="61.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.APMOPrefsView" Width="1.5" PointX="58.75" PointY="60.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicantExperience" Width="1.5" PointX="54.75" PointY="62.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicantPreferenceView" Width="1.5" PointX="60.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicantQualificationview" Width="1.5" PointX="60.75" PointY="8.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicantView" Width="1.5" PointX="60.75" PointY="14.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationFileReqDView" Width="1.5" PointX="60.75" PointY="22.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationFileReqLogView" Width="1.5" PointX="60.75" PointY="34.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationFileReqView" Width="1.5" PointX="60.75" PointY="39.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationLogView" Width="1.5" PointX="40.75" PointY="63.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationRequestView" Width="1.5" PointX="60.75" PointY="50.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationThumbView" Width="1.5" PointX="60.75" PointY="57.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ApplicationView" Width="1.5" PointX="56.75" PointY="63.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AttachmentView" Width="1.5" PointX="7.75" PointY="62.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AwaitingPostingAppView" Width="1.5" PointX="0.75" PointY="64.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.AwaitingPostingView" Width="1.5" PointX="25.75" PointY="64.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.BedsInfo" Width="1.5" PointX="58.75" PointY="64.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.CadreView" Width="1.5" PointX="60.75" PointY="64.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.CovidFacilityView" Width="1.5" PointX="62.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.CovidStaffView" Width="1.5" PointX="62.75" PointY="8.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.CreatedLog" Width="1.5" PointX="9.75" PointY="65.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.DDSDetailsView" Width="1.5" PointX="62.75" PointY="16.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.DDSView" Width="1.5" PointX="62.75" PointY="23.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.DistrictView" Width="1.5" PointX="62.75" PointY="33.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.DivisionView" Width="1.5" PointX="32.75" PointY="65.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.DoctorsView" Width="1.5" PointX="62.75" PointY="36.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.EmployeePostingView" Width="1.5" PointX="34.75" PointY="65.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.EmployeesLeaveExpired" Width="1.5" PointX="62.75" PointY="59.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.EmployeesOnLeave" Width="1.5" PointX="62.75" PointY="64.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Entity_Log_View" Width="1.5" PointX="46.75" PointY="66.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Entity_Modified_Log_View" Width="1.5" PointX="64.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ESR_DSG" Width="1.5" PointX="64.75" PointY="6.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ESR_FINAL" Width="1.5" PointX="64.75" PointY="9.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ESRLatestView" Width="1.5" PointX="64.75" PointY="17.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ESRReportView" Width="1.5" PointX="64.75" PointY="31.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ESRView" Width="1.5" PointX="64.75" PointY="36.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.FileMoveDetailView" Width="1.5" PointX="64.75" PointY="50.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.FileMoveMasterView" Width="1.5" PointX="52.75" PointY="67.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.FilesUpdateView" Width="1.5" PointX="64.75" PointY="58.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.GEOLVL_V" Width="1.5" PointX="58.75" PointY="67.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HealthFacilityDetail" Width="1.5" PointX="64.75" PointY="64.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFDetail" Width="1.5" PointX="0.75" PointY="68.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFList" Width="1.5" PointX="66.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFListGeoLocation" Width="1.5" PointX="66.75" PointY="13.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFListGI" Width="1.5" PointX="66.75" PointY="24.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFListMode" Width="1.5" PointX="66.75" PointY="34.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFListP" Width="1.5" PointX="66.75" PointY="44.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFModeView" Width="1.5" PointX="7.75" PointY="69.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFOpenedLHRView" Width="1.5" PointX="42.75" PointY="69.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFOpenedView" Width="1.5" PointX="66.75" PointY="54.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFRecordView" Width="1.5" PointX="66.75" PointY="60.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFTownView" Width="1.5" PointX="60.75" PointY="69.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HfTypeList" Width="1.5" PointX="66.75" PointY="65.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFTypeWiseReport" Width="1.5" PointX="66.75" PointY="68.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFTypeWiseRpt" Width="1.5" PointX="68.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFUCMView" Width="1.5" PointX="68.75" PointY="6.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFWardBedsView" Width="1.5" PointX="68.75" PointY="10.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HisduEmpAttaundaceLog1" Width="1.5" PointX="68.75" PointY="15.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HisduEmpDailyAttancucsSummery1" Width="1.5" PointX="68.75" PointY="22.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HisduEmpMonthelyLeaveSummery" Width="1.5" PointX="68.75" PointY="28.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HisduMonthelyEmpReport1" Width="1.5" PointX="68.75" PointY="32.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrApplicationView" Width="1.5" PointX="68.75" PointY="38.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrAttachedPersonView" Width="1.5" PointX="68.75" PointY="44.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrDesignationDoc" Width="1.5" PointX="68.75" PointY="50.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrDesignationView" Width="1.5" PointX="68.75" PointY="55.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrHealthWorkerExportView" Width="1.5" PointX="68.75" PointY="59.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrHealthWorkerView" Width="1.5" PointX="66.75" PointY="72.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrInquiryView" Width="1.5" PointX="17.75" PointY="72.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrLeaveRecordView" Width="1.5" PointX="19.75" PointY="72.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrPost_TypeView" Width="1.5" PointX="68.75" PointY="72.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrPostingView" Width="1.5" PointX="70.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrProfileDetailsView" Width="1.5" PointX="70.75" PointY="11.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrProfileReq_VIEW" Width="1.5" PointX="24.75" PointY="73.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrQualificationView" Width="1.5" PointX="70.75" PointY="32.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrReviewSubmissionView" Width="1.5" PointX="32.75" PointY="73.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrReviewView" Width="1.5" PointX="34.75" PointY="73.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrSeniorityApplicationView" Width="1.5" PointX="70.75" PointY="38.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrSeniorityApplicationView_Fixed" Width="1.5" PointX="36.75" PointY="73.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrSeniorityDCPharmacistApplicationView" Width="1.5" PointX="52.75" PointY="73.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrSeniorityDCPharmacistApplicationView_Fixed" Width="1.5" PointX="62.75" PointY="73.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.HrServiceHistoryView" Width="1.5" PointX="70.75" PointY="69.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobApplicantDocumentView" Width="1.5" PointX="2.75" PointY="74.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobApplicantPrefView" Width="1.5" PointX="4.75" PointY="74.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobApplicantsView" Width="1.5" PointX="26.75" PointY="74.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobApplicantView" Width="1.5" PointX="28.75" PointY="74.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobApplicationPreferenceView" Width="1.5" PointX="38.75" PointY="74.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobApplicationsView" Width="1.5" PointX="44.75" PointY="74.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobApplicationView" Width="1.5" PointX="46.75" PointY="74.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobBatchesView" Width="1.5" PointX="11.75" PointY="73.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobDocumentRequiredView" Width="1.5" PointX="72.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobHFView" Width="1.5" PointX="72.75" PointY="7.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobsView" Width="1.5" PointX="72.75" PointY="12.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.JobView" Width="1.5" PointX="72.75" PointY="19.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawCallsListOfficerView" Width="1.5" PointX="72.75" PointY="25.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawCallsListView" Width="1.5" PointX="72.75" PointY="28.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LawWingReport" Width="1.5" PointX="72.75" PointY="33.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LeaveApplication_View" Width="1.5" PointX="72.75" PointY="37.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LeaveOrderView" Width="1.5" PointX="40.75" PointY="75.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LeavesExpired" Width="1.5" PointX="72.75" PointY="45.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.MeritDiplomaCandidateView" Width="1.5" PointX="72.75" PointY="50.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.MeritPGView" Width="1.5" PointX="72.75" PointY="56.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.MeritPostingView" Width="1.5" PointX="72.75" PointY="60.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.MeritsView" Width="1.5" PointX="72.75" PointY="69.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.MoPrefferedHealthFacilityView" Width="1.5" PointX="68.75" PointY="76.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.MWRouteDetailView" Width="1.5" PointX="74.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.MWRouteView" Width="1.5" PointX="74.75" PointY="8.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.OrderAllView" Width="1.5" PointX="74.75" PointY="13.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.OrderReportOverallView" Width="1.5" PointX="74.75" PointY="19.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.OrderReportSignedByAll" Width="1.5" PointX="74.75" PointY="24.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.PandSOfficerView" Width="1.5" PointX="74.75" PointY="30.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.PermotionReport" Width="1.5" PointX="74.75" PointY="35.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.PerView" Width="1.5" PointX="74.75" PointY="41.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.PerWrkngPprGrdsCnt" Width="1.5" PointX="74.75" PointY="51.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.PHFMCOrderView" Width="1.5" PointX="74.75" PointY="54.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Pivot_Dsg_Specific" Width="1.5" PointX="74.75" PointY="63.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ProfileAttachmentsView" Width="1.5" PointX="74.75" PointY="67.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ProfileCompactView" Width="1.5" PointX="74.75" PointY="71.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ProfileDetailsSeniorityView" Width="1.5" PointX="70.75" PointY="78.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ProfileDetailsView" Width="1.5" PointX="72.75" PointY="78.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ProfileDetailsViewActive" Width="1.5" PointX="74.75" PointY="78.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ProfileListView" Width="1.5" PointX="76.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ProfileRemarksView" Width="1.5" PointX="76.75" PointY="27.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ProfileSeniorityView" Width="1.5" PointX="76.75" PointY="31.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ProfileThumbView" Width="1.5" PointX="76.75" PointY="58.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Program_Project_Wise_HealthFacility" Width="1.5" PointX="58.75" PointY="79.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Project_ProgramView" Width="1.5" PointX="76.75" PointY="64.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.PromoJobApplicationVM" Width="1.5" PointX="76.75" PointY="68.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.PromotedCandidateView" Width="1.5" PointX="76.75" PointY="78.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.PromotedCandidateView2" Width="1.5" PointX="30.75" PointY="80.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.PromotionApplyView" Width="1.5" PointX="32.75" PointY="80.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.PromotionEsrView" Width="1.5" PointX="42.75" PointY="80.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ServiceTempView" Width="1.5" PointX="44.75" PointY="80.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.TehsilView" Width="1.5" PointX="0.75" PointY="79.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.TransferApplication_View" Width="1.5" PointX="46.75" PointY="80.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.UserContactView" Width="1.5" PointX="78.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.UserCreatedLog" Width="1.5" PointX="78.75" PointY="7.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.UserCreatedVPProfileLog" Width="1.5" PointX="78.75" PointY="11.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.UserLogView" Width="1.5" PointX="78.75" PointY="15.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.UsersUpdated" Width="1.5" PointX="78.75" PointY="20.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.UsersView" Width="1.5" PointX="78.75" PointY="28.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.UsersViewNew" Width="1.5" PointX="78.75" PointY="37.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_absent" Width="1.5" PointX="78.75" PointY="45.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_Absentees" Width="1.5" PointX="78.75" PointY="51.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_all_activity_log" Width="1.5" PointX="78.75" PointY="54.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_AttendanceCalc" Width="1.5" PointX="78.75" PointY="58.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_CurrentBalance" Width="1.5" PointX="78.75" PointY="63.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_Dashb_Roster" Width="1.5" PointX="78.75" PointY="66.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_dpt_month_attendance" Width="1.5" PointX="78.75" PointY="70.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_HF_test" Width="1.5" PointX="78.75" PointY="74.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_HISDUProfileDetailsView" Width="1.5" PointX="78.75" PointY="80.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_LeaveRecords" Width="1.5" PointX="80.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_Log" Width="1.5" PointX="2.75" PointY="79.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_MonthlyAttendance1" Width="1.5" PointX="80.75" PointY="9.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_MonthlyBalance" Width="1.5" PointX="80.75" PointY="15.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_MonthlyBalance_Rpt" Width="1.5" PointX="80.75" PointY="19.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_New" Width="1.5" PointX="80.75" PointY="23.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_NewAT" Width="1.5" PointX="80.75" PointY="27.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_Profilethumbview_change" Width="1.5" PointX="26.75" PointY="83.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_ProjectsDetail" Width="1.5" PointX="80.75" PointY="31.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_RosterDetail" Width="1.5" PointX="80.75" PointY="36.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_RosterEmployees" Width="1.5" PointX="80.75" PointY="41.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_Rptattandance" Width="1.5" PointX="80.75" PointY="44.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_RptDailyAttendance" Width="1.5" PointX="80.75" PointY="50.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_TaskDetail" Width="1.5" PointX="80.75" PointY="54.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_TeamDetails" Width="1.5" PointX="80.75" PointY="59.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_TeamEmployees" Width="1.5" PointX="80.75" PointY="63.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_TeamMembers" Width="1.5" PointX="80.75" PointY="66.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_TeamProjects" Width="1.5" PointX="80.75" PointY="70.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.View_TotalLeaves" Width="1.5" PointX="80.75" PointY="73.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ViewESRSummaryTotal" Width="1.5" PointX="80.75" PointY="77.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ViewHFService" Width="1.5" PointX="80.75" PointY="81.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ViewMeritPreference" Width="1.5" PointX="38.75" PointY="84.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ViewMeritPreferencesFinal" Width="1.5" PointX="48.75" PointY="84.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ViewMeritsVp" Width="1.5" PointX="82.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.ViewProfilePhoto" Width="1.5" PointX="82.75" PointY="18.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.VpDetailView" Width="1.5" PointX="82.75" PointY="22.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.VpDProfileView" Width="1.5" PointX="82.75" PointY="28.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.VpDView" Width="1.5" PointX="82.75" PointY="33.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.VpGeoView" Width="1.5" PointX="82.75" PointY="37.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.VPHolderView" Width="1.5" PointX="82.75" PointY="49.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.VpMasterProfileView" Width="1.5" PointX="82.75" PointY="65.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.VpMastProfileView" Width="1.5" PointX="64.75" PointY="85.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.VpMDView" Width="1.5" PointX="66.75" PointY="85.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.VpMeritPostingView" Width="1.5" PointX="82.75" PointY="74.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.VpMeritPreferenceView" Width="1.5" PointX="82.75" PointY="83.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.VpMProfileView" Width="1.5" PointX="40.75" PointY="86.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.VpMView" Width="1.5" PointX="42.75" PointY="86.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.VPProfileView" Width="1.5" PointX="84.75" PointY="3.75" />
+        <AssociationConnector Association="HR_SystemModel.FK__ErpModuleComponents__ErpComponent" />
+        <AssociationConnector Association="HR_SystemModel.FK__ErpUserFields__ErpField" />
+        <AssociationConnector Association="HR_SystemModel.FK__ErpUserFields__ErpUserModuleComponents" />
+        <AssociationConnector Association="HR_SystemModel.FK_dbo__UserClaim_dbo__User_UserId" />
+        <AssociationConnector Association="HR_SystemModel.FK_dbo__UserLogin_dbo__User_UserId" />
+        <AssociationConnector Association="HR_SystemModel.FK_AdhocInterviewBatch_AdhocInterview" />
+        <AssociationConnector Association="HR_SystemModel.FK_AdhocInterviewBatchApplication_AdhocInterviewBatch" />
+        <AssociationConnector Association="HR_SystemModel.FK_ApplicationAttachment_ApplicationDocument" />
+        <AssociationConnector Association="HR_SystemModel.FK_AppTypeDoc_ApplicationDocument" />
+        <AssociationConnector Association="HR_SystemModel.FK_ApplicationFileRecositionLog_ApplicationFileRecosition" />
+        <AssociationConnector Association="HR_SystemModel.FK_ApplicationFileRecositionLog_FileRequestStatus1" />
+        <AssociationConnector Association="HR_SystemModel.FK_ApplicationFileRecositionLog_P_SOfficers" />
+        <AssociationConnector Association="HR_SystemModel.FK_ApplicationMaster_ApplicationPersonAppeared" />
+        <AssociationConnector Association="HR_SystemModel.FK_ApplicationMaster_ApplicationStatus" />
+        <AssociationConnector Association="HR_SystemModel.FK_ApplicationMaster_ApplicationType" />
+        <AssociationConnector Association="HR_SystemModel.FK_ApplicationMaster_HrDepartment" />
+        <AssociationConnector Association="HR_SystemModel.FK_ApplicationMaster_LeaveType" />
+        <AssociationConnector Association="HR_SystemModel.FK_ApplicationMaster_VPHolder" />
+        <AssociationConnector Association="HR_SystemModel.FK_ApplicationMaster_VPHolder1" />
+        <AssociationConnector Association="HR_SystemModel.FK_ApplicationMaster_VPMaster" />
+        <AssociationConnector Association="HR_SystemModel.FK_PromotionAply_Entity_Lifecycle" />
+        <AssociationConnector Association="HR_SystemModel.FK_PromotionAply_EsrSectionOfficers" />
+        <AssociationConnector Association="HR_SystemModel.FK_PromotionAply_HealthFacilities" />
+        <AssociationConnector Association="HR_SystemModel.FK_PromotionAply_HrProfile" />
+        <AssociationConnector Association="HR_SystemModel.FK_AppTypeDoc_ApplicationType" />
+        <AssociationConnector Association="HR_SystemModel.FK_HrDesignation_Cadre_Id" />
+        <AssociationConnector Association="HR_SystemModel.FK_HrProfile_Cadre_Id" />
+        <AssociationConnector Association="HR_SystemModel.FK_P_SConcernedCadres_Cadre" />
+        <AssociationConnector Association="HR_SystemModel.FK_VPostMast_Cadre_Id" />
+        <AssociationConnector Association="HR_SystemModel.FK_DDsDetails_DDS_Files" />
+        <AssociationConnector Association="HR_SystemModel.FK_DDsDetails_Entity_Lifecycle" />
+        <AssociationConnector Association="HR_SystemModel.FK_DistrictsDistance_Districts" />
+        <AssociationConnector Association="HR_SystemModel.FK_DistrictsDistance_Districts1" />
+        <AssociationConnector Association="HR_SystemModel.FK_MeritPGDistricts_Districts" />
+        <AssociationConnector Association="HR_SystemModel.FK_Merits_Districts" />
+        <AssociationConnector Association="HR_SystemModel.FK_MeritsVpDistricts_Districts" />
+        <AssociationConnector Association="HR_SystemModel.FK_Entity_LifecycleEntity_Modified_Log" />
+        <AssociationConnector Association="HR_SystemModel.FK_HealthFacilityEntity_Lifecycle" />
+        <AssociationConnector Association="HR_SystemModel.FK_HFPhotos_Entity_Lifecycle" />
+        <AssociationConnector Association="HR_SystemModel.FK_HFWardBeds_Entity_Lifecycle" />
+        <AssociationConnector Association="HR_SystemModel.FK_HrInquiry_Entity_Lifecycle" />
+        <AssociationConnector Association="HR_SystemModel.fk_HrProfile_Entity_Lifecycle_Id" />
+        <AssociationConnector Association="HR_SystemModel.FK_HrProfileReq_Entity_Lifecycle" />
+        <AssociationConnector Association="HR_SystemModel.FK_LeaveApplication_Entity_Lifecycle" />
+        <AssociationConnector Association="HR_SystemModel.FK_LeaveOrder_Entity_Lifecycle" />
+        <AssociationConnector Association="HR_SystemModel.FK_TransferApplication_Entity_Lifecycle" />
+        <AssociationConnector Association="HR_SystemModel.FK_VPDetail_Entity_Lifecycle" />
+        <AssociationConnector Association="HR_SystemModel.FK_VPHolder_Entity_Lifecycle" />
+        <AssociationConnector Association="HR_SystemModel.FK_VPMaster_Entity_Lifecycle" />
+        <AssociationConnector Association="HR_SystemModel.FK_VPSP_Entity_Lifecycle" />
+        <AssociationConnector Association="HR_SystemModel.FK_ESR_EsrSectionOfficers" />
+        <AssociationConnector Association="HR_SystemModel.FK_EsrForwardToOfficers_ESR" />
+        <AssociationConnector Association="HR_SystemModel.FK_LeaveApplication_EsrSectionOfficers" />
+        <AssociationConnector Association="HR_SystemModel.FK_LeaveOrder_EsrSectionOfficers" />
+        <AssociationConnector Association="HR_SystemModel.FK_TransferApplication_EsrSectionOfficers" />
+        <AssociationConnector Association="HR_SystemModel.FK_UserDetails_EsrSectionOfficers" />
+        <AssociationConnector Association="HR_SystemModel.FK_FCLEAVETDTL_FCRequests" />
+        <AssociationConnector Association="HR_SystemModel.FK_FCPromotion_FCRequests" />
+        <AssociationConnector Association="HR_SystemModel.FCRequests_HrProfile_Fk" />
+        <AssociationConnector Association="HR_SystemModel.FK_FCRequests_GSMNETWORK" />
+        <AssociationConnector Association="HR_SystemModel.FK_FCTransfer_FCRequests" />
+        <AssociationConnector Association="HR_SystemModel.FK_FileDetails_FilesMaster" />
+        <AssociationConnector Association="HR_SystemModel.FK_FileMoveDetail_FileMoveMaster" />
+        <AssociationConnector Association="HR_SystemModel.FK_PerGradings_Grading" />
+        <AssociationConnector Association="HR_SystemModel.FK_PerGradings_GradingVals" />
+        <AssociationConnector Association="HR_SystemModel.FK_HFPhotos_HealthFacilities" />
+        <AssociationConnector Association="HR_SystemModel.FK_HFWards_HealthFacilities" />
+        <AssociationConnector Association="HR_SystemModel.FK_HrProfile_HealthFacilities" />
+        <AssociationConnector Association="HR_SystemModel.FK_HrProfile_HealthFacility_Id" />
+        <AssociationConnector Association="HR_SystemModel.FK_HrProfileReq_HealthFacilities" />
+        <AssociationConnector Association="HR_SystemModel.FK_MeritPG_HealthFacilities" />
+        <AssociationConnector Association="HR_SystemModel.FK_MeritPreferences_HealthFacilities" />
+        <AssociationConnector Association="HR_SystemModel.FK_Merits_HealthFacilities" />
+        <AssociationConnector Association="HR_SystemModel.FK_MeritsVp_HealthFacilities" />
+        <AssociationConnector Association="HR_SystemModel.FK_PSHealthFacility_HealthFacilities" />
+        <AssociationConnector Association="HR_SystemModel.FK_VP_HealthFacilities" />
+        <AssociationConnector Association="HR_SystemModel.FK_VPMaster_HealthFacilities" />
+        <AssociationConnector Association="HR_SystemModel.FK_VPSP_HealthFacilities" />
+        <AssociationConnector Association="HR_SystemModel.HFBlocks_HF_Id_Fk" />
+        <AssociationConnector Association="HR_SystemModel.HFServices_HealthFacilities_HF_Id" />
+        <AssociationConnector Association="HR_SystemModel.FK_User_Activity_Log_User_Id" />
+        <AssociationConnector Association="HR_SystemModel.Fk_Types_HFCat_Id" />
+        <AssociationConnector Association="HR_SystemModel.HFServices_Servies_Id" />
+        <AssociationConnector Association="HR_SystemModel.FK_HrProfile_Department_Id" />
+        <AssociationConnector Association="HR_SystemModel.FK_VP_HrDepartment" />
+        <AssociationConnector Association="HR_SystemModel.FK_VPostMast_Department_Id" />
+        <AssociationConnector Association="HR_SystemModel.FK_HrDesignation_HrScale_Id" />
+        <AssociationConnector Association="HR_SystemModel.FK_HrProfile_HrDesignation" />
+        <AssociationConnector Association="HR_SystemModel.FK_HrProfileReq_HrDesignation" />
+        <AssociationConnector Association="HR_SystemModel.FK_Merits_HrDesignation" />
+        <AssociationConnector Association="HR_SystemModel.FK_MeritsVp_HrDesignation" />
+        <AssociationConnector Association="HR_SystemModel.FK_P_SConcernedDesignations_HrDesignation" />
+        <AssociationConnector Association="HR_SystemModel.FK_PER_HrDesignation" />
+        <AssociationConnector Association="HR_SystemModel.FK_PER_HrDesignation_PostHeld" />
+        <AssociationConnector Association="HR_SystemModel.FK_PromotionJobApplication_HrDesignation" />
+        <AssociationConnector Association="HR_SystemModel.FK_PromtionJobApplication_HrDesignation" />
+        <AssociationConnector Association="HR_SystemModel.FK_SeniorityDetail_HrDesignation" />
+        <AssociationConnector Association="HR_SystemModel.FK_VP_HrDesignation" />
+        <AssociationConnector Association="HR_SystemModel.FK_VPMaster_HrDesignation" />
+        <AssociationConnector Association="HR_SystemModel.FK_VPSP_HrDesignation" />
+        <AssociationConnector Association="HR_SystemModel.FK_VP_HrEmpMode" />
+        <AssociationConnector Association="HR_SystemModel.FK_VPDetail_HrEmpMode" />
+        <AssociationConnector Association="HR_SystemModel.Fk_VPostDtl_EmpMode_Id" />
+        <AssociationConnector Association="HR_SystemModel.FK_VPSP_HrEmpMode" />
+        <AssociationConnector Association="HR_SystemModel.FK_HrInquiry_HrProfile" />
+        <AssociationConnector Association="HR_SystemModel.FK_HrInquiry_InquiryStatus" />
+        <AssociationConnector Association="HR_SystemModel.FK_HrInquiryPenalty_HrInquiry" />
+        <AssociationConnector Association="HR_SystemModel.FK_HrProfile_Post_Type_Id" />
+        <AssociationConnector Association="HR_SystemModel.FK_VP_HrPost_Type" />
+        <AssociationConnector Association="HR_SystemModel.FK_VPMaster_HrPost_Type" />
+        <AssociationConnector Association="HR_SystemModel.FK_VPSP_HrPost_Type" />
+        <AssociationConnector Association="HR_SystemModel.FK_HrProfile_HrProfileStatus" />
+        <AssociationConnector Association="HR_SystemModel.FK_HrProfile_Qualification" />
+        <AssociationConnector Association="HR_SystemModel.FK_HrProfile_Religion_Id" />
+        <AssociationConnector Association="HR_SystemModel.FK_HrProfile_Specialization" />
+        <AssociationConnector Association="HR_SystemModel.FK_LeaveApplication_HrProfile" />
+        <AssociationConnector Association="HR_SystemModel.FK_LeaveOrder_HrProfile" />
+        <AssociationConnector Association="HR_SystemModel.FK_PER_HrProfile" />
+        <AssociationConnector Association="HR_SystemModel.FK_PerDeferment_HrProfile" />
+        <AssociationConnector Association="HR_SystemModel.FK_PerInquiry_HrProfile" />
+        <AssociationConnector Association="HR_SystemModel.FK_PromtionJobApplication_HrProfile" />
+        <AssociationConnector Association="HR_SystemModel.FK_SeniorityDetail_HrProfile" />
+        <AssociationConnector Association="HR_SystemModel.FK_TransferApplication_HrProfile" />
+        <AssociationConnector Association="HR_SystemModel.FK_LeaveApplication_HrProfileReq" />
+        <AssociationConnector Association="HR_SystemModel.FK_TransferApplication_HrProfileReq" />
+        <AssociationConnector Association="HR_SystemModel.FK_VpProfileStatus_HrProfileStatus" />
+        <AssociationConnector Association="HR_SystemModel.FK_VPostDtl_HrScale_Id" />
+        <AssociationConnector Association="HR_SystemModel.FK_JobApplication_Job" />
+        <AssociationConnector Association="HR_SystemModel.FK_JobHF_Job" />
+        <AssociationConnector Association="HR_SystemModel.FK_JobPosting_Job" />
+        <AssociationConnector Association="HR_SystemModel.FK_JobApplication_JobApplicant" />
+        <AssociationConnector Association="HR_SystemModel.FK_JobApplicationPreference_JobApplication" />
+        <AssociationConnector Association="HR_SystemModel.FK_JobPosting_JobApplication" />
+        <AssociationConnector Association="HR_SystemModel.FK_JobApplicationPreference_JobHF" />
+        <AssociationConnector Association="HR_SystemModel.FK_JobPosting_JobApplicationPreference" />
+        <AssociationConnector Association="HR_SystemModel.FK_FilesImages_Files" />
+        <AssociationConnector Association="HR_SystemModel.FK_FilesPetitioners_Files" />
+        <AssociationConnector Association="HR_SystemModel.FK_FilesRepresentatives_Files" />
+        <AssociationConnector Association="HR_SystemModel.FK_LeaveApplication_LeaveApplication" />
+        <AssociationConnector Association="HR_SystemModel.FK_LeaveApplication_LeaveStatus" />
+        <AssociationConnector Association="HR_SystemModel.FK_LeaveApplication_LeaveType" />
+        <AssociationConnector Association="HR_SystemModel.FK_LeaveOrder_LeaveType" />
+        <AssociationConnector Association="HR_SystemModel.FK_PER_LeaveType" />
+        <AssociationConnector Association="HR_SystemModel.FK_Merits_MeritActiveDesignations" />
+        <AssociationConnector Association="HR_SystemModel.FK_MeritsVp_MeritActiveDesignations" />
+        <AssociationConnector Association="HR_SystemModel.FK_MeritsVpDistricts_MeritActiveDesignations" />
+        <AssociationConnector Association="HR_SystemModel.FK_MeritGrievience_Merits" />
+        <AssociationConnector Association="HR_SystemModel.FK_MeritPG_Merits" />
+        <AssociationConnector Association="HR_SystemModel.FK_MeritPG_Specialization" />
+        <AssociationConnector Association="HR_SystemModel.FK_MeritPGDistricts_MeritPG" />
+        <AssociationConnector Association="HR_SystemModel.FK_MeritPGDistricts_Merits" />
+        <AssociationConnector Association="HR_SystemModel.FK_MeritsVp_MeritPGDistricts" />
+        <AssociationConnector Association="HR_SystemModel.FK_MeritPreferences_Merits" />
+        <AssociationConnector Association="HR_SystemModel.FK_MeritsVp_MeritPreferences" />
+        <AssociationConnector Association="HR_SystemModel.FK_MeritsVp_Merits" />
+        <AssociationConnector Association="HR_SystemModel.FK_Officers_Office" />
+        <AssociationConnector Association="HR_SystemModel.FK_P_SConcernedCadres_P_SOfficers" />
+        <AssociationConnector Association="HR_SystemModel.FK_P_SConcernedDesignations_P_SOfficers" />
+        <AssociationConnector Association="HR_SystemModel.FK_P_SConcernedOfficers_P_SOfficers" />
+        <AssociationConnector Association="HR_SystemModel.FK_P_SConcernedOfficers_P_SOfficers1" />
+        <AssociationConnector Association="HR_SystemModel.FK_PER_PerTypes" />
+        <AssociationConnector Association="HR_SystemModel.FK_PerGradings_PER" />
+        <AssociationConnector Association="HR_SystemModel.FK_PerImages_PER" />
+        <AssociationConnector Association="HR_SystemModel.FK_PerPrfmAssment_PER" />
+        <AssociationConnector Association="HR_SystemModel.FK_PerTargetAchievements_PER" />
+        <AssociationConnector Association="HR_SystemModel.FK_PerTraining_PER" />
+        <AssociationConnector Association="HR_SystemModel.FK_PerPrfmAssment_PrfmAssment" />
+        <AssociationConnector Association="HR_SystemModel.FK_PerTraining_Trainings" />
+        <AssociationConnector Association="HR_SystemModel.FK_PromotionJobApplicationServiceStatement_PromotionJobApplication" />
+        <AssociationConnector Association="HR_SystemModel.FK_PSHealthFacility_PSHealthFacility" />
+        <AssociationConnector Association="HR_SystemModel.FK_PSHealthProject_PSHealthProgram" />
+        <AssociationConnector Association="HR_SystemModel.FK_SeniorityDetail_SeniorityMaster" />
+        <AssociationConnector Association="HR_SystemModel.FK_TehsilsDistances_Tehsils" />
+        <AssociationConnector Association="HR_SystemModel.FK_TehsilsDistances_Tehsils1" />
+        <AssociationConnector Association="HR_SystemModel.FK_TransferApplication_TransferApplication" />
+        <AssociationConnector Association="HR_SystemModel.FK_VPDetail_VPMaster" />
+        <AssociationConnector Association="HR_SystemModel.FK_VPHolder_VPDetail" />
+        <AssociationConnector Association="HR_SystemModel.FK_VPHolder_VPHolder" />
+        <AssociationConnector Association="HR_SystemModel.FK_VPProfile_VPProfile" />
+        <AssociationConnector Association="HR_SystemModel.FK_VPostDtl_Id" />
+        <AssociationConnector Association="HR_SystemModel.C_UserRole" />
+        <EntityTypeShape EntityType="HR_SystemModel.HFPicView" Width="1.5" PointX="85.375" PointY="9.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.UniqueAdhocHealthFacility" Width="1.5" PointX="3.375" PointY="0.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LoggedInLog" Width="1.5" PointX="85.375" PointY="17.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.LoggedProfileInLog" Width="1.5" PointX="85.375" PointY="22.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.DailyWagerBankDetail" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.DailyWagerContractDetail" Width="1.5" PointX="15.375" PointY="0.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.DailyWagesProfile" Width="1.5" PointX="85.375" PointY="27.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.hc_hfbankdetails" Width="1.5" PointX="85.375" PointY="33.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.BankDetail" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.tEMPtABLE" Width="1.5" PointX="85.375" PointY="39.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.DailyWagerDetailView" Width="1.5" PointX="85.375" PointY="45.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.Coordinate" Width="1.5" PointX="87.625" PointY="53.375" />
+        <EntityTypeShape EntityType="HR_SystemModel.UcData" Width="1.5" PointX="85.375" PointY="53" />
+        <EntityTypeShape EntityType="HR_SystemModel.GetCoordinate" Width="1.5" PointX="85.375" PointY="56.75" />
+        <AssociationConnector Association="HR_SystemModel.FK_Coordinates_Coordinates" />
+        <EntityTypeShape EntityType="HR_SystemModel.DailyWagerCategory" Width="1.5" PointX="9.375" PointY="0.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.DailyWagerDesignation" Width="1.5" PointX="11.375" PointY="0.75" />
+        <EntityTypeShape EntityType="HR_SystemModel.UCWiseData" Width="1.5" PointX="85.375" PointY="61.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,426 @@
+<div class="animated fadeIn" *ngIf="2 + 2 == 5">
+  <p class="p-strong" style="text-align:center">
+    Portal is closed
+  </p>
+</div>
+<div class="animated fadeIn" *ngIf="2 + 2 == 4">
+  <div class="animated fadeIn">
+    <div class="row mb-2">
+      <div class="col-md-2 control-col-st">
+        <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/adhoc/apply">1 - <i
+            class="fa fa-graduation-cap"></i>
+          Select Post</button>
+      </div>
+      <div class="col-md-2 control-col">
+        <button kendoButton primary="true" class="btn-block" routerLink="/adhoc/apply">2 - <i class="fa fa-user"></i>
+          Profile</button>
+      </div>
+      <div class="col-md-2 control-col">
+        <button kendoButton primary="true" look="outline"
+          [disabled]="!applicant?.Id || !f.valid || !applicant.CNICDoc || !applicant.DomicileDoc || !applicant.PMDCDoc || !applicant.ProfilePic"
+          class="btn-block" routerLink="/adhoc/qualification">3 - <i class="fa fa-file"></i>
+          Qualification</button>
+      </div>
+      <div class="col-md-2 control-col">
+        <button kendoButton primary="true" look="outline" [disabled]="applicant.Status_Id < 5 || !applicant?.Id"
+          class="btn-block" routerLink="/adhoc/experience">4 - <i class="fa fa-medkit"></i>
+          Experience</button>
+      </div>
+      <div class="col-md-2 control-col">
+        <button kendoButton primary="true" look="outline" [disabled]="applicant.Status_Id < 5 || !applicant?.Id"
+          class="btn-block" routerLink="/adhoc/preferences">5 -<i class="fa fa-building-o"></i>
+          Preferences</button>
+      </div>
+      <div class="col-md-2 control-col-end">
+        <button kendoButton primary="true" look="outline" [disabled]="applicant.Status_Id < 5 || !applicant?.Id"
+          class="btn-block" routerLink="/adhoc/apply-now/1">6 - <i class="fa fa-print"></i>
+          Finalize & Print!</button>
+      </div>
+    </div>
+    <hr>
+  </div>
+  <div class="animated fadeIn row">
+    <div class="col-md-6">
+      <p class="font-2xl m-0">
+        {{urdu.infoeng}}
+      </p>
+    </div>
+    <div class="col-md-6">
+      <p class="urdu-text font-3xl m-0 p-strong text-center">
+        {{urdu.info}}
+      </p>
+    </div>
+  </div>
+  <hr>
+  <div class="p-4" style="background: #e9e9e9;color: black;border: 5px;">
+    <form name="profileform" (ngSubmit)="f.valid && onSubmit()" #f="ngForm" novalidate>
+      <div>
+        <div class="row print-not" id="applicantInfo">
+          <div class="col-md-4 col-sm-4 col-xs-12 mt-2 control-col-st">
+            <label class="k-form-field">
+              <span>CNIC</span>&nbsp;<span class="text-danger">*</span>
+              <kendo-maskedtextbox [mask]="cnicMask" disabled (input)="inputChange.next(CNIC.value)" name="CNIC"
+                [(ngModel)]="applicant.CNIC" #CNIC="ngModel" required>
+              </kendo-maskedtextbox>
+            </label>
+          </div>
+          <div class="col-md-4 col-sm-4 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+              <span>Name <span class="text-danger">*</span></span>
+              <input kendoTextBox type="text" name="Name" [(ngModel)]="applicant.Name" #Name="ngModel" required />
+            </label>
+          </div>
+          <div class="col-md-4 col-sm-4 col-xs-12 mt-2 control-col-end">
+            <label class="k-form-field">
+              <span>S/D/W of</span>&nbsp;<span class="text-danger">*</span>
+              <input kendoTextBox type="text" name="FatherName" [(ngModel)]="applicant.FatherName" #FatherName="ngModel"
+                required />
+            </label>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col-st">
+            <label class="k-form-field">
+              <span>Gender</span>&nbsp;<span class="text-danger">*</span>
+              <kendo-dropdownlist [data]="dropDowns.genders" [valuePrimitive]="true" name="Gender"
+                [(ngModel)]="applicant.Gender" #Gender="ngModel" [value]="'Select...'" [defaultItem]="'Select...'"
+                required>
+              </kendo-dropdownlist>
+            </label>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+              <span>Date of Birth</span>&nbsp;<span class="text-danger">*</span>
+              <kendo-datepicker name="DOB" [max]="birthDateMax" [min]="birthDateMin" [format]="'dd/MM/yyyy'"
+                (valueChange)="calculate_age($event)" [(ngModel)]="applicant.DOB" #DOB="ngModel" required>
+              </kendo-datepicker>
+            </label>
+          </div>
+
+          <div class="col-md-1 col-sm-6 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+              <span>Age</span>&nbsp;<span class="text-danger">*</span>
+              <input kendoTextBox disabled name="Age" [(ngModel)]="applicant.Age" #Age="ngModel" required />
+            </label>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+              <span>Domicile</span>&nbsp;<span class="text-danger">*</span>
+              <kendo-dropdownlist [data]="dropDowns.domicile" [textField]="'DistrictName'" [valueField]="'Id'"
+                (valueChange)="dropdownValueChanged($event, 'domicile')"
+                [value]="dropDowns.selectedFiltersModel.domicile" [defaultItem]="dropDowns.defultFiltersModel.domicile"
+                required>
+              </kendo-dropdownlist>
+            </label>
+          </div>
+          <div class="col-md-2 col-sm-6 col-xs-12 mt-2 control-col-end">
+            <label class="k-form-field">
+              <span>Marital Status</span>&nbsp;<span class="text-danger">*</span>
+              <kendo-dropdownlist name="MaritalStatus" [data]="dropDowns.maritalStatusItems"
+                [(ngModel)]="applicant.MaritalStatus" #MaritalStatus="ngModel"
+                [defaultItem]="dropDowns.defultFiltersModel.maritalStatus" [textField]="'text'" [valueField]="'value'"
+                [valuePrimitive]="true" required>
+              </kendo-dropdownlist>
+            </label>
+          </div>
+          <div class="col-md-6 col-sm-6 col-xs-12 mt-2 control-col-st">
+            <label class="k-form-field">
+              <span>Mobile</span>&nbsp;<span class="text-danger">*</span>&nbsp;<span class="text-muted">(SMS alerts will
+                be sent on mobile number)</span>
+              <kendo-maskedtextbox name="MobileNumber" [mask]="mobileMask" [(ngModel)]="applicant.MobileNumber"
+                #MobileNumber="ngModel" required>
+              </kendo-maskedtextbox>
+            </label>
+          </div>
+          <!-- 
+        <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col">
+          <label class="k-form-field">
+            <span>Secondary Mobile / Landline with City Code</span>&nbsp;
+            <input kendoTextBox type="text" name="MobileSec" [(ngModel)]="applicant.MobileSec" #MobileSec="ngModel">
+          </label>
+        </div> -->
+          <div class="col-md-6 col-sm-6 col-xs-12 mt-2 control-col-end">
+            <label class="k-form-field">
+              <span>Email</span>&nbsp;<span class="text-danger">*</span>
+              <input kendoTextBox type="email" name="Email" [(ngModel)]="applicant.Email" #Email="ngModel"
+                pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+                [ngClass]="{ 'is-invalid': Email.invalid }">
+            </label>
+          </div>
+          <div class="col-md-12 col-sm-6 col-xs-12 mt-2 control-col-st-end">
+            <label class="k-form-field">
+              <span>Address</span>&nbsp;<span class="text-danger">*</span>&nbsp;<span class="text-muted">(House No. ,
+                Street No. , Colony/Block, Tehsil, District)</span>
+              <input kendoTextBox type="text" name="Address" [(ngModel)]="applicant.Address" #Address="ngModel">
+            </label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 col-sm-4 col-xs-12 mt-2 control-col-st">
+            <label class="k-form-field">
+              <span>{{designationId == 302 ? 'PNC' : 'PMC'}} Number</span>&nbsp;<span class="text-danger">*</span>
+              <input kendoTextBox type="text" name="PMDCNumber" [(ngModel)]="applicant.PMDCNumber" #PMDCNumber="ngModel"
+                required />
+            </label>
+          </div>
+          <div class="col-md-4 col-sm-40px col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+              <span>PMC Registation Date</span>&nbsp;<span class="text-danger">*</span>
+              <kendo-datepicker name="PMDCRegDate" [format]="'dd/MM/yyyy'" [(ngModel)]="applicant.PMDCRegDate"
+                #PMDCRegDate="ngModel" required>
+              </kendo-datepicker>
+            </label>
+          </div>
+          <div class="col-md-4 col-sm-40px col-xs-12 mt-2 control-col-end">
+            <label class="k-form-field">
+              <span>PMC Valid Upto</span>&nbsp;<span class="text-danger">*</span>
+              <kendo-datepicker name="PMDCValidUpto" [format]="'dd/MM/yyyy'" [(ngModel)]="applicant.PMDCValidUpto"
+                #PMDCValidUpto="ngModel" required>
+              </kendo-datepicker>
+            </label>
+          </div>
+        </div>
+      </div>
+      <hr>
+       
+      <div>
+        <div class="row print-not" id="applicantInfo">
+        
+          <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col-st">
+            <label class="k-form-field">
+              <span>Current Designation</span>&nbsp;<span class="text-danger">*</span>
+              <kendo-dropdownlist [data]="dropDowns.genders" [valuePrimitive]="true" name="Gender"
+                [(ngModel)]="applicant.Gender" #Gender="ngModel" [value]="'Select...'" [defaultItem]="'Select...'"
+                required>
+              </kendo-dropdownlist>
+            </label>
+          </div>
+
+          <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col-st">
+            <label class="k-form-field">
+              <span>Current BPS</span>&nbsp;<span class="text-danger">*</span>
+              <kendo-dropdownlist [data]="dropDowns.genders" [valuePrimitive]="true" name="Gender"
+                [(ngModel)]="applicant.Gender" #Gender="ngModel" [value]="'Select...'" [defaultItem]="'Select...'"
+                required>
+              </kendo-dropdownlist>
+            </label>
+          </div>
+
+          <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col-st">
+            <label class="k-form-field">
+              <span>Hospital Level/Institute</span>&nbsp;<span class="text-danger">*</span>
+              <kendo-dropdownlist [data]="dropDowns.genders" [valuePrimitive]="true" name="Gender"
+                [(ngModel)]="applicant.Gender" #Gender="ngModel" [value]="'Select...'" [defaultItem]="'Select...'"
+                required>
+              </kendo-dropdownlist>
+            </label>
+          </div>
+
+          <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col-st">
+            <label class="k-form-field">
+              <span>Hospital Type/College</span>&nbsp;<span class="text-danger">*</span>
+              <kendo-dropdownlist [data]="dropDowns.genders" [valuePrimitive]="true" name="Gender"
+                [(ngModel)]="applicant.Gender" #Gender="ngModel" [value]="'Select...'" [defaultItem]="'Select...'"
+                required>
+              </kendo-dropdownlist>
+            </label>
+          </div>
+
+          <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col-st">
+            <label class="k-form-field">
+              <span>Name of Hospital/College </span>&nbsp;<span class="text-danger">*</span>
+              <kendo-dropdownlist [data]="dropDowns.genders" [valuePrimitive]="true" name="Gender"
+                [(ngModel)]="applicant.Gender" #Gender="ngModel" [value]="'Select...'" [defaultItem]="'Select...'"
+                required>
+              </kendo-dropdownlist>
+            </label>
+          </div>
+
+          <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+              <span>Joining Date (Regular Only)</span>&nbsp;<span class="text-danger">*</span>
+              <kendo-datepicker name="DOB" [max]="birthDateMax" [min]="birthDateMin" [format]="'dd/MM/yyyy'"
+                (valueChange)="calculate_age($event)" [(ngModel)]="applicant.DOB" #DOB="ngModel" required>
+              </kendo-datepicker>
+            </label>
+          </div>
+        </div>
+      </div>
+      
+
+
+
+      <div class="row">
+        <div class="col-md-3 control-col-st">
+          <!-- <pre>{{applicant | json}}</pre>
+          <div>{{(!applicant.CNICDoc && !photoSrcCnic)}}</div>
+          <div>{{(!applicant.DomicileDoc && !photoSrcDomicile)}}</div>
+          <div>{{(!applicant.PMDCDoc && !photoSrcPmdc)}}</div>
+          <div>{{(!f.valid)}}</div>
+          <div>{{!f.valid || (!applicant.CNICDoc && !photoSrcCnic)}}</div> -->
+          <button [ladda]="savingProfile" data-style="zoom-in" [disabled]="!f.valid" kendoButton primary="true"
+            type="submit" class="btn-block btn-lg">Save Profile</button>
+        </div>
+      </div>
+    </form>
+    <div *ngIf="applicant.Id > 0" class="animated fadeIn">
+      <hr>
+      <div class="font-2xl content-heading text-center">
+        REQUIRED DOCUMENTS
+      </div>
+      <div class="row">
+        <div class="col-md-3 col-sm-3 col-xs-12 mt-2 control-col-st">
+          <label class="k-form-field">
+            <span>Passport Size Photo <span class="text-danger">*</span><span class="clearfix"></span><small
+                class="text-muted">(only .jpg format
+                of maximum 5mb)</small></span>
+            <div style="width:100%;">
+              <img *ngIf="applicant.ProfilePic && !photoSrc" class="animated fadeIn"
+                style="width:100px;height:100px;border:1px solid grey;" [src]="applicant.ProfilePic"
+                onError="this.src='../../../assets/img/notfound.png'" alt="">
+              <img *ngIf="photoSrc" class="animated fadeIn" style="width:100px;height:100px;border:1px solid;"
+                [src]="photoSrc" onError="this.src='../../../assets/img/notfound.png'" alt="">
+              <input #photoRef type="file" accept="image/jpg, image/jpeg" (change)="readUrl($event, 'pic')" hidden>
+              <button kendoButton type="button" [primary]="true" [look]="'outline'" (click)="uploadBtn('pic')"
+                class="btn-sm btn-block" [ngClass]="photoFile.length == 0 ? 'mt-0' : 'mt-2'" style="cursor:pointer;"
+                [ladda]="isUploading" data-style="expand-right">
+                <i class="fa fa-file"></i> {{photoFile.length == 0 ? 'Choose Photo' : 'Choose other'}}</button>
+              <button *ngIf="photoSrc" kendoButton type="button" [primary]="true" (click)="uploadFile('photo')"
+                class="btn-sm btn-block btn-lg mt-2" style="cursor:pointer;" [ladda]="fileUpload.photo"
+                data-style="expand-right">
+                <i class="fa fa-upload"></i> Click Here To Upload</button>
+            </div>
+          </label>
+        </div>
+        <div class="col-md-3 col-sm-3 col-xs-12 mt-2 control-col">
+          <label class="k-form-field">
+            <span>CNIC <span class="text-danger">*</span><span class="clearfix"></span><small class="text-muted">(only
+                .jpg or .pdf format
+                of maximum 5mb)</small></span>
+            <div style="width:100%;">
+              <img *ngIf="applicant.CNICDoc && !photoSrcCnic" class="animated fadeIn"
+                style="width:100px;height:100px;border:1px solid grey;" [src]="applicant.CNICDoc"
+                onError="this.src='../../../assets/img/notfound.png'" alt="">
+              <img *ngIf="photoSrcCnic" class="animated fadeIn" style="width:100px;height:100px;border:1px solid;"
+                [src]="photoSrcCnic" onError="this.src='../../../assets/img/notfound.png'" alt="">
+              <input #photoRefCnic type="file" accept="image/jpg, image/jpeg, application/pdf"
+                (change)="readUrl($event, 'cnic')" hidden>
+              <button kendoButton type="button" [primary]="true" [look]="'outline'" (click)="uploadBtn('cnic')"
+                class="btn-sm btn-block" [ngClass]="cnicFile.length == 0 ? 'mt-0' : 'mt-2'" style="cursor:pointer;"
+                [ladda]="isUploading" data-style="expand-right">
+                <i class="fa fa-file"></i>
+                {{cnicFile.length == 0 || !applicant.CNICDoc ? 'Choose Photo' : 'Choose other'}}</button>
+              <button *ngIf="photoSrcCnic" kendoButton type="button" [primary]="true" (click)="uploadFile('cnic')"
+                class="btn-sm btn-block btn-lg mt-2" style="cursor:pointer;" [ladda]="fileUpload.cnic"
+                data-style="expand-right">
+                <i class="fa fa-upload"></i> Click Here To Upload</button>
+            </div>
+          </label>
+        </div>
+        <div class="col-md-3 col-sm-3 col-xs-12 mt-2 control-col">
+          <label class="k-form-field">
+            <span>Domicile <span class="text-danger">*</span><span class="clearfix"></span><small
+                class="text-muted">(only .jpg or .pdf format
+                of maximum 5mb)</small></span>
+            <div style="width:100%;">
+              <img *ngIf="applicant.DomicileDoc && !photoSrcDomicile" class="animated fadeIn"
+                style="width:100px;height:100px;border:1px solid grey;" [src]="applicant.DomicileDoc"
+                onError="this.src='../../../assets/img/notfound.png'" alt="">
+              <img *ngIf="photoSrcDomicile" class="animated fadeIn" style="width:100px;height:100px;border:1px solid;"
+                [src]="photoSrcDomicile" onError="this.src='../../../assets/img/notfound.png'" alt="">
+              <input #photoRefDomicile type="file" accept="image/jpg, image/jpeg, application/pdf"
+                (change)="readUrl($event, 'domicile')" hidden>
+              <button kendoButton type="button" [primary]="true" [look]="'outline'" (click)="uploadBtn('domicile')"
+                class="btn-sm btn-block" [ngClass]="domicileFile.length == 0 ? 'mt-0' : 'mt-2'" style="cursor:pointer;"
+                [ladda]="isUploading" data-style="expand-right">
+                <i class="fa fa-file"></i>
+                {{domicileFile.length == 0 || !applicant.DomicileDoc ? 'Choose Photo' : 'Choose other'}}</button>
+              <button *ngIf="photoSrcDomicile" kendoButton type="button" [primary]="true"
+                (click)="uploadFile('domicile')" class="btn-sm btn-block btn-lg mt-2" style="cursor:pointer;"
+                [ladda]="fileUpload.domicile" data-style="expand-right">
+                <i class="fa fa-upload"></i> Click Here To Upload</button>
+            </div>
+          </label>
+        </div>
+        <div class="col-md-3 col-sm-3 col-xs-12 mt-2 control-col-end">
+          <label class="k-form-field">
+            <span>{{designationId == 302 ? 'PNC' : 'PMC'}} <span class="text-danger">*</span><span
+                class="clearfix"></span><small class="text-muted">(only
+                .jpg or .pdf format
+                of maximum 5mb)</small></span>
+            <div style="width:100%;">
+              <img *ngIf="applicant.PMDCDoc && !photoSrcPmdc" class="animated fadeIn"
+                style="width:100px;height:100px;border:1px solid grey;" [src]="applicant.PMDCDoc"
+                onError="this.src='../../../assets/img/notfound.png'" alt="">
+              <img *ngIf="photoSrcPmdc" class="animated fadeIn" style="width:100px;height:100px;border:1px solid;"
+                [src]="photoSrcPmdc" onError="this.src='../../../assets/img/notfound.png'" alt="">
+              <input #photoRefPmdc type="file" accept="image/jpg, image/jpeg, application/pdf"
+                (change)="readUrl($event, 'pmdc')" hidden>
+              <button kendoButton type="button" [primary]="true" [look]="'outline'" (click)="uploadBtn('pmdc')"
+                class="btn-sm btn-block" [ngClass]="pmdcFile.length == 0 ? 'mt-0' : 'mt-2'" style="cursor:pointer;"
+                [ladda]="isUploading" data-style="expand-right">
+                <i class="fa fa-file"></i>
+                {{pmdcFile.length == 0 || !applicant.PMDCDoc ? 'Choose Photo' : 'Choose other'}}</button>
+              <button *ngIf="photoSrcPmdc" kendoButton type="button" [primary]="true" (click)="uploadFile('pmdc')"
+                class="btn-sm btn-block btn-lg mt-2" style="cursor:pointer;" [ladda]="fileUpload.pmdc"
+                data-style="expand-right">
+                <i class="fa fa-upload"></i> Click Here To Upload</button>
+            </div>
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col-st">
+          <label class="k-form-field">
+            <span style="width:100%;">Hafiz-e-Quran</span>&nbsp;<span class="text-danger"></span>
+            <input kendoCheckBox type="checkbox" name="Hafiz" [(ngModel)]="applicant.Hafiz" #Hafiz="ngModel" />
+          </label>
+        </div>
+        <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col-end" *ngIf="applicant.Hafiz">
+          <label class="k-form-field">
+            <span>Hifz Certificate<span class="text-danger">*</span><span class="clearfix"></span><small
+                class="text-muted">(only .jpg or .pdf format
+                of maximum 5mb)</small></span>
+            <div style="width:100%;">
+              <img *ngIf="applicant.HifzDocument && !photoSrcHifz" class="animated fadeIn"
+                style="width:100px;height:100px;border:1px solid grey;" [src]="applicant.HifzDocument"
+                onError="this.src='../../../assets/img/notfound.png'" alt="">
+              <img *ngIf="photoSrcHifz" class="animated fadeIn" style="width:100px;height:100px;border:1px solid;"
+                [src]="photoSrcHifz" onError="this.src='../../../assets/img/notfound.png'" alt="">
+              <input #photoRefHifz type="file" accept="image/jpg, image/jpeg, application/pdf"
+                (change)="readUrl($event, 'hifz')" hidden>
+              <button kendoButton type="button" [primary]="true" [look]="'outline'" (click)="uploadBtn('hifz')"
+                class="btn-sm btn-block" [ngClass]="hifzFile.length == 0 ? 'mt-0' : 'mt-2'" style="cursor:pointer;"
+                [ladda]="isUploading" data-style="expand-right">
+                <i class="fa fa-file"></i>
+                {{hifzFile.length == 0 || !applicant.HifzDocument ? 'Choose Photo' : 'Choose other'}}</button>
+              <button *ngIf="photoSrcHifz" kendoButton type="button" [primary]="true" (click)="uploadFile('hifz')"
+                class="btn-sm btn-block btn-lg mt-2" style="cursor:pointer;" [ladda]="fileUpload.hifz"
+                data-style="expand-right">
+                <i class="fa fa-upload"></i> Click Here To Upload</button>
+            </div>
+          </label>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-md-3 control-col-st">
+          <!-- <pre>{{applicant | json}}</pre>
+        <div>{{(!applicant.CNICDoc && !photoSrcCnic)}}</div>
+        <div>{{(!applicant.DomicileDoc && !photoSrcDomicile)}}</div>
+        <div>{{(!applicant.PMDCDoc && !photoSrcPmdc)}}</div>
+        <div>{{(!f.valid)}}</div>
+        <div>{{!f.valid || (!applicant.CNICDoc && !photoSrcCnic)}}</div> -->
+          <button
+            [disabled]="!applicant.CNICDoc || !applicant.DomicileDoc || !applicant.PMDCDoc || !applicant.ProfilePic || (applicant.Hafiz && !applicant.HifzDocument)"
+            kendoButton primary="true" type="button" (click)="proceed()" class="btn-block">Proceed</button>
+        </div>
+        <div class="col-md-6 control-col">
+          <p class="m-0 text-danger animated fadeIn" *ngIf="ageError">Age cannot be more than {{job.AgeLimit}}
+          </p>
+        </div>
+        <div class="col-md-3  control-col-end">
+          <button type="button" class="btn btn-secondary btn-block" routerLink="/adhoc/account">Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

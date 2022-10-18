@@ -1,0 +1,110 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3">
+        Attendance Log
+      </div>
+    </div>
+  </div>
+
+  <div class="row row-panel">
+    <div class="col-md-12">
+      <div class="grid-wrapper">
+        <kendo-grid [data]="gridView" [sortable]="{
+            allowUnsort: allowUnsort,
+            mode: multiple ? 'multiple' : 'single'
+          }" [selectable]="true" [sort]="sort" (sortChange)="sortChange($event)" [(pageSize)]="pageSize" [skip]="skip"
+          [pageable]="true" (pageChange)="pageChange($event)" [scrollable]="false">
+          <kendo-grid-column [width]="10" field="asd" title="No." [headerClass]="'grid-header-custom'" [style]="{
+              'background-color': '#fff',
+              color: '#000',
+              'border-bottom': '1px solid #c8ced3'
+            }">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              {{ rowIndex + 1 }}
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="'15'" field="Date" Title="Date" [headerClass]="'grid-header-custom'" [style]="{
+              'background-color': '#fff',
+              color: '#000',
+              'border-bottom': '1px solid #c8ced3'
+            }">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              {{ dataItem.date_att | date : 'dd/MM/yyyy' }}
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="'30'" field="Name" Title="Name" [headerClass]="'grid-header-custom'" [style]="{
+            'background-color': '#fff',
+            color: '#000',
+            'border-bottom': '1px solid #c8ced3'
+          }">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div [routerLink]="'/profile/' + dataItem.CNIC">
+                {{ dataItem.Name }}
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="'30'" field="Name" Title="Time IN/OUT" [headerClass]="'grid-header-custom'"
+            [style]="{
+              'background-color': '#fff',
+              color: '#000',
+              'border-bottom': '1px solid #c8ced3'
+            }">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p *ngFor="let t of dataItem.times;let i = index;"><i class="fa"
+                  [ngClass]="i % 2 != 0 ? 'fa-arrow-up text-danger' : 'fa-arrow-down text-success'"></i>
+                {{t.DateTime | date: 'hh:mm a'}}</p>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="20" field="Hours" Title="Hours" [headerClass]="'grid-header-custom'" [style]="{
+            'background-color': '#fff',
+            color: '#000',
+            'border-bottom': '1px solid #c8ced3'
+          }">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              {{ dataItem.hourss }}
+            </ng-template>
+          </kendo-grid-column>
+
+          <!-- <kendo-grid-column
+        [width]="20"
+        field="Office Hours"
+        Title="Office Hours"
+        [headerClass]="'grid-header-custom'"
+        [style]="{
+          'background-color': '#fff',
+          color: '#000',
+          'border-bottom': '1px solid #c8ced3'
+        }"
+      >
+        <ng-template
+          kendoGridCellTemplate
+          let-dataItem
+          let-rowIndex="rowIndex"
+        >
+          {{ dataItem.Total_hours }}
+        </ng-template>
+      </kendo-grid-column>      -->
+
+          <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+            <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+            <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+            <kendo-pager-next-buttons></kendo-pager-next-buttons>
+            <div class="pager-rows-number">
+              <select #select (change)="changePagesize(select.value)">
+                <option *ngIf="showInitialPageSize" [value]="pageSize">{{
+                  pageSize
+                }}</option>
+                <option *ngFor="let page of pageSizes" [value]="page" [selected]="page === pageSize ? true : undefined">
+                  {{ page }}
+                </option>
+              </select>
+              &nbsp; items per page
+            </div>
+            <kendo-pager-info></kendo-pager-info>
+          </ng-template>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+</div>

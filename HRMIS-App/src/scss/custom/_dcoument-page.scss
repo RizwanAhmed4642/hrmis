@@ -1,0 +1,85 @@
+.page {
+  background: white;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 0.5cm;
+  box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+}
+
+.page.preview {
+  width: 100%;
+  padding: 30px 50px 0 50px;
+  height: 29.7cm;
+
+}
+
+.page.preview-order {
+  width: 100%;
+  min-height: 29.7cm;
+}
+
+.page.preview-live {
+  padding: 30px 50px 0 50px;
+  width: 21cm;
+  height: 29.7cm;
+}
+
+.page.actionside {
+  width: 100%;
+  padding: 20px;
+  height: 29.7cm;
+
+}
+
+.page.a4w {
+  width: 24cm;
+  height: 29.7cm;
+}
+
+.page.a4wlandscape {
+  width: 35cm;
+}
+
+.page.a4 {
+  width: 21cm;
+  height: 29.7cm;
+}
+
+.page.a4.landscape {
+  width: 29.7cm;
+  height: 21cm;
+}
+
+.page[size="A3"] {
+  width: 29.7cm;
+  height: 42cm;
+}
+
+.page[size="A3"][layout="landscape"] {
+  width: 42cm;
+  height: 29.7cm;
+}
+
+.page[size="A5"] {
+  width: 14.8cm;
+  height: 21cm;
+}
+
+.page[size="A5"][layout="landscape"] {
+  width: 21cm;
+  height: 14.8cm;
+}
+
+/* @media print {
+    body * {
+       visibility: hidden;
+    }
+    #printDiv, #printDiv * {
+       visibility: visible;
+    }
+    #printDiv {
+       position: absolute !important;
+       left: 0 !important;
+       top: 0 !important;
+    }
+} */

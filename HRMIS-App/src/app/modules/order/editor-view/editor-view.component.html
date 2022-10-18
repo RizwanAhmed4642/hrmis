@@ -1,0 +1,61 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3">
+        Edit Order
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12">
+      <div class="top-controls">
+        <!-- <button kendoButton *ngIf="user.UserName == 'dpd'" (click)="setEditorContents()" [primary]="true">Editor</button> -->
+        <button kendoButton class="ml-2" [primary]="true" [look]="'outline'" routerLink="/order/0/1">Back to
+          List</button>
+        <!-- <button kendoButton *ngIf="leaveOrder?.UserId == currentUser?.Id || esr?.Users_Id == currentUser?.Id" -->
+        <!-- <button kendoButton [primary]="true" [ladda]="saving" data-style="zoom-in" (click)="onChange('')"><i
+            *ngIf="saved" class="fa fa-check"></i> Save</button>
+        <button kendoButton class="mr-2" [primary]="true" [ladda]="loadingQR" data-style="zoom-in"
+          (click)="generateQRManual()"><i class="fa fa-qrcode"></i> Generate QR</button> -->
+        <input #photoRef type="file" accept="image/jpg, image/jpeg, image/png, application/pdf"
+          (change)="readUrl($event)" hidden>
+        <button kendoButton type="button" [primary]="true" [look]="'outline'" (click)="uploadBtn()"
+          class="btn-sm mr-1" [ngClass]="photoFile.length == 0 ? 'mt-0' : 'mt-2'" style="cursor:pointer;"
+          [ladda]="uploadingFile" data-style="expand-right">
+          <i class="fa fa-upload"></i> {{photoFile.length == 0 ? 'Upload Signed Copy' : 'Choose Other'}}</button>
+      </div>
+    </div>
+  </div>
+    <!-- <div class="row">
+    <div class="col-md-12">
+      <p class="mb-0">
+        <{{'tr>'}}</p> <br>
+          <<span>{{'td style="border-color:transparent !important;">'}}</span>
+            <<span>{{'br>'}}</span>
+              <<span>{{'br>'}}</span>
+                <<span>{{'img src="' + qr + '" alt="IMAGE AREA" style="border-width:0px;">'}}</span>
+                  <<span>{{'/td>'}}</span>
+                    <<span>{{'td style="border-color:transparent !important;text-align: center;">'}}</span>
+                      <<span>{{'br>'}}</span>
+                        <<span>{{'br>'}}</span>
+                          <<span>{{'small>'}}</span>
+                            <<span>
+                              {{'u>This document is electronically system generated, there is no need for signature '}}</span>
+                              <<span>{{'br>This document can be verified through QR Code'}}</span>
+                                <<span>{{'/u>'}}</span>
+                                  <<span>{{'/small>'}}</span>
+                                    <<span>{{'/span>'}}</span>
+                                      <<span>{{'/td>'}}</span>
+                                        <br>
+                                        <p>
+                                          <{{'/tr>'}}</p> </div> </div> -->
+  <div class=" animated fadeIn" *ngIf="showEditor">
+    <div class="animated fadeIn" *ngIf="esr && esr?.TransferTypeID != 5">
+      <ckeditor [(ngModel)]="esr.OrderHTML" #myckeditor [config]="ckeConfig" debounce="300" (change)="onChange($event)">
+      </ckeditor>
+    </div>
+    <div class="animated fadeIn" *ngIf="esr && esr?.TransferTypeID == 5 && leaveOrder">
+      <ckeditor [(ngModel)]="leaveOrder.OrderHTML" #myckeditor [config]="ckeConfig" debounce="300"
+        (change)="onChange($event)">
+      </ckeditor>
+    </div>
+  </div>
+</div>

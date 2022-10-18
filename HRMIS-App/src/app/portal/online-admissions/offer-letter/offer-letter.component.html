@@ -1,0 +1,212 @@
+<div class="animated fadein">
+    <div class="animated fadeIn" *ngIf="applicant.Status_Id && applicant.Status_Id > 1">
+        <div class="row mb-2">
+            <div class="col-md-4">
+                <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/adhoc/apply">2 - <i
+                        class="fa fa-user"></i>
+                    Profile</button>
+            </div>
+            <div class="col-md-4">
+                <button kendoButton *ngIf="applicant.Status_Id > 2" primary="true" look="outline" class="btn-block"
+                    routerLink="/adhoc/document"><i class="fa fa-file"></i>
+                    Documents</button>
+            </div>
+            <div class="col-md-4">
+                <button kendoButton *ngIf="applicant.Status_Id > 3" primary="true" look="outline" class="btn-block"
+                    routerLink="/adhoc/experience">4 - <i class="fa fa-file"></i>
+                    Experience</button>
+            </div>
+        <!--     <div class="col-md-3">
+                <button kendoButton *ngIf="applicant.Status_Id > 4" primary="true" look="outline"
+                    class="btn-block" routerLink="/job/applications"><i class="fa fa-newspaper-o"></i>
+                    Applications</button>
+            </div> -->
+        </div>
+        <hr>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <h3 class="text-primary p-strong">ACADEMIC INFORMATION</h3>
+            <hr>
+            <p>- File size must be less than 5MB</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <kendo-grid [data]="documents" *ngIf="documents.length > 0">
+                <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-custom'"
+                    [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{(rowIndex + 1)}}.
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <!--   <kendo-grid-column field="Name" [title]="'Document'" width="40
+    " [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                      
+                    </ng-template>
+                </kendo-grid-column> -->
+
+                <kendo-grid-column field="FromDate" [title]="'Qualification'" width="55" [headerClass]="'grid-header-custom'"
+                    [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <label class="k-form-field">
+                            <span><strong class="p-strong">{{dataItem.Name}}</strong>&nbsp;<i class="fa"
+                                    [ngClass]="dataItem.attached ? 'fa-check-circle text-success' : ''"></i></span>
+                            <input type="file" [ngClass]="dataItem.attached ? 'text-success p-strong' : ''"
+                                (change)="selectFile($event, dataItem)" style="width: 100%;" [name]="dataItem.Name">
+                        </label>
+                    </ng-template>
+                </kendo-grid-column>
+                <!-- <kendo-grid-column field="FromDate" [title]="'Degree'" width="55" [headerClass]="'grid-header-custom'"
+                    [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <label class="k-form-field">
+                            <span>{{dataItem.Id == 10 ? 'Name of Organization' : 'Name of Degree'}} <span
+                                    class="text-danger">*</span></span>
+                            <input kendoTextBox type="text" [(ngModel)]="dataItem.Degree">
+                        </label>
+                    </ng-template>
+                </kendo-grid-column> -->
+                <!--  <kendo-grid-column field="FromDate" [title]="'Passing Year'" width="55"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <label class="k-form-field">
+                            <span>{{dataItem.Id == 10 ? 'Job Title' : 'Passing Year'}} <span
+                                    class="text-danger">*</span></span>
+                            <input kendoTextBox type="number" [(ngModel)]="dataItem.PassingYear">
+                        </label>
+                    </ng-template>
+                </kendo-grid-column> -->
+             <!--    <kendo-grid-column field="FromDate" [title]="'Total Marks'" width="20"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <label class="k-form-field">
+                            <span>Total Marks <span class="text-danger">*</span></span>
+                            <input kendoTextBox type="number" [(ngModel)]="dataItem.TotalMarks">
+                        </label>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="FromDate" [title]="'Obtained Marks'" width="20"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <label class="k-form-field">
+                            <span>Obtained Marks <span class="text-danger">*</span></span>
+                            <input kendoTextBox type="number" [(ngModel)]="dataItem.ObtainedMarks">
+                        </label>
+                    </ng-template>
+                </kendo-grid-column> -->
+                <!--    <kendo-grid-column field="FromDate" [title]="'Division'" width="55" [headerClass]="'grid-header-custom'"
+                    [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <label class="k-form-field">
+                            <span>Division (1<sup>st</sup>, 2<sup>nd</sup>, 3<sup>rd</sup>) <span
+                                    class="text-danger">*</span></span>
+                            <input kendoTextBox type="number" [(ngModel)]="dataItem.Division">
+                        </label>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="FromDate" [title]="'Grade'" width="55" [headerClass]="'grid-header-custom'"
+                    [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <label class="k-form-field">
+                            <span>Grade (A, B, C, D, E) <span class="text-danger">*</span></span>
+                            <input kendoTextBox type="text" [(ngModel)]="dataItem.Grade">
+                        </label>
+                    </ng-template>
+                </kendo-grid-column> -->
+                <!--  <kendo-grid-column field="FromDate" [title]="'Marks'" width="55" [headerClass]="'grid-header-custom'"
+                    [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <div class="row">
+                            <div class="col-md-3 control-col-st">
+                                <label class="k-form-field">
+                                    <span>{{dataItem.Id == 10 ? 'Name of Organization' : 'Name of Degree'}} <span
+                                            class="text-danger">*</span></span>
+                                    <input kendoTextBox type="text" [(ngModel)]="dataItem.Degree">
+                                </label>
+                            </div>
+
+                            <div class="col-md-3 control-col">
+                                <label class="k-form-field">
+                                    <span>{{dataItem.Id == 10 ? 'Job Title' : 'Passing Year'}} <span
+                                            class="text-danger">*</span></span>
+                                    <input kendoTextBox type="number" [(ngModel)]="dataItem.PassingYear">
+                                </label>
+                            </div>
+
+                            <div class="col-md-3 control-col">
+                                <label class="k-form-field">
+                                    <span>Total Marks <span class="text-danger">*</span></span>
+                                    <input kendoTextBox type="number" [(ngModel)]="dataItem.TotalMarks">
+                                </label>
+                            </div>
+
+                            <div class="col-md-3 control-col-end">
+                                <label class="k-form-field">
+                                    <span>Obtained Marks <span class="text-danger">*</span></span>
+                                    <input kendoTextBox type="number" [(ngModel)]="dataItem.ObtainedMarks">
+                                </label>
+                            </div>
+                            <div class="col-md-3 control-col-st">
+                                <label class="k-form-field">
+                                    <span>Division (1<sup>st</sup>, 2<sup>nd</sup>, 3<sup>rd</sup>) <span
+                                            class="text-danger">*</span></span>
+                                    <input kendoTextBox type="number" [(ngModel)]="dataItem.Division">
+                                </label>
+                            </div>
+                            <div class="col-md-3 control-col">
+                                <label class="k-form-field">
+                                    <span>Grade (A, B, C, D, E) <span class="text-danger">*</span></span>
+                                    <input kendoTextBox type="text" [(ngModel)]="dataItem.Grade">
+                                </label>
+                            </div>
+
+                            <div class="col-md-6 control-col-end">
+                                <label class="k-form-field">
+                                    <span><strong class="p-strong">{{dataItem.Name}}</strong>&nbsp;<i class="fa"
+                                            [ngClass]="dataItem.attached ? 'fa-check-circle text-success' : ''"></i></span>
+                                    <input type="file" [ngClass]="dataItem.attached ? 'text-success p-strong' : ''"
+                                        (change)="selectFile($event, dataItem)" style="width: 100%;"
+                                        [name]="dataItem.Name">
+                                </label>
+                            </div>
+                        </div>
+                    </ng-template>
+                </kendo-grid-column> -->
+            </kendo-grid>
+
+            <!--  <div class="row">
+                <div class="col-md-6" *ngFor="let doc of documents; let i = index;">
+                    <label class="k-form-field">
+                        <span><strong class="p-strong">{{(i + 1) + ' - ' + doc.Name}}</strong>&nbsp;<i class="fa"
+                                [ngClass]="doc.attached ? 'fa-check-circle text-success' : ''"></i>
+                        </span>
+                        <input type="file" [ngClass]="doc.attached ? 'text-success p-strong' : ''"
+                            (change)="selectFile($event, doc)" style="width: 100%;" [name]="doc.Name">
+                    </label>
+                </div>
+            </div> -->
+        </div>
+
+    </div>
+    <div class="animated fadeIn">
+        <hr>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <!-- routerLink="/ppsc/preferences" -->
+                <button style="margin: 0 auto;" (click)="uploadJobApplicantAttachments()" class="btn-block btn-lg"
+                    kendoButton primary="true" look="outline">Upload Documents</button>
+                <button style="margin: 0 auto;" class="btn-block btn-lg" routerLink="/ppsc/experience"
+                    *ngIf="(acceptanceUploaded || applicant.Status == 'Accepted' || applicant.Status == 'Completed') && applicant.Designation_Id != 903"
+                    kendoButton primary="true" look="outline">Proceed For Preference <i
+                        class="fa fa-arrow-right-circle"></i></button>
+            </div>
+            <div class="col-md-3 control-col-end">
+                <button type="button" class="btn btn-secondary btn-block btn-lg"
+                    routerLink="/job/account">Logout</button>
+            </div>
+        </div>
+    </div>
+</div>

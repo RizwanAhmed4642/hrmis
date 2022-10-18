@@ -1,0 +1,213 @@
+<div class="animated fadeIn">
+    <tabset class="tab-container">
+        <ul class="nav nav-tabs">
+            <li  class="nav-item "><a  class="nav-link"  [routerLink]="'/wagesmap/'"><span>Wager Map</span></a></li>
+            <li  class="nav-item "><a  class="nav-link " [routerLink]="'/dailywagerlist/'"><span>Daily Wager List</span></a></li>
+            <li  class="nav-item active"><a  class="nav-link active"  [routerLink]="'/daily-wages-count/'"><span>Wager Count</span></a></li>
+            
+        </ul>
+    </tabset>
+    <div class="card card-accent-success animated fadeIn">
+        <div class="card-header animated fadeIn">
+            <div class="row" style="float: right;">
+                <a type="button" class="btn btn-primary" [routerLink]="['/dailywagerprofile', 0]">Add Profile</a>
+            </div>
+        </div>
+        <div class="card-body animated fadeIn">
+            <div class="row animated fadeIn">
+                <!-- <div class="col-md-4 col-sm-12 control-col-st">
+                    <label class="k-form-field">
+                        <span>Search by Name / CNIC / Designation</span>
+                        <input type="text" (keyup)="inputChange.next(true)" [(ngModel)]="searchTerm"
+                            placeholder="Type Name or CNIC" kendoTextBox>
+                    </label>
+                </div> -->
+                <!-- <div class="col-md-3 col-sm-12 control-col" [hidden]="retirementInOneYear && retirementAlerted">
+                    <label class="k-form-field">
+                        <span>Designation&nbsp;<span class="text-danger">*</span></span>
+                        <select id="designation" class="form-control custom-select" [(ngModel)]="designationCode"
+                            (change)="onChangedDesignation($event)">
+                            <option [ngValue]="null">Choose Designation</option>
+                            <option *ngFor="let Designation of DesignationList" [ngValue]="Designation">
+                                {{ Designation }}
+                            </option>
+                        </select>
+                    </label>
+                </div> -->
+            </div>
+            <div class="row animated fadeIn">
+                <div class="col-md-3" *ngIf="divisionsData.length > 0">
+                    <span>Division &nbsp;<span class="text-danger">*</span></span>
+                    <kendo-dropdownlist  [data]="divisionsData" [valuePrimitive]="false"
+                        [defaultItem]="selectedFiltersModel.division" [textField]="'Name'" [valueField]="'Code'"
+                        (filterChange)="handleFilter($event, 'division')"
+                        (valueChange)="dropdownValueChanged($event, 'division')" [value]="selectedFiltersModel.division"
+                        required>
+                    </kendo-dropdownlist>
+                </div>
+                <div class="col-md-3">
+                    <span>District &nbsp;<span class="text-danger">*</span></span>
+                    <kendo-dropdownlist  [data]="districtsData"
+                        [defaultItem]="{Name: 'Select District', Code: currentUser?.HfmisCode}" [textField]="'Name'"
+                        [valueField]="'Code'" [valuePrimitive]="false" (filterChange)="handleFilter($event, 'district')"
+                        (valueChange)="dropdownValueChanged($event, 'district')" [value]="selectedFiltersModel.district"
+                        required>
+                    </kendo-dropdownlist>
+                </div>
+                <div class="col-md-3">
+                    <span>Tehsil &nbsp;<span class="text-danger">*</span></span>
+                    <kendo-dropdownlist [data]="tehsilsData"
+                        [defaultItem]="{Name: 'Select Tehsil', Code: currentUser?.HfmisCode}" [textField]="'Name'"
+                        [valueField]="'Code'" [valuePrimitive]="false" (filterChange)="handleFilter($event, 'tehsil')"
+                        (valueChange)="dropdownValueChanged($event, 'tehsil')" [value]="selectedFiltersModel.tehsil"
+                       >
+                    </kendo-dropdownlist>
+                </div>
+                
+                <div class="col-md-3">
+                    <span>Designation&nbsp;<span class="text-danger">*</span></span>
+                    <select id="designationStr"  class="form-control form-select custom-select" [(ngModel)]="designationStr" >
+                        <option [value]="null" [selected] ="true">Choose Designation</option>
+                        <option *ngFor="let bank of DesignationList" [value]="bank">
+                            {{ bank }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 col-sm-12 control-col-end">
+                    <label class="k-form-field mt-1">
+                        <button kendoButton class="btn-block btn-align-v" [ladda]="searching" data-style="zoom-in"
+                            (click)="onSearch()" [primary]="true">SEARCH</button>
+                    </label>
+                </div>
+                <!-- <div class="col-md-3" *ngIf="isShowHF">
+                    <span>Health Facility&nbsp;<span class="text-danger">*</span></span>
+                    <select id="hfCode" class="form-control custom-select" formControlName="HfmisCode">
+                        <option [ngValue]="null">Choose Health Facility</option>
+                        <option *ngFor="let bank of hfData" [ngValue]="bank.Id">
+                            {{ bank.Name }}
+                        </option>
+                    </select>
+                </div> -->
+            </div>
+               
+            </div>
+            <div class="row animated fadeIn">
+                <div class="col-md-3" *ngIf="isShowUC">
+                    <span>UC&nbsp;<span class="text-danger">*</span></span>
+
+                    <select class="form-control custom-select" (change)="selectedUC($event)"
+                        id="Id">
+                        <option value="0">-- Select UC --</option>
+                        <option *ngFor="let pet of ucData; let i=index" [value]="ucData[i].Id">
+                            {{ucData[i].Name}}
+                        </option>
+                    </select>
+                </div>
+               
+            </div>
+            <div *ngIf="loading" class="k-i-loading"></div>
+            <div class="row row-panel">
+                <div class="col-md-12">
+                    
+            
+                    <div class="grid-wrapper">
+                        <kendo-grid [data]="gridView" [sortable]="{
+                          allowUnsort: allowUnsort,
+                          mode: multiple ? 'multiple' : 'single'
+                          }" [selectable]="true" [sort]="sort" (sortChange)="sortChange($event)" [(pageSize)]="pageSize"
+                            [skip]="false" [pageable]="false" (pageChange)="pageChange($event)" [scrollable]="false">
+                            <kendo-grid-column [width]="15" field="Id" title="No." [headerClass]="'grid-header-custom'"
+                                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    {{(rowIndex + 1)}}.
+                                </ng-template>
+                            </kendo-grid-column>
+                            
+                            
+                            <kendo-grid-column [width]="28" field="Division" title="Division" [headerClass]="'grid-header-custom'"
+                            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="grid-list-item">
+                                            <p class="m-0 mb-1"
+                                                style="font-family: 'Roboto-Regular'; color: darkslategray ; font-weight: 100;">
+                                                <span>{{dataItem.Division}}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column [width]="28" field="Division" title="District" [headerClass]="'grid-header-custom'"
+                            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="grid-list-item">
+                                            <p class="m-0 mb-1"
+                                                style="font-family: 'Roboto-Regular'; color: darkslategray ; font-weight: 100;">
+                                                <span>{{dataItem.District}}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column [width]="28" field="Division" title="Tehsil" [headerClass]="'grid-header-custom'"
+                            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="grid-list-item">
+                                            <p class="m-0 mb-1"
+                                                style="font-family: 'Roboto-Regular'; color: darkslategray ; font-weight: 100;">
+                                                <span>{{dataItem.Tehsil}}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column [width]="28" field="Designation" title="Designation" [headerClass]="'grid-header-custom'"
+                                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="grid-list-item">
+                                                <p class="m-0 mb-1"
+                                                    style="font-family: 'Roboto-Regular'; color: darkslategray ; font-weight: 100;">
+                                                    <span>{{dataItem.Designation}}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column [width]="28" field="TotalWagers" title="Total Wagers" [headerClass]="'grid-header-custom'"
+                                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="grid-list-item">
+                                                <p class="m-0 mb-1"
+                                                    style="font-family: 'Roboto-Regular'; color: darkslategray ; font-weight: 100;">
+                                                    <span>{{dataItem.Count}}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </kendo-grid-column>
+                            
+                          
+                        </kendo-grid>
+            
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+</div>

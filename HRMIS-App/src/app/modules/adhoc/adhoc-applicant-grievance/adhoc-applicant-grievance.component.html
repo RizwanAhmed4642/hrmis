@@ -1,0 +1,818 @@
+<div class="animated fadeIn mt-4">
+  <table class="table table-sm border-c my-4 animated fadeIn">
+    <tr class="animated fadeIn">
+      <td>
+        <small class="m-0">
+          <i class="fa fa-barcode"></i>&nbsp;Application #&nbsp;{{application.Id}}
+        </small>
+
+      </td>
+      <td colspan="3" class="p-strong text-center h3 mt-4 animated fadeIn">{{application.DesignationName}}</td>
+      <td>
+        <small class="m-0 pull-right">
+          <i class="fa fa-clock-o"></i>&nbsp;{{application.CreatedDate | date: 'dd/MM/yyyy hh:mm a'}}
+        </small>
+      </td>
+    </tr>
+    <tr>
+      <td rowspan="5" style="width: 200px;">
+        <img onError="this.src='../../../assets/img/notfound.png'"
+          class="image--cover d-block cursor-p zoom animated fadeIn ml-2"
+          [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/AdhocApplicants/Photo/' + applicant.CNIC + '_23.jpg'">
+      </td>
+      <td class="p-strong">Name</td>
+      <td>{{applicant.Name}}</td>
+      <td class="p-strong">S/D/W of</td>
+      <td>{{applicant.FatherName}}</td>
+    </tr>
+    <tr>
+      <td class="p-strong">CNIC</td>
+      <td>{{dashifyCNIC(applicant.CNIC)}}</td>
+      <td class="p-strong">Mobile No.</td>
+      <td>{{applicant.MobileNumber}}</td>
+    </tr>
+    <tr>
+      <td class="p-strong">Date of Birth</td>
+      <td>{{applicant.DOB | date: 'dd/MM/yyyy'}}</td>
+      <td class="p-strong">Email</td>
+      <td>{{applicant.Email}}</td>
+    </tr>
+    <tr>
+      <td class="p-strong">Gender</td>
+      <td>{{applicant.Gender}}</td>
+      <td class="p-strong">Marital Status</td>
+      <td>{{applicant.MaritalStatus}}</td>
+    </tr>
+    <tr>
+      <td class="p-strong">Address</td>
+      <td colspan="3">{{applicant.Address}}</td>
+    </tr>
+    <tr *ngIf="(!scrutinyRejected && scrutinyComplete) || scrutinyRejected || application.Status_Id == 2"
+      class="animated fadeIn">
+      <td colspan="1" class="p-strong"></td>
+      <td colspan="3">
+        <h4 *ngIf="application.Status_Id == 2" class="text-success"><i class="fa fa-check"></i> Application Accepted
+          <small><i>&nbsp;<span *ngIf="!application.AcceptedByGrievance">District
+                {{application.StatusChangedByDistrict}}</span><span *ngIf="application.AcceptedByGrievance">Grievance
+                Committee</span> on <span
+                *ngIf="!application.AcceptedByGrievance">{{application.StatusChangedDateTime | date: 'dd/MM/yyyy hh:mm a'}}</span>
+              <span
+                *ngIf="application.AcceptedByGrievance">{{application.GrievanceDateTime | date: 'dd/MM/yyyy hh:mm a'}}</span></i></small>
+        </h4>
+        <h4 *ngIf="application.Status_Id == 3" class="text-danger"><i class="fa fa-times"></i> Application Rejected
+          <small><i>&nbsp;<span *ngIf="!application.AcceptedByGrievance">District
+                {{application.StatusChangedByDistrict}}</span><span *ngIf="application.AcceptedByGrievance">Grievance
+                Committee</span> on <span
+                *ngIf="!application.AcceptedByGrievance">{{application.StatusChangedDateTime | date: 'dd/MM/yyyy hh:mm a'}}</span>
+              <span
+                *ngIf="application.AcceptedByGrievance">{{application.GrievanceDateTime | date: 'dd/MM/yyyy hh:mm a'}}</span></i></small>
+        </h4>
+      </td>
+    </tr>
+    <tr style="border-bottom: none !important;" *ngIf="application.Status_Id == 3">
+      <td colspan="5">
+        <div class="row animated fadeIn py-2">
+          <div class="col-md-12">
+            <h3 class="p-strong" *ngIf="applicant.AdhocScrutiniesRejected?.length > 0">Application is rejected on the
+              basis of following reasons:
+            </h3>
+            <kendo-grid [data]="applicant.AdhocScrutiniesRejected"
+              *ngIf="applicant.AdhocScrutiniesRejected?.length > 0">
+              <kendo-grid-column [width]="5" field="asd" title="No." [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p class="m-0">{{(rowIndex + 1)}}.</p>
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column [width]="15" field="DocumentName" title="Document" [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <img width="70px" class="d-block cursor-p zoom animated fadeIn"
+                    [src]="dataItem.UploadPath && dataItem.UploadPath.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + dataItem.UploadPath"
+                    (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + dataItem.UploadPath)"
+                    draggable="false" alt="">
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column [width]="30" field="DocName" title="Detail" [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p *ngIf="dataItem.Name != 'PMC'" class="m-0">{{dataItem.DocName == 'CNIC' ? dashifyCNIC(applicant.CNIC) : 
+                    dataItem.DocName == 'Domicile' ? applicant.DomicileName : ''}}
+                  </p>
+                  <p class="m-0 p-strong" *ngIf="dataItem.DocName == 'PMC'">
+                    {{application.Desgination_Id == 302 ? 'PNC' : 'PMC'}} #
+                    {{applicant.PMDCNumber}} </p>
+                  <p class="m-0" *ngIf="dataItem.DocName == 'PMC'">Registration Date:
+                    {{applicant.PMDCRegDate | date:'dd/MM/yyyy'}}</p>
+                  <p class="m-0" *ngIf="dataItem.DocName == 'PMC'">Valid Upto:
+                    {{applicant.PMDCValidUpto | date:'dd/MM/yyyy'}}</p>
+                  <button kendoButton *ngIf="dataItem.DocName == 'PMC'" look="outline" (click)="verifyPMC()"
+                    primary="true" class="btn-sm mt-2"><i class="fa fa-search"></i> Verify from PMC</button>
+
+                  <div
+                    *ngIf="dataItem.DocName != 'PMC' && dataItem.DocName != 'Domicile' && dataItem.DocName != 'Hafiz-e-Quran'">
+                    <p class="m-0">{{dataItem.detailData?.Institute}}
+                    </p>
+                    <p class="m-0"><u><i class="p-strong">{{dataItem.detailData?.DegreeName}}</i></u></p>
+                    <p class="m-0" *ngIf="dataItem.detailData?.Required_Degree_Id != 121">Marks:
+                      <span
+                        class="p-strong">{{dataItem.detailData?.ObtainedMarks}}/{{dataItem.detailData?.TotalMarks}}</span>
+                      &nbsp;<small class="text-muted">Year {{dataItem.detailData?.PassingYear | date:'yyyy'}}</small>
+                    </p>
+                  </div>
+
+
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column [width]="25" field="DocName" title="Scrutiny Remarks"
+                [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p class="m-0"><span class="p-strong">{{dataItem.DocName}}:</span>
+                    <small class="mx-2 text-muted">{{dataItem.ReasonDetail}}</small></p>
+                  <p class="my-1"><span class="p-strong">Remarks:</span>&nbsp;{{dataItem.Remarks}}</p>
+                  <p class="m-0"><i
+                      class="fa fa-clock-o"></i>&nbsp;{{dataItem?.CreatedDate | date:'dd/MM/yyyy hh:mm a' }}
+                  </p>
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column *ngIf="isAdmin" field="References" [title]="'Action'" [width]="25"
+                [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                  <button kendoButton *ngIf="dataItem.Name == 'PMC'" look="outline" (click)="verifyPMC()" primary="true"
+                    class="btn-sm mb-2"><i class="fa fa-search"></i> Verify from PMC</button>
+                  <div *ngIf="dataItem">
+                    <p class="m-0">
+                      <i class="fa"
+                        [ngClass]="dataItem?.IsAccepted == true ? 'fa-check-circle-o text-success' : dataItem?.IsRejected == true ? 'fa-times text-danger' : ''"></i>&nbsp;
+                      {{dataItem?.IsAccepted == true ? 'Accepted' : dataItem?.IsRejected == true ? 'Rejected' : ''}}
+                      by {{dataItem?.DistrictName}}
+                    </p>
+                    <hr>
+                    <button class="animated fadeIn" class="btn btn-sm"
+                      *ngIf="application.Status_Id == 3 && dataItem?.IsRejected" kendoButton primary="true"
+                      (click)="changeStatus(dataItem, 'Accepted')"><i class="fa fa-check"></i>
+                      Accept</button>
+                  </div>
+                </ng-template>
+              </kendo-grid-column>
+            </kendo-grid>
+          </div>
+        </div>
+        <hr *ngIf="applicant.AdhocScrutiniesRejected?.length > 0">
+        <ul class="my-2 info-custom-box mx-auto">
+          <li>
+            <!-- Status:&nbsp;{{application.Grievance.StatusId == 1 ? 'Under Review' : ''}} - -->
+            <div class="p-2">
+              <h3>Grievance
+                &nbsp;<small
+                  class="pull-right font-sm">{{application.Grievance?.CreatedDate | date:'dd/MM/yyyy hh:mm a'}}</small>
+              </h3>
+              <p class="m-0">{{application.Grievance?.Remarks}}</p>
+            </div>
+          </li>
+        </ul>
+        <hr>
+        <ul class="my-2 list-unstyled">
+          <li>
+            <div class="p-2">
+              <h3>Reply
+              </h3>
+              <textarea kendoTextArea rows="4" [(ngModel)]="applicationLog.Remarks"></textarea>
+            </div>
+          </li>
+        </ul>
+        <hr *ngIf="application.Status_Id == 3">
+        <div class="row" *ngIf="application.Status_Id == 3">
+          <div class="col-md-6">
+            <button (click)="changeApplicationGrievanceStatus(2)" [disabled]="!applicationLog.Remarks"
+              [ladda]="acceptingGrievance" data-style="zoom-in" kendoButton primary="true"
+              class="animated fadeIn btn-lg btn-block"><i class="fa fa-check"></i>
+              &nbsp;Accept Grievance & Approve</button>
+          </div>
+          <div class="col-md-6">
+            <button (click)="changeApplicationGrievanceStatus(3)" [disabled]="!applicationLog.Remarks"
+              [ladda]="rejectingGrievance" data-style="zoom-in" style="padding: 10px;"
+              class="btn btn-danger btn-block animated fadeIn"><i class="fa fa-times"></i>
+              &nbsp;Reject Grievance</button>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <tabset [justified]="true" *ngIf="isAdmin">
+
+    <tab heading="1- Documents">
+      <div class="row animated fadeIn">
+        <div class="col-md-12">
+          <kendo-grid [data]="documents">
+            <kendo-grid-column [width]="10" field="asd" title="No." [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0">{{(rowIndex + 1)}}.</p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="20" field="DocumentName" title="Document" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <!--    <div class="d-flex">
+                  <div style="width: 48%;"> -->
+                <img width="100px" class="d-block cursor-p zoom animated fadeIn"
+                  [src]="dataItem.UploadPath && dataItem.UploadPath.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + dataItem.UploadPath"
+                  (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + dataItem.UploadPath)" draggable="false"
+                  alt="">
+                <!--    </div>
+                  <div style="width: 40%;margin-top:10px;margin-left:20px;">
+                    <button class="animated fadeIn" class="btn btn-sm pull-right btn-block"
+                      *ngIf="application.Status_Id == 4" kendoButton primary="true"
+                      (click)="changeStatus('Accepted')"><i class="fa fa-check"></i>
+                      Accept</button>
+                    <button *ngIf="application.Status_Id == 4"
+                      class="btn btn-sm btn-danger ml-2 animated fadeIn pull-right btn-block"
+                      (click)="changeStatus('Rejected')"><i class="fa fa-times"></i>
+                      Reject</button>
+                  </div>
+                </div> -->
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="30" field="DocumentName" title="Detail" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p *ngIf="dataItem.Name != 'PMC'" class="m-0 p-strong">{{dataItem.Name}}
+                </p>
+                <p *ngIf="dataItem.Name != 'PMC'" class="m-0">{{dataItem.Name == 'CNIC' ? dashifyCNIC(applicant.CNIC) : 
+                  dataItem.Name == 'Domicile' ? applicant.DomicileName : ''}}
+                </p>
+                <p class="m-0 p-strong" *ngIf="dataItem.Name == 'PMC'">
+                  {{application.Desgination_Id == 302 ? 'PNC' : 'PMC'}} #
+                  {{applicant.PMDCNumber}} </p>
+                <!--    <p *ngIf="dataItem.Name == 'PMC'">
+                  Valid till
+                  {{applicant.PMDCValidUpto | date: 'dd.MM.yyyy'}}</p> -->
+
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column *ngIf="isAdmin" field="References" [title]="' '" [width]="15"
+              [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <small class="text-center" *ngIf="!dataItem.scrutiny && scrutinyDone">
+                  <i *ngIf="dataItem.Name == 'Domicile'">please verify that domicile is of punjab province</i>
+                  <i *ngIf="dataItem.Name == 'Hafiz-e-Quran'">please verify that the certificate is valid and from
+                    recognized institution</i>
+                  <i *ngIf="dataItem.Name == 'PMC'">please verify that
+                    {{application.Desgination_Id == 302 ? 'PNC' : 'PMC'}} is valid</i>
+                </small>
+
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column *ngIf="isAdmin" field="References" [title]="'Action'" [width]="25"
+              [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <button kendoButton *ngIf="dataItem.Name == 'PMC'" look="outline" (click)="verifyPMC()" primary="true"
+                  class="btn-sm mb-2"><i class="fa fa-search"></i> Verify from PMC</button>
+                <div *ngIf="!dataItem.scrutiny && scrutinyDone">
+                  <div *ngIf="dataItem.Name == 'PMC' && pmcVerification?.data">
+                    <button class="animated fadeIn" class="btn btn-sm"
+                      *ngIf="application.Status_Id == 4 && (dataItem.Name == 'PMC' || dataItem.Name == 'Domicile')"
+                      kendoButton primary="true" (click)="changeStatus(dataItem, 'Accepted')"><i
+                        class="fa fa-check"></i>
+                      Accept</button>
+                    <button
+                      *ngIf="application.Status_Id == 4 && (dataItem.Name == 'PMC' || dataItem.Name == 'Domicile')"
+                      class="btn btn-sm btn-danger ml-2 animated fadeIn" (click)="changeStatus(dataItem, 'Rejected')"><i
+                        class="fa fa-times"></i>
+                      Reject</button>
+                  </div>
+                  <div *ngIf="dataItem.Name == 'Domicile' || dataItem.Name == 'Hafiz-e-Quran'">
+                    <button class="animated fadeIn" class="btn btn-sm"
+                      *ngIf="application.Status_Id == 4 && (dataItem.Name == 'Hafiz-e-Quran' || dataItem.Name == 'Domicile')"
+                      kendoButton primary="true" (click)="changeStatus(dataItem, 'Accepted')"><i
+                        class="fa fa-check"></i>
+                      Accept</button>
+                    <button
+                      *ngIf="application.Status_Id == 4 && (dataItem.Name == 'Hafiz-e-Quran' || dataItem.Name == 'Domicile')"
+                      class="btn btn-sm btn-danger ml-2 animated fadeIn" (click)="changeStatus(dataItem, 'Rejected')"><i
+                        class="fa fa-times"></i>
+                      Reject</button>
+                  </div>
+                </div>
+                <div *ngIf="dataItem.scrutiny">
+                  <p class="m-0">
+                    <i class="fa"
+                      [ngClass]="dataItem.scrutiny?.IsAccepted == true ? 'fa-check-circle-o text-success' : dataItem.scrutiny?.IsRejected == true ? 'fa-times text-danger' : ''"></i>&nbsp;
+                    {{dataItem.scrutiny?.IsAccepted == true ? 'Accepted' : dataItem.scrutiny?.IsRejected == true ? 'Rejected' : ''}}
+                    by {{dataItem.scrutiny?.CreatedBy}}
+                  </p>
+                  <p class="m-0" *ngIf="dataItem.scrutiny?.ReasonDetail"><span
+                      class="p-strong">Reason:</span>&nbsp;{{dataItem.scrutiny?.ReasonDetail}}
+                  </p>
+                  <p class="m-0" *ngIf="dataItem.scrutiny?.Remarks"><span
+                      class="p-strong">Remarks:</span>&nbsp;{{dataItem.scrutiny?.Remarks}}
+                  </p>
+                  <p class="m-0"><i
+                      class="fa fa-clock-o"></i>&nbsp;{{dataItem.scrutiny?.CreatedDate | date:'dd/MM/yyyy hh:mm a' }}
+                  </p>
+                  <!--   <hr>
+                  <div *ngIf="dataItem.Name == 'PMC'">
+                    <button class="animated fadeIn" class="btn btn-sm"
+                      *ngIf="application.Status_Id == 3 && (dataItem.Name == 'PMC' || dataItem.Name == 'Domicile') && dataItem.scrutiny?.IsRejected"
+                      kendoButton primary="true" (click)="changeStatus(dataItem, 'Accepted')"><i
+                        class="fa fa-check"></i>
+                      Accept</button>
+                  </div>
+                  <div *ngIf="dataItem.Name == 'Domicile' || dataItem.Name == 'Hafiz-e-Quran'">
+                    <button class="animated fadeIn" class="btn btn-sm"
+                      *ngIf="application.Status_Id == 3 && (dataItem.Name == 'Hafiz-e-Quran' || dataItem.Name == 'Domicile') && dataItem.scrutiny?.IsRejected"
+                      kendoButton primary="true" (click)="changeStatus(dataItem, 'Accepted')"><i
+                        class="fa fa-check"></i>
+                      Accept</button>
+                  </div> -->
+                </div>
+              </ng-template>
+            </kendo-grid-column>
+
+
+          </kendo-grid>
+          <!-- <div class="d-flex flex-wrap">
+            <div class="mx-3 mb-3 hover-success"
+              (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + applicant.CNICDoc)">
+              <img width="150px" onError="this.src='../../../assets/img/notfound.png'"
+                class="d-block cursor-p zoom animated fadeIn"
+                [src]="applicant.CNICDoc && applicant.CNICDoc.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + applicant.CNICDoc"
+                draggable="false" alt="">
+              <p class="my-1 text-center cursor-p p-strong p-hoverable">CNIC</p>
+            </div>
+            <div class="mx-3 mb-3 hover-success"
+              (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + applicant.DomicileDoc)">
+              <img width="150px" onError="this.src='../../../assets/img/notfound.png'"
+                class="d-block cursor-p zoom animated fadeIn"
+                [src]="applicant.DomicileDoc && applicant.DomicileDoc.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + applicant.DomicileDoc"
+                draggable="false" alt="">
+              <p class="my-1 text-center cursor-p p-strong p-hoverable">Domicile: <u>{{applicant.DomicileName}}</u></p>
+            </div>
+            <div class="mx-3 mb-3 hover-success"
+              (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + applicant.PMDCDoc)">
+              <img width="150px" onError="this.src='../../../assets/img/notfound.png'"
+                class="d-block cursor-p zoom animated fadeIn"
+                [src]="applicant.PMDCDoc && applicant.PMDCDoc.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + applicant.PMDCDoc"
+                draggable="false" alt="">
+              <p class="m-0 text-center cursor-p p-strong p-hoverable">
+                {{application.Desgination_Id == 302 ? 'PNC' : 'PMC'}} #
+                {{applicant.PMDCNumber}}</p>
+              <p class="my-1 text-center cursor-p p-strong p-hoverable text-muted"><small>Valid till
+                  {{applicant.PMDCValidUpto | date: 'dd.MM.yyyy'}}</small></p>
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </tab>
+    <tab heading="2- Qualification">
+
+      <div class="row animated fadeIn" *ngIf="applicant.Qualifications?.length > 0">
+        <div class="col-md-12">
+          <kendo-grid [data]="applicant.Qualifications">
+            <kendo-grid-column [width]="10" field="asd" title="No." [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0">{{(rowIndex + 1)}}.</p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="20" field="DocumentName" title="Documents" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <img width="75px" class="d-block cursor-p zoom animated fadeIn"
+                  [src]="dataItem.UploadPath && dataItem.UploadPath.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + dataItem.UploadPath"
+                  (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + dataItem.UploadPath)" draggable="false"
+                  alt="">
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="40" field="DocumentName" title="Academic" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0">{{dataItem.Institute}}
+                </p>
+                <p class="m-0"><u><i class="p-strong">{{dataItem.DegreeName}}</i></u></p>
+                <p class="m-0" *ngIf="dataItem.Required_Degree_Id != 121">Marks:
+                  <span class="p-strong">{{dataItem.ObtainedMarks}}/{{dataItem.TotalMarks}}</span> &nbsp;<small
+                    class="text-muted">Year {{dataItem.PassingYear | date:'yyyy'}}</small></p>
+                <p class="m-0"></p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column *ngIf="isAdmin" field="References" [title]="'Action'" [width]="30"
+              [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <div *ngIf="!dataItem.scrutiny && scrutinyDone">
+                  <button class="animated fadeIn" class="btn btn-sm" *ngIf="application.Status_Id == 4" kendoButton
+                    primary="true" (click)="changeStatus(dataItem, 'Accepted')"><i class="fa fa-check"></i>
+                    Accept</button>
+                  <button *ngIf="application.Status_Id == 4" class="btn btn-sm btn-danger ml-2 animated fadeIn"
+                    (click)="changeStatus(dataItem, 'Rejected')"><i class="fa fa-times"></i>
+                    Reject</button>
+                </div>
+                <div *ngIf="dataItem.scrutiny">
+                  <p class="m-0">
+                    <i class="fa"
+                      [ngClass]="dataItem.scrutiny?.IsAccepted == true ? 'fa-check-circle-o text-success' : dataItem.scrutiny?.IsRejected == true ? 'fa-times text-danger' : ''"></i>&nbsp;
+                    {{dataItem.scrutiny?.IsAccepted == true ? 'Accepted' : dataItem.scrutiny?.IsRejected == true ? 'Rejected' : ''}}
+                    by {{dataItem.scrutiny?.CreatedBy}}
+                  </p>
+                  <p class="m-0" *ngIf="dataItem.scrutiny?.ReasonDetail"><span
+                      class="p-strong">Reason:</span>&nbsp;{{dataItem.scrutiny?.ReasonDetail}}
+                  </p>
+                  <p class="m-0" *ngIf="dataItem.scrutiny?.Remarks"><span
+                      class="p-strong">Remarks:</span>&nbsp;{{dataItem.scrutiny?.Remarks}}
+                  </p>
+                  <p class="m-0"><i
+                      class="fa fa-clock-o"></i>&nbsp;{{dataItem.scrutiny?.CreatedDate | date:'dd/MM/yyyy hh:mm a' }}
+                  </p>
+                  <!--  <hr>
+                  <button class="animated fadeIn" class="btn btn-sm"
+                    *ngIf="application.Status_Id == 3 && dataItem.scrutiny?.IsRejected" kendoButton primary="true"
+                    (click)="changeStatus(dataItem, 'Accepted')"><i class="fa fa-check"></i>
+                    Accept</button> -->
+                </div>
+              </ng-template>
+            </kendo-grid-column>
+
+          </kendo-grid>
+          <p class="m-0" *ngIf="applicant.Qualifications?.length == 0">
+            No Qualification
+          </p>
+        </div>
+      </div>
+    </tab>
+    <tab heading="3- Experience">
+      <div class="row animated fadeIn" *ngIf="applicant.ApplicantExperiences?.length > 0">
+        <div class="col-md-12">
+          <kendo-grid [data]="applicant.ApplicantExperiences">
+            <kendo-grid-column [width]="8" field="asd" title="No." [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0">{{(rowIndex + 1)}}.</p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="22" field="DocumentName" title="Documents" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <img width="75px" class="d-block cursor-p zoom animated fadeIn"
+                  [src]="dataItem.UploadPath && dataItem.UploadPath.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + dataItem.UploadPath"
+                  (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + dataItem.UploadPath)" draggable="false"
+                  alt="">
+
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="40" field="DocumentName" title="Organization / Job Title"
+              [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0">{{dataItem.Organization}}</p>
+                <p class="m-0">Designation: {{dataItem.JobTitle}}</p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="30" field="ObtainedMarks" title="Tenure" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0">From: {{dataItem.FromDate | date: 'dd/MM/yyyy'}}</p>
+                <p class="m-0" *ngIf="!dataItem.IsContinued">To: {{dataItem.ToDate | date: 'dd/MM/yyyy'}}</p>
+                <p class="text-success cursor-p" *ngIf="dataItem.IsContinued">continued</p>
+                <p class="m-0">{{dataItem.exp}} year</p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column *ngIf="isAdmin" field="References" [title]="'Action'" [width]="30"
+              [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <div *ngIf="!dataItem.scrutiny && scrutinyDone">
+                  <button class="animated fadeIn" class="btn btn-sm" *ngIf="application.Status_Id == 4" kendoButton
+                    primary="true" (click)="changeStatus(dataItem, 'Accepted')"><i class="fa fa-check"></i>
+                    Accept</button>
+                  <button *ngIf="application.Status_Id == 4" class="btn btn-sm btn-danger ml-2 animated fadeIn"
+                    (click)="changeStatus(dataItem, 'Rejected')"><i class="fa fa-times"></i>
+                    Reject</button>
+                </div>
+                <div *ngIf="dataItem.scrutiny">
+                  <p class="m-0">
+                    <i class="fa"
+                      [ngClass]="dataItem.scrutiny?.IsAccepted == true ? 'fa-check-circle-o text-success' : dataItem.scrutiny?.IsRejected == true ? 'fa-times text-danger' : ''"></i>&nbsp;
+                    {{dataItem.scrutiny?.IsAccepted == true ? 'Accepted' : dataItem.scrutiny?.IsRejected == true ? 'Rejected' : ''}}
+                    by {{dataItem.scrutiny?.CreatedBy}}
+                  </p>
+                  <p class="m-0" *ngIf="dataItem.scrutiny?.ReasonDetail"><span
+                      class="p-strong">Reason:</span>&nbsp;{{dataItem.scrutiny?.ReasonDetail}}
+                  </p>
+                  <p class="m-0" *ngIf="dataItem.scrutiny?.Remarks"><span
+                      class="p-strong">Remarks:</span>&nbsp;{{dataItem.scrutiny?.Remarks}}
+                  </p>
+                  <p class="m-0"><i
+                      class="fa fa-clock-o"></i>&nbsp;{{dataItem.scrutiny?.CreatedDate | date:'dd/MM/yyyy hh:mm a' }}
+                  </p>
+                  <hr>
+                  <p class="text-success cursor-p" (click)="adhocApplicantContinueExp(dataItem)">continued</p>
+                  <!--    <button class="animated fadeIn" class="btn btn-sm"
+                    *ngIf="application.Status_Id == 3 && dataItem.scrutiny?.IsRejected" kendoButton primary="true"
+                    (click)="changeStatus(dataItem, 'Accepted')"><i class="fa fa-check"></i>
+                    Accept</button> -->
+                </div>
+
+              </ng-template>
+            </kendo-grid-column>
+
+          </kendo-grid>
+          <p class="m-0" *ngIf="applicant.ApplicantExperiences?.length == 0">
+            No Experience
+          </p>
+        </div>
+      </div>
+    </tab>
+    <tab heading="4- Preferences">
+      <div class="row animated fadeIn" *ngIf="applicant.Preferences?.length > 0">
+        <div class="col-md-12">
+          <p class="mb-2"><span class="p-strong">Preferences:</span> {{ applicant.Preferences?.length}}
+          </p>
+          <kendo-grid [data]="applicant.Preferences">
+            <kendo-grid-column [width]="7" field="asd" title="No." [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0">{{(rowIndex + 1)}}.</p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="93" field="FullName" title="Preference" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0 cursor-p hover-success" (click)="openInNewTab('/health-facility/' + dataItem.HFMISCode)">
+                  {{dataItem.HFName}} <small
+                    class="pull-right">{{dataItem.CreatedDate | date: 'dd/MM/yyyy hh:mm a'}}</small></p>
+                <p class="m-0"></p>
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+          <p class="m-0" *ngIf="applicant.Preferences?.length == 0">
+            No Preferences
+          </p>
+        </div>
+      </div>
+    </tab>
+
+  </tabset>
+</div>
+
+
+
+<kendo-dialog [title]="applicant.Name + (!decision ? ' - src: www.pmc.gov.pk' : '')" *ngIf="scrutinyDialog && applicant"
+  (close)="closeScrutinyDialog()" [minWidth]="'450'" [width]="decision == 'Accepted' ? '480' : '1000'">
+  <div *ngIf="!decision">
+    <!--  <pre>{{pmcVerification | json}}</pre>
+    <pre>{{pmcQualification | json}}</pre> -->
+    <div class="row">
+      <div class="col-md-7">
+        <div id="doctorDataDiv" class="box-shoadow-div" style="border-radius: 5px;"
+          *ngFor="let data of pmcVerification.data">
+          <h3 class="fontBold"
+            style="background-color: #0c65a0; color: white; padding:4px; margin-top: 0;border-top-left-radius: 5px; border-top-right-radius:5px ;">
+            Doctor Details
+          </h3>
+          <div style="padding: 10px;">
+            <div style="display: flex;">
+              <div class="fontBold" style="flex: 1;">
+                <p>Registration No.</p>
+              </div>
+              <div class="fontLight" style="flex: 1;">
+                <p id="reg_no">{{data.RegistrationNo}}</p>
+              </div>
+            </div>
+            <div style="display: flex;">
+              <div class="fontBold" style="flex: 1;">
+                <p>Full Name</p>
+              </div>
+              <div class="fontLight" style="flex: 1;">
+                <p id="full_name">{{data.Name}}</p>
+              </div>
+            </div>
+            <div style="display: flex;">
+              <div class="fontBold" style="flex: 1;">
+                <p>Father Name</p>
+              </div>
+              <div class="fontLight" style="flex: 1;">
+                <p id="father_name">{{data.FatherName}}</p>
+              </div>
+            </div>
+            <div style="display: flex;">
+              <div class="fontBold" style="flex: 1;">
+                <p>Registration Type</p>
+              </div>
+              <div class="fontLight" style="flex: 1;">
+                <p id="reg_type"
+                  [ngClass]="data.RegistrationType != 'PERMANENT' ? 'text-danger p-strong' : 'text-success'">
+                  <i class="fa fa-check-circle-o"
+                    *ngIf="data.RegistrationType == 'PERMANENT'"></i>&nbsp;{{data.RegistrationType}}</p>
+              </div>
+            </div>
+            <div style="display: flex;">
+              <div class="fontBold" style="flex: 1;">
+                <p>Status</p>
+              </div>
+              <div class="fontLight" style="flex: 1;">
+                <p id="status">{{data.Status}}</p>
+              </div>
+            </div>
+            <div style="display: flex;">
+              <div class="fontBold" style="flex: 1;">
+                <p>Issue Date</p>
+              </div>
+              <div class="fontLight" style="flex: 1;">
+                <p id="registration_date">{{data.RegistrationDate}}</p>
+              </div>
+            </div>
+            <div style="display: flex;">
+              <div class="fontBold" style="flex: 1;">
+                <p>License Valid Upto</p>
+              </div>
+              <div class="fontLight" style="flex: 1;">
+                <p id="license_valid">{{data.ValidUpto}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="box-shoadow-div" style="border-radius: 5px;" *ngIf="pmcQualification && pmcQualification.data">
+          <h3 class="fontBold"
+            style="background-color: #0c65a0; color: white; padding:10px; margin-top: 0;border-top-left-radius: 5px; border-top-right-radius:5px ;">
+            Qualification
+          </h3>
+          <div style="padding: 10px;">
+            <div class="table-responsive">
+              <!-- <div id="quali_div"> -->
+
+              <table class="table table-responsive table-bordered">
+                <thead>
+                  <tr>
+                    <th>Sr No</th>
+                    <th>Qualification</th>
+                    <th>Speciality</th>
+                    <th>University</th>
+                    <th>Passing Year</th>
+                  </tr>
+                </thead>
+                <tbody class="fontLight" id="tBody">
+                  <tr *ngFor="let data of pmcQualification.data.Qualifications;let i = index;">
+                    <td>{{(i + 1)}}</td>
+                    <td>{{data.Degree}}</td>
+                    <td>{{data.Speciality}}</td>
+                    <td>{{data.University}}</td>
+                    <td>{{data.PassingYear}}</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <!-- </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <img style="width: 100%;" class="d-block cursor-p animated fadeIn"
+          [src]="applicant.PMDCDoc && applicant.PMDCDoc.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + applicant.PMDCDoc"
+          (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + applicant.PMDCDoc)" draggable="false" alt="">
+      </div>
+    </div>
+
+  </div>
+  <div *ngIf="decision == 'AcceptedFinal'">
+    <div class="p-4">
+      <h1 class="text-success text-center p-4 font-4xl"><i class="fa fa-check-circle-o"></i></h1>
+    </div>
+    <div class="animated fadeIn">
+      <div class="d-flex flex-wrap">
+        <div class="mx-3 mb-3 hover-success"
+          (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + applicant.CNICDoc)">
+          <img width="100px" height="100px" onError="this.src='../../../assets/img/notfound.png'"
+            class="d-block cursor-p zoom animated fadeIn"
+            [src]="applicant.CNICDoc && applicant.CNICDoc.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + applicant.CNICDoc"
+            draggable="false" alt="">
+          <p class="m-0 text-center cursor-p"><small>CNIC</small></p>
+        </div>
+        <div class="mx-3 mb-3 hover-success"
+          (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + applicant.DomicileDoc)">
+          <img width="100px" height="100px" onError="this.src='../../../assets/img/notfound.png'"
+            class="d-block cursor-p zoom animated fadeIn"
+            [src]="applicant.DomicileDoc && applicant.DomicileDoc.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + applicant.DomicileDoc"
+            draggable="false" alt="">
+          <p class="m-0 text-center cursor-p"><small>Domicile: <u>{{applicant.DomicileName}}</u></small></p>
+        </div>
+        <div class="mx-3 mb-3 hover-success"
+          (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + applicant.PMDCDoc)">
+          <img width="100px" height="100px" onError="this.src='../../../assets/img/notfound.png'"
+            class="d-block cursor-p zoom animated fadeIn"
+            [src]="applicant.PMDCDoc && applicant.PMDCDoc.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + applicant.PMDCDoc"
+            draggable="false" alt="">
+          <p class="m-0 text-center cursor-p"><small>PMC # {{applicant.PMDCNumber}}</small></p>
+        </div>
+        <div class="mx-3 mb-3 hover-success" *ngFor="let q of applicant.Qualifications"
+          (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + q.UploadPath)">
+          <img width="100px" height="100px" class="d-block cursor-p zoom animated fadeIn"
+            [src]="q.UploadPath && q.UploadPath.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + q.UploadPath"
+            (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + q.UploadPath)" draggable="false" alt="">
+          <p class="m-0 text-center cursor-p">
+            <small>{{q.DegreeName}}&nbsp;{{q.ObtainedMarks}}/{{q.TotalMarks}}</small></p>
+        </div>
+
+      </div>
+    </div>
+    <hr>
+  </div>
+  <div *ngIf="decision == 'Accepted'">
+    <!-- <div class="p-4">
+      <h1 class="text-success text-center p-4 font-4xl"><i class="fa fa-check-circle-o"></i></h1>
+    </div> -->
+    <div class="row p-4">
+      <div class="col-md-12" style="font-size: 20px !important;">
+        <p class="p-strong font-2xl m-0 hover-success cursor-p">
+          <i class="fa fa-check-circle-o"></i> Approve with remarks
+        </p>
+      </div>
+      <div class="col-md-12">
+        <label class="k-form-field p-strong">Remarks&nbsp;<span class="text-danger">*</span>
+          <textarea type="text" [(ngModel)]="adhocScrutiny.Remarks"
+            style="width: 100%;border: 1px solid #f2f2f2;"></textarea>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="animated fadeIn" *ngIf="decision == 'Rejected'">
+    <!--   <div class="p-4">
+      <h1 class="text-danger text-center p-4 font-4xl"><i class="fa fa-times-circle-o"></i></h1>
+    </div> -->
+    <!--  <div class="row p-4">
+      <div class="col-md-10 offset-md-1" style="font-size: 20px !important;">
+        <label class="k-form-field p-strong">Select Reason For Rejection&nbsp;<span class="text-danger">*</span></label>
+        <p class="p-strong m-0 hover-success cursor-p" *ngFor="let reason of scrutinyReasons;let i = index;">
+          <label> <input type="checkbox" (onchange)="changeReason($event" [(ngModel)]="reason.Selected">
+            {{reason.Detail}}
+          </label>
+        </p>
+      </div>
+    </div> -->
+    <div class="animated fadeIn">
+      <div class="row">
+        <div class="col-md-12">
+          <label class="k-form-field p-strong">Select Reason For Rejection&nbsp;<span class="text-danger">*</span>
+            <kendo-dropdownlist [data]="scrutinyReasons" [textField]="'Detail'" [valueField]="'Id'"
+              (valueChange)="dropValueChanged('reason', $event)" [defaultItem]="{ Id: 0, Detail: 'Select...' }">
+            </kendo-dropdownlist>
+          </label>
+        </div>
+      </div>
+      <!--  <div class="row animated fadeIn" *ngIf="applicationLog.ReasonId == 3 || applicationLog.ReasonId == 4">
+        <div class="col-md-8 offset-md-2">
+          <label class="k-form-field p-strong">Select Record&nbsp;<span class="text-danger">*</span>
+            <kendo-dropdownlist [data]="applicationLog.ReasonId == 3 ? applicant.Qualifications : []"
+              (valueChange)="dropValueChanged('reasonSpecific', $event)"
+              [textField]="applicationLog.ReasonId == 3 ? 'DegreeName' : 'JobTitle'" [valueField]="'Id'">
+              <ng-template kendoDropDownListItemTemplate let-dataItem>
+                <span class="" *ngIf="applicationLog.ReasonId == 3">{{ dataItem.DegreeName }}</span>
+                <span class="" *ngIf="applicationLog.ReasonId == 4">{{ dataItem.JobTitle }}</span>
+              </ng-template>
+            </kendo-dropdownlist>
+          </label>
+        </div>
+      </div> -->
+      <div class="row animated fadeIn mb-2">
+        <div class="col-md-12">
+          <label class="k-form-field p-strong">Remarks&nbsp;<span class="text-danger">*</span>
+            <textarea type="text" [(ngModel)]="adhocScrutiny.Remarks"
+              style="width: 100%;border: 1px solid #f2f2f2;"></textarea>
+          </label>
+        </div>
+      </div>
+      <!-- <div class="row animated fadeIn" *ngIf="applicationLog.Remarks && applicationLog.ReasonId">
+        <div class="col-md-12" style="font-size: 20px !important;">
+          <p class="p-strong m-0 hover-danger cursor-p">
+            <label> <input type="checkbox" [(ngModel)]="application.Agree">
+              Documents and information provided by the applicant is not correct
+            </label>
+          </p>
+          <p class="p-strong hover-danger cursor-p">
+            <label> <input type="checkbox" [(ngModel)]="application.Agree2">
+              Applicant is not eligible for interview
+            </label>
+          </p>
+        </div>
+      </div> -->
+
+    </div>
+  </div>
+  <kendo-dialog-actions
+    *ngIf="scrutinyDialog && applicant && decision && applicant.Status_Id != 3 && applicant.Status_Id != 2"
+    class="animated fadeIn">
+    <kendo-buttongroup [width]="'100%'" style="padding: 10px 15px !important;">
+      <button kendoButton primary="true" [ladda]="adhocScrutiny.saving" data-style="zoom-in"
+        [disabled]="!adhocScrutiny.Remarks" *ngIf="decision == 'Accepted'" class="btn-lg"
+        (click)="acceptAdhocGrievanceScrutiny()"><i class="fa fa-check"></i>
+        Confirm Accept</button>
+      <!--  <button kendoButton style="color: #f86c6b !important;" [disabled]="!adhocScrutiny.Remarks"
+        *ngIf="decision == 'Rejected'" class="btn-lg" (click)="saveAdhocScrutiny(false)"><i class="fa fa-times"></i>
+        Confirm Reject</button> -->
+    </kendo-buttongroup>
+  </kendo-dialog-actions>
+</kendo-dialog>

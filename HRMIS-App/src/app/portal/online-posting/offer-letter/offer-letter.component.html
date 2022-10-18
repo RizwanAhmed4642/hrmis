@@ -1,0 +1,103 @@
+<div class="animated fadein">
+    <div class="animated fadeIn" *ngIf="merit.Status && (merit.Status == 'Accepted' || merit.Status == 'Completed')">
+        <div class="row mb-2">
+            <div class="col-md-4">
+                <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/ppsc/profile">1-
+                    Profile</button>
+            </div>
+            <div class="col-md-4">
+                <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/ppsc/letter">2- Offer
+                    Letter &
+                    Acceptance</button>
+            </div>
+            <div class="col-md-4" *ngIf="merit.Designation_Id != 903">
+                <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/ppsc/preferences">3-
+                    Preferences</button>
+            </div>
+        </div>
+        <hr>
+    </div>
+    <div class="row" *ngIf="merit.Designation_Id == 903">
+        <div class="col-md-10">
+            <h4><strong>End Date: </strong> {{meritActiveDesignation.DateEnd | date: 'dd/MM/yyyy'}}</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <h3 class="text-primary p-strong">1- Download Offer Letter</h3>
+            <hr>
+            <p>- Download Offer Letter</p>
+            <p>- Offer letter will be required when joining</p>
+            <p>- You can always come back to this portal to download your offer letter in future</p>
+            <p>- Read the offer letter carefully and submit your acceptance in next step</p>
+        </div>
+        <div class="col-md-4">
+            <h3 class="text-primary p-strong">2- Download Acceptance</h3>
+            <hr>
+            <p>- Download Acceptance Letter and Print It</p>
+            <p>- You must sign acceptance letter and upload in next step</p>
+        </div>
+        <div class="col-md-4">
+            <h3 class="text-primary p-strong">3- Upload Signed Acceptance</h3>
+            <hr>
+            <p>- Upload signed copy of your acceptance letter (scanned)</p>
+            <p>- File type must be JPG or JPEG</p>
+            <p>- File size must be less than 5MB</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <button class="text-center btn-block mb-1" kendoButton primary="true" [ladda]="downloadingOfferLetter"
+                data-style="zoom-in" (click)="getOfferLetterLink()">1-&nbsp;Download Offer
+                Letter</button>
+        </div>
+        <div class="col-md-4">
+            <button style="margin: 0 auto;" class="text-center btn-block mb-1" kendoButton primary="true"
+                [ladda]="downloadingAcceptanceLetter" data-style="zoom-in"
+                (click)="getAcceptanceLetterLink()">2-&nbsp;Download
+                Acceptance
+                Letter</button>
+        </div>
+        <div class="col-md-4">
+            <label class="k-form-field">
+                <div style="width:100%;"
+                    *ngIf="!merit.Status || (merit.Status != 'Accepted' && merit.Status != 'Completed')">
+                    <img *ngIf="photoSrc" class="animated fadeIn mb-1"
+                        style="width:100px;height:100px;border:1px solid;" [src]="photoSrc"
+                        onError="this.src='../../../assets/img/notfound.png'" alt="">
+                    <input #photoRef type="file" accept="image/jpg, image/jpeg, image/png"
+                        (change)="readUrl($event, 'pic')" hidden>
+                    <button kendoButton type="button" [primary]="true" (click)="uploadBtn('pic')"
+                        class="btn-sm btn-block mb-1" [ngClass]="photoFile.length == 0 ? 'mt-0' : 'mt-2'"
+                        style="cursor:pointer;" [ladda]="isUploading" data-style="expand-right">
+                        {{'3- Upload Acceptance Letter'}}</button>
+                </div>
+                <div style="width:100%;"
+                    *ngIf="merit.Status && (merit.Status == 'Accepted' || merit.Status == 'Completed')">
+                    <img class="animated fadeIn" style="width:100px;height:100px;border:1px solid;"
+                        [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/Acceptances/' + merit.Id + '_OfferLetter.jpg'"
+                        onError="this.src='../../../assets/img/notfound.png'" alt="">
+                    <input #photoRef type="file" accept="image/jpg, image/jpeg, image/png"
+                        (change)="readUrl($event, 'pic')" hidden>
+                    <button kendoButton type="button" [primary]="true" (click)="uploadBtn('pic')"
+                        class="btn-sm btn-block mb-1" [ngClass]="photoFile.length == 0 ? 'mt-0' : 'mt-2'"
+                        style="cursor:pointer;" [ladda]="isUploading" data-style="expand-right">
+                        {{'Change Acceptance Letter'}}</button>
+                </div>
+            </label>
+        </div>
+    </div>
+    <div class="animated fadeIn">
+        <hr>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <button style="margin: 0 auto;" class="btn-block btn-lg mb-1" routerLink="/ppsc/preferences"
+                    *ngIf="(acceptanceUploaded || merit.Status == 'Accepted' || merit.Status == 'Completed')"
+                    kendoButton primary="true" look="outline">Proceed <i class="fa fa-arrow-right-circle"></i></button>
+            </div>
+            <div class="col-md-3 control-col-end">
+                <button type="button" class="btn btn-secondary btn-block btn-lg" routerLink="/ppsc">Logout</button>
+            </div>
+        </div>
+    </div>
+</div>

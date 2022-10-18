@@ -1,0 +1,1017 @@
+<div class="animated fadeIn" *ngIf="!applicant.IsLocked">
+  <div class="animated fadeIn row">
+    <div class="col-md-12">
+      <p *ngIf="step == 1" class="m-0 p-strong animated fadeIn p-1">{{urdu.infoeng0}}</p>
+      <p *ngIf="step == 2" class="m-0 p-strong animated fadeIn p-1">{{urdu.infoeng1}}</p>
+      <p *ngIf="step == 3" class="m-0 p-strong animated fadeIn p-1">{{urdu.infoeng2}}</p>
+    </div>
+  </div>
+  <hr>
+  <div>
+    <form name="profileform" #f="ngForm" novalidate>
+      <div>
+        <div class="card card-accent-success animated fadeIn" *ngIf="step == 1">
+          <div class="card-header animated fadeIn">
+            <h5 class="m-0">PERSONAL INFORMATION
+            </h5>
+          </div>
+          <div class="card-body animated fadeIn">
+            <div class="row print-not" id="applicantInfo">
+              <div class="col-md-3 col-sm-4 col-xs-12 mt-2 control-col-st">
+                <label class="k-form-field">
+                  <span>CNIC</span>&nbsp;<span class="text-danger">*</span>
+                  <kendo-maskedtextbox [mask]="cnicMask" disabled name="CNIC" [value]="applicant.CNIC" required>
+                  </kendo-maskedtextbox>
+                </label>
+              </div>
+              <div class="col-md-3 col-sm-4 col-xs-12 mt-2 control-col">
+                <label class="k-form-field">
+                  <span>Name <span class="text-danger">*</span>&nbsp;<span class="text-muted">(as on CNIC)</span></span>
+                  <input kendoTextBox type="text" name="EmployeeName" [disabled]="id == 1"
+                    [(ngModel)]="applicant.EmployeeName" #EmployeeName="ngModel" required />
+                </label>
+              </div>
+              <div class="col-md-3 col-sm-4 col-xs-12 mt-2 control-col">
+                <label class="k-form-field">
+                  <span>S/D/W of</span>&nbsp;<span class="text-danger">*&nbsp;<span class="text-muted">(as on
+                      CNIC)</span></span>
+                  <input kendoTextBox type="text" [disabled]="id == 1" name="FatherName"
+                    [(ngModel)]="applicant.FatherName" #FatherName="ngModel" required />
+                </label>
+              </div>
+
+              <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col-end">
+                <label class="k-form-field">
+                  <span>Gender</span>&nbsp;<span class="text-danger">*</span>
+                  <kendo-dropdownlist [data]="dropDowns.genders" [valuePrimitive]="true" name="Gender"
+                    [disabled]="id == 1" [(ngModel)]="applicant.Gender" #Gender="ngModel" [value]="'Select...'"
+                    [defaultItem]="'Select...'" required>
+                  </kendo-dropdownlist>
+                </label>
+              </div>
+              <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col-st">
+                <label class="k-form-field">
+                  <span>Date of Birth</span>&nbsp;<span class="text-danger">*</span>
+                  <kendo-datepicker name="DateOfBirth" [max]="birthDateMax" [disabled]="id == 1" [min]="birthDateMin"
+                    [format]="'dd/MM/yyyy'" placeholder="Select Date" [(ngModel)]="applicant.DateOfBirth"
+                    #DateOfBirth="ngModel" required>
+                  </kendo-datepicker>
+                </label>
+              </div>
+              <div class="col-md-1 col-sm-6 col-xs-12 mt-2 control-col" *ngIf="applicant.Age">
+                <label class="k-form-field">
+                  <span>Age</span>&nbsp;<span class="text-danger">*</span>
+                  <input kendoTextBox disabled name="Age" [(ngModel)]="applicant.Age" #Age="ngModel" required />
+                </label>
+              </div>
+              <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col">
+                <label class="k-form-field">
+                  <span>Domicile</span>&nbsp;<span class="text-danger">*</span>
+                  <kendo-dropdownlist [data]="dropDowns.domicile" [disabled]="id == 1" [textField]="'DistrictName'"
+                    [valueField]="'Id'" (valueChange)="dropdownValueChanged($event, 'domicile')"
+                    [value]="dropDowns.selectedFiltersModel.domicile"
+                    [defaultItem]="dropDowns.defultFiltersModel.domicile" required>
+                  </kendo-dropdownlist>
+                </label>
+              </div>
+              <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col-end">
+                <label class="k-form-field">
+                  <span>Marital Status</span>&nbsp;<span class="text-danger">*</span>
+                  <kendo-dropdownlist name="MaritalStatus" [disabled]="id == 1" [data]="dropDowns.maritalStatusItems"
+                    [(ngModel)]="applicant.MaritalStatus" #MaritalStatus="ngModel"
+                    [defaultItem]="dropDowns.defultFiltersModel.maritalStatus" [textField]="'text'"
+                    [valueField]="'value'" [valuePrimitive]="true" required>
+                  </kendo-dropdownlist>
+                </label>
+              </div>
+              <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col-st">
+                <label class="k-form-field">
+                  <span>Mobile</span>&nbsp;<span class="text-danger">*</span>&nbsp;<span class="text-muted">(SMS alerts
+                    will
+                    be sent on mobile number)</span>
+                  <kendo-maskedtextbox name="MobileNo" [disabled]="id == 1" [mask]="mobileMask"
+                    [(ngModel)]="applicant.MobileNo" #MobileNo="ngModel" required>
+                  </kendo-maskedtextbox>
+                </label>
+              </div>
+              <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col">
+                <label class="k-form-field">
+                  <span>Email</span>&nbsp;<span class="text-danger">*</span>
+                  <input kendoTextBox type="email" name="Email" [disabled]="id == 1" [(ngModel)]="applicant.EMaiL"
+                    #EMaiL="ngModel"
+                    pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+                    [ngClass]="{ 'is-invalid': EMaiL.invalid }">
+                </label>
+              </div>
+              <div class="col-md-5 col-sm-6 col-xs-12 mt-2 control-col-end">
+                <label class="k-form-field">
+                  <span>Address</span>&nbsp;<span class="text-danger">*</span>&nbsp;<span class="text-muted">(House No.
+                    ,
+                    Street No. , Colony/Block, Tehsil, District)</span>
+                  <input kendoTextBox type="text" [disabled]="id == 1" name="PermanentAddress"
+                    [(ngModel)]="applicant.PermanentAddress" #PermanentAddress="ngModel">
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card card-accent-success animated fadeIn" *ngIf="step == 1">
+          <div class="card-header animated fadeIn">
+            <h5 class="m-0">POSTING DETAIL
+            </h5>
+          </div>
+          <div class="card-body animated fadeIn">
+            <div class="row print-not" id="applicantInfo">
+              <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col-st">
+                <label class="k-form-field">
+                  <span>Current Status</span>&nbsp;<span class="text-danger">*</span>
+                  <kendo-dropdownlist [data]="[{ Id:2	, Name: 'Active'},
+                    { Id:14	, Name: 'On Leave'},
+                    { Id:15	, Name: 'On Deputation'},
+                    { Id:27	, Name: 'Suspended'},
+                    { Id:41	, Name: 'Awaiting Posting'}]" [disabled]="id == 1" [textField]="'Name'" [valueField]="'Id'"
+                    (valueChange)="dropdownValueChanged($event, 'status')"
+                    [value]="dropDowns.selectedFiltersModel.currentStatus"
+                    [defaultItem]="dropDowns.defultFiltersModel.currentStatus">
+                  </kendo-dropdownlist>
+                </label>
+              </div>
+              <div class="col-md-6 col-sm-6 col-xs-12 mt-2 control-col">
+                <label class="k-form-field">
+                  <span>Department</span>&nbsp;<span class="text-danger">*</span>
+                  <kendo-dropdownlist
+                    [data]="[{Id: 25, Name:'Primary & Secondary Healthcare Department'}, {Id: 28, Name:'Specialized Healthcare & Medical Education Department'}]"
+                    [textField]="'Name'" [valueField]="'Id'" [disabled]="id == 1"
+                    (valueChange)="dropdownValueChanged($event, 'department')"
+                    [value]="dropDowns.selectedFiltersModel.department"
+                    [defaultItem]="dropDowns.defultFiltersModel.department">
+                  </kendo-dropdownlist>
+                </label>
+              </div>
+              <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col-end"
+                *ngIf="applicant.Status_Id == 14 || applicant.Status_Id == 15 || applicant.Status_Id == 41">
+                <label class="k-form-field">
+                  <span>{{applicant.Status_Id == 14 ? 'Leave Order' : applicant.Status_Id == 15 ? 'Deputation Order Copy' : applicant.Status_Id == 41 ? 'Joining Report' : ''}}&nbsp;<span
+                      class="text-danger">*</span><span class="clearfix"></span></span>
+                  <div style="width:100%;"
+                    *ngIf="applicant.Status_FilePath == null || applicant.Status_FileName == null">
+                    <input #photoRefHifz type="file" accept="image/jpg, image/jpeg, application/pdf"
+                      (change)="appendFilesToList($event.target.files, 8)">
+                  </div>
+                  <div style="width:100%;"
+                    *ngIf="applicant.Status_FilePath != null && applicant.Status_FileName != null">
+                    <img (click)="openInNewTab(applicant.Status_FilePath)" [src]="'/' + applicant.Status_FilePath"
+                      [alt]="applicant.Status_FileName"
+                      style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                    <a href="javascript:void(0)" (click)="changeImage(8)"
+                      style="display: inline-block; width:100px; height:30px;">Change</a>
+                  </div>
+                </label>
+              </div>
+            </div>
+            <div class="row print-not" id="applicantInfo">
+              <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col-st">
+                <label class="k-form-field">
+                  <span>District</span>&nbsp;<span class="text-danger">*</span>
+                  <kendo-dropdownlist [data]="dropDowns.districts" [disabled]="id == 1" [textField]="'Name'"
+                    [valueField]="'Code'" (valueChange)="dropdownValueChanged($event, 'district')"
+                    [value]="dropDowns.selectedFiltersModel.district"
+                    [defaultItem]="dropDowns.defultFiltersModel.district">
+                  </kendo-dropdownlist>
+                </label>
+              </div>
+              <div class="col-md-6 col-sm-6 col-xs-12 mt-2 control-col">
+                <label class="k-form-field">
+                  <span>Health Facility</span>&nbsp;<span class="text-danger">*</span>
+                  <kendo-dropdownlist [data]="dropDowns.healthFacilities" [disabled]="id == 1" [textField]="'Name'"
+                    [valueField]="'Id'" (valueChange)="dropdownValueChanged($event, 'healthfacility')"
+                    [value]="dropDowns.selectedFiltersModel.healthFacility"
+                    [defaultItem]="dropDowns.defultFiltersModel.healthFacility">
+                  </kendo-dropdownlist>
+                </label>
+              </div>
+              <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col-end">
+                <label class="k-form-field">
+                  <span>Designation</span>&nbsp;<span class="text-danger">*</span>
+                  <kendo-dropdownlist [data]="dropDowns.designations" [disabled]="id == 1" [textField]="'Name'"
+                    [valueField]="'Id'" (valueChange)="dropdownValueChanged($event, 'designation')"
+                    [value]="dropDowns.selectedFiltersModel.designation"
+                    [defaultItem]="dropDowns.defultFiltersModel.designation">
+                  </kendo-dropdownlist>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--   <pre>
+        {{applicant.CNIC}}  
+          {{'EmployeeName' + ':' + applicant.EmployeeName}}   
+          {{'FatherName' + ':' + applicant.FatherName}} 
+          {{'Gender' + ':' + applicant.Gender}} 
+          {{'DateOfBirth' + ':' + applicant.DateOfBirth}} 
+          {{'Domicile_Id' + ':' + applicant.Domicile_Id}} 
+          {{'MobileNo' + ':' + applicant.MobileNo}} 
+          {{'MaritalStatus' + ':' + applicant.MaritalStatus}} 
+          {{'PermanentAddress' + ':' + applicant.PermanentAddress}} 
+          {{'Status_Id' + ':' + applicant.Status_Id}} 
+          {{'Department_Id' + ':' + applicant.Department_Id}} 
+          {{'HealthFacility_Id' + ':' + applicant.HealthFacility_Id}} 
+          {{'Designation_Id' + ':' + applicant.Designation_Id}} 
+          {{'Designation_Id' + ':' + applicant.Designation_Id}} 
+          {{'EMaiL' + ':' + applicant.EMaiL}}
+
+        </pre> -->
+        <div class="row animated fadeIn" *ngIf="step == 1">
+          <div class="col-md-3">
+            <button kendoButton primary="true" (click)="step = 2" [disabled]="!applicant.CNIC  
+            || !applicant.EmployeeName   
+            || !applicant.FatherName 
+            || !applicant.Gender 
+            || !applicant.DateOfBirth 
+            || !applicant.Domicile_Id 
+            || applicant.Domicile_Id == 0 
+            || !applicant.MobileNo 
+            || !applicant.MaritalStatus 
+            || !applicant.PermanentAddress 
+            || !applicant.Status_Id 
+            || applicant.Status_Id == 0 
+            || !applicant.Department_Id 
+            || applicant.Department_Id == 0
+            || applicant.HealthFacility_Id  == 0
+            || !applicant.HealthFacility_Id 
+            || !applicant.Designation_Id 
+            ||  !applicant.EMaiL" class="btn-block btn-lg">Proceed</button>
+          </div>
+          <div class="col-md-3">
+            <button kendoButton primary="true" routerLink="/promotion-apply/seniority-list" look="outline"
+              class="btn-block btn-lg">Back To
+              Seniority List</button>
+          </div>
+        </div>
+        <div class="card card-accent-success animated fadeIn" *ngIf="step == 2">
+          <div class="card-header animated fadeIn">
+            <h5 class="m-0">MODE OF APPOINTMENT
+            </h5>
+          </div>
+          <div class="card-body animated fadeIn">
+            <div class="row p-1">
+              <div class="col-md-3 col-sm-6 col-xs-12 mt-2 control-col-end">
+                <label class="k-form-field">
+                  <span>CNIC Photo&nbsp;<span class="text-danger">*</span><span class="clearfix"></span></span>
+                  <div style="width:100%;" *ngIf="applicant.CNIC_FilePath == null || applicant.CNIC_FileName == null">
+                    <input #photoRefHifz type="file" accept="image/jpg, image/jpeg, application/pdf"
+                      (change)="appendFilesToList($event.target.files, 1)">
+                  </div>
+                  <div style="width:100%;" *ngIf="applicant.CNIC_FilePath != null && applicant.CNIC_FileName != null">
+                    <img (click)="openInNewTab(applicant.CNIC_FilePath)" [src]="'/' + applicant.CNIC_FilePath"
+                      [alt]="applicant.CNIC_FileName"
+                      style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                    <a href="javascript:void(0)" (click)="changeImage(1)"
+                      style="display: inline-block; width:100px; height:30px;">Change</a>
+                  </div>
+                </label>
+              </div>
+            </div>
+            <hr>
+            <div class="row p-1">
+              <div class="col-md-12">
+                <label class="k-form-field"><span class="p-strong">Entry in Service</span></label>
+                <div class="row">
+                  <div class="col-md-4"> <input type="radio" id="Directly" (change)="applicant.ModeId = null"
+                      [(ngModel)]="applicant.entry" name="Directly" [value]="101">&nbsp;<label for="Directly">Directly
+                      Inducted as
+                      Consultant</label>
+                  </div>
+                  <div class="col-md-4"> <input type="radio" id="Promotion" (change)="applicant.entry = null"
+                      [(ngModel)]="applicant.ModeId" name="Promotion" [value]="1">&nbsp;<label for="Promotion">By
+                      Promotion</label>
+                  </div>
+                  <div class="col-md-4"> <input type="radio" id="Transfer" (change)="applicant.entry = null"
+                      [(ngModel)]="applicant.ModeId" name="Transfer" [value]="5">&nbsp;<label for="Transfer">Appointment
+                      by Transfer</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="row p-1 animated fadeIn"
+              *ngIf="applicant.entry == 101 && applicant.ModeId != 1 && applicant.ModeId != 5">
+              <div class="col-md-12">
+                <label class="k-form-field"><span class="p-strong">Entry in Service</span></label>
+                <div class="row">
+                  <div class="col-md-4"> <input type="radio" id="PPSC" [(ngModel)]="applicant.ModeId" name="PPSC"
+                      [value]="2">&nbsp;<label for="PPSC">PPSC</label>
+                  </div>
+                  <div class="col-md-4"> <input type="radio" id="contract" [(ngModel)]="applicant.ModeId"
+                      name="contract" [value]="3">&nbsp;<label for="contract">Initially on Contract but
+                      Regularized</label></div>
+                </div>
+              </div>
+            </div>
+            <hr *ngIf="applicant.entry == 101">
+            <div class="row" *ngIf="applicant.ModeId == 1">
+              <div class="col-md-4">
+                <label class="k-form-field"><span class="p-strong">Promotion Order Date</span>
+                  <kendo-datepicker name="LastPromotionDate" [format]="'dd/MM/yyyy'"
+                    [(ngModel)]="applicant.LastPromotionDate" #LastPromotionDate="ngModel"></kendo-datepicker>
+                </label>
+              </div>
+              <div class="col-md-4">
+                <label class="k-form-field"><span class="p-strong">Promotion Order Number</span><input kendoTextBox
+                    type="text" name="PromotionOrderNumber" [(ngModel)]="applicant.PromotionOrderNumber"
+                    #PromotionOrderNumber="ngModel" [ngClass]="{ 'is-invalid': PromotionOrderNumber.invalid }"></label>
+              </div>
+              <div class="col-md-4">
+                <label class="k-form-field"><span class="p-strong">Joining Date after Promotion</span>
+                  <kendo-datepicker name="PromotionJoiningDate" [format]="'dd/MM/yyyy'"
+                    [(ngModel)]="applicant.PromotionJoiningDate" #PromotionJoiningDate="ngModel"></kendo-datepicker>
+                </label>
+              </div>
+              <div class="col-md-4">
+              </div>
+              <div class="col-md-4">
+                <label class="k-form-field">
+                  <span class="p-strong">Promotion Order Copy&nbsp;<span class="text-danger">*</span><span
+                      class="clearfix"></span></span>
+                  <div style="width:100%;"
+                    *ngIf="applicant.PromotionCopy_FilePath == null || applicant.PromotionCopy_FileName == null">
+                    <input #photoRefHifz type="file" accept="image/jpg, image/jpeg, application/pdf"
+                      (change)="appendFilesToList($event.target.files, 5)">
+                  </div>
+                  <div style="width:100%;"
+                    *ngIf="applicant.PromotionCopy_FilePath != null && applicant.PromotionCopy_FileName != null">
+                    <img (click)="openInNewTab(applicant.PromotionCopy_FilePath)"
+                      [src]="'/' + applicant.PromotionCopy_FilePath" [alt]="applicant.PromotionCopy_FileName"
+                      style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                    <a href="javascript:void(0)" (click)="changeImage(5)"
+                      style="display: inline-block; width:100px; height:30px;">Change</a>
+                  </div>
+                </label>
+              </div>
+              <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col">
+                <label class="k-form-field">
+                  <span>Charge Report&nbsp;<span class="text-danger">*</span><span class="clearfix"></span></span>
+                  <div style="width:100%;"
+                    *ngIf="applicant.AssumptionReport_FileName == null || applicant.AssumptionReport_FilePath == null">
+                    <input #photoRefHifz type="file" accept="image/jpg, image/jpeg, application/pdf"
+                      (change)="appendFilesToList($event.target.files, 3)">
+                  </div>
+                  <div style="width:100%;"
+                    *ngIf="applicant.AssumptionReport_FilePath != null && applicant.AssumptionReport_FileName != null">
+                    <img (click)="openInNewTab(applicant.AssumptionReport_FilePath)"
+                      [src]="'/' + applicant.AssumptionReport_FilePath" [alt]="applicant.AssumptionReport_FileName"
+                      style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                    <a href="javascript:void(0)" (click)="changeImage(3)"
+                      style="display: inline-block; width:100px; height:30px;">Change</a>
+                  </div>
+                </label>
+              </div>
+            </div>
+            <div *ngIf="applicant.ModeId == 3 && applicant.entry == 101">
+              <div class="row">
+                <div class="col-md-4 animated fadeIn">
+                  <label class="k-form-field"><span class="p-strong animated fadeIn">Contract Order Number </span><input
+                      kendoTextBox type="text" name="ContractOrderNumber" [(ngModel)]="applicant.ContractOrderNumber"
+                      #ContractOrderNumber="ngModel" [ngClass]="{ 'is-invalid': ContractOrderNumber.invalid }"></label>
+                </div>
+                <div class="col-md-4 animated fadeIn">
+                  <label class="k-form-field"><span class="p-strong animated fadeIn">Contract Order Date</span>
+                    <kendo-datepicker name="ContractStartDate" [format]="'dd/MM/yyyy'"
+                      [(ngModel)]="applicant.ContractStartDate" #ContractStartDate="ngModel"
+                      [ngClass]="{ 'is-invalid': ContractStartDate.invalid }">
+                    </kendo-datepicker>
+                  </label>
+                </div>
+                <div class="col-md-4 animated fadeIn">
+                  <label class="k-form-field"><span class="p-strong animated fadeIn">Contract Joining date</span>
+                    <kendo-datepicker name="ContractOrderDate" [format]="'dd/MM/yyyy'"
+                      [(ngModel)]="applicant.ContractOrderDate" #ContractOrderDate="ngModel"></kendo-datepicker>
+                  </label>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col">
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col">
+                  <label class="k-form-field">
+                    <span>Contract Order Copy&nbsp;<span class="text-danger">*</span><span
+                        class="clearfix"></span></span>
+                    <div style="width:100%;"
+                      *ngIf="applicant.ContractOrderCopy_FileName == null || applicant.ContractOrderCopy_FilePath == null">
+                      <input #photoRefHifz type="file" accept="image/jpg, image/jpeg, application/pdf"
+                        (change)="appendFilesToList($event.target.files, 6)">
+                    </div>
+                    <div style="width:100%;"
+                      *ngIf="applicant.ContractOrderCopy_FilePath != null && applicant.ContractOrderCopy_FileName != null">
+                      <img (click)="openInNewTab(applicant.ContractOrderCopy_FilePath)"
+                        [src]="'/' + applicant.ContractOrderCopy_FilePath" [alt]="applicant.ContractOrderCopy_FileName"
+                        style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                      <a href="javascript:void(0)" (click)="changeImage(6)"
+                        style="display: inline-block; width:100px; height:30px;">Change</a>
+                    </div>
+                  </label>
+                </div>
+
+                <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col">
+                  <label class="k-form-field">
+                    <span>Contract Joining&nbsp;<span class="text-danger">*</span><span class="clearfix"></span></span>
+                    <div style="width:100%;"
+                      *ngIf="applicant.ContractJoining_FileName == null || applicant.ContractJoining_FilePath == null">
+                      <input #photoRefHifz type="file" accept="image/jpg, image/jpeg, application/pdf"
+                        (change)="appendFilesToList($event.target.files, 7)">
+                    </div>
+                    <div style="width:100%;"
+                      *ngIf="applicant.ContractJoining_FilePath != null && applicant.ContractJoining_FileName != null">
+                      <img (click)="openInNewTab(applicant.ContractJoining_FilePath)"
+                        [src]="'/' + applicant.ContractJoining_FilePath" [alt]="applicant.ContractJoining_FileName"
+                        style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                      <a href="javascript:void(0)" (click)="changeImage(7)"
+                        style="display: inline-block; width:100px; height:30px;">Change</a>
+                    </div>
+                  </label>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-md-4 animated fadeIn">
+                  <label class="k-form-field"><span class="p-strong">{{'Posting Order Number of Regularization'}}</span>
+                    <input kendoTextBox type="text" name="RegularOrderNumber" [(ngModel)]="applicant.RegularOrderNumber"
+                      #RegularOrderNumber="ngModel" [ngClass]="{ 'is-invalid': RegularOrderNumber.invalid }"></label>
+                </div>
+                <div class="col-md-4 animated fadeIn">
+                  <label class="k-form-field">
+                    <span class="p-strong animated fadeIn">{{'Posting Order Date of Regularization'}}</span>&nbsp;<span
+                      class="text-danger">*</span>
+                    <kendo-datepicker name="DateOfRegularization" [format]="'dd/MM/yyyy'"
+                      [(ngModel)]="applicant.DateOfRegularization" #DateOfRegularization="ngModel"
+                      placeholder="Select Date" required>
+                    </kendo-datepicker>
+                  </label>
+                </div>
+                <div class="col-md-4 animated fadeIn">
+                  <label class="k-form-field">
+                    <span class="p-strong animated fadeIn">Date of Joining after Regularization</span>&nbsp;<span
+                      class="text-danger">*</span>
+                    <kendo-datepicker name="FirstJoiningDate" placeholder="Select Date" [format]="'dd/MM/yyyy'"
+                      [(ngModel)]="applicant.FirstJoiningDate" #FirstJoiningDate="ngModel" required>
+                    </kendo-datepicker>
+                  </label>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12 mt-2">
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12 mt-2">
+                  <label class="k-form-field">
+                    <span>Posting Order&nbsp;<span class="text-danger">*</span><span class="clearfix"></span></span>
+                    <div style="width:100%;"
+                      *ngIf="applicant.OrderCopy_FileName == null || applicant.OrderCopy_FilePath == null">
+                      <input #photoRefHifz type="file" accept="image/jpg, image/jpeg, application/pdf"
+                        (change)="appendFilesToList($event.target.files, 2)">
+                    </div>
+                    <div style="width:100%;"
+                      *ngIf="applicant.OrderCopy_FilePath != null && applicant.OrderCopy_FileName != null">
+                      <img (click)="openInNewTab(applicant.OrderCopy_FilePath)"
+                        [src]="'/' + applicant.OrderCopy_FilePath" [alt]="applicant.OrderCopy_FileName"
+                        style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                      <a href="javascript:void(0)" (click)="changeImage(2)"
+                        style="display: inline-block; width:100px; height:30px;">Change</a>
+                    </div>
+                  </label>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12 mt-2">
+                  <label class="k-form-field">
+                    <span>Charge Report&nbsp;<span class="text-danger">*</span><span class="clearfix"></span></span>
+                    <div style="width:100%;"
+                      *ngIf="applicant.AssumptionReport_FileName == null || applicant.AssumptionReport_FilePath == null">
+                      <input #photoRefHifz type="file" accept="image/jpg, image/jpeg, application/pdf"
+                        (change)="appendFilesToList($event.target.files, 3)">
+                    </div>
+                    <div style="width:100%;"
+                      *ngIf="applicant.AssumptionReport_FilePath != null && applicant.AssumptionReport_FileName != null">
+                      <img (click)="openInNewTab(applicant.AssumptionReport_FilePath)"
+                        [src]="'/' + applicant.AssumptionReport_FilePath" [alt]="applicant.AssumptionReport_FileName"
+                        style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                      <a href="javascript:void(0)" (click)="changeImage(3)"
+                        style="display: inline-block; width:100px; height:30px;">Change</a>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="row" *ngIf="applicant.ModeId == 5">
+
+              <div class="col-md-4 animated fadeIn">
+                <label class="k-form-field"><span class="p-strong">{{'Posting Order Number of Transfer'}}</span>
+                  <input kendoTextBox type="text" name="RegularOrderNumber" [(ngModel)]="applicant.RegularOrderNumber"
+                    #RegularOrderNumber="ngModel" [ngClass]="{ 'is-invalid': RegularOrderNumber.invalid }"></label>
+              </div>
+
+              <div class="col-md-4 animated fadeIn">
+                <label class="k-form-field">
+                  <span class="p-strong animated fadeIn">{{'Posting Order Date of Transfer'}}</span>&nbsp;<span
+                    class="text-danger">*</span>
+                  <kendo-datepicker name="DateOfRegularization" [disabled]="!applicant.ModeId || applicant.ModeId == 0"
+                    [format]="'dd/MM/yyyy'" [(ngModel)]="applicant.DateOfRegularization" #DateOfRegularization="ngModel"
+                    placeholder="Select Date" required>
+                  </kendo-datepicker>
+                </label>
+              </div>
+
+              <div class="col-md-4">
+                <label class="k-form-field"><span class="p-strong">Joining date</span>
+                  <kendo-datepicker name="FirstJoiningDate" [format]="'dd/MM/yyyy'"
+                    [(ngModel)]="applicant.FirstJoiningDate" #FirstJoiningDate="ngModel"></kendo-datepicker>
+                </label>
+              </div>
+              <div class="col-md-4">
+              </div>
+              <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col">
+                <label class="k-form-field">
+                  <span>Posting Order&nbsp;<span class="text-danger">*</span><span class="clearfix"></span></span>
+                  <div style="width:100%;"
+                    *ngIf="applicant.OrderCopy_FileName == null || applicant.OrderCopy_FilePath == null">
+                    <input #photoRefHifz type="file" accept="image/jpg, image/jpeg, application/pdf"
+                      (change)="appendFilesToList($event.target.files, 2)">
+                  </div>
+                  <div style="width:100%;"
+                    *ngIf="applicant.OrderCopy_FilePath != null && applicant.OrderCopy_FileName != null">
+                    <img (click)="openInNewTab(applicant.OrderCopy_FilePath)" [src]="'/' + applicant.OrderCopy_FilePath"
+                      [alt]="applicant.OrderCopy_FileName"
+                      style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                    <a href="javascript:void(0)" (click)="changeImage(2)"
+                      style="display: inline-block; width:100px; height:30px;">Change</a>
+                  </div>
+                </label>
+              </div>
+              <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col">
+                <label class="k-form-field">
+                  <span>Charge Report&nbsp;<span class="text-danger">*</span><span class="clearfix"></span></span>
+                  <div style="width:100%;"
+                    *ngIf="applicant.AssumptionReport_FileName == null || applicant.AssumptionReport_FilePath == null">
+                    <input #photoRefHifz type="file" accept="image/jpg, image/jpeg, application/pdf"
+                      (change)="appendFilesToList($event.target.files, 3)">
+                  </div>
+                  <div style="width:100%;"
+                    *ngIf="applicant.AssumptionReport_FilePath != null && applicant.AssumptionReport_FileName != null">
+                    <img (click)="openInNewTab(applicant.AssumptionReport_FilePath)"
+                      [src]="'/' + applicant.AssumptionReport_FilePath" [alt]="applicant.AssumptionReport_FileName"
+                      style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                    <a href="javascript:void(0)" (click)="changeImage(3)"
+                      style="display: inline-block; width:100px; height:30px;">Change</a>
+                  </div>
+                </label>
+              </div>
+            </div>
+            <div class="row" *ngIf="applicant.ModeId == 2 && applicant.entry == 101">
+              <div class="col-md-3 animated fadeIn">
+                <label class="k-form-field"><span class="p-strong">{{'Posting Order Number'}}</span>
+                  <input kendoTextBox type="text" name="RegularOrderNumber" [(ngModel)]="applicant.RegularOrderNumber"
+                    #RegularOrderNumber="ngModel" [ngClass]="{ 'is-invalid': RegularOrderNumber.invalid }"></label>
+              </div>
+              <div class="col-md-3 animated fadeIn">
+                <label class="k-form-field">
+                  <span class="p-strong animated fadeIn">{{'Posting Order Date'}}</span>&nbsp;<span
+                    class="text-danger">*</span>
+                  <kendo-datepicker name="DateOfRegularization" [disabled]="!applicant.ModeId || applicant.ModeId == 0"
+                    [format]="'dd/MM/yyyy'" [(ngModel)]="applicant.DateOfRegularization" #DateOfRegularization="ngModel"
+                    placeholder="Select Date" required>
+                  </kendo-datepicker>
+                </label>
+              </div>
+              <div class="col-md-3 animated fadeIn">
+                <label class="k-form-field"><span class="p-strong">Joining date</span>
+                  <kendo-datepicker name="FirstJoiningDate" [format]="'dd/MM/yyyy'"
+                    [(ngModel)]="applicant.FirstJoiningDate" #FirstJoiningDate="ngModel"></kendo-datepicker>
+                </label>
+              </div>
+              <div class="col-md-3 animated fadeIn">
+                <label class="k-form-field"><span class="p-strong">PPSC Merit Number</span> <input kendoTextBox
+                    type="number" name="PPSCMeritNumber" [(ngModel)]="applicant.PPSCMeritNumber"
+                    #PPSCMeritNumber="ngModel" [ngClass]="{ 'is-invalid': PPSCMeritNumber.invalid }">
+                </label>
+              </div>
+              <div class="col-md-3 col-sm-6 col-xs-12 mt-2">
+              </div>
+              <div class="col-md-3 col-sm-6 col-xs-12 mt-2">
+                <label class="k-form-field">
+                  <span>Posting Order&nbsp;<span class="text-danger">*</span><span class="clearfix"></span></span>
+                  <div style="width:100%;"
+                    *ngIf="applicant.OrderCopy_FileName == null || applicant.OrderCopy_FilePath == null">
+                    <input #photoRefHifz type="file" accept="image/jpg, image/jpeg, application/pdf"
+                      (change)="appendFilesToList($event.target.files, 2)">
+                  </div>
+                  <div style="width:100%;"
+                    *ngIf="applicant.OrderCopy_FilePath != null && applicant.OrderCopy_FileName != null">
+                    <img (click)="openInNewTab(applicant.OrderCopy_FilePath)" [src]="'/' + applicant.OrderCopy_FilePath"
+                      [alt]="applicant.OrderCopy_FileName"
+                      style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                    <a href="javascript:void(0)" (click)="changeImage(2)"
+                      style="display: inline-block; width:100px; height:30px;">Change</a>
+                  </div>
+                </label>
+              </div>
+              <div class="col-md-3 col-sm-6 col-xs-12 mt-2">
+                <label class="k-form-field">
+                  <span>Charge Report&nbsp;<span class="text-danger">*</span><span class="clearfix"></span></span>
+                  <div style="width:100%;"
+                    *ngIf="applicant.AssumptionReport_FileName == null || applicant.AssumptionReport_FilePath == null">
+                    <input #photoRefHifz type="file" accept="image/jpg, image/jpeg, application/pdf"
+                      (change)="appendFilesToList($event.target.files, 3)">
+                  </div>
+                  <div style="width:100%;"
+                    *ngIf="applicant.AssumptionReport_FilePath != null && applicant.AssumptionReport_FileName != null">
+                    <img (click)="openInNewTab(applicant.AssumptionReport_FilePath)"
+                      [src]="'/' + applicant.AssumptionReport_FilePath" [alt]="applicant.AssumptionReport_FileName"
+                      style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                    <a href="javascript:void(0)" (click)="changeImage(3)"
+                      style="display: inline-block; width:100px; height:30px;">Change</a>
+                  </div>
+                </label>
+              </div>
+              <div class="col-md-3 col-sm-6 col-xs-12 mt-2">
+                <label class="k-form-field">
+                  <span>PPSC Merit List&nbsp;<span class="text-danger">*</span><span class="clearfix"></span></span>
+                  <div style="width:100%;"
+                    *ngIf="applicant.MeritList_FileName == null || applicant.MeritList_FilePath == null">
+                    <input #photoRefHifz type="file" accept="image/jpg, image/jpeg, application/pdf"
+                      (change)="appendFilesToList($event.target.files, 4)">
+                  </div>
+                  <div style="width:100%;"
+                    *ngIf="applicant.MeritList_FilePath != null && applicant.MeritList_FileName != null">
+                    <!-- <input #photoRefHifz type="file" accept="image/jpg, image/jpeg, application/pdf"
+                        (change)="readUrl($event, 'hifz')"> -->
+                    <img (click)="openInNewTab(applicant.MeritList_FilePath)" [src]="'/' + applicant.MeritList_FilePath"
+                      [alt]="applicant.MeritList_FileName"
+                      style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                    <a href="javascript:void(0)" (click)="changeImage(4)"
+                      style="display: inline-block; width:100px; height:30px;">Change</a>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="animated fadeIn" *ngIf="step == 2">
+      <div class="row">
+        <div class="col-md-3 control-col-st">
+          <button kendoButton primary="true" *ngIf="!applicant.IsLocked" ladda data-style="zoom-in" type="button"
+            (click)="step = 1" class="btn-block"><i class="fa fa-arrow-left"></i> Go Back</button>
+        </div>
+        <div class="col-md-3 control-col">
+          <button kendoButton primary="true" [disabled]="!validations.masterFlag" *ngIf="!applicant.IsLocked"
+            [ladda]="proceeding" data-style="zoom-in" type="button" (click)="proceed()" class="btn-block"><i
+              class="fa fa-save"></i> Save</button>
+        </div>
+        <div class="col-md-3 control-col">
+        </div>
+        <div class="col-md-3  control-col-end">
+          <button type="button" class="btn btn-secondary btn-block"
+            routerLink="/promotion-apply/account">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-accent-success animated fadeIn" *ngIf="step == 3">
+      <div class="card-header animated fadeIn">
+        <h5 class="m-0">PERSONAL INFORMATION
+        </h5>
+      </div>
+      <div class="card-body animated fadeIn">
+        <div class="row">
+          <div class="col-md-4">
+            <label class="k-form-field mb-0 p-strong">Name</label>
+            <label class="k-form-field">{{applicant.EmployeeName}}</label>
+            <label class="k-form-field mb-0 p-strong">Date of Birth</label>
+            <label class="k-form-field">{{applicant.DateOfBirth | date:'dd-MM-yyyy'}}</label>
+            <label class="k-form-field mb-0 p-strong">Marital Status</label>
+            <label class="k-form-field">{{applicant.MaritalStatus}}</label>
+          </div>
+          <div class="col-md-4">
+            <label class="k-form-field mb-0 p-strong">Father Name</label>
+            <label class="k-form-field">{{applicant.FatherName}}</label>
+            <label class="k-form-field mb-0 p-strong">Gender</label>
+            <label class="k-form-field">{{applicant.Gender}}</label>
+            <label class="k-form-field mb-0 p-strong">Mobile Number</label>
+            <label class="k-form-field">{{applicant.MobileNo}}</label>
+
+          </div>
+          <div class="col-md-4">
+            <div class="row">
+              <div class="col-md-5 animated fadeIn">
+                <label class="k-form-field mb-0 p-strong">CNIC</label>
+                <label class="k-form-field">{{dashifyCNIC(applicant.CNIC)}}</label>
+              </div>
+              <div class="col-md-7 animated fadeIn">
+                <img class="pic-shadow pull-right zoom position-absolute cursor-p" style="margin-left: 48%;" width="90"
+                  height="50" (click)="openInNewTab(applicant.CNIC_FilePath)" [src]="'/' + applicant.CNIC_FilePath"
+                  [alt]="applicant.CNIC_FileName">
+              </div>
+            </div>
+            <label class="k-form-field mb-0 p-strong">Domicile</label>
+            <label class="k-form-field">{{applicant.Domicile_Name}}</label>
+            <label class="k-form-field mb-0 p-strong">E-mail</label>
+            <label class="k-form-field">{{applicant.EMaiL}}</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8">
+            <label class="k-form-field mb-0 p-strong">Permanent Address</label>
+            <label class="k-form-field">{{applicant.PermanentAddress}}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card card-accent-success animated fadeIn" *ngIf="step == 3">
+      <div class="card-header animated fadeIn">
+        <h5 class="m-0">POSTING DETAIL
+        </h5>
+      </div>
+      <div class="card-body animated fadeIn">
+        <div class="row">
+          <div class="col-md-4">
+            <label class="k-form-field mb-0 p-strong">Current Status</label>
+            <label class="k-form-field">{{applicant.StatusName}}</label>
+            <label class="k-form-field mb-0 p-strong">District</label>
+            <label class="k-form-field">{{applicant.District}}</label>
+          </div>
+          <div class="col-md-4">
+            <label class="k-form-field mb-0 p-strong">Department</label>
+            <label class="k-form-field">{{applicant.Department_Name}}</label>
+            <label class="k-form-field mb-0 p-strong">Health Facility</label>
+            <label
+              class="k-form-field">{{applicant.HealthFacility ? applicant.HealthFacility + ', ' + (applicant.Tehsil == applicant.District ? applicant.Tehsil : applicant.Tehsil + ', ' + applicant.District) : ''}}</label>
+          </div>
+          <div class="col-md-4">
+            <label class="k-form-field mb-0 p-strong">&nbsp;</label>
+            <label class="k-form-field">&nbsp;</label>
+            <label class="k-form-field mb-0 p-strong">Designation</label>
+            <label class="k-form-field">{{applicant.Designation_Name}}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-accent-success animated fadeIn" *ngIf="step == 3">
+      <div class="card-header animated fadeIn">
+        <h5 class="m-0">MODE OF APPOINTMENT
+        </h5>
+      </div>
+      <div class="card-body animated fadeIn">
+        <div class="row">
+          <div class="col-md-4">
+            <label class="k-form-field mb-0 p-strong">Entry in Service</label>
+            <label class="k-form-field">{{applicant.ModeName}}</label>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="applicant.ModeId == 1">
+          <div class="col-md-4">
+            <label class="k-form-field mb-0 p-strong">Promotion Order Date</label>
+            <label class="k-form-field">{{applicant.LastPromotionDate | date: 'dd/MM/yyyy'}}</label>
+          </div>
+          <div class="col-md-4">
+            <label class="k-form-field mb-0 p-strong">Promotion Order Number</label>
+            <label class="k-form-field">{{applicant.PromotionOrderNumber}}</label>
+          </div>
+          <div class="col-md-4">
+            <label class="k-form-field mb-0 p-strong">Joining Date after Promotion</label>
+            <label class="k-form-field">{{applicant.PromotionJoiningDate | date: 'dd/MM/yyyy'}}</label>
+          </div>
+          <div class="col-md-4">
+          </div>
+          <div class="col-md-4">
+            <label class="k-form-field">
+              <span class="p-strong">Promotion Order Copy</span>
+              <div style="width:100%;"
+                *ngIf="applicant.PromotionCopy_FilePath != null && applicant.PromotionCopy_FileName != null">
+                <img (click)="openInNewTab(applicant.PromotionCopy_FilePath)" class="cursor-p zoom"
+                  [src]="applicant.PromotionCopy_FilePath && applicant.PromotionCopy_FilePath.toLowerCase().endsWith('.pdf') ? '../../../../assets/img/icons/pdf-icon.png' : '/' + applicant.PromotionCopy_FilePath"
+                  [alt]="applicant.PromotionCopy_FileName"
+                  style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+              </div>
+            </label>
+          </div>
+          <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+              <span>Charge Report</span>
+              <div style="width:100%;"
+                *ngIf="applicant.AssumptionReport_FilePath != null && applicant.AssumptionReport_FileName != null">
+                <img (click)="openInNewTab(applicant.AssumptionReport_FilePath)" class="cursor-p zoom"
+                  [src]="applicant.AssumptionReport_FilePath && applicant.AssumptionReport_FilePath.toLowerCase().endsWith('.pdf') ? '../../../../assets/img/icons/pdf-icon.png' : '/' + applicant.AssumptionReport_FilePath"
+                  [alt]="applicant.AssumptionReport_FileName"
+                  style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+              </div>
+            </label>
+          </div>
+        </div>
+        <div *ngIf="applicant.ModeId == 3 && applicant.entry == 101">
+          <div class="row">
+            <div class="col-md-4 animated fadeIn">
+              <label class="k-form-field mb-0 p-strong">Contract Order Number</label>
+              <label class="k-form-field">{{applicant.ContractOrderNumber}}</label>
+            </div>
+            <div class="col-md-4 animated fadeIn">
+              <label class="k-form-field mb-0 p-strong">Contract Order Date</label>
+              <label class="k-form-field">{{applicant.ContractStartDate | date:'dd/MM/yyyy'}}</label>
+            </div>
+            <div class="col-md-4 animated fadeIn">
+              <label class="k-form-field mb-0 p-strong">Contract Joining date</label>
+              <label class="k-form-field">{{applicant.ContractOrderDate | date:'dd/MM/yyyy'}}</label>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col">
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col">
+              <label class="k-form-field">
+                <span>Contract Order Copy</span>
+                <div style="width:100%;"
+                  *ngIf="applicant.ContractOrderCopy_FilePath != null && applicant.ContractOrderCopy_FileName != null">
+                  <img (click)="openInNewTab(applicant.ContractOrderCopy_FilePath)" class="cursor-p zoom"
+                    [src]="applicant.ContractOrderCopy_FilePath && applicant.ContractOrderCopy_FilePath.toLowerCase().endsWith('.pdf') ? '../../../../assets/img/icons/pdf-icon.png' : '/' + applicant.ContractOrderCopy_FilePath"
+                    [alt]="applicant.ContractOrderCopy_FileName"
+                    style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                </div>
+              </label>
+            </div>
+
+            <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col">
+              <label class="k-form-field">
+                <span>Contract Joining</span>
+                <div style="width:100%;"
+                  *ngIf="applicant.ContractJoining_FilePath != null && applicant.OrderCopy_FileName != null">
+                  <img (click)="openInNewTab(applicant.ContractJoining_FilePath)" class="cursor-p zoom"
+                    [src]="applicant.ContractJoining_FilePath && applicant.ContractJoining_FilePath.toLowerCase().endsWith('.pdf') ? '../../../../assets/img/icons/pdf-icon.png' : '/' + applicant.ContractJoining_FilePath"
+                    [alt]="applicant.ContractJoining_FileName"
+                    style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                </div>
+              </label>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-md-4 animated fadeIn">
+              <label class="k-form-field mb-0 p-strong">Posting Order Number of Regularization</label>
+              <label class="k-form-field">{{applicant.RegularOrderNumber}}</label>
+            </div>
+            <div class="col-md-4 animated fadeIn">
+              <label class="k-form-field mb-0 p-strong">Posting Order Date of Regularization</label>
+              <label class="k-form-field">{{applicant.DateOfRegularization | date:'dd/MM/yyyy'}}</label>
+            </div>
+            <div class="col-md-4 animated fadeIn">
+              <label class="k-form-field mb-0 p-strong">Date of Joining after Regularization</label>
+              <label class="k-form-field">{{applicant.FirstJoiningDate | date:'dd/MM/yyyy'}}</label>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12 mt-2">
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12 mt-2">
+              <label class="k-form-field">
+                <span>Posting Order</span>
+                <div style="width:100%;"
+                  *ngIf="applicant.OrderCopy_FilePath != null && applicant.OrderCopy_FileName != null">
+                  <img (click)="openInNewTab(applicant.OrderCopy_FilePath)" class="cursor-p zoom"
+                    [src]="applicant.OrderCopy_FileName && applicant.OrderCopy_FileName.toLowerCase().endsWith('.pdf') ? '../../../../assets/img/icons/pdf-icon.png' : '/' + applicant.OrderCopy_FilePath"
+                    [alt]="applicant.OrderCopy_FileName"
+                    style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                </div>
+              </label>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12 mt-2">
+              <label class="k-form-field">
+                <span>Charge Report</span>
+                <div style="width:100%;"
+                  *ngIf="applicant.AssumptionReport_FilePath != null && applicant.AssumptionReport_FileName != null">
+                  <img (click)="openInNewTab(applicant.AssumptionReport_FilePath)" class="cursor-p zoom"
+                    [src]="applicant.AssumptionReport_FilePath && applicant.AssumptionReport_FilePath.toLowerCase().endsWith('.pdf') ? '../../../../assets/img/icons/pdf-icon.png' : '/' + applicant.AssumptionReport_FilePath"
+                    [alt]="applicant.AssumptionReport_FileName"
+                    style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="applicant.ModeId == 5">
+          <div class="col-md-4 animated fadeIn">
+            <label class="k-form-field mb-0 p-strong">Posting Order Number of Regularization</label>
+            <label class="k-form-field">{{applicant.RegularOrderNumber}}</label>
+          </div>
+
+          <div class="col-md-4 animated fadeIn">
+            <label class="k-form-field mb-0 p-strong">Posting Order Date of Regularization</label>
+            <label class="k-form-field">{{applicant.DateOfRegularization | date:'dd/MM/yyyy'}}</label>
+          </div>
+
+          <div class="col-md-4">
+            <label class="k-form-field mb-0 p-strong">Joining Date</label>
+            <label class="k-form-field">{{applicant.FirstJoiningDate | date:'dd/MM/yyyy'}}</label>
+          </div>
+          <div class="col-md-4">
+          </div>
+          <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+              <span>Posting Order</span>
+
+              <div style="width:100%;"
+                *ngIf="applicant.OrderCopy_FilePath != null && applicant.OrderCopy_FileName != null">
+                <img (click)="openInNewTab(applicant.OrderCopy_FilePath)" class="cursor-p zoom"
+                  [src]="applicant.OrderCopy_FilePath && applicant.OrderCopy_FilePath.toLowerCase().endsWith('.pdf') ? '../../../../assets/img/icons/pdf-icon.png' : '/' + applicant.OrderCopy_FilePath"
+                  [alt]="applicant.OrderCopy_FileName"
+                  style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+              </div>
+            </label>
+          </div>
+          <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+              <span>Charge Report</span>
+
+              <div style="width:100%;"
+                *ngIf="applicant.AssumptionReport_FilePath != null && applicant.AssumptionReport_FileName != null">
+                <img (click)="openInNewTab(applicant.AssumptionReport_FilePath)" class="cursor-p zoom"
+                  [src]="applicant.AssumptionReport_FilePath && applicant.AssumptionReport_FilePath.toLowerCase().endsWith('.pdf') ? '../../../../assets/img/icons/pdf-icon.png' : '/' + applicant.AssumptionReport_FilePath"
+                  [alt]="applicant.AssumptionReport_FileName"
+                  style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+              </div>
+            </label>
+          </div>
+        </div>
+        <div class="row" *ngIf="applicant.ModeId == 2 && applicant.entry == 101">
+          <div class="col-md-3 animated fadeIn">
+            <label class="k-form-field mb-0 p-strong">Posting Order Date of Regularization</label>
+            <label class="k-form-field">{{applicant.RegularOrderNumber}}</label>
+          </div>
+          <div class="col-md-3 animated fadeIn">
+            <label class="k-form-field mb-0 p-strong">Posting Order Date of Regularization</label>
+            <label class="k-form-field">{{applicant.DateOfRegularization | date:'dd/MM/yyyy'}}</label>
+          </div>
+          <div class="col-md-3 animated fadeIn">
+            <label class="k-form-field mb-0 p-strong">Joining Date</label>
+            <label class="k-form-field">{{applicant.FirstJoiningDate | date:'dd/MM/yyyy'}}</label>
+          </div>
+          <div class="col-md-3 animated fadeIn">
+            <label class="k-form-field mb-0 p-strong">PPSC Merit Number</label>
+            <label class="k-form-field">{{applicant.PPSCMeritNumber}}</label>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12 mt-2">
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12 mt-2">
+            <label class="k-form-field">
+              <span>Posting Order</span>
+
+              <div style="width:100%;"
+                *ngIf="applicant.OrderCopy_FilePath != null && applicant.OrderCopy_FileName != null">
+                <img (click)="openInNewTab(applicant.OrderCopy_FilePath)" class="cursor-p zoom"
+                  [src]="applicant.OrderCopy_FilePath && applicant.OrderCopy_FilePath.toLowerCase().endsWith('.pdf') ? '../../../../assets/img/icons/pdf-icon.png' : '/' + applicant.OrderCopy_FilePath"
+                  [alt]="applicant.OrderCopy_FileName"
+                  style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+              </div>
+            </label>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12 mt-2">
+            <label class="k-form-field">
+              <span>Charge Report</span>
+
+              <div style="width:100%;"
+                *ngIf="applicant.AssumptionReport_FilePath != null && applicant.AssumptionReport_FileName != null">
+                <img (click)="openInNewTab(applicant.AssumptionReport_FilePath)" class="cursor-p zoom"
+                  [src]="applicant.AssumptionReport_FilePath && applicant.AssumptionReport_FilePath.toLowerCase().endsWith('.pdf') ? '../../../../assets/img/icons/pdf-icon.png' : '/' + applicant.AssumptionReport_FilePath"
+                  [alt]="applicant.AssumptionReport_FileName"
+                  style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+              </div>
+            </label>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12 mt-2">
+            <label class="k-form-field">
+              <span>PPSC Merit List&nbsp;<span class="text-danger">*</span><span class="clearfix"></span></span>
+              <div style="width:100%;" *ngIf="applicant.MeritList_FilePath != null">
+                <img (click)="openInNewTab(applicant.MeritList_FilePath)" class="cursor-p zoom"
+                  [src]="applicant.MeritList_FilePath && applicant.MeritList_FilePath.toLowerCase().endsWith('.pdf') ? '../../../../assets/img/icons/pdf-icon.png' : '/' + applicant.MeritList_FilePath"
+                  [alt]="applicant.MeritList_FileName"
+                  style="height: 30px; width: 100px; display: inline-block;">&nbsp;&nbsp;&nbsp;
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="animated fadeIn" *ngIf="step == 3">
+      <div class="row">
+        <div class="col-md-3 control-col-st">
+          <button kendoButton primary="true" *ngIf="!applicant.IsLocked" [ladda]="lockingProfile" data-style="zoom-in"
+            type="button" (click)="proceed(true)" class="btn-block"><i class="fa fa-lock"></i> Submit & Lock
+            Application</button>
+        </div>
+        <div class="col-md-3 control-col">
+          <button kendoButton primary="true" *ngIf="!applicant.IsLocked" ladda data-style="zoom-in" type="button"
+            (click)="step = 1" class="btn-block"><i class="fa fa-pencil-square"></i> Go Back And Change Data</button>
+        </div>
+        <div class="col-md-3 control-col">
+        </div>
+        <div class="col-md-3  control-col-end">
+          <button type="button" class="btn btn-secondary btn-block"
+            routerLink="/promotion-apply/account">Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="applicant.IsLocked">
+  <h2 class="text-success">Application submitted successfully! You will recieve confirmation SMS and Email.</h2>
+</div>

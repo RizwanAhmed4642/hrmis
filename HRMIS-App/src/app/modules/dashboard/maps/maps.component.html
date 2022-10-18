@@ -1,0 +1,1693 @@
+<div class="k-i-loading" *ngIf="!show"></div>
+<div class="animated fadeIn" *ngIf="show">
+    <!--    <div class="row">
+        <div class="col-md-8 col-xs-12">
+            <div class="top-h3">
+                Anesthetist
+            </div>
+        </div>
+        <div class="col-md-4 col-xs-12">
+            <div class="top-controls">
+            </div>
+        </div>
+    </div> -->
+    <!--    <div class="row animated fadeIn mt-3" *ngIf="2 + 2 == 4">
+        <div class="col-md-8"> -->
+
+    <!-- <table style="width: 100%;">
+        <tr>
+            <th>
+                <label class="k-form-field">
+                    <kendo-dropdownlist [data]="districtsData"
+                        [defaultItem]="{Name: 'All Districts', Code: currentUser?.HfmisCode}" [textField]="'Name'"
+                        [valueField]="'Code'" (filterChange)="handleFilter($event, 'district')"
+                        (valueChange)="dropdownValueChanged($event, 'district')" [value]="selectedFiltersModel.district"
+                        [disabled]="districtsData.length == 1">
+                    </kendo-dropdownlist>
+                </label>
+
+            </th>
+            <th>
+
+                <label class="k-form-field">
+                    <kendo-multiselect #designationsList [data]="designationsData" [valuePrimitive]="true"
+                        (valueChange)="getData()" [(ngModel)]="selectedDesignations" [filterable]="true"
+                        textField="Name" valueField="Id" placeholder="Select Designation"
+                        (filterChange)="handleFilter($event, 'designation')">
+                    </kendo-multiselect>
+                </label>
+
+            </th>
+            <th>
+                <label class="k-form-field">
+                    <kendo-multiselect #hfTypeList [data]="hfTypesData" [valuePrimitive]="true"
+                        [(ngModel)]="hfTypeCodes" [filterable]="true" [textField]="'Name'" [valueField]="'Code'"
+                        placeholder="Select Type of Health Facility" (filterChange)="handleFilter($event, 'hftype')"
+                        (valueChange)="getData()">
+                    </kendo-multiselect>
+                </label>
+            </th>
+        </tr>
+    </table> -->
+
+
+    <div class="text-center p-2" style="background: #46a23f;color:white;">
+        <h1 class="m-0 p-strong">Consultant Anaesthetist attached with MO/WMO (Anaesthesia) <button
+                class="btn btn-secondary pull-right" (click)="showMap = !showMap">View
+                {{showMap ? 'Summary' : 'Map'}}</button></h1>
+    </div>
+    <div></div>
+    <table style="width: 100%;">
+        <tr>
+            <th style="width: 69%;">
+                <!--    <div #mapContainer id="map"></div> -->
+                <div class="animated fadeIn" *ngIf="showMap">
+                    <agm-map [styles]="mapStyles" [latitude]='lat' [longitude]='lng' [zoom]="zoom">
+                        <agm-marker [iconUrl]="'../../../../assets/img/icons/bluedot.png'"
+                            *ngFor='let markerT of vpTechsWorking' [latitude]='markerT.Latitude'
+                            [longitude]='markerT.Longitude' [opacity]='1'>
+                        </agm-marker>
+                        <agm-marker *ngFor='let marker of vpMaps' [latitude]='marker.Latitude' [iconUrl]="marker.color"
+                            [longitude]='marker.Longitude' [opacity]='1'
+                            (markerClick)='selectMarker(marker, marker.Code)'>
+                            <agm-info-window (infoWindowClose)="infoWindowClosed()"
+                                [isOpen]="isInfoWindowOpen(marker.Code)" [latitude]="marker.Latitude"
+                                [longitude]="marker.Longitude" InfoWindow #{{marker.Code}}>
+                                <div id="content">
+                                    <div class="d-flex">
+                                        <img style="height: 100px;width:25%;"
+                                            [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/Files/HFPics/' + marker.ImagePath"
+                                            alt="">
+                                        <p class="ml-2 mt-3 h4 p-strong text-center"
+                                            [routerLink]="'/health-facility/' + marker.Code">
+                                            {{marker.Name}}</p>
+                                    </div>
+                                    <div class="mx-0 my-2"
+                                        *ngIf="(!marker.showProfileViewId || marker.showProfileViewId < 0) && marker.showProfileViewId != 0 && !marker.loadingP">
+                                        <table class="table-stats h5"
+                                            *ngIf="(!marker.showProfileViewId || marker.showProfileViewId < 0) && marker.showProfileViewId != 0 && !marker.loadingP">
+                                            <tr>
+                                                <th style="background: #e7e7e7;">Designation</th>
+                                                <th style="background: #e7e7e7;">Sanctioned</th>
+                                                <th style="background: #e7e7e7;">Filled</th>
+                                                <th style="background: #e7e7e7;">Vacant</th>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p class="m-0">
+                                                        {{marker.DsgName}}
+                                                    </p>
+                                                </td>
+                                                <td>
+                                                    <p class="m-0 text-center">
+                                                        {{marker.TotalSanctioned}}
+                                                    </p>
+                                                </td>
+                                                <td (click)="marker.showProfileViewId = 0">
+                                                    <p class="m-0 text-center">
+                                                        {{marker.TotalWorking}}
+                                                    </p>
+                                                </td>
+                                                <td>
+                                                    <p class="m-0 text-center">
+                                                        {{marker.Vacant}}
+                                                    </p>
+                                                </td>
+                                            </tr>
+
+                                            <tr *ngIf="marker.vpTech">
+                                                <td>
+                                                    <p class="m-0">
+                                                        {{marker.vpTech.DsgName}}
+                                                    </p>
+                                                </td>
+                                                <td>
+                                                    <p class="m-0 text-center">
+                                                        {{marker.vpTech.TotalSanctioned}}
+                                                    </p>
+                                                </td>
+                                                <td (click)="marker.vpTech.showProfileViewId = 0">
+                                                    <p class="m-0 text-center">
+                                                        {{marker.vpTech.TotalWorking}}
+                                                    </p>
+                                                </td>
+                                                <td>
+                                                    <p class="m-0 text-center">
+                                                        {{marker.vpTech.Vacant}}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <hr>
+
+
+                                        <div class="pg-orgchart">
+                                            <div class="org-chart">
+                                                <ul>
+                                                    <li>
+                                                        <div class="user">
+                                                            <div class="name hover-success cursor-p"
+                                                                (click)="marker.showProfileViewId = 0">
+                                                                Consultant Anaesthetists <strong class="p-strong">
+                                                                    ({{anaesthesiaTree.anaesthesiaTree?.length}}/{{marker.TotalSanctioned}})</strong>
+                                                            </div>
+                                                        </div>
+                                                        <ul>
+                                                            <li>
+                                                                <div class="user">
+                                                                    <div class="name hover-success cursor-p border-bottom border-black p-strong"
+                                                                        (click)="marker.showProfileViewId = 1">
+                                                                        MO / WMO
+                                                                        Anaesthesia
+                                                                        <strong
+                                                                            class="p-strong">({{anaesthesiaTree.AttachedPersons}}/{{(marker.TotalWorking * 3)}})</strong>
+                                                                    </div>
+                                                                    <div class="name">
+                                                                        <small class="hover-success cursor-p"
+                                                                            (click)="marker.showProfileViewId = 3">Diploma
+                                                                            <strong
+                                                                                class="p-strong">({{anaesthesiaTree.MOWMOAnaesthesIsDiploma}})</strong></small>&nbsp;
+                                                                        <small class="hover-success cursor-p"
+                                                                            (click)="marker.showProfileViewId = 4">Training
+                                                                            <strong
+                                                                                class="p-strong">({{anaesthesiaTree.MOWMOAnaesthesOnTraining}})</strong></small>
+                                                                    </div>
+                                                                </div>
+                                                                <ul>
+                                                                    <li>
+                                                                        <div class="user">
+                                                                            <div class="name hover-success cursor-p"
+                                                                                (click)="marker.showProfileViewId = 2">
+                                                                                MO
+                                                                                / WMO
+                                                                                <strong
+                                                                                    class="p-strong">({{anaesthesiaTree.AttachedMOWMO}}/{{(marker.TotalWorking * 3) * 2}})</strong>
+                                                                            </div>
+                                                                        </div>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                            <li>
+                                                                <div class="user">
+                                                                    <div class="name hover-success cursor-p"
+                                                                        (click)="marker.showProfileViewId = 5">
+                                                                        Anaesthesia
+                                                                        Technologist
+                                                                        <strong
+                                                                            class="p-strong">({{marker.vpTech ? marker.vpTech.TotalWorking : 0}}/{{marker.vpTech ? marker.vpTech.TotalSanctioned : 0}})</strong>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <!--  <table class="table-stats">
+                                            <tr>
+                                                <th>Sr.</th>
+                                                <th>Anaesthetist - <span
+                                                        class="">{{facilityProfilesData.ConsultantAnaesthetists?.length}}/{{marker.TotalSanctioned}}</span>
+                                                </th>
+                                                <th>MO/WMO (Anaesthesia) - <span
+                                                        class="">{{getTeamCount(marker.Code)}}/{{(facilityProfilesData.ConsultantAnaesthetists?.length * 3)}}</span>
+                                                </th>
+                                                <th>Technologist - <span
+                                                        class="">{{facilityProfilesData.Technologists?.length}}/{{facilityProfilesData.ConsultantAnaesthetists?.length}}</span>
+                                                </th>
+                                            </tr>
+                                            <tr
+                                                *ngFor="let profile of facilityProfilesData.ConsultantAnaesthetists;let i = index;">
+                                                <td>
+                                                    <p class="mb-0">{{(i + 1)}}
+                                                    </p>
+                                                </td>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="d-flex">
+                                                                <img class="pic-shadow" width="50" height="50"
+                                                                    [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + profile.CNIC + '_23.jpg'"
+                                                                    onError="this.src='../../../../assets/img/notfound.png'"
+                                                                    alt="">
+                                                                <div>
+                                                                    <p class="mb-0 ml-2 h5"
+                                                                        style="font-family: Roboto-Regular; font-weight: 100;">
+                                                                        {{profile.EmployeeName}}</p>
+                                                                    <p class="m-0 ml-2"
+                                                                        style="font-family: Roboto-Regular; font-weight: 100;">
+                                                                        {{profile.StatusName}} -
+                                                                        {{profile.EmpMode_Name}}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="d-flex" style="width: 100%;overflow-x: auto;">
+                                                                <span *ngFor="let item of profile.Team131">
+                                                                    <img class="pic-shadow m-1 cursor-p" width="50"
+                                                                        height="50"
+                                                                        (click)="openInNewTab('profile/' + item.CNIC)"
+                                                                        [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + item.CNIC + '_23.jpg'"
+                                                                        onError="this.src='../../../../assets/img/notfound.png'"
+                                                                        [title]="item.EmployeeName + ' - ' + item.Designation_Name">
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <span *ngFor="let item of profile.TeamTechs">
+                                                                <img class="pic-shadow m-1 cursor-p" width="50"
+                                                                    height="50"
+                                                                    (click)="openInNewTab('profile/' + item.CNIC)"
+                                                                    [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + item.CNIC + '_23.jpg'"
+                                                                    onError="this.src='../../../../assets/img/notfound.png'"
+                                                                    [title]="item.EmployeeName + ' - ' + item.Designation_Name">
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <hr> -->
+
+
+                                        <!-- <table class="table-stats h5" style="background: #5656c7;
+                                        color: white;">
+                                            <tr *ngIf="facilityProfilesData.CountMO > 0">
+                                                <td (click)="showProfiles(marker, 1)">
+                                                    <p class="m-0">
+                                                        Medical Officer (Anaesthesia)
+                                                    </p>
+                                                </td>
+                                                <td (click)="showProfiles(marker, 31)">
+                                                    <p class="m-0 text-center">
+                                                        {{facilityProfilesData.attachedPersons?.length}}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="facilityProfilesData.CountTrainingMO > 0">
+                                                <td (click)="showProfiles(marker, 1)">
+                                                    <p class="m-0">
+                                                        Medical Officer (Training)
+                                                    </p>
+                                                </td>
+                                                <td (click)="showProfiles(marker, 11)">
+                                                    <p class="m-0 text-center">
+                                                        {{facilityProfilesData.CountTrainingMO}}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="facilityProfilesData.CountDiplomaMO > 0">
+                                                <td (click)="showProfiles(marker, 1)">
+                                                    <p class="m-0">
+                                                        Medical Officer (Diploma)
+                                                    </p>
+                                                </td>
+                                                <td (click)="showProfiles(marker, 12)">
+                                                    <p class="m-0 text-center">
+                                                        {{facilityProfilesData.CountDiplomaMO}}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="facilityProfilesData.CountWMO > 0">
+                                                <td (click)="showProfiles(marker, 2)">
+                                                    <p class="m-0">
+                                                        Women Medical Officer (Anaesthesia)
+                                                    </p>
+                                                </td>
+                                                <td (click)="showProfiles(marker, 2)">
+                                                    <p class="m-0 text-center">
+                                                        {{facilityProfilesData.CountWMO}}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="facilityProfilesData.CountTrainingWMO > 0">
+                                                <td (click)="showProfiles(marker, 2)">
+                                                    <p class="m-0">
+                                                        Women Medical Officer (Training)
+                                                    </p>
+                                                </td>
+                                                <td (click)="showProfiles(marker, 21)">
+                                                    <p class="m-0 text-center">
+                                                        {{facilityProfilesData.CountTrainingWMO}}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="facilityProfilesData.CountDiplomaWMO > 0">
+                                                <td (click)="showProfiles(marker, 2)">
+                                                    <p class="m-0">
+                                                        Women Medical Officer (Diploma)
+                                                    </p>
+                                                </td>
+                                                <td (click)="showProfiles(marker, 22)">
+                                                    <p class="m-0 text-center">
+                                                        {{facilityProfilesData.CountDiplomaWMO}}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="facilityProfilesData.CountOnlyMO > 0">
+                                                <td (click)="showProfiles(marker, 2)">
+                                                    <p class="m-0">
+                                                        Medical Officer (BS-17)
+                                                    </p>
+                                                </td>
+                                                <td (click)="showProfiles(marker, 22)">
+                                                    <p class="m-0 text-center">
+                                                        {{facilityProfilesData.CountOnlyMO}}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="facilityProfilesData.CountOnlyWMO > 0">
+                                                <td (click)="showProfiles(marker, 2)">
+                                                    <p class="m-0">
+                                                        Women Medical Officer (BS-17)
+                                                    </p>
+                                                </td>
+                                                <td (click)="showProfiles(marker, 22)">
+                                                    <p class="m-0 text-center">
+                                                        {{facilityProfilesData.CountOnlyWMO}}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table> -->
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-10 offset-md-1">
+
+                                            <table class="table-stats animated fadeIn mb-2" *ngIf="surgeries">
+                                                <tr>
+                                                    <td colspan="2">
+
+                                                        <p class="m-0 h3 text-center">
+                                                            Surgeries in Februrary 2021
+                                                        </p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <p class="m-0">
+                                                            Operations under General Anaesthesia
+                                                        </p>
+                                                    </td>
+                                                    <td>
+                                                        <p class="m-0 text-center">
+                                                            {{surgeries[0]['ga'] | number}}
+                                                        </p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <p class="m-0">
+                                                            Operations under Spinal Anaesthesia
+                                                        </p>
+                                                    </td>
+                                                    <td>
+                                                        <p class="m-0 text-center">
+                                                            {{surgeries[0]['sa'] | number}}
+                                                        </p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <p class="m-0">
+                                                            Operations under Local Anaesthesia
+                                                        </p>
+                                                    </td>
+                                                    <td>
+                                                        <p class="m-0 text-center">
+                                                            {{surgeries[0]['la'] | number}}
+                                                        </p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <p class="m-0">
+                                                            Other Operations
+                                                        </p>
+                                                    </td>
+                                                    <td>
+                                                        <p class="m-0 text-center">
+                                                            {{surgeries[0]['other'] | number}}
+                                                        </p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="k-i-loading" *ngIf="marker.loadingP"></div>
+                                    <div class="animated fadeIn"
+                                        *ngIf="marker.showProfileViewId >= 0 && !marker.loadingP">
+                                        <div class="text-success" (click)="marker.showProfileViewId = -1">
+                                            <i class="fa fa-arrow-left ml-2 text-success cursor-p pull-left"> </i>
+                                            <i class="fa fa-times ml-2 text-success cursor-p pull-right"> </i>
+                                        </div>
+                                        <div class="animated fadeIn"
+                                            *ngIf="marker.showProfileViewId == 0 && anaesthesiaTree.anaesthesiaTree?.length > 0">
+                                            <table class="table-stats">
+                                                <tr>
+                                                    <th class="h5 p-strong text-center" colSpan="3">Consultant
+                                                        Anaesthetist</th>
+                                                    <th class="h5 p-strong text-center" colSpan="1">MO / WMO Anaesthesia
+                                                    </th>
+                                                </tr>
+                                                <tr *ngFor="let tree of anaesthesiaTree.anaesthesiaTree;let i = index;">
+                                                    <th>
+                                                        <p class="m-0">{{(i + 1)}}
+                                                        </p>
+                                                    </th>
+                                                    <th>
+                                                        <img class="pic-shadow" width="50" height="50"
+                                                            [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + tree.Anaesthetist.CNIC + '_23.jpg'"
+                                                            onError="this.src='../../../../assets/img/notfound.png'"
+                                                            alt="">
+                                                    </th>
+                                                    <th>
+                                                        <div class="row">
+                                                            <div class="col-md-12 cursor-p"
+                                                                (click)="openInNewTab('profile/' + tree.Anaesthetist.CNIC)">
+                                                                <h5 class="m-0 mb-1"
+                                                                    style="font-family: Roboto-Medium; font-weight: 100;">
+                                                                    {{tree.Anaesthetist.EmployeeName}}
+                                                                </h5>
+                                                                <p class="m-0"
+                                                                    style="font-family: Roboto-Regular; font-weight: 100;">
+                                                                    {{tree.Anaesthetist.StatusName}} -
+                                                                    {{tree.Anaesthetist.EmpMode_Name}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                    <th>
+                                                        <div class="d-flex" style="width: 100%;overflow-x: auto;">
+                                                            <span *ngFor="let item of tree.MOTree">
+                                                                <img class="pic-shadow m-1 cursor-p" width="50"
+                                                                    height="50"
+                                                                    (click)="openInNewTab('profile/' + item.MOWMOAnaesthesia.CNIC)"
+                                                                    [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + item.MOWMOAnaesthesia.CNIC + '_23.jpg'"
+                                                                    onError="this.src='../../../../assets/img/notfound.png'"
+                                                                    [title]="item.MOWMOAnaesthesia.EmployeeName + ' - ' + item.MOWMOAnaesthesia.Designation_Name">
+                                                            </span>
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                        </div>
+
+                                        <div class="animated fadeIn"
+                                            *ngIf="marker.showProfileViewId == 1 && anaesthesiaTree.moWMOAnaesthesiaTree?.length > 0">
+                                            <table class="table-stats">
+                                                <tr>
+                                                    <th class="h5 p-strong text-center" colSpan="3">MO / WMO Anaesthesia
+                                                    </th>
+                                                    <th class="h5 p-strong text-center" colSpan="1">MO / WMO
+                                                    </th>
+                                                </tr>
+                                                <tr
+                                                    *ngFor="let tree of anaesthesiaTree.moWMOAnaesthesiaTree;let i = index;">
+                                                    <th>
+                                                        <p class="m-0">{{(i + 1)}}
+                                                        </p>
+                                                    </th>
+                                                    <th>
+                                                        <img class="pic-shadow" width="50" height="50"
+                                                            [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + tree.MOWMOAnaesthesia.CNIC + '_23.jpg'"
+                                                            onError="this.src='../../../../assets/img/notfound.png'"
+                                                            alt="">
+                                                    </th>
+                                                    <th>
+                                                        <div class="row">
+                                                            <div class="col-md-12 cursor-p"
+                                                                (click)="openInNewTab('profile/' + tree.MOWMOAnaesthesia.CNIC)">
+                                                                <h5 class="m-0 mb-1"
+                                                                    style="font-family: Roboto-Medium; font-weight: 100;">
+                                                                    {{tree.MOWMOAnaesthesia.EmployeeName}}
+                                                                </h5>
+                                                                <p class="m-0"
+                                                                    style="font-family: Roboto-Regular; font-weight: 100;">
+                                                                    {{tree.MOWMOAnaesthesia.IsDiploma ? 'Diploma' : 'Training Completed'}}
+                                                                    -
+                                                                    {{tree.MOWMOAnaesthesia.EmpMode_Name}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                    <th>
+                                                        <div class="d-flex" style="width: 100%;overflow-x: auto;">
+                                                            <span *ngFor="let item of tree.MOWMO">
+                                                                <img class="pic-shadow m-1 cursor-p" width="50"
+                                                                    height="50"
+                                                                    (click)="openInNewTab('profile/' + item.CNIC)"
+                                                                    [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + item.CNIC + '_23.jpg'"
+                                                                    onError="this.src='../../../../assets/img/notfound.png'"
+                                                                    [title]="item.EmployeeName + ' - ' + item.Designation_Name">
+                                                            </span>
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                        </div>
+
+
+                                        <div class="animated fadeIn"
+                                            *ngIf="marker.showProfileViewId == 2 && anaesthesiaTree.moWMO?.length > 0">
+                                            <table class="table-stats">
+                                                <tr>
+                                                    <th class="h5 p-strong text-center" colSpan="3">MO / WMO
+                                                    </th>
+
+                                                </tr>
+                                                <tr *ngFor="let tree of anaesthesiaTree.moWMO;let i = index;">
+                                                    <th>
+                                                        <p class="m-0">{{(i + 1)}}
+                                                        </p>
+                                                    </th>
+                                                    <th>
+                                                        <img class="pic-shadow" width="50" height="50"
+                                                            [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + tree.CNIC + '_23.jpg'"
+                                                            onError="this.src='../../../../assets/img/notfound.png'"
+                                                            alt="">
+                                                    </th>
+                                                    <th>
+                                                        <div class="row">
+                                                            <div class="col-md-12 cursor-p"
+                                                                (click)="openInNewTab('profile/' + tree.CNIC)">
+                                                                <h5 class="m-0 mb-1"
+                                                                    style="font-family: Roboto-Medium; font-weight: 100;">
+                                                                    {{tree.EmployeeName}}
+                                                                </h5>
+                                                                <p class="m-0"
+                                                                    style="font-family: Roboto-Regular; font-weight: 100;">
+                                                                    {{tree.EmpMode_Name}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                        </div>
+
+
+                                        <div class="animated fadeIn"
+                                            *ngIf="marker.showProfileViewId == 3 && anaesthesiaTree.MOWMOAnaesthesDiplomas?.length > 0">
+                                            <table class="table-stats">
+                                                <tr>
+                                                    <th class="h5 p-strong text-center" colSpan="3">MO / WMO
+                                                    </th>
+
+                                                </tr>
+                                                <tr
+                                                    *ngFor="let tree of anaesthesiaTree.MOWMOAnaesthesDiplomas;let i = index;">
+                                                    <th>
+                                                        <p class="m-0">{{(i + 1)}}
+                                                        </p>
+                                                    </th>
+                                                    <th>
+                                                        <img class="pic-shadow" width="50" height="50"
+                                                            [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + tree.CNIC + '_23.jpg'"
+                                                            onError="this.src='../../../../assets/img/notfound.png'"
+                                                            alt="">
+                                                    </th>
+                                                    <th>
+                                                        <div class="row">
+                                                            <div class="col-md-12 cursor-p"
+                                                                (click)="openInNewTab('profile/' + tree.CNIC)">
+                                                                <h5 class="m-0 mb-1"
+                                                                    style="font-family: Roboto-Medium; font-weight: 100;">
+                                                                    {{tree.EmployeeName}}
+                                                                </h5>
+                                                                <p class="m-0"
+                                                                    style="font-family: Roboto-Regular; font-weight: 100;">
+                                                                    {{tree.EmpMode_Name}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                        </div>
+
+                                        <div class="animated fadeIn"
+                                            *ngIf="marker.showProfileViewId == 4 && anaesthesiaTree.MOWMOAnaesthesTrainings?.length > 0">
+                                            <table class="table-stats">
+                                                <tr>
+                                                    <th class="h5 p-strong text-center" colSpan="3">MO / WMO
+                                                    </th>
+
+                                                </tr>
+                                                <tr
+                                                    *ngFor="let tree of anaesthesiaTree.MOWMOAnaesthesTrainings;let i = index;">
+                                                    <th>
+                                                        <p class="m-0">{{(i + 1)}}
+                                                        </p>
+                                                    </th>
+                                                    <th>
+                                                        <img class="pic-shadow" width="50" height="50"
+                                                            [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + tree.CNIC + '_23.jpg'"
+                                                            onError="this.src='../../../../assets/img/notfound.png'"
+                                                            alt="">
+                                                    </th>
+                                                    <th>
+                                                        <div class="row">
+                                                            <div class="col-md-12 cursor-p"
+                                                                (click)="openInNewTab('profile/' + tree.CNIC)">
+                                                                <h5 class="m-0 mb-1"
+                                                                    style="font-family: Roboto-Medium; font-weight: 100;">
+                                                                    {{tree.EmployeeName}}
+                                                                </h5>
+                                                                <p class="m-0"
+                                                                    style="font-family: Roboto-Regular; font-weight: 100;">
+                                                                    {{tree.EmpMode_Name}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                        </div>
+
+                                        <div class="animated fadeIn"
+                                            *ngIf="marker.showProfileViewId == 5 && anaesthesiaTree.Technologists?.length > 0">
+                                            <table class="table-stats">
+                                                <tr>
+                                                    <th class="h5 p-strong text-center" colSpan="3">Anaesthesia
+                                                        Technologists
+                                                    </th>
+
+                                                </tr>
+                                                <tr *ngFor="let tree of anaesthesiaTree.Technologists;let i = index;">
+                                                    <th>
+                                                        <p class="m-0">{{(i + 1)}}
+                                                        </p>
+                                                    </th>
+                                                    <th>
+                                                        <img class="pic-shadow" width="50" height="50"
+                                                            [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + tree.CNIC + '_23.jpg'"
+                                                            onError="this.src='../../../../assets/img/notfound.png'"
+                                                            alt="">
+                                                    </th>
+                                                    <th>
+                                                        <div class="row">
+                                                            <div class="col-md-12 cursor-p"
+                                                                (click)="openInNewTab('profile/' + tree.CNIC)">
+                                                                <h5 class="m-0 mb-1"
+                                                                    style="font-family: Roboto-Medium; font-weight: 100;">
+                                                                    {{tree.EmployeeName}}
+                                                                </h5>
+                                                                <p class="m-0"
+                                                                    style="font-family: Roboto-Regular; font-weight: 100;">
+                                                                    {{tree.EmpMode_Name}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                        </div>
+
+                                        <!-- <div class="animated fadeIn"
+                                            *ngIf="marker.showProfileViewId == 0 && facilityProfilesData.ConsultantAnaesthetists?.length > 0">
+                                            <table class="table-stats">
+                                                <tr
+                                                    *ngFor="let profile of facilityProfilesData.ConsultantAnaesthetists;let i = index;">
+                                                    <th>
+                                                        <p class="m-0">{{(i + 1)}}
+                                                        </p>
+                                                    </th>
+                                                    <th>
+                                                        <img class="pic-shadow" width="50" height="50"
+                                                            [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + profile.CNIC + '_23.jpg'"
+                                                            onError="this.src='../../../../assets/img/notfound.png'"
+                                                            alt="">
+                                                    </th>
+                                                    <th>
+                                                        <div class="row">
+                                                            <div class="col-md-12 cursor-p"
+                                                                (click)="openInNewTab('profile/' + profile.CNIC)">
+                                                                <h5 class="m-0 mb-1"
+                                                                    style="font-family: Roboto-Medium; font-weight: 100;">
+                                                                    {{profile.EmployeeName}}
+                                                                </h5>
+                                                                <p class="m-0"
+                                                                    style="font-family: Roboto-Regular; font-weight: 100;">
+                                                                    {{profile.StatusName}} -
+                                                                    {{profile.EmpMode_Name}}</p>
+                                                            </div>
+                                                            <div class="col-md-7">
+                                                                <div class="d-flex"
+                                                                    style="width: 100%;overflow-x: auto;">
+                                                                    <span *ngFor="let item of profile.Team131">
+                                                                        <img class="pic-shadow m-1 cursor-p" width="50"
+                                                                            height="50"
+                                                                            (click)="openInNewTab('profile/' + item.CNIC)"
+                                                                            [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + item.CNIC + '_23.jpg'"
+                                                                            onError="this.src='../../../../assets/img/notfound.png'"
+                                                                            [title]="item.EmployeeName + ' - ' + item.Designation_Name">
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                        </div> -->
+
+                                        <div class="animated fadeIn"
+                                            *ngIf="marker.showProfileViewId > 0 && facilityProfilesData">
+                                            <table class="table-stats">
+                                                <tr *ngFor="let profile of marker.showProfileViewId == 1 ? facilityProfilesData.MO : 
+                                                    marker.showProfileViewId == 11 ?  facilityProfilesData.TrainingMO : 
+                                                    marker.showProfileViewId == 12 ?  facilityProfilesData.DiplomaMO :
+                                                    marker.showProfileViewId == 2 ? facilityProfilesData.WMO : 
+                                                    marker.showProfileViewId == 21 ?  facilityProfilesData.TrainingWMO : 
+                                                    marker.showProfileViewId == 31 ?  facilityProfilesData.attachedPersons : 
+                                                    marker.showProfileViewId == 22 ?  
+                                                    facilityProfilesData.DiplomaWMO : [];let i = index;">
+                                                    <th>
+                                                        <p class="m-0">{{(i + 1)}}
+                                                        </p>
+                                                    </th>
+                                                    <th>
+                                                        <img class="pic-shadow" width="50" height="50"
+                                                            [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + profile.CNIC + '_23.jpg'"
+                                                            onError="this.src='../../../../assets/img/notfound.png'"
+                                                            alt="">
+                                                    </th>
+                                                    <th>
+                                                        <div class="row" style="cursor: pointer;"
+                                                            (click)="openInNewTab('profile/' + profile.CNIC)">
+                                                            <div class="col-md-12">
+                                                                <div class="grid-list-item">
+                                                                    <h5 class="m-0 mb-1"
+                                                                        style="font-family: Roboto-Medium; font-weight: 100;">
+                                                                        {{profile.EmployeeName}}
+                                                                        <span class="pull-right">
+                                                                            {{profile.EmpMode_Name}}</span></h5>
+                                                                    <div class="row">
+                                                                        <div class="col-md-5">
+                                                                            <p class="m-0"
+                                                                                style="font-family: Roboto-Regular; font-weight: 100;">
+                                                                                {{profile.Designation_Name}}</p>
+                                                                            <p class="m-0"
+                                                                                style="font-family: Roboto-Regular; font-weight: 100;"
+                                                                                *ngIf="marker.showProfileViewId != 31">
+                                                                                <span
+                                                                                    style="font-family: Roboto-Medium; ">
+                                                                                    {{profile.HealthFacility + ', ' + profile.Tehsil + ', ' + profile.District}}</span>
+                                                                            </p>
+                                                                        </div>
+                                                                        <div class="col-md-7">
+                                                                            <p class="m-0"
+                                                                                style="font-family: Roboto-Regular; font-weight: 100;">
+                                                                                <span
+                                                                                    style="font-family: Roboto-Medium; ">
+                                                                                    Designation:</span>
+                                                                                {{profile.Designation_Name}} -
+                                                                                {{profile.CurrentGradeBPS}}
+                                                                            </p>
+                                                                            <p class="m-0"
+                                                                                *ngIf="marker.showProfileViewId == 1 || marker.showProfileViewId == 2 || marker.showProfileViewId == 31"
+                                                                                style="font-family: Roboto-Regular; font-weight: 100;">
+                                                                                <span
+                                                                                    style="font-family: Roboto-Medium; ">
+                                                                                    Working Designation:</span>
+                                                                                {{profile.WDesignation_Name}}
+                                                                            </p>
+                                                                            <p class="m-0"
+                                                                                style="font-family: Roboto-Regular; font-weight: 100;"
+                                                                                *ngIf="marker.showProfileViewId != 1 && marker.showProfileViewId != 2 && marker.showProfileViewId != 31">
+                                                                                <span
+                                                                                    style="font-family: Roboto-Medium; ">
+                                                                                    Qualification:</span>
+                                                                                {{profile.AdditionalQualification}}
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </agm-info-window>
+                        </agm-marker>
+                        <agm-data-layer [geoJson]="geoJsonObject" (layerClick)="clicked($event)" [style]="styleFunc">
+                        </agm-data-layer>
+
+                    </agm-map>
+                </div>
+
+                <div class="animated fadeIn" *ngIf="!showMap">
+                    <table class="table-stats">
+                        <tr *ngFor="let dist of districts; let i = index;">
+                            <td>
+                                {{(i+1)}}.
+                            </td>
+                            <td [ngStyle]="{'background': dist.color}">
+                                <span (click)="dropdownValueChanged(dist, 'district')">{{dist.Name}}</span>
+                            </td>
+                            <td>
+                                <span *ngFor="let hf of dist.hfs" style="font-size: 13px;" [ngClass]="hf.badgeColor"
+                                    class="badge mr-1 cursor-p" (click)="selectMarker(hf, null)">{{hf.badgeName}}</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </th>
+            <th style="width: 31%;" valign="top">
+                <table class="table-stats">
+                    <tr>
+                        <th colSpan="3">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <p class="m-0">DHQ:&nbsp;
+                                        <button class="ml-1 btn btn-sm six-ane">6</button>
+                                        <button class="ml-1 btn btn-sm five-ane">5</button>
+                                        <button class="ml-1 btn btn-sm four-ane">4</button>
+                                        <button class="ml-1 btn btn-sm three-ane">3</button>
+                                        <button class="ml-1 btn btn-sm two-ane">2</button>
+                                        <button class="ml-1 btn btn-sm one-ane">1</button>
+                                        <button class="ml-1 btn btn-sm zero-ane">0</button>
+                                        <!-- <i class="fa fa-map-marker text-danger mx-2"></i>
+                                        <span (click)="navShow(-1)">{{districtred}}</span>
+                                        <i class="fa fa-map-marker text-warning mx-2"></i>
+                                        <span (click)="beginShow()">{{districtyellow}}</span>
+                                        <i class="fa fa-map-marker text-success mx-2"></i>
+                                        <span (click)="navShow(1)">{{districtgreen}}</span> -->
+                                    </p>
+                                    <p class="m-0">THQ:&nbsp;
+                                        <!--  <i class="fa fa-map-marker text-danger mx-2"></i>
+                                        <span (click)="navShow(-1)">{{red}}</span>
+                                        <i class="fa fa-map-marker text-warning mx-2"></i>
+                                        <span (click)="beginShow()">{{yellow}}</span>
+                                        <i class="fa fa-map-marker text-success mx-2"></i>
+                                        <span (click)="navShow(1)">{{green}}</span> -->
+                                        <button class="ml-1 btn btn-sm four-anet">4</button>
+                                        <button class="ml-1 btn btn-sm three-anet">3</button>
+                                        <button class="ml-1 btn btn-sm two-anet">2</button>
+                                        <button class="ml-1 btn btn-sm one-anet">1</button>
+                                        <button class="ml-1 btn btn-sm zero-anet">0</button>
+                                    </p>
+
+                                </div>
+                                <div class="col-md-3">
+
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="k-form-field">
+                                        <kendo-multiselect #designationsList [data]="designationsData"
+                                            [valuePrimitive]="true" (valueChange)="getData()"
+                                            [(ngModel)]="selectedDesignations" [filterable]="true" textField="Name"
+                                            valueField="Id" placeholder="Select Designation"
+                                            (filterChange)="handleFilter($event, 'designation')">
+                                        </kendo-multiselect>
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="k-form-field">
+                                        <kendo-multiselect #hfTypeList [data]="hfTypesData" [valuePrimitive]="true"
+                                            [(ngModel)]="hfTypeCodes" [filterable]="true" [textField]="'Name'"
+                                            [valueField]="'Code'" placeholder="Select Type of Health Facility"
+                                            (filterChange)="handleFilter($event, 'hftype')" (valueChange)="getData()">
+                                        </kendo-multiselect>
+                                    </label>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="k-form-field">
+                                        <kendo-dropdownlist [data]="districtsData"
+                                            [defaultItem]="{Name: 'Punjab', Code: currentUser?.HfmisCode}"
+                                            [textField]="'Name'" [valueField]="'Code'"
+                                            (filterChange)="handleFilter($event, 'district')"
+                                            (valueChange)="dropdownValueChanged($event, 'district')"
+                                            [value]="selectedFiltersModel.district"
+                                            [disabled]="districtsData.length == 1">
+                                        </kendo-dropdownlist>
+                                    </label>
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                </table>
+                <div class="side-panel-custom">
+                    <table class="table-stats">
+                        <tr>
+                            <th></th>
+                            <th>Sanctioned</th>
+                            <th>Filled</th>
+                            <th>Vacant</th>
+                        </tr>
+                        <tr class="cursor-p" *ngFor="let vp of vpMaps" [hidden]="hfmisCode == '0'">
+                            <td>
+                                <p class="m-0 cursor-p hover-success text-medium" (click)="selectMarker(vp, vp.Code)">
+                                    {{vp.Name?.replace('District Headquarter', 'DHQ').replace('Tehsil Headquarter', 'THQ')}}
+                                </p>
+                            </td>
+                            <td>
+                                <p class="m-0 text-center">
+                                    {{vp.TotalSanctioned}}
+                                </p>
+                            </td>
+                            <td style="padding:0px !important;">
+                                <!--  <p class="m-0 text-white text-center text-medium"
+                                    *ngIf="vp.Code.substring(12,15) == '011'"
+                                    [ngClass]="((vp.TotalWorking / vp.TotalSanctioned) * 100) <= 10 ? 'bg-danger' : ((vp.TotalWorking / vp.TotalSanctioned) * 100) > 10 && ((vp.TotalWorking / vp.TotalSanctioned) * 100) < 50 ? 'bg-warning' : 'bg-success'"
+                                    style="padding:4px !important;">
+                                    {{vp.TotalWorking ? vp.TotalWorking : 0}}
+                                </p>
+                                <p class="m-0 text-white text-center text-medium"
+                                    *ngIf="vp.Code.substring(12,15) == '012'"
+                                    [ngClass]="((vp.TotalWorking / vp.TotalSanctioned) * 100) <= 10 ? 'bg-danger' : ((vp.TotalWorking / vp.TotalSanctioned) * 100) > 10 && ((vp.TotalWorking / vp.TotalSanctioned) * 100) < 51 ? 'bg-warning' : 'bg-success'"
+                                    style="padding:4px !important;">
+                                    {{vp.TotalWorking ? vp.TotalWorking : 0}}
+                                </p> -->
+
+                                <p class="m-0 text-white text-center text-medium"
+                                    *ngIf="vp.Code.substring(12,15) == '011'" [ngClass]="vp.TotalWorking == 6 ? 'six-ane' : 
+                                vp.TotalWorking == 5 ? 'five-ane' : vp.TotalWorking == 4 ? 'four-ane' : vp.TotalWorking == 3 ? 'three-ane' : 
+                                vp.TotalWorking == 2 ? 'two-ane' : vp.TotalWorking == 1 ? 'one-ane' : vp.TotalWorking == 0 ? 'zero-ane' : 
+                                'zero-ane'" style="padding:4px !important;">
+                                    {{vp.TotalWorking ? vp.TotalWorking : 0}}
+                                </p>
+                                <p class="m-0 text-white text-center text-medium"
+                                    *ngIf="vp.Code.substring(12,15) == '012'" [ngClass]="vp.TotalWorking == 4 ? 'four-anet' : vp.TotalWorking == 3 ? 'three-anet' : 
+                                vp.TotalWorking == 2 ? 'two-anet' : vp.TotalWorking == 1 ? 'one-anet' : vp.TotalWorking == 0 ? 'zero-anet' : 
+                                'zero-anet'" style="padding:4px !important;">
+                                    {{vp.TotalWorking ? vp.TotalWorking : 0}}
+                                </p>
+
+                            </td>
+                            <td>
+                                <p class="m-0 text-center text-medium">
+                                    {{vp.Vacant}}
+                                </p>
+                            </td>
+                        </tr>
+                        <tr (click)="openWindow(0)" class="cursor-p">
+                            <th>
+                                <p class="m-0">
+                                    Consultant Anaesthetist
+                                </p>
+                            </th>
+                            <th>
+                                <p class="m-0 text-center">
+                                    {{vacancy.Sanctioned}}
+                                </p>
+                            </th>
+                            <th style="padding:0px !important;">
+                                <p class="m-0 text-center" style="padding:4px !important;">
+                                    {{vacancy.Filled}}
+                                </p>
+                            </th>
+                            <th>
+                                <p class="m-0 text-center">
+                                    {{vacancy.Vacant}}
+                                </p>
+                            </th>
+                        </tr>
+                        <tr (click)="openWindow(79)" class="cursor-p">
+                            <th>
+                                <p class="m-0">
+                                    {{vacancyTech.Name}}
+                                </p>
+                            </th>
+                            <th>
+                                <p class="m-0 text-center">
+                                    {{vacancyTech.Sanctioned}}
+                                </p>
+                            </th>
+                            <th style="padding:0px !important;">
+                                <p class="m-0 text-center" style="padding:4px !important;">
+                                    {{vacancyTech.Filled}}
+                                </p>
+                            </th>
+                            <th>
+                                <p class="m-0 text-center">
+                                    {{vacancyTech.Vacant}}
+                                </p>
+                            </th>
+                        </tr>
+
+                    </table>
+                </div>
+                <table class="table-stats">
+                    <!-- <tr>
+                        <th> </th>
+                        <th> Anaesthesia</th>
+                        <th> Training Completed</th>
+                        <th> Diploma</th>
+                        <th> Attached</th>
+                    </tr> -->
+                    <tr *ngIf="profilesData.attachedPersons?.length > 0">
+                        <td (click)="openWindow(1)">
+                            <p class="m-0">
+                                Attached Doctors
+                            </p>
+                        </td>
+                        <td (click)="openWindow(31)">
+                            <p class="m-0 text-center">
+                                {{profilesData.attachedPersons?.length}}
+                            </p>
+                        </td>
+
+                        <!-- 
+                        <td rowspan="2" (click)="openWindow(31)">
+                            <p class="m-0 text-center">
+                                {{profilesData.attachedPersons?.length}}
+                            </p>
+                        </td> -->
+                    </tr>
+                    <tr *ngIf="profilesData.CountMO > 0">
+                        <td (click)="openWindow(1)">
+                            <p class="m-0 text-medium">
+                                MO (Anaesthesia)
+                            </p>
+                        </td>
+                        <td (click)="openWindow(1)">
+                            <p class="m-0 text-medium text-center">
+                                {{profilesData.CountMO}}
+                            </p>
+                        </td>
+
+                        <!-- 
+                        <td rowspan="2" (click)="openWindow(31)">
+                            <p class="m-0 text-medium text-center">
+                                {{profilesData.attachedPersons?.length}}
+                            </p>
+                        </td> -->
+                    </tr>
+                    <tr *ngIf="profilesData.CountTrainingMO > 0">
+                        <td (click)="openWindow(1)">
+                            <p class="m-0 text-medium">
+                                MO (Training)
+                            </p>
+                        </td>
+                        <td (click)="openWindow(11)">
+                            <p class="m-0 text-medium text-center">
+                                {{profilesData.CountTrainingMO}}
+                            </p>
+                        </td>
+                    </tr>
+                    <tr *ngIf="profilesData.CountDiplomaMO > 0">
+                        <td (click)="openWindow(1)">
+                            <p class="m-0 text-medium">
+                                MO (Diploma)
+                            </p>
+                        </td>
+                        <td (click)="openWindow(12)">
+                            <p class="m-0 text-medium text-center">
+                                {{profilesData.CountDiplomaMO}}
+                            </p>
+                        </td>
+                        <!--   <td rowspan="2" (click)="openWindow(31)">
+                            <p class="m-0 text-medium text-center">
+                                {{profilesData.attachedPersons?.length}}
+                            </p>
+                        </td> -->
+                    </tr>
+                    <tr *ngIf="profilesData.CountWMO > 0">
+                        <td (click)="openWindow(2)">
+
+                            <p class="m-0 text-medium">
+                                WMO (Anaesthesia)
+                            </p>
+                        </td>
+                        <td (click)="openWindow(2)">
+
+                            <p class="m-0 text-medium text-center">
+                                {{profilesData.CountWMO}}
+                            </p>
+                        </td>
+                    </tr>
+                    <tr *ngIf="profilesData.CountTrainingWMO > 0">
+                        <td (click)="openWindow(2)">
+
+                            <p class="m-0 text-medium">
+                                WMO (Training)
+                            </p>
+                        </td>
+                        <td (click)="openWindow(21)">
+
+                            <p class="m-0 text-medium text-center">
+                                {{profilesData.CountTrainingWMO}}
+                            </p>
+                        </td>
+                    </tr>
+                    <tr *ngIf="profilesData.CountDiplomaWMO > 0">
+                        <td (click)="openWindow(2)">
+
+                            <p class="m-0 text-medium">
+                                WMO (Diploma)
+                            </p>
+                        </td>
+                        <td (click)="openWindow(22)">
+                            <p class="m-0 text-medium text-center">
+                                {{profilesData.CountDiplomaWMO}}
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+                <table class="table-stats animated fadeIn" *ngIf="surgeries">
+                    <tr>
+                        <td colspan="2">
+
+                            <p class="m-0">
+                                Surgeries
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p class="m-0 text-medium">
+                                Operations under General Anaesthesia
+                            </p>
+                        </td>
+                        <td>
+                            <p class="m-0 text-medium text-center">
+                                {{surgeries[0]['ga'] | number}}
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p class="m-0 text-medium">
+                                Operations under Spinal Anaesthesia
+                            </p>
+                        </td>
+                        <td>
+                            <p class="m-0 text-medium text-center">
+                                {{surgeries[0]['sa'] | number}}
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p class="m-0 text-medium">
+                                Operations under Local Anaesthesia
+                            </p>
+                        </td>
+                        <td>
+                            <p class="m-0 text-medium text-center">
+                                {{surgeries[0]['la'] | number}}
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p class="m-0 text-medium">
+                                Other Operations
+                            </p>
+                        </td>
+                        <td>
+                            <p class="m-0 text-medium text-center">
+                                {{surgeries[0]['other'] | number}}
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </th>
+        </tr>
+    </table>
+    <!-- <img [src]="'../../../../assets/img/' + 
+            (hfTypeCodes.length == 1 ? 
+            hfTypeCodes[0] == '011' ? 'distictsDHQr.jpg' : hfTypeCodes[0] == '012' ? 'distictsTHQr.jpg' : 'distictsDHQTHQr.jpg' : 'distictsDHQTHQr.jpg')"
+                usemap="#image-map">
+            <map name="image-map">
+                <area alt="037001" title="Attock" class="popable" coords="469,126,569,195" shape="rect">
+                <area alt="031002" title="Bahawalpur" class="popable" coords="307,954,476,1058" shape="rect">
+                <area alt="037004" title="Chakwal" class="popable" coords="472,234,604,307" shape="rect">
+                <area alt="038001" title="Bhakkar" class="popable" coords="392,534,317,424" shape="rect">
+                <area alt="033004" title="Chiniot" class="popable" coords="615,515,535,469" shape="rect">
+                <area alt="034004" title="Narowal" class="popable" coords="937,432,878,379" shape="rect">
+                <area alt="039003" title="Okara" class="popable" coords="762,690,656,646" shape="rect">
+                <area alt="039008" title="Pakpattan" class="popable" coords="680,756,606,711" shape="rect">
+                <area alt="031003" title="Rahim Yar Khan" class="popable" coords="275,1133,133,1029" shape="rect">
+                <area alt="032004" title="Rajanpur" class="popable" coords="183,986,97,836" shape="rect">
+                <area alt="037003" title="Rawalpindi" class="popable" coords="675,225,581,180" shape="rect">
+                <area alt="034002" title="Gujrat" class="popable" coords="720,287,803,336" shape="rect">
+                <area alt="037002" title="Jhelum" class="popable" coords="641,244,711,287" shape="rect">
+                <area alt="036006" title="Lodhran" class="popable" coords="370,834,440,873" shape="rect">
+                <area alt="039007" title="Sahiwal" class="popable" coords="608,716,541,682" shape="rect">
+                <area alt="033002" title="Jhang" class="popable" coords="512,603,432,557" shape="rect">
+                <area alt="032002" title="Layyah" class="popable" coords="410,648,265,578" shape="rect">
+                <area alt="033001" title="Faisalabad" class="popable" coords="675,585,576,540" shape="rect">
+                <area alt="038003" title="Mianwali" class="popable" coords="440,328,332,269" shape="rect">
+                <area alt="036001" title="Multan" class="popable" coords="373,817,338,760" shape="rect">
+                <area alt="032003" title="Muzaffargarh" class="popable" coords="312,852,279,684" shape="rect">
+                <area alt="035006" title="Nankana Sahib" class="popable" coords="754,569,716,519" shape="rect">
+                <area alt="035004" title="Sheikhupura" class="popable" coords="818,504,712,475" shape="rect">
+                <area alt="034003" title="Sialkot" class="popable" coords="884,380,803,354" shape="rect">
+                <area alt="033003" title="T.T Singh" class="popable" coords="543,671,503,597" shape="rect">
+                <area alt="036003" title="Vehari" class="popable" coords="554,807,475,764" shape="rect">
+                <area alt="034006" title="Mandi Bahuddin" class="popable" coords="718,361,648,317" shape="rect">
+                <area alt="038002" title="Khushab" class="popable" coords="523,366,432,326" shape="rect">
+                <area alt="038004" title="Sargodha" class="popable" coords="632,424,511,380" shape="rect">
+                <area alt="034005" title="Hafizabad" class="popable" coords="708,372,727,423,662,456,644,424"
+                    shape="poly">
+                <area alt="034001" title="Gujranwala" class="popable"
+                    coords="792,337,797,381,842,411,822,433,780,446,753,445,744,422,744,403,734,380,729,370"
+                    shape="poly">
+                <area alt="035002" title="Lahore" class="popable" coords="794,552,846,512" shape="rect">
+                <area alt="032001" title="Dera Ghazi Khan" class="popable" coords="137,719,251,679" shape="rect">
+                <area alt="036004" title="Khanewal" class="popable" coords="410,729,500,693" shape="rect">
+                <area alt="035001" title="Kasur" class="popable" coords="735,620,834,581" shape="rect">
+                <area alt="031001" title="Bahawalnagar" class="popable"
+                    coords="725,737,749,746,746,763,725,777,692,790,667,798,652,828,594,947,534,988,520,962,510,946,499,935,569,863,560,842,549,829,640,770,576,801"
+                    shape="poly">
+            </map> -->
+    <!--  <div class="k-i-loading" *ngIf="loadingMap"></div> -->
+    <!-- <div class="animated fadeIn" *ngIf="!loadingMap">
+                <div class="row" *ngIf="districts.length > 0">
+                    <div *ngFor="let dist of districts;let i = index;" (click)="dropdownValueChanged(dist, 'distict')"
+                        style="transition: 0.13s all ease-in-out;"
+                        [ngClass]="'col-md-3 ' + (i % 4 === 0 ? 'control-col-st' : i % 4 === 1 ? 'control-col' : i % 4 === 2 ? 'control-col' : i % 4 === 3 ? 'control-col-end' : '')">
+                        <div class="staff-statement-box">
+                            <span class="title">{{dist.Name ? dist.Name : ''}} <span
+                                    class="text-muted">({{dist.Count}})</span>
+                            </span>
+                            <i class="view-icon fa fa-arrow-circle-o-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+    <!--   </div>
+        <div class="col-md-4"> -->
+    <div class="mt-3">
+        <!--      <p id="distP" hidden></p>
+                <button id="asddd" hidden (click)="dropdownValueChanged('distP', 'distict')"></button> -->
+        <!-- <table class="">
+            <tr>
+                <th colSpan="3" style="text-align: left !important;">
+                    <i class="fa fa-square text-danger mx-2"></i>
+                    <span>0% - 10%</span>
+                    <i class="fa fa-square text-warning mx-2"></i>
+                    <span>11% - 49%</span>
+                    <i class="fa fa-square text-success mx-2"></i>
+                    <span>50% - 100%</span>
+                </th>
+            </tr>
+            <tr>
+                <th colSpan="3">
+                    <label class="k-form-field">
+                        <kendo-dropdownlist [data]="districtsData"
+                            [defaultItem]="{Name: 'All Districts', Code: currentUser?.HfmisCode}" [textField]="'Name'"
+                            [valueField]="'Code'" (filterChange)="handleFilter($event, 'district')"
+                            (valueChange)="dropdownValueChanged($event, 'district')"
+                            [value]="selectedFiltersModel.district" [disabled]="districtsData.length == 1">
+                        </kendo-dropdownlist>
+                    </label>
+                    <label class="k-form-field">
+                        <kendo-multiselect #designationsList [data]="designationsData" [valuePrimitive]="true"
+                            (valueChange)="getData()" [(ngModel)]="selectedDesignations" [filterable]="true"
+                            textField="Name" valueField="Id" placeholder="Select Designation"
+                            (filterChange)="handleFilter($event, 'designation')">
+                        </kendo-multiselect>
+                    </label>
+                    <label class="k-form-field">
+                        <kendo-multiselect #hfTypeList [data]="hfTypesData" [valuePrimitive]="true"
+                            [(ngModel)]="hfTypeCodes" [filterable]="true" [textField]="'Name'" [valueField]="'Code'"
+                            placeholder="Select Type of Health Facility" (filterChange)="handleFilter($event, 'hftype')"
+                            (valueChange)="getData()">
+                        </kendo-multiselect>
+                    </label>
+                </th>
+            </tr>
+        </table>
+        <table class="">
+            <tr>
+                <th>Facility</th>
+                <th>Sanctioned</th>
+                <th>Filled</th>
+                <th>Vacant</th>
+            </tr>
+            <tr class="cursor-p" *ngFor="let vp of vpMaps" [hidden]="hfmisCode == '0'">
+                <td>
+                    <p class="m-0">
+                        {{vp.Name?.replace('District Headquarter', 'DHQ').replace('Tehsil Headquarter', 'THQ')}}
+                    </p>
+                </td>
+                <td>
+                    <p class="m-0 text-center">
+                        {{vp.TotalSanctioned}}
+                    </p>
+                </td>
+                <td style="padding:0px !important;">
+                    <p class="m-0 text-white text-center" *ngIf="vp.Code.substring(12,15) == '011'"
+                        [ngClass]="((vp.TotalWorking / vp.TotalSanctioned) * 100) <= 10 ? 'bg-danger' : ((vp.TotalWorking / vp.TotalSanctioned) * 100) > 10 && ((vp.TotalWorking / vp.TotalSanctioned) * 100) < 50 ? 'bg-warning' : 'bg-success'"
+                        style="padding:4px !important;">
+                        {{vp.TotalWorking ? vp.TotalWorking : 0}}
+                    </p>
+                    <p class="m-0 text-white text-center" *ngIf="vp.Code.substring(12,15) == '012'"
+                        [ngClass]="((vp.TotalWorking / vp.TotalSanctioned) * 100) <= 10 ? 'bg-danger' : ((vp.TotalWorking / vp.TotalSanctioned) * 100) > 10 && ((vp.TotalWorking / vp.TotalSanctioned) * 100) <= 50 ? 'bg-warning' : 'bg-success'"
+                        style="padding:4px !important;">
+                        {{vp.TotalWorking ? vp.TotalWorking : 0}}
+                    </p>
+                </td>
+                <td>
+                    <p class="m-0 text-center">
+                        {{vp.Vacant}}
+                    </p>
+                </td>
+            </tr>
+            <tr (click)="openWindow(0)" class="cursor-p">
+                <th>
+                    <p class="m-0 text-center">
+                        Total
+                    </p>
+                </th>
+                <th>
+                    <p class="m-0 text-center">
+                        {{vacancy.Sanctioned}}
+                    </p>
+                </th>
+                <th style="padding:0px !important;">
+                    <p class="m-0 text-center"
+                        [ngClass]="((vacancy.Filled / vacancy.Sanctioned) * 100) <= 10 ? 'bg-danger' : ((vacancy.Filled / vacancy.Sanctioned) * 100) > 10 && ((vacancy.Filled / vacancy.Sanctioned) * 100) < 50 ? 'bg-warning' : 'bg-success'"
+                        style="padding:4px !important;">
+                        {{vacancy.Filled}}
+                    </p>
+                </th>
+                <th>
+                    <p class="m-0 text-center">
+                        {{vacancy.Vacant}}
+                    </p>
+                </th>
+            </tr>
+
+        </table>
+        <table class="">
+            <tr>
+                <th> </th>
+                <th> Anaesthesia</th>
+                <th> Training Completed</th>
+                <th> Diploma</th>
+                <th> Attached</th>
+            </tr>
+            <tr>
+                <td (click)="openWindow(1)">
+                    <p class="m-0">
+                        Medical Officer
+                    </p>
+                </td>
+                <td (click)="openWindow(1)">
+                    <p class="m-0 text-center">
+                        {{profilesData.CountMO}}
+                    </p>
+                </td>
+                <td (click)="openWindow(11)">
+                    <p class="m-0 text-center">
+                        {{profilesData.CountTrainingMO}}
+                    </p>
+                </td>
+                <td (click)="openWindow(12)">
+                    <p class="m-0 text-center">
+                        {{profilesData.CountDiplomaMO}}
+                    </p>
+                </td>
+                <td rowspan="2" (click)="openWindow(31)">
+                    <p class="m-0 text-center">
+                        {{profilesData.attachedPersons?.length}}
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td (click)="openWindow(2)">
+
+                    <p class="m-0">
+                        Women Medical Officer
+                    </p>
+                </td>
+                <td (click)="openWindow(2)">
+
+                    <p class="m-0 text-center">
+                        {{profilesData.CountWMO}}
+                    </p>
+                </td>
+                <td (click)="openWindow(21)">
+
+                    <p class="m-0 text-center">
+                        {{profilesData.CountTrainingWMO}}
+                    </p>
+                </td>
+                <td (click)="openWindow(22)">
+                    <p class="m-0 text-center">
+                        {{profilesData.CountDiplomaWMO}}
+                    </p>
+                </td>
+            </tr>
+        </table> -->
+        <!--   </div>
+        </div>
+    </div> -->
+    </div>
+    <kendo-dialog [title]="selectedFiltersModel.district?.Name" *ngIf="profilesWindow.dialogOpened"
+        (close)="closeWindow()" [minWidth]="'450'" [height]="'685'" [width]="'1350'">
+        <div *ngIf="!loadingVpMaster">
+            <div class="row">
+                <div class="col-md-2 col-sm-12 control-col-st">
+                    <label class="k-form-field">
+                        <span class="p-strong">Designation</span>
+                        <kendo-dropdownlist disabled [value]="'Consultant Anaesthetist'">
+                        </kendo-dropdownlist>
+                    </label>
+                </div>
+                <div class="col-md-2 col-sm-12 control-col">
+                    <label class="k-form-field">
+                        <span class="p-strong" (click)="viewAttachedPersons = !viewAttachedPersons">Sanctioned</span>
+                        <input type="number" min="0" disabled [value]="vacancy.Sanctioned" kendoTextBox>
+                    </label>
+                </div>
+                <div class="col-md-2 col-sm-12 control-col">
+                    <label class="k-form-field">
+                        <span class="p-strong">Filled</span>
+                        <input type="number" min="0" disabled [value]="vacancy.Filled" kendoTextBox>
+                    </label>
+                </div>
+                <div class="col-md-2 col-sm-12 control-col-end">
+                    <label class="k-form-field">
+                        <span class="p-strong">Vacant</span>
+                        <input type="number" min="0" disabled [value]="vacancy.Vacant" kendoTextBox>
+                    </label>
+                </div>
+                <div class="col-md-2 col-sm-12 control-col">
+                    <label class="k-form-field">
+                        <span class="p-strong">Adhoc</span>
+                        <input type="number" min="0" disabled [value]="vacancy.Adhoc" kendoTextBox>
+                    </label>
+                </div>
+                <div class="col-md-2 col-sm-12 control-col-end">
+                    <label class="k-form-field">
+                        <span class="p-strong">Regular</span>
+                        <input type="number" min="0" disabled [value]="vacancy.Regular" kendoTextBox>
+                    </label>
+                </div>
+            </div>
+            <!--  <div class="animated fadeIn"
+            *ngIf="!showProfile && vpMaster.HF_Id > 0 && vpMaster.TotalSanctioned > 0 && vpMaster.Desg_Id > 0 && vpMaster.PostType_Id > 0">
+            <hr>
+            <div class="row">
+                <div class="col-md-3 col-sm-12" *ngFor="let employementMode of employementModes; let i = index;"
+                    [ngClass]="i % 4 === 0 ? 'control-col-st' : i % 4 === 1 || i % 4 === 2 ? 'control-col' : i % 4 === 3 ? 'control-col-end' : ''">
+                    <label class="k-form-field">
+                        <span>{{employementMode.Name}}</span>
+                        <div *ngIf="employementMode.profiles > 0">
+                            <input style="width:48% !important; margin-right:2px !important;" type="number" min="0"
+                                [(ngModel)]="employementMode.totalWorking"
+                                [ngClass]="(filledExceed && (employementMode.totalWorking && employementMode.totalWorking > 0)) || employementMode.totalWorking < 0 ? 'ng-invalid-only' : ''"
+                                (input)="searchEvent.next({ event: $event, filter: 'employementMode', Id: employementMode.Id})"
+                                kendoTextBox>
+                            <button kendoButton style="width:48% !important; margin-left:2px !important;"
+                                (click)="showProfileClicked(employementMode.Id)" [primary]="true"
+                                [look]="'outline'">{{employementMode.profiles}}
+                                Profile{{employementMode.profiles > 1 ? 's' : ''}}</button>
+                        </div>
+                        <input *ngIf="!employementMode.profiles || employementMode.profiles == 0" type="number" min="0"
+                            [(ngModel)]="employementMode.totalWorking"
+                            [ngClass]="(filledExceed && (employementMode.totalWorking && employementMode.totalWorking > 0)) || employementMode.totalWorking < 0 ? 'ng-invalid-only' : ''"
+                            (input)="searchEvent.next({ event: $event, filter: 'employementMode', Id: employementMode.Id})"
+                            kendoTextBox>
+                    </label>
+                </div>
+            </div>
+            <hr>
+            <div class="animated fadeIn mt-2" *ngIf="vpMaster.TotalWorking && filledExceed"
+                class="text-danger animated fadeIn">
+                *
+                cannot fill
+                {{vpMaster.TotalWorking + ' '
+        + vpMaster.DsgName + ' against ' + vpMaster.TotalSanctioned + ' sanctioned posts'}}</div>
+            <p style="margin: 0;width:100%;cursor:pointer;text-align: right;" *ngIf="vpMaster.Modified_Date">
+                Modified at <i>{{vpMaster.Modified_Date
+        | date: 'dd/MM/yy, h:mm a'}}</i></p>
+            <p style="margin: 0;width:100%;cursor:pointer;text-align: right;" *ngIf="!vpMaster.Modified_Date">Created at {{vpMaster.Created_Date
+        | date: 'dd/MM/yy, h:mm a'}}</p>
+        </div> -->
+            <div class="animated fadeIn">
+                <div class="animated fadeIn"
+                    *ngIf="showProfileViewId == 0 && profilesData.ConsultantAnaesthetists?.length > 0">
+                    <kendo-grid [data]="profilesData.ConsultantAnaesthetists" [scrollable]="true"
+                        style="height: 508px; width: 100%;">
+                        <kendo-grid-column width="5" field="asd" title="Sr." [headerClass]="'grid-header-custom'"
+                            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                {{(rowIndex + 1)}}
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column width="12" field="EmployeeName" title="Photo"
+                            [headerClass]="'grid-header-custom'"
+                            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <img class="pic-shadow" width="75" height="75"
+                                    [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + dataItem.CNIC + '_23.jpg'"
+                                    onError="this.src='../../../../assets/img/notfound.png'" alt="">
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column width="87" field="EmployeeName" title="Name"
+                            [headerClass]="'grid-header-custom'"
+                            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <div class="row">
+                                    <div class="col-md-5 cursor-p" (click)="openInNewTab('profile/' + dataItem.CNIC)">
+                                        <h5 class="m-0 mb-1" style="font-family: Roboto-Medium; font-weight: 100;">
+                                            {{dataItem.EmployeeName}}
+                                            <small class="pull-right">
+                                                {{dataItem.StatusName}} - {{dataItem.EmpMode_Name}}</small></h5>
+                                        <!--   <p class="m-0" style="font-family: Roboto-Regular; font-weight: 100;">
+                                        <span style="font-family: Roboto-Medium; "> CNIC:</span>
+                                        {{dashifyCNIC(dataItem.CNIC)}}</p> -->
+                                        <p class="m-0" style="font-family: Roboto-Regular; font-weight: 100;">
+                                            {{dataItem.Designation_Name}}</p>
+                                        <p class="m-0" style="font-family: Roboto-Regular; font-weight: 100;">
+                                            <span style="font-family: Roboto-Medium; ">
+                                                {{dataItem.HealthFacility + ', ' + dataItem.Tehsil + ', ' + dataItem.District}}</span>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-7" *ngIf="viewAttachedPersons">
+                                        <div class="d-flex" style="width: 100%;overflow-x: auto;">
+                                            <span *ngFor="let item of getTeam(dataItem.Id)">
+                                                <img class="pic-shadow m-1 cursor-p" width="50" height="50"
+                                                    (click)="openInNewTab('profile/' + item.CNIC)"
+                                                    [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + item.CNIC + '_23.jpg'"
+                                                    onError="this.src='../../../../assets/img/notfound.png'"
+                                                    [title]="item.EmployeeName + ' - ' + item.Designation_Name">
+                                                <!--  <p class="m-0 mb-1"
+                                                            style="font-family: Roboto-Medium; font-weight: 100;">
+                                                            {{item.EmployeeName}}
+                                                        </p>
+                                                        <p class="m-0"
+                                                            style="font-family: Roboto-Regular; font-weight: 100;">
+                                                            <span style="font-family: Roboto-Medium; "> CNIC:</span>
+                                                            {{dashifyCNIC(item.CNIC)}}</p>
+                                                        <p class="m-0"
+                                                            style="font-family: Roboto-Regular; font-weight: 100;">
+                                                            <span style="font-family: Roboto-Medium; ">
+                                                                Designation:</span>
+                                                            {{item.DesignationName}}</p> -->
+                                            </span>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+                            </ng-template>
+                        </kendo-grid-column>
+                    </kendo-grid>
+                </div>
+                <div class="animated fadeIn" *ngIf="showProfileViewId != 0 && profilesData">
+                    <kendo-grid [data]="showProfileViewId == 1 ? profilesData.MO : 
+                showProfileViewId == 11 ?  profilesData.TrainingMO : 
+                showProfileViewId == 12 ?  profilesData.DiplomaMO :
+                showProfileViewId == 2 ? profilesData.WMO : 
+                showProfileViewId == 21 ?  profilesData.TrainingWMO : 
+                showProfileViewId == 31 ?  profilesData.attachedPersons : 
+                showProfileViewId == 22 ?  
+                profilesData.DiplomaWMO : []
+                " [scrollable]="true" style="height: 508px; width: 100%;">
+                        <kendo-grid-column width="5" field="asd" title="Sr." [headerClass]="'grid-header-custom'"
+                            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                {{(rowIndex + 1)}}
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column width="12" field="EmployeeName" title="Photo"
+                            [headerClass]="'grid-header-custom'"
+                            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <img class="pic-shadow" width="75" height="75"
+                                    [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + dataItem.CNIC + '_23.jpg'"
+                                    onError="this.src='../../../../assets/img/notfound.png'" alt="">
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column width="87" field="EmployeeName" title="Name"
+                            [headerClass]="'grid-header-custom'"
+                            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <div class="row" style="cursor: pointer;"
+                                    (click)="openInNewTab('profile/' + dataItem.CNIC)">
+                                    <div class="col-md-12">
+                                        <div class="grid-list-item">
+                                            <h5 class="m-0 mb-1" style="font-family: Roboto-Medium; font-weight: 100;">
+                                                {{dataItem.EmployeeName}}
+                                                <span class="pull-right">
+                                                    {{dataItem.StatusName}} - {{dataItem.EmpMode_Name}}</span></h5>
+                                            <div class="row">
+                                                <div class="col-md-5">
+                                                    <p class="m-0"
+                                                        style="font-family: Roboto-Regular; font-weight: 100;">
+                                                        {{dataItem.Designation_Name}}</p>
+                                                    <p class="m-0"
+                                                        style="font-family: Roboto-Regular; font-weight: 100;"
+                                                        *ngIf="showProfileViewId != 31">
+                                                        <span style="font-family: Roboto-Medium; ">
+                                                            {{dataItem.HealthFacility + ', ' + dataItem.Tehsil + ', ' + dataItem.District}}</span>
+                                                    </p>
+                                                </div>
+                                                <div class="col-md-7">
+                                                    <p class="m-0"
+                                                        style="font-family: Roboto-Regular; font-weight: 100;">
+                                                        <span style="font-family: Roboto-Medium; ">
+                                                            Designation:</span>
+                                                        {{dataItem.Designation_Name}} - {{dataItem.CurrentGradeBPS}}
+                                                    </p>
+                                                    <p class="m-0"
+                                                        *ngIf="showProfileViewId == 1 || showProfileViewId == 2 || showProfileViewId == 31"
+                                                        style="font-family: Roboto-Regular; font-weight: 100;">
+                                                        <span style="font-family: Roboto-Medium; ">
+                                                            Working Designation:</span>
+                                                        {{dataItem.WDesignation_Name}}
+                                                    </p>
+                                                    <p class="m-0"
+                                                        style="font-family: Roboto-Regular; font-weight: 100;"
+                                                        *ngIf="showProfileViewId != 1 && showProfileViewId != 2 && showProfileViewId != 31">
+                                                        <span style="font-family: Roboto-Medium; ">
+                                                            Qualification:</span>
+                                                        {{dataItem.AdditionalQualification}}
+                                                    </p>
+                                                </div>
+                                                <!--  <div class="col-md-2">
+                                                <p class="m-0" style="font-family: Roboto-Regular; font-weight: 100;">
+                                                    <span style="font-family: Roboto-Medium; "> Status:</span>
+                                                    {{dataItem.StatusName}}</p>
+                                                <p class="m-0" style="font-family: Roboto-Regular; font-weight: 100;">
+                                                    <span style="font-family: Roboto-Medium; ">
+                                                        Cadre:</span> {{dataItem.Cadre_Name}}
+                                                </p>
+                                            </div> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </kendo-grid-column>
+                    </kendo-grid>
+                </div>
+            </div>
+        </div>
+    </kendo-dialog>
+</div>

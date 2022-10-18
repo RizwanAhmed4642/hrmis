@@ -1,0 +1,66 @@
+p.heading {
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+p.normalPara {
+    margin-left: 5px;
+    font-family: sans-serif, Arial, Verdana, "Trebuchet MS";
+    font-weight: bold;
+}
+
+p.normalPara u {
+    font-weight: 100 !important;
+}
+
+p.normalPara span.left {
+    float: left;
+}
+
+p.normalPara span.right {
+    float: right;
+}
+
+.candidate-photo {
+    width: 150px;
+    height: 175px;
+}
+
+.candidate-photo img {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #000000;
+}
+
+table.info {
+    font-family: sans-serif, Arial, Verdana, "Trebuchet MS";
+    width: 100%;
+}
+
+table.info td {
+    border: none;
+}
+
+table.info th {
+    border: none;
+}
+
+table.doc {
+    font-family: sans-serif, Arial, Verdana, "Trebuchet MS";
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.doc td {
+    border: 1px solid #000000;
+    text-align: center;
+    padding: 8px;
+}
+
+table.doc th {
+    border: 1px solid #000000;
+    text-align: center;
+    padding: 8px;
+    background-color: rgb(254, 217, 102);
+}

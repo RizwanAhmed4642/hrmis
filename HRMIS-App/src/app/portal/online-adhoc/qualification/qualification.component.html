@@ -1,0 +1,215 @@
+<div class="animated fadeIn" *ngIf="2 + 2 == 4">
+  <p class="p-strong" style="text-align:center">
+    Portal is closed
+  </p>
+</div>
+
+<div class="animated fadeIn">
+  <div class="row mb-2">
+    <div class="col-md-2 control-col-st">
+      <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/adhoc/apply">1 - <i
+          class="fa fa-graduation-cap"></i>
+        Select Post</button>
+    </div>
+    <div class="col-md-2 control-col">
+      <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/adhoc/profile">2 - <i
+          class="fa fa-user"></i>
+        Profile</button>
+    </div>
+    <div class="col-md-2 control-col">
+      <button kendoButton primary="true" class="btn-block" routerLink="/adhoc/qualification">3 - <i
+          class="fa fa-file"></i>
+        Qualification</button>
+    </div>
+    <div class="col-md-2 control-col">
+      <button kendoButton primary="true" look="outline" class="btn-block" [disabled]="applicant.Status_Id < 6"
+        routerLink="/adhoc/experience">4 - <i class="fa fa-medkit"></i>
+        Experience</button>
+    </div>
+    <div class="col-md-2 control-col">
+      <button kendoButton primary="true" look="outline" class="btn-block" [disabled]="applicant.Status_Id < 6"
+        routerLink="/adhoc/preferences">5 - <i class="fa fa-building-o"></i>
+        Preferences</button>
+    </div>
+    <div class="col-md-2 control-col-end">
+      <button kendoButton primary="true" look="outline" class="btn-block" [disabled]="applicant.Status_Id < 6"
+        routerLink="/adhoc/experience">6 - <i class="fa fa-print"></i>
+        Finalize & Print!</button>
+    </div>
+  </div>
+</div>
+<div class="row animated fadeIn" *ngIf="documentMissing">
+  <div class="col-md-8 offset-md-2 text-center">
+    <h2 class="text-danger mb-2 mt-4">Required documents are missing in profile</h2>
+    <button kendoButton primary="true" class="btn-lg" routerLink="/adhoc/profile" look="outline"><i
+        class="fa fa-arrow-left"></i>&nbsp;Go
+      back to
+      Profile</button>
+  </div>
+</div>
+<div class="row animated fadeIn" *ngIf="!documentMissing">
+  <div class="col-md-6">
+    <p class="font-2xl m-0">
+      {{urdu.infoeng}}
+    </p>
+  </div>
+  <div class="col-md-6">
+    <p class="urdu-text font-3xl m-0 p-strong text-center">
+      {{urdu.info}}
+    </p>
+  </div>
+</div>
+<div *ngIf="!documentMissing">
+  <hr>
+  <div *ngIf="addNew" class="row animated fadeIn p-2" style="background: #e9e9e9;color: black;border-radius: 9px;">
+    <div class="col-md-4 control-col-st">
+      <label class="k-form-field">
+        <span>Degree / Certificate <span class="text-danger">*</span></span>
+        <kendo-dropdownlist [data]="dropDowns.degrees" [textField]="'DegreeName'" [valueField]="'Id'" required
+          (valueChange)="dropdownValueChanged($event, 'degree')" (filterChange)="handleFilter($event, 'degree')"
+          [filterable]="true" [value]="dropDowns.selectedFiltersModel.degree"
+          [defaultItem]="dropDowns.defultFiltersModel.degree">
+          <ng-template kendoDropDownListItemTemplate let-dataItem>
+            <p class="m-0"><span>{{ dataItem.DegreeName }}</span>
+              <span *ngIf="dataItem.required" class="text-danger">
+                *
+                <span *ngIf="dataItem.text == 'MCPS'">
+                  &nbsp;-&nbsp;
+                  <small>{{dataItem.text}}</small></span>
+              </span>
+            </p>
+          </ng-template>
+        </kendo-dropdownlist>
+      </label>
+    </div>
+    <div class="col-md-4 control-col-end">
+      <label class="k-form-field">
+        <span>Institute / University / Board&nbsp;<span class="text-danger">*</span></span>
+        <input kendoTextBox type="text" [(ngModel)]="serviceHistory.Institute" />
+      </label>
+    </div>
+    <div class="col-md-2 control-col-st">
+      <label class="k-form-field">
+        Degree From
+      </label>
+
+      <input type="radio" value="Pakistan" id="Pakistan" [(ngModel)]="serviceHistory.DegreeType"
+        (change)="degreeTypeChanged()" kendoRadioButton />
+      <label class="k-label ml-2" for="Pakistan">Pakistan</label>
+    </div>
+    <div class="col-md-2 control-col-st">
+      <label class="k-form-field">
+        &nbsp;
+      </label>
+      <input type="radio" value="Foreign" id="Foreign" [(ngModel)]="serviceHistory.DegreeType"
+        (change)="degreeTypeChanged()" kendoRadioButton />
+      <label class="k-label ml-2" for="Foreign">Foreign Country</label>
+    </div>
+    <div class="col-md-2 control-col-st">
+      <label class="k-form-field">
+        <span>Total Marks<span class="animated fadeIn"
+            *ngIf="serviceHistory.DegreeType == 'Foreign'">/CGPA</span>&nbsp;<span class="text-danger">*</span></span>
+        <input kendoTextBox type="text" [(ngModel)]="serviceHistory.TotalMarks"
+          [ngClass]="+serviceHistory.TotalMarks < +serviceHistory.ObtainedMarks ? 'ng-invalid' : ''" />
+      </label>
+    </div>
+    <div class="col-md-2 control-col">
+      <label class="k-form-field">
+        <span>Obtained Marks<span class="animated fadeIn"
+            *ngIf="serviceHistory.DegreeType == 'Foreign'">/CGPA</span>&nbsp;<span class="text-danger">*</span></span>
+        <input kendoTextBox type="text" [(ngModel)]="serviceHistory.ObtainedMarks"
+          [ngClass]="+serviceHistory.TotalMarks < +serviceHistory.ObtainedMarks ? 'ng-invalid' : ''" />
+      </label>
+    </div>
+    <div class="col-md-2 control-col-st animated fadeIn" *ngIf="serviceHistory.Required_Degree_Id == 124">
+      <label class="k-form-field">
+        <span>Health Facility&nbsp;<span class="text-danger">*</span></span>
+        <input kendoTextBox type="text" [(ngModel)]="serviceHistory.HealthFacility" />
+      </label>
+    </div>
+    <div class="col-md-2 control-col-st animated fadeIn" *ngIf="serviceHistory.Required_Degree_Id == 124">
+      <label class="k-form-field">
+        <span>Experience From&nbsp;<span class="text-danger">*</span></span>
+        <kendo-datepicker [format]="'dd/MM/yyyy'" [(ngModel)]="serviceHistory.ExpFrom"></kendo-datepicker>
+      </label>
+    </div>
+    <div class="col-md-2 control-col animated fadeIn" *ngIf="serviceHistory.Required_Degree_Id == 124">
+      <label class="k-form-field">
+        <span>Experience To&nbsp;<span class="text-danger">*</span></span>
+        <kendo-datepicker [format]="'dd/MM/yyyy'" [(ngModel)]="serviceHistory.ExpTo"></kendo-datepicker>
+      </label>
+    </div>
+    <div class="col-md-2 control-col">
+      <label class="k-form-field">
+        <span>Passing Year&nbsp;<span class="text-danger">*</span></span>
+        <kendo-datepicker [format]="'yyyy'" [bottomView]="'year'" [(ngModel)]="serviceHistory.PassingYear">
+        </kendo-datepicker>
+      </label>
+    </div>
+    <div class="col-md-4 control-col">
+      <label class="k-form-field">
+        <span>{{photoFile.length == 0 ? 'Document' : photoFile[0].name}}</span>&nbsp;<small class="text-muted">(only
+          .jpg, .pdf of maximum 5mb)</small>
+        <input type="file" accept="image/jpg, image/jpeg, image/png, application/pdf" (change)="readUrl($event, 'pic')">
+      </label>
+    </div>
+    <div class="col-md-2 control-col-st">
+      <label class="k-form-field mt-1">
+        <button kendoButton primary="true" [ladda]="saving" data-style="zoom-in"
+          [disabled]="!serviceHistory.PassingYear ||  !serviceHistory.ObtainedMarks || !serviceHistory.TotalMarks
+                 || !serviceHistory.Institute || !serviceHistory.QualificationTypeId || !serviceHistory.Required_Degree_Id || photoFile.length == 0" (click)="submitServiceHistory()"
+          class="btn-align-v btn-block">Save</button>
+      </label>
+    </div>
+  </div>
+  <hr *ngIf="addNew">
+
+  <kendo-grid [data]="qualifications" *ngIf="!loading">
+    <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-custom'"
+      [class]="{ 'grid-cell-custom': true }">
+      <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+        <p class="m-0">{{(rowIndex + 1)}}.
+        </p>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Name" [title]="'Institute / University'" width="20
+    " [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+      <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+        <img width="50px"
+          [src]="dataItem.UploadPath && dataItem.UploadPath.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/Uploads/AdhocApplicants/Qualification/' + dataItem.UploadPath"
+          (click)="openInNewTab('/' + dataItem.UploadPath)" draggable="false" alt="">
+        <p class="m-0">{{dataItem.Institute}}
+        </p>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Qualification" [title]="'Qualification'" width="55
+    " [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+      <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+        <p class="m-0">{{dataItem.DegreeName}}</p>
+        <p class="m-0" *ngIf="dataItem.Required_Degree_Id != 121">Marks:
+          {{dataItem.ObtainedMarks}}/{{dataItem.TotalMarks}}</p>
+        <p class="m-0">Passing Year: {{dataItem.PassingYear | date:'yyyy'}}</p>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column *ngIf="2 + 2 == 4" field="References" [title]="'Action'" width="20"
+      [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+      <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+        <button class="btn btn-sm btn-danger animated fadeIn" (click)="removeApplicantQualification(dataItem)"
+          [ladda]="dataItem.removing" data-style="zoom-in">Remove</button>
+      </ng-template>
+    </kendo-grid-column>
+  </kendo-grid>
+</div>
+<div class="animated fadeIn" *ngIf="!documentMissing">
+  <hr>
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <button style="margin: 0 auto;" routerLink="/adhoc/experience"
+        [disabled]="qualifications.length == 0 || !requiredDegreesAdded" class="btn-block btn-lg" kendoButton
+        primary="true" look="outline">Proceed</button>
+    </div>
+    <div class="col-md-3 control-col-end">
+      <button type="button" class="btn btn-secondary btn-block btn-lg" routerLink="/adhoc/account">Logout</button>
+    </div>
+  </div>
+</div>

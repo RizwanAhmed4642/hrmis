@@ -1,0 +1,1036 @@
+<div class="animated fadeIn">
+  <div class="text-center p-2" style="background: #46a23f;color:white;height: 64px;">
+    <img src="../../../assets/img/brand/logo-punjab.png" alt="" style="float:left;">
+    <h1 class="p-strong animated fadeIn text-center" style="background: transparent !important;">
+      PUCs Pendency Status Report <span *ngIf="rangeDept.start"> -
+        <small *ngIf="rangeDept.start" class="animated fadeIn">{{rangeDept.start | date:'dd/MM/yyyy'}} - {{rangeDept.end |
+           date:'dd/MM/yyyy'}}</small></span>
+      <span class="pull-right">
+        <kendo-daterange>
+          <label hidden>
+            <span class="label">Start</span>
+            <kendo-dateinput kendoDateRangeStartInput [(value)]="rangeDept.start"></kendo-dateinput>
+          </label>
+          <label hidden>
+            <span class="label">End</span>
+            <kendo-dateinput kendoDateRangeEndInput [(value)]="rangeDept.end"></kendo-dateinput>
+          </label>
+          <button #anchor class="btn btn-secondary btn-block" (click)="popup.toggle()" kendoButton>
+            <i class="fa fa-calendar"></i>&nbsp;Calendar
+          </button>
+          <kendo-daterange-popup id="popupcal" #popup [anchor]="anchor">
+            <ng-template kendoDateRangePopupTemplate>
+              <div class="pt-2 pb-2 pl-4 pr-4">
+                <span *ngIf="rangeDept.start"><strong class="p-strong">Start
+                    Date:</strong>&nbsp;<u>{{rangeDept.start | date:'d, MMMM - yyyy'}}</u>&nbsp;</span>
+                <span *ngIf="rangeDept.end">&nbsp;<strong class="p-strong">End
+                    Date:</strong>&nbsp;<u>{{rangeDept.end | date:'d, MMMM - yyyy'}}</u></span>
+                &nbsp; <button kendoButton class="animated fadeIn" *ngIf="rangeDept.start" [ladda]="kGrid.loading"
+                  data-style="zoom-in" (click)="getDepartmentReport()" [primary]="true">APPLY
+                  RANGE</button>
+              </div>
+              <kendo-multiviewcalendar kendoDateRangeSelection>
+              </kendo-multiviewcalendar>
+            </ng-template>
+          </kendo-daterange-popup>
+        </kendo-daterange>
+      </span>
+    </h1>
+    <!--  <h4 (click)="showFilters = !showFilters" class="animated fadeIn text-center"
+      style="background: transparent !important;">
+      <i>Pendency Status Report</i> <span *ngIf="rangeDept.start"> -
+        <small *ngIf="rangeDept.start" class="animated fadeIn">{{rangeDept.start | date:'dd/MM/yyyy'}} - {{rangeDept.end |
+           date:'dd/MM/yyyy'}}</small></span>
+    </h4> -->
+
+  </div>
+  <div class="k-i-loading" *ngIf="kGrid.loading && !searchQuery"></div>
+  <div class="row p-0 m-0">
+    <!-- <div class="col-md-3 h1 mt-1 p-strong" style="font-size:1.8vw !important;line-height: 2.2;">
+      Total Pendency ({{(secretary?.asadmn?.NoProcessInitiated ? secretary?.asadmn?.NoProcessInitiated : 0) + (secretary?.asadmn?.UnderProcess ? secretary?.asadmn?.UnderProcess : 0)
+        + (secretary?.dsadmin?.NoProcessInitiated ? secretary?.dsadmin?.NoProcessInitiated : 0) + (secretary?.dsadmin?.UnderProcess ? secretary?.dsadmin?.UnderProcess : 0)
+        + (secretary?.soahpi?.NoProcessInitiated ? secretary?.soahpi?.NoProcessInitiated : 0) + (secretary?.soahpi?.UnderProcess ? secretary?.soahpi?.UnderProcess : 0)
+        + (secretary?.soahpii?.NoProcessInitiated ? secretary?.soahpii?.NoProcessInitiated : 0) + (secretary?.soahpii?.UnderProcess ? secretary?.soahpii?.UnderProcess : 0)
+        + (secretary?.sodhas?.NoProcessInitiated ? secretary?.sodhas?.NoProcessInitiated : 0) + (secretary?.sodhas?.UnderProcess ? secretary?.sodhas?.UnderProcess : 0)
+        + (secretary?.sogci?.NoProcessInitiated ? secretary?.sogci?.NoProcessInitiated : 0) + (secretary?.sogci?.UnderProcess ? secretary?.sogci?.UnderProcess : 0)
+        + (secretary?.sogcii?.NoProcessInitiated ? secretary?.sogcii?.NoProcessInitiated : 0) + (secretary?.sogcii?.UnderProcess ? secretary?.sogcii?.UnderProcess : 0)
+        + (secretary?.soinq?.NoProcessInitiated ? secretary?.soinq?.NoProcessInitiated : 0) + (secretary?.soinq?.UnderProcess ? secretary?.soinq?.UnderProcess : 0)
+        + (secretary?.sosc?.NoProcessInitiated ? secretary?.sosc?.NoProcessInitiated : 0) + (secretary?.sosc?.UnderProcess ? secretary?.sosc?.UnderProcess : 0)
+        + (secretary?.dsestab?.NoProcessInitiated ? secretary?.dsestab?.NoProcessInitiated : 0) + (secretary?.dsestab?.UnderProcess ? secretary?.dsestab?.UnderProcess : 0)
+        + (secretary?.sowmoi?.NoProcessInitiated ? secretary?.sowmoi?.NoProcessInitiated : 0) + (secretary?.sowmoi?.UnderProcess ? secretary?.sowmoi?.UnderProcess : 0)
+        + (secretary?.sowmoii?.NoProcessInitiated ? secretary?.sowmoii?.NoProcessInitiated : 0) + (secretary?.sowmoii?.UnderProcess ? secretary?.sowmoii?.UnderProcess : 0)
+        + (secretary?.sonursing?.NoProcessInitiated ? secretary?.sonursing?.NoProcessInitiated : 0) + (secretary?.sonursing?.UnderProcess ? secretary?.sonursing?.UnderProcess : 0)
+        + (secretary?.dsg?.NoProcessInitiated ? secretary?.dsg?.NoProcessInitiated : 0) + (secretary?.dsg?.UnderProcess ? secretary?.dsg?.UnderProcess : 0)
+        + (secretary?.socentral?.NoProcessInitiated ? secretary?.socentral?.NoProcessInitiated : 0) + (secretary?.socentral?.UnderProcess ? secretary?.socentral?.UnderProcess : 0)
+        + (secretary?.sog?.NoProcessInitiated ? secretary?.sog?.NoProcessInitiated : 0) + (secretary?.sog?.UnderProcess ? secretary?.sog?.UnderProcess : 0)
+        + (secretary?.sonorth?.NoProcessInitiated ? secretary?.sonorth?.NoProcessInitiated : 0) + (secretary?.sonorth?.UnderProcess ? secretary?.sonorth?.UnderProcess : 0)
+        + (secretary?.sosouth?.NoProcessInitiated ? secretary?.sosouth?.NoProcessInitiated : 0) + (secretary?.sosouth?.UnderProcess ? secretary?.sosouth?.UnderProcess : 0)
+        + (secretary?.dspromotion?.NoProcessInitiated ? secretary?.dspromotion?.NoProcessInitiated : 0) + (secretary?.dspromotion?.UnderProcess ? secretary?.dspromotion?.UnderProcess : 0)
+        + (secretary?.soconf?.NoProcessInitiated ? secretary?.soconf?.NoProcessInitiated : 0) + (secretary?.soconf?.UnderProcess ? secretary?.soconf?.UnderProcess : 0)
+        + (secretary?.sopromotion?.NoProcessInitiated ? secretary?.sopromotion?.NoProcessInitiated : 0) + (secretary?.sopromotion?.UnderProcess ? secretary?.sopromotion?.UnderProcess : 0)
+        + (secretary?.dsstaff?.NoProcessInitiated ? secretary?.dsstaff?.NoProcessInitiated : 0) + (secretary?.dsstaff?.UnderProcess ? secretary?.dsstaff?.UnderProcess : 0)
+        + (secretary?.sopharmacy?.NoProcessInitiated ? secretary?.sopharmacy?.NoProcessInitiated : 0) + (secretary?.sopharmacy?.UnderProcess ? secretary?.sopharmacy?.UnderProcess : 0)
+        + (secretary?.sodental?.NoProcessInitiated ? secretary?.sodental?.NoProcessInitiated : 0) + (secretary?.sodental?.UnderProcess ? secretary?.sodental?.UnderProcess : 0)
+        + (secretary?.soliason?.NoProcessInitiated ? secretary?.soliason?.NoProcessInitiated : 0) + (secretary?.soliason?.UnderProcess ? secretary?.soliason?.UnderProcess : 0)
+        + (secretary?.asdc?.NoProcessInitiated ? secretary?.asdc?.NoProcessInitiated : 0) + (secretary?.asdc?.UnderProcess ? secretary?.asdc?.UnderProcess : 0)
+        + (secretary?.dsdc?.NoProcessInitiated ? secretary?.dsdc?.NoProcessInitiated : 0) + (secretary?.dsdc?.UnderProcess ? secretary?.dsdc?.UnderProcess : 0)
+        + (secretary?.sodci?.NoProcessInitiated ? secretary?.sodci?.NoProcessInitiated : 0) + (secretary?.sodci?.UnderProcess ? secretary?.sodci?.UnderProcess : 0)
+        + (secretary?.sodcii?.NoProcessInitiated ? secretary?.sodcii?.NoProcessInitiated : 0) + (secretary?.sodcii?.UnderProcess ? secretary?.sodcii?.UnderProcess : 0)
+        + (secretary?.astech?.NoProcessInitiated ? secretary?.astech?.NoProcessInitiated : 0) + (secretary?.astech?.UnderProcess ? secretary?.astech?.UnderProcess : 0)
+        + (secretary?.socnc?.NoProcessInitiated ? secretary?.socnc?.NoProcessInitiated : 0) + (secretary?.socnc?.UnderProcess ? secretary?.socnc?.UnderProcess : 0)
+        + (secretary?.sohd?.NoProcessInitiated ? secretary?.sohd?.NoProcessInitiated : 0) + (secretary?.sohd?.UnderProcess ? secretary?.sohd?.UnderProcess : 0)
+        + (secretary?.sophp?.NoProcessInitiated ? secretary?.sophp?.NoProcessInitiated : 0) + (secretary?.sophp?.UnderProcess ? secretary?.sophp?.UnderProcess : 0)
+        + (secretary?.dsvp?.NoProcessInitiated ? secretary?.dsvp?.NoProcessInitiated : 0) + (secretary?.dsvp?.UnderProcess ? secretary?.dsvp?.UnderProcess : 0)
+        + (secretary?.sovp?.NoProcessInitiated ? secretary?.sovp?.NoProcessInitiated : 0) + (secretary?.sovp?.UnderProcess ? secretary?.sovp?.UnderProcess : 0) + (secretary?.sond?.NoProcessInitiated ? secretary?.sond?.NoProcessInitiated : 0) + (secretary?.sond?.UnderProcess ? secretary?.sond?.UnderProcess : 0)
+        + (secretary?.sobugdet?.NoProcessInitiated ? secretary?.sobugdet?.NoProcessInitiated : 0) + (secretary?.sobugdet?.UnderProcess ? secretary?.sobugdet?.UnderProcess : 0)
+      }})
+    </div> -->
+    <div class="col-md-6 col-sm-12 control-col-st">
+      <label class="k-form-field">
+        <input type="text" class="btn-align-v" style="font-size:2vw !important;" #searchRef
+          (input)="inputChange.next(searchRef.value)" placeholder="Search by Name, CNIC, Mobile Number" kendoTextBox>
+      </label>
+    </div>
+    <div class="col-md-6 col-sm-12 control-col-end">
+      <label class="k-form-field">
+        <input type="text" class="btn-align-v" style="font-size:2vw !important;" placeholder="Search Tracking..."
+          #trackingSearchRef kendoTextBox (input)="showTrackingDetail = false"
+          (keyup.enter)="searchApplication(trackingSearchRef.value)">
+      </label>
+    </div>
+    <!--  <div class="col-md-1 col-sm-12 control-col-end">
+      <label class="k-form-field mt-1">
+        <button kendoButton style="height: 85px !important;font-size:50px !important;" class="btn-block btn-align-v"
+          [ladda]="searchingTrack" data-style="zoom-in" (click)="searchApplication(trackingSearchRef.value)"
+          [primary]="true"><i class="fa fa-search"></i></button>
+      </label>
+    </div> -->
+
+  </div>
+
+  <div class="row p-0 m-0 animated fadeIn font-5xl">
+    <div class="col-md-12">
+      <kendo-grid *ngIf="!kGrid.loading && searchQuery" [data]="kGridSearchedApplications.gridView" [sortable]="{
+        allowUnsort: kGridSearchedApplications.allowUnsort,
+        mode: kGridSearchedApplications.multiple ? 'multiple' : 'single'
+        }" [scrollable]="true" style="height: 74vh; width: 100%;" [sort]="kGridSearchedApplications.sort"
+        (sortChange)="pageSearchChange($event)" [(pageSize)]="kGridSearchedApplications.pageSize"
+        [skip]="kGridSearchedApplications.skip" [pageable]="true" (pageChange)="sortSearchChange($event)"
+        [scrollable]="false">
+        <kendo-grid-column [width]="20" field="asd" title="No." [headerClass]="'grid-header-custom font-3xl'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <span class="font-3xl">{{(rowIndex + 1)}}.</span>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="80" field="EmployeeName" title="Applicant"
+          [headerClass]="'grid-header-custom font-3xl'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="employee-info font-3xl" *ngIf="dataItem.ApplicationSource_Id == 5 || dataItem.ApplicationSource_Id == 8">
+              <p class="m-0">{{dataItem.DispatchFrom}}</p>
+              <p class="m-0"><strong class="p-strong">CNIC: </strong>{{dashifyCNIC(dataItem.CNIC)}}</p>
+              <p class="m-0"><strong class="p-strong">Dated:
+                </strong>{{dataItem.DispatchDated | date:'dd/MM/yyyy'}}</p>
+            </div>
+            <div class="employee-info font-3xl"
+              *ngIf="dataItem.ApplicationType_Id != 11 && dataItem.ApplicationSource_Id != 5 && dataItem.ApplicationSource_Id != 8">
+              <p class="m-0"><strong class="p-strong"> Name: </strong>
+                {{dataItem.EmployeeName ? dataItem.EmployeeName : ''}}</p>
+              <p class="m-0"><strong class="p-strong"> CNIC: </strong> {{dashifyCNIC(dataItem.CNIC)}}</p>
+              <p class="m-0" *ngIf="dataItem.FileNumber"><strong class="p-strong"> File Number: </strong>
+                {{dataItem.FileNumber}}</p>
+            </div>
+            <div class="employee-info font-3xl"
+              *ngIf="dataItem.ApplicationType_Id == 11 && dataItem.ApplicationSource_Id != 5 && dataItem.ApplicationSource_Id != 8">
+              <p class="m-0"> Developement Application</p>
+              <p class="m-0" *ngIf="dataItem.FileNumber">{{dataItem.FileNumber}}</p>
+              <p class="m-0">{{dataItem.Created_Date | date:'dd/MM/yyyy, h:mm a'}}</p>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="80" field="EmployeeName" title="Posting"
+          [headerClass]="'grid-header-custom font-3xl'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="employee-info font-3xl" *ngIf="dataItem.ApplicationSource_Id == 5 || dataItem.ApplicationSource_Id == 8">
+              <p class="m-0"></p>
+              <p class="m-0"></p>
+              <p class="m-0"></p>
+            </div>
+            <div class="employee-info font-3xl"
+              *ngIf="dataItem.ApplicationType_Id != 11 && dataItem.ApplicationSource_Id != 5 && dataItem.ApplicationSource_Id != 8">
+              <p class="m-0"><strong
+                  class="p-strong">{{dataItem.designationName ? dataItem.designationName : ''}}</strong>
+              </p>
+              <p class="m-0"><strong class="p-strong">Remarks:</strong> {{dataItem.Remarks}}</p>
+            </div>
+            <div class="employee-info font-3xl"
+              *ngIf="dataItem.ApplicationType_Id == 11 && dataItem.ApplicationSource_Id != 5 && dataItem.ApplicationSource_Id != 8">
+              <p class="m-0"></p>
+              <p class="m-0"></p>
+              <p class="m-0"></p>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="80" field="TrackingNumber" title="Application"
+          [headerClass]="'grid-header-custom font-3xl'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="application-info font-3xl">
+              <p class="m-0" *ngIf="dataItem.ApplicationTypeName"><strong class="p-strong"> Type: </strong>
+                {{dataItem.ApplicationTypeName}}</p>
+              <p class="m-0"><strong class="p-strong"> Tracking # </strong> {{dataItem.TrackingNumber}} <i
+                  class="fa fa-barcode"></i></p>
+              <p class="m-0"><u> {{dataItem.ApplicationSourceName}}</u></p>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="80" field="PandSOfficerName" title="Office"
+          [headerClass]="'grid-header-custom font-3xl'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="application-info font-3xl">
+              <p class="m-0"><strong class="p-strong">{{dataItem.PandSOfficerName ? dataItem.PandSOfficerName :
+                dataItem.ForwardingOfficerName ? dataItem.ForwardingOfficerName : ''}}</strong> </p>
+              <p class="m-0" *ngIf="dataItem.StatusName != 'Initiated'"><strong class="p-strong"> Status:
+                </strong>
+                <u>{{dataItem.StatusName}}</u>
+              </p>
+              <p class="m-0">{{dataItem.Created_Date | date:'dd/MM/yyyy, h:mm a'}}</p>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="50" field="asd" title="View" [headerClass]="'grid-header-custom font-3xl'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <button style="width: 88%;
+            height: 57px;
+            padding: 6px;" kendoButton [primary]="true" [look]="'outline'" class="ml-2 animated fadeIn btn-sm"
+              (click)="openInNewTab('fts/application/' + dataItem.Id + '/' + dataItem.TrackingNumber)">View</button>
+            <!-- (click)="openApplicationWindow(dataItem)" -->
+          </ng-template>
+        </kendo-grid-column>
+        <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+          <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+          <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+          <kendo-pager-next-buttons></kendo-pager-next-buttons>
+          <div class="pager-rows-number">
+            <select #select (change)="changeSearchPagesize(select.value)">
+              <option *ngIf="kGridSearchedApplications.showInitialPageSize"
+                [value]="kGridSearchedApplications.pageSize">
+                {{kGridSearchedApplications.pageSize}}</option>
+              <option *ngFor="let page of kGridSearchedApplications.pageSizes" [value]="page"
+                [selected]="page === kGridSearchedApplications.pageSize ? true : undefined">
+                {{page}}
+              </option>
+            </select>
+            &nbsp; items per page
+          </div>
+          <kendo-pager-info></kendo-pager-info>
+        </ng-template>
+      </kendo-grid>
+
+      <div class="grid-wrapper" *ngIf="kGrid.loading && searchQuery">
+        <kendo-grid [data]="[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}]" style="height: 74vh; width: 100%;">
+          <kendo-grid-column [width]="20" field="asd" title="No." [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="shine shim-controls"></div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="80" field="EmployeeName" title="Applicant" [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="shine shim-controls"></div>
+              <div class="shine shim-controls"></div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="80" field="TrackingNumber" title="Posting" [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="shine shim-controls"></div>
+              <div class="shine shim-controls"></div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="80" field="TrackingNumber" title="Application"
+            [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="shine shim-controls"></div>
+              <div class="shine shim-controls"></div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="80" field="PandSOfficerName" title="Office" [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="shine shim-controls"></div>
+              <div class="shine shim-controls"></div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="50" field="asd" title="View" [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <div class="shine shim-controls" style="width: 88%;
+               height: 57px;
+               padding: 6px;"></div>
+            </ng-template>
+          </kendo-grid-column>
+          <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+            <div class="shine shim-controls"></div>
+          </ng-template>
+        </kendo-grid>
+        <div class="grid-wrapper">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="row p-0 m-0 animated fadeIn font-5xl" *ngIf="!kGrid.loading && !searchQuery">
+    <div class="col-md-6">
+      <div class="card mb-0 box-cstm">
+        <div class="card-header font-4xl p-strong">
+          Admn Wing <span class="pull-right">({{(secretary?.asadmn?.NoProcessInitiated ? secretary?.asadmn?.NoProcessInitiated : 0) + (secretary?.asadmn?.UnderProcess ? secretary?.asadmn?.UnderProcess : 0)
+            + (secretary?.dsadmin?.NoProcessInitiated ? secretary?.dsadmin?.NoProcessInitiated : 0) + (secretary?.dsadmin?.UnderProcess ? secretary?.dsadmin?.UnderProcess : 0)
+            + (secretary?.soahpi?.NoProcessInitiated ? secretary?.soahpi?.NoProcessInitiated : 0) + (secretary?.soahpi?.UnderProcess ? secretary?.soahpi?.UnderProcess : 0)
+            + (secretary?.soahpii?.NoProcessInitiated ? secretary?.soahpii?.NoProcessInitiated : 0) + (secretary?.soahpii?.UnderProcess ? secretary?.soahpii?.UnderProcess : 0)
+            + (secretary?.sodhas?.NoProcessInitiated ? secretary?.sodhas?.NoProcessInitiated : 0) + (secretary?.sodhas?.UnderProcess ? secretary?.sodhas?.UnderProcess : 0)
+            + (secretary?.sogci?.NoProcessInitiated ? secretary?.sogci?.NoProcessInitiated : 0) + (secretary?.sogci?.UnderProcess ? secretary?.sogci?.UnderProcess : 0)
+            + (secretary?.sogcii?.NoProcessInitiated ? secretary?.sogcii?.NoProcessInitiated : 0) + (secretary?.sogcii?.UnderProcess ? secretary?.sogcii?.UnderProcess : 0)
+            + (secretary?.soinq?.NoProcessInitiated ? secretary?.soinq?.NoProcessInitiated : 0) + (secretary?.soinq?.UnderProcess ? secretary?.soinq?.UnderProcess : 0)
+            + (secretary?.sosc?.NoProcessInitiated ? secretary?.sosc?.NoProcessInitiated : 0) + (secretary?.sosc?.UnderProcess ? secretary?.sosc?.UnderProcess : 0)
+            + (secretary?.dsestab?.NoProcessInitiated ? secretary?.dsestab?.NoProcessInitiated : 0) + (secretary?.dsestab?.UnderProcess ? secretary?.dsestab?.UnderProcess : 0)
+            + (secretary?.sowmoi?.NoProcessInitiated ? secretary?.sowmoi?.NoProcessInitiated : 0) + (secretary?.sowmoi?.UnderProcess ? secretary?.sowmoi?.UnderProcess : 0)
+            + (secretary?.sowmoii?.NoProcessInitiated ? secretary?.sowmoii?.NoProcessInitiated : 0) + (secretary?.sowmoii?.UnderProcess ? secretary?.sowmoii?.UnderProcess : 0)
+            + (secretary?.sonursing?.NoProcessInitiated ? secretary?.sonursing?.NoProcessInitiated : 0) + (secretary?.sonursing?.UnderProcess ? secretary?.sonursing?.UnderProcess : 0)
+            + (secretary?.dsg?.NoProcessInitiated ? secretary?.dsg?.NoProcessInitiated : 0) + (secretary?.dsg?.UnderProcess ? secretary?.dsg?.UnderProcess : 0)
+            + (secretary?.socentral?.NoProcessInitiated ? secretary?.socentral?.NoProcessInitiated : 0) + (secretary?.socentral?.UnderProcess ? secretary?.socentral?.UnderProcess : 0)
+            + (secretary?.sog?.NoProcessInitiated ? secretary?.sog?.NoProcessInitiated : 0) + (secretary?.sog?.UnderProcess ? secretary?.sog?.UnderProcess : 0)
+            + (secretary?.sonorth?.NoProcessInitiated ? secretary?.sonorth?.NoProcessInitiated : 0) + (secretary?.sonorth?.UnderProcess ? secretary?.sonorth?.UnderProcess : 0)
+            + (secretary?.sosouth?.NoProcessInitiated ? secretary?.sosouth?.NoProcessInitiated : 0) + (secretary?.sosouth?.UnderProcess ? secretary?.sosouth?.UnderProcess : 0)
+            + (secretary?.dspromotion?.NoProcessInitiated ? secretary?.dspromotion?.NoProcessInitiated : 0) + (secretary?.dspromotion?.UnderProcess ? secretary?.dspromotion?.UnderProcess : 0)
+            + (secretary?.soconf?.NoProcessInitiated ? secretary?.soconf?.NoProcessInitiated : 0) + (secretary?.soconf?.UnderProcess ? secretary?.soconf?.UnderProcess : 0)
+            + (secretary?.soconf2?.NoProcessInitiated ? secretary?.soconf2?.NoProcessInitiated : 0) + (secretary?.soconf2?.UnderProcess ? secretary?.soconf2?.UnderProcess : 0)
+            + (secretary?.sopromotion?.NoProcessInitiated ? secretary?.sopromotion?.NoProcessInitiated : 0) + (secretary?.sopromotion?.UnderProcess ? secretary?.sopromotion?.UnderProcess : 0)
+            + (secretary?.sopension?.NoProcessInitiated ? secretary?.sopension?.NoProcessInitiated : 0) + (secretary?.sopension?.UnderProcess ? secretary?.sopension?.UnderProcess : 0)
+            + (secretary?.dsstaff?.NoProcessInitiated ? secretary?.dsstaff?.NoProcessInitiated : 0) + (secretary?.dsstaff?.UnderProcess ? secretary?.dsstaff?.UnderProcess : 0)
+            + (secretary?.sopharmacy?.NoProcessInitiated ? secretary?.sopharmacy?.NoProcessInitiated : 0) + (secretary?.sopharmacy?.UnderProcess ? secretary?.sopharmacy?.UnderProcess : 0)
+            + (secretary?.sodental?.NoProcessInitiated ? secretary?.sodental?.NoProcessInitiated : 0) + (secretary?.sodental?.UnderProcess ? secretary?.sodental?.UnderProcess : 0)
+            + (secretary?.soliason?.NoProcessInitiated ? secretary?.soliason?.NoProcessInitiated : 0) + (secretary?.soliason?.UnderProcess ? secretary?.soliason?.UnderProcess : 0)
+          }})</span>
+        </div>
+        <div class="card-body pb-0">
+          <div class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.asadmn)"
+            *ngIf="user.UserName == 'pshd' || user.UserName == 'as.admin'">
+            <span class="p-strong"> {{secretary?.asadmn?.OfficerDesignation}} <span
+                class="text-muted">{{secretary?.asadmn?.OfficerName}}</span></span>
+            <span class="pull-right">
+              ({{(secretary?.asadmn?.NoProcessInitiated ? secretary?.asadmn?.NoProcessInitiated : 0) + (secretary?.asadmn?.UnderProcess ? secretary?.asadmn?.UnderProcess : 0)}})
+            </span>
+          </div>
+          <hr *ngIf="user.UserName == 'pshd' || user.UserName == 'as.admin'">
+          <div class="ml-1">
+            <span class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.dsadmin)"
+              *ngIf="user.UserName == 'pshd' || user.UserName == 'as.admin' || user.UserName == 'ds.admin'">
+              <span class="p-strong"> {{secretary?.dsadmin?.OfficerDesignation}} <span
+                  class="text-muted">{{secretary?.dsadmin?.OfficerName}}</span></span>
+              <span class="pull-right">
+                ({{(secretary?.dsadmin?.NoProcessInitiated ? secretary?.dsadmin?.NoProcessInitiated : 0) + (secretary?.dsadmin?.UnderProcess ? secretary?.dsadmin?.UnderProcess : 0)}})
+              </span>
+            </span>
+            <ul *ngIf="user.UserName == 'pshd' || user.UserName == 'as.admin' || user.UserName == 'ds.admin'">
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.soahpi)">
+                <span>{{secretary?.soahpi?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.soahpi?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.soahpi?.NoProcessInitiated ? secretary?.soahpi?.NoProcessInitiated : 0) + (secretary?.soahpi?.UnderProcess ? secretary?.soahpi?.UnderProcess : 0)}})
+                </span></li>
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.soahpii)">
+                <span>{{secretary?.soahpii?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.soahpii?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.soahpii?.NoProcessInitiated ? secretary?.soahpii?.NoProcessInitiated : 0) + (secretary?.soahpii?.UnderProcess ? secretary?.soahpii?.UnderProcess : 0)}})
+                </span></li>
+
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.sodhas)">
+                <span>{{secretary?.sodhas?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.sodhas?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.sodhas?.NoProcessInitiated ? secretary?.sodhas?.NoProcessInitiated : 0) + (secretary?.sodhas?.UnderProcess ? secretary?.sodhas?.UnderProcess : 0)}})
+                </span>
+              </li>
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.sogci)">
+                <span>{{secretary?.sogci?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.sogci?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.sogci?.NoProcessInitiated ? secretary?.sogci?.NoProcessInitiated : 0) + (secretary?.sogci?.UnderProcess ? secretary?.sogci?.UnderProcess : 0)}})
+                </span>
+              </li>
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.sogcii)">
+                <span>{{secretary?.sogcii?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.sogcii?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.sogcii?.NoProcessInitiated ? secretary?.sogcii?.NoProcessInitiated : 0) + (secretary?.sogcii?.UnderProcess ? secretary?.sogcii?.UnderProcess : 0)}})
+                </span>
+              </li>
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.soinq)">
+                <span>{{secretary?.soinq?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.soinq?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.soinq?.NoProcessInitiated ? secretary?.soinq?.NoProcessInitiated : 0) + (secretary?.soinq?.UnderProcess ? secretary?.soinq?.UnderProcess : 0)}})
+                </span>
+              </li>
+
+
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.sosc)">
+                <span>{{secretary?.sosc?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.sosc?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.sosc?.NoProcessInitiated ? secretary?.sosc?.NoProcessInitiated : 0) + (secretary?.sosc?.UnderProcess ? secretary?.sosc?.UnderProcess : 0)}})
+                </span>
+              </li>
+            </ul>
+            <span class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.dsestab)"
+              *ngIf="user.UserName == 'pshd' || user.UserName == 'as.admin' || user.UserName == 'dse'">
+              <span class="p-strong"> {{secretary?.dsestab?.OfficerDesignation}} <span
+                  class="text-muted">{{secretary?.dsestab?.OfficerName}}</span></span>
+              <span class="pull-right">
+                ({{(secretary?.dsestab?.NoProcessInitiated ? secretary?.dsestab?.NoProcessInitiated : 0) + (secretary?.dsestab?.UnderProcess ? secretary?.dsestab?.UnderProcess : 0)}})
+              </span>
+            </span>
+            <ul *ngIf="user.UserName == 'pshd' || user.UserName == 'as.admin' || user.UserName == 'dse'">
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.sowmoi)">
+                <span>{{secretary?.sowmoi?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.sowmoi?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.sowmoi?.NoProcessInitiated ? secretary?.sowmoi?.NoProcessInitiated : 0) + (secretary?.sowmoi?.UnderProcess ? secretary?.sowmoi?.UnderProcess : 0)}})
+                </span></li>
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.sowmoii)">
+                <span>{{secretary?.sowmoii?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.sowmoii?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.sowmoii?.NoProcessInitiated ? secretary?.sowmoii?.NoProcessInitiated : 0) + (secretary?.sowmoii?.UnderProcess ? secretary?.sowmoii?.UnderProcess : 0)}})
+                </span></li>
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.sonursing)">
+                <span>{{secretary?.sonursing?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.sonursing?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.sonursing?.NoProcessInitiated ? secretary?.sonursing?.NoProcessInitiated : 0) + (secretary?.sonursing?.UnderProcess ? secretary?.sonursing?.UnderProcess : 0)}})
+                </span>
+              </li>
+            </ul>
+            <span class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.dsg)"
+              *ngIf="user.UserName == 'pshd' || user.UserName == 'as.admin' || user.UserName == 'ds.general'">
+              <span class="p-strong"> {{secretary?.dsg?.OfficerDesignation}} <span
+                  class="text-muted">{{secretary?.dsg?.OfficerName}}</span></span>
+              <span class="pull-right">
+                ({{(secretary?.dsg?.NoProcessInitiated ? secretary?.dsg?.NoProcessInitiated : 0) + (secretary?.dsg?.UnderProcess ? secretary?.dsg?.UnderProcess : 0)}})
+              </span>
+            </span>
+            <ul *ngIf="user.UserName == 'pshd' || user.UserName == 'as.admin' || user.UserName == 'ds.general'">
+
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.socentral)">
+                <span>{{secretary?.socentral?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.socentral?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.socentral?.NoProcessInitiated ? secretary?.socentral?.NoProcessInitiated : 0) + (secretary?.socentral?.UnderProcess ? secretary?.socentral?.UnderProcess : 0)}})
+                </span></li>
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.sog)">
+                <span>{{secretary?.sog?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.sog?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.sog?.NoProcessInitiated ? secretary?.sog?.NoProcessInitiated : 0) + (secretary?.sog?.UnderProcess ? secretary?.sog?.UnderProcess : 0)}})
+                </span></li>
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.sonorth)">
+                <span>{{secretary?.sonorth?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.sonorth?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.sonorth?.NoProcessInitiated ? secretary?.sonorth?.NoProcessInitiated : 0) + (secretary?.sonorth?.UnderProcess ? secretary?.sonorth?.UnderProcess : 0)}})
+                </span></li>
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.sosouth)">
+                <span>{{secretary?.sosouth?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.sosouth?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.sosouth?.NoProcessInitiated ? secretary?.sosouth?.NoProcessInitiated : 0) + (secretary?.sosouth?.UnderProcess ? secretary?.sosouth?.UnderProcess : 0)}})
+                </span></li>
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.sopharmacy)">
+                <span>{{secretary?.sopharmacy?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.sopharmacy?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.sopharmacy?.NoProcessInitiated ? secretary?.sopharmacy?.NoProcessInitiated : 0) + (secretary?.sopharmacy?.UnderProcess ? secretary?.sopharmacy?.UnderProcess : 0)}})
+                </span></li>
+
+            </ul>
+            <span class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.dspromotion)"
+              *ngIf="user.UserName == 'pshd' || user.UserName == 'as.admin' || user.UserName == 'ds.promotion'">
+              <span class="p-strong"> {{secretary?.dspromotion?.OfficerDesignation}} <span
+                  class="text-muted">{{secretary?.dspromotion?.OfficerName}}</span></span>
+              <span class="pull-right">
+                ({{(secretary?.dspromotion?.NoProcessInitiated ? secretary?.dspromotion?.NoProcessInitiated : 0) + (secretary?.dspromotion?.UnderProcess ? secretary?.dspromotion?.UnderProcess : 0)}})
+              </span>
+            </span>
+            <ul *ngIf="user.UserName == 'pshd' || user.UserName == 'as.admin' || user.UserName == 'ds.promotion'">
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.soconf)">
+                <span>{{secretary?.soconf?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.soconf?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.soconf?.NoProcessInitiated ? secretary?.soconf?.NoProcessInitiated : 0) + (secretary?.soconf?.UnderProcess ? secretary?.soconf?.UnderProcess : 0)}})
+                </span></li>
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.soconf2)">
+                <span>{{secretary?.soconf2?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.soconf2?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.soconf2?.NoProcessInitiated ? secretary?.soconf2?.NoProcessInitiated : 0) + (secretary?.soconf2?.UnderProcess ? secretary?.soconf2?.UnderProcess : 0)}})
+                </span></li>
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.sopromotion)">
+                <span>{{secretary?.sopromotion?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.sopromotion?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.sopromotion?.NoProcessInitiated ? secretary?.sopromotion?.NoProcessInitiated : 0) + (secretary?.sopromotion?.UnderProcess ? secretary?.sopromotion?.UnderProcess : 0)}})
+                </span></li>
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.sopension)">
+                <span>{{secretary?.sopension?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.sopension?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.sopension?.NoProcessInitiated ? secretary?.sopension?.NoProcessInitiated : 0) + (secretary?.sopension?.UnderProcess ? secretary?.sopension?.UnderProcess : 0)}})
+                </span></li>
+            </ul>
+            <span class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.dsstaff)"
+              *ngIf="user.UserName == 'pshd' || user.UserName == 'as.admin' || user.UserName == 'ds.staff'">
+              <span class="p-strong"> {{secretary?.dsstaff?.OfficerDesignation}} <span
+                  class="text-muted">{{secretary?.dsstaff?.OfficerName}}</span></span>
+              <span class="pull-right">
+                ({{(secretary?.dsstaff?.NoProcessInitiated ? secretary?.dsstaff?.NoProcessInitiated : 0) + (secretary?.dsstaff?.UnderProcess ? secretary?.dsstaff?.UnderProcess : 0)}})
+              </span>
+            </span>
+            <ul *ngIf="user.UserName == 'pshd' || user.UserName == 'as.admin' || user.UserName == 'ds.staff'">
+
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.sodental)">
+                <span>{{secretary?.sodental?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.sodental?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.sodental?.NoProcessInitiated ? secretary?.sodental?.NoProcessInitiated : 0) + (secretary?.sodental?.UnderProcess ? secretary?.sodental?.UnderProcess : 0)}})
+                </span></li>
+              <li *ngIf="secretary?.soliason" class="hover-success cursor-p"
+                (click)="openApplicationDialog(secretary?.soliason)">
+                <span>{{secretary?.soliason?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.soliason?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.soliason?.NoProcessInitiated ? secretary?.soliason?.NoProcessInitiated : 0) + (secretary?.soliason?.UnderProcess ? secretary?.soliason?.UnderProcess : 0)}})
+                </span></li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card mb-0 box-cstm">
+        <div class="card-header font-4xl p-strong">
+          Drug Control Wing<span class="pull-right">({{(secretary?.asdc?.NoProcessInitiated ? secretary?.asdc?.NoProcessInitiated : 0) + (secretary?.asdc?.UnderProcess ? secretary?.asdc?.UnderProcess : 0)
+            + (secretary?.dsdc?.NoProcessInitiated ? secretary?.dsdc?.NoProcessInitiated : 0) + (secretary?.dsdc?.UnderProcess ? secretary?.dsdc?.UnderProcess : 0)
+            + (secretary?.sodci?.NoProcessInitiated ? secretary?.sodci?.NoProcessInitiated : 0) + (secretary?.sodci?.UnderProcess ? secretary?.sodci?.UnderProcess : 0)
+            + (secretary?.sodcii?.NoProcessInitiated ? secretary?.sodcii?.NoProcessInitiated : 0) + (secretary?.sodcii?.UnderProcess ? secretary?.sodcii?.UnderProcess : 0)
+          }})</span>
+        </div>
+        <div class="card-body pb-0">
+          <div class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.asdc)"
+            *ngIf="user.UserName == 'pshd' || user.UserName == 'as.drugcontrol'">
+            <span>{{secretary?.asdc?.OfficerDesignation}} <span
+                class="text-muted p-strong">{{secretary?.asdc?.OfficerName}}</span></span>
+            <span class="pull-right">
+              ({{(secretary?.asdc?.NoProcessInitiated ? secretary?.asdc?.NoProcessInitiated : 0) + (secretary?.asdc?.UnderProcess ? secretary?.asdc?.UnderProcess : 0)}})
+            </span>
+          </div>
+          <hr *ngIf="user.UserName == 'pshd' || user.UserName == 'as.drugcontrol'">
+          <div class="ml-1">
+            <span class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.dsdc)"
+              *ngIf="user.UserName == 'pshd' || user.UserName == 'as.admin' || user.UserName == 'dsdc'">
+              <span class="p-strong"> {{secretary?.dsdc?.OfficerDesignation}} <span
+                  class="text-muted">{{secretary?.dsdc?.OfficerName}}</span></span>
+              <span class="pull-right">
+                ({{(secretary?.dsdc?.NoProcessInitiated ? secretary?.dsdc?.NoProcessInitiated : 0) + (secretary?.dsdc?.UnderProcess ? secretary?.dsdc?.UnderProcess : 0)}})
+              </span>
+            </span>
+            <ul *ngIf="user.UserName == 'pshd' || user.UserName == 'as.drugcontrol' || user.UserName == 'dsdc'">
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.sodci)">
+                <span>{{secretary?.sodci?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.sodci?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.sodci?.NoProcessInitiated ? secretary?.sodci?.NoProcessInitiated : 0) + (secretary?.sodci?.UnderProcess ? secretary?.sodci?.UnderProcess : 0)}})
+                </span></li>
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.sodcii)">
+                <span>{{secretary?.sodcii?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.sodcii?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.sodcii?.NoProcessInitiated ? secretary?.sodcii?.NoProcessInitiated : 0) + (secretary?.sodcii?.UnderProcess ? secretary?.sodcii?.UnderProcess : 0)}})
+                </span></li>
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.sohp)">
+                <span>{{secretary?.sohp?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.sohp?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.sohp?.NoProcessInitiated ? secretary?.sohp?.NoProcessInitiated : 0) + (secretary?.sohp?.UnderProcess ? secretary?.sohp?.UnderProcess : 0)}})
+                </span></li>
+              <!-- <li class="hover-success cursor-p">
+                <span>Section (Hospital Pharmacy) <span class="text-muted">Mst. Humaira Tahir</span></span>
+                <span class="pull-right">
+                  (0)
+                </span></li> -->
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="card box-cstm">
+        <div class="card-header font-4xl p-strong">
+          Technical Wing<span class="pull-right">({{(secretary?.astech?.NoProcessInitiated ? secretary?.astech?.NoProcessInitiated : 0) + (secretary?.astech?.UnderProcess ? secretary?.astech?.UnderProcess : 0)
+            + (secretary?.socnc?.NoProcessInitiated ? secretary?.socnc?.NoProcessInitiated : 0) + (secretary?.socnc?.UnderProcess ? secretary?.socnc?.UnderProcess : 0)
+            + (secretary?.sohd?.NoProcessInitiated ? secretary?.sohd?.NoProcessInitiated : 0) + (secretary?.sohd?.UnderProcess ? secretary?.sohd?.UnderProcess : 0)
+            + (secretary?.sophp?.NoProcessInitiated ? secretary?.sophp?.NoProcessInitiated : 0) + (secretary?.sophp?.UnderProcess ? secretary?.sophp?.UnderProcess : 0)
+          }})</span>
+        </div>
+        <div class="card-body pb-0">
+          <div class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.astech)"
+            *ngIf="user.UserName == 'pshd' || user.UserName == 'as.technical'">
+            <span>{{secretary?.astech?.OfficerDesignation}} <span
+                class="text-muted p-strong">{{secretary?.astech?.OfficerName}}</span></span>
+            <span class="pull-right">
+              ({{(secretary?.astech?.NoProcessInitiated ? secretary?.astech?.NoProcessInitiated : 0) + (secretary?.astech?.UnderProcess ? secretary?.astech?.UnderProcess : 0)}})
+            </span>
+          </div>
+          <hr *ngIf="user.UserName == 'pshd' || user.UserName == 'as.technical'">
+          <div class="ml-1">
+            <!--   <span class="p-strong"> {{secretary?.dstechii?.OfficerDesignation}} <span
+                  class="text-muted">{{secretary?.soinq?.OfficerName}}</span></span>
+            <span class="pull-right">
+              ({{(secretary?.dstechii?.NoProcessInitiated ? secretary?.dstechii?.NoProcessInitiated : 0) + (secretary?.dstechii?.UnderProcess ? secretary?.dstechii?.UnderProcess : 0)}})
+            </span>
+            <span class="p-strong"> {{secretary?.dstechiii?.OfficerDesignation}} <span
+                  class="text-muted">{{secretary?.soinq?.OfficerName}}</span></span>
+            <span class="pull-right">
+              ({{(secretary?.dstechiii?.NoProcessInitiated ? secretary?.dstechiii?.NoProcessInitiated : 0) + (secretary?.dstechiii?.UnderProcess ? secretary?.dstechiii?.UnderProcess : 0)}})
+            </span> -->
+
+            <span class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.dstecti)"
+              *ngIf="user.UserName == 'pshd' || user.UserName == 'as.technical' || user.UserName == 'ds.tech2'">
+              <span class="p-strong"> Deputy Secretary (Technical-II)
+                &nbsp;<span class="text-muted">Mr. Muhammad Tariq Khawaja (Add. Charge)</span>
+
+                <span class="pull-right">
+                  <!-- ({{(secretary?.dsstaff?.NoProcessInitiated ? secretary?.dsstaff?.NoProcessInitiated : 0) + (secretary?.dsstaff?.UnderProcess ? secretary?.dsstaff?.UnderProcess : 0)}})
+                 -->
+                  (0)
+                </span>
+              </span>
+            </span>
+            <br>
+            <span class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.dstechii)"
+              *ngIf="user.UserName == 'pshd' || user.UserName == 'as.technical' || user.UserName == 'ds.tech3'">
+              <span class="p-strong"> Deputy Secretary (Technical-III) <span class="text-muted">Mr. Owais
+                  Gohar</span>
+              </span>
+              <span class="pull-right">
+                <!-- ({{(secretary?.dsstaff?.NoProcessInitiated ? secretary?.dsstaff?.NoProcessInitiated : 0) + (secretary?.dsstaff?.UnderProcess ? secretary?.dsstaff?.UnderProcess : 0)}})
+               -->
+                (0)
+              </span>
+            </span>
+            <ul *ngIf="user.UserName == 'pshd' || user.UserName == 'as.technical' || user.UserName == 'ds.tech3'">
+
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.socnc)">
+                <span>{{secretary?.socnc?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.socnc?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.socnc?.NoProcessInitiated ? secretary?.socnc?.NoProcessInitiated : 0) + (secretary?.socnc?.UnderProcess ? secretary?.socnc?.UnderProcess : 0)}})
+                </span></li>
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.sohd)">
+                <span>{{secretary?.sohd?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.sohd?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.sohd?.NoProcessInitiated ? secretary?.sohd?.NoProcessInitiated : 0) + (secretary?.sohd?.UnderProcess ? secretary?.sohd?.UnderProcess : 0)}})
+                </span></li>
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.sophp)">
+                <span>{{secretary?.sophp?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.sophp?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.sophp?.NoProcessInitiated ? secretary?.sophp?.NoProcessInitiated : 0) + (secretary?.sophp?.UnderProcess ? secretary?.sophp?.UnderProcess : 0)}})
+                </span></li>
+              <li class="hover-success cursor-p">
+                <span>Section (EP&C) <span class="text-muted">Vacant</span></span>
+                <span class="pull-right">
+                  (0)
+                </span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="card box-cstm">
+        <div class="card-header font-4xl p-strong">
+          Development Wing<span class="pull-right">({{(secretary?.sond?.NoProcessInitiated ? secretary?.sond?.NoProcessInitiated : 0) + (secretary?.sond?.UnderProcess ? secretary?.sond?.UnderProcess : 0)
+            + (secretary?.asdev?.NoProcessInitiated ? secretary?.asdev?.NoProcessInitiated : 0) + (secretary?.asdev?.UnderProcess ? secretary?.asdev?.UnderProcess : 0)
+            + (secretary?.sobugdet?.NoProcessInitiated ? secretary?.sobugdet?.NoProcessInitiated : 0) + (secretary?.sobugdet?.UnderProcess ? secretary?.sobugdet?.UnderProcess : 0)
+          }})</span>
+        </div>
+        <div class="card-body pb-0">
+          <span>{{secretary?.asdev?.OfficerDesignation}} <span
+              class="text-muted p-strong">{{secretary?.asdev?.OfficerName}}</span></span>
+          <span class="pull-right">
+            ({{(secretary?.asdev?.NoProcessInitiated ? secretary?.asdev?.NoProcessInitiated : 0) + (secretary?.asdev?.UnderProcess ? secretary?.asdev?.UnderProcess : 0)}})
+          </span>
+          <!--   <div class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.asdev)" *ngIf="user.UserName == 'pshd' || user.UserName == 'as.dev'">
+            <span>Additional Secretary (Development)</span>
+            <span class="pull-right">
+              (0)
+            </span>
+          </div> -->
+          <hr *ngIf="user.UserName == 'pshd' || user.UserName == 'as.dev'">
+          <div class="ml-1">
+            <!-- <span class="p-strong"> {{secretary?.dsdev?.OfficerDesignation}} <span
+                class="text-muted">{{secretary?.dsdev?.OfficerName}}</span></span>
+            <span class="pull-right">
+              ({{(secretary?.dsdev?.NoProcessInitiated ? secretary?.dsdev?.NoProcessInitiated : 0) + (secretary?.dsdev?.UnderProcess ? secretary?.dsdev?.UnderProcess : 0)}})
+            </span> -->
+            <div>
+              <span class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.dsbna)"
+                *ngIf="user.UserName == 'pshd' || user.UserName == 'as.dev' || user.UserName == 'ds.budget'">
+                <span class="p-strong"> Deputy Secretary (Development) <span class="text-muted">Ms.
+                    Noor-Ul-Ain</span></span>
+                <span class="pull-right">
+                  <!-- ({{(secretary?.dsstaff?.NoProcessInitiated ? secretary?.dsstaff?.NoProcessInitiated : 0) + (secretary?.dsstaff?.UnderProcess ? secretary?.dsstaff?.UnderProcess : 0)}})
+             -->
+                  (0)
+                </span>
+              </span>
+            </div>
+            <div> <span class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.dsbna)"
+                *ngIf="user.UserName == 'pshd' || user.UserName == 'as.dev' || user.UserName == 'ds.budget'">
+                <span class="p-strong"> Deputy Secretary (Budget & Accounts) <span class="text-muted">Mr. Wajid
+                    Ali</span></span>
+                <span class="pull-right">
+                  <!-- ({{(secretary?.dsstaff?.NoProcessInitiated ? secretary?.dsstaff?.NoProcessInitiated : 0) + (secretary?.dsstaff?.UnderProcess ? secretary?.dsstaff?.UnderProcess : 0)}})
+           -->
+                  (0)
+                </span>
+              </span></div>
+            <ul *ngIf="user.UserName == 'pshd' || user.UserName == 'as.dev' || user.UserName == 'ds.budget'">
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.sond)">
+                <span>{{secretary?.sond?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.sond?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.sond?.NoProcessInitiated ? secretary?.sond?.NoProcessInitiated : 0) + (secretary?.sond?.UnderProcess ? secretary?.sond?.UnderProcess : 0)}})
+                </span>
+              </li>
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.sobugdet)">
+                <span>{{secretary?.sobugdet?.OfficerDesignation}} <span
+                    class="text-muted">{{secretary?.sobugdet?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.sobugdet?.NoProcessInitiated ? secretary?.sobugdet?.NoProcessInitiated : 0) + (secretary?.sobugdet?.UnderProcess ? secretary?.sobugdet?.UnderProcess : 0)}})
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--    <div class="col-md-3 control-col-end">
+   
+      <div class="card" style="background: #b28900e3;">
+        <div class="card-header font-4xl p-strong">
+          Vertical Programs<span class="pull-right">({{(secretary?.dsvp?.NoProcessInitiated ? secretary?.dsvp?.NoProcessInitiated : 0) + (secretary?.dsvp?.UnderProcess ? secretary?.dsvp?.UnderProcess : 0)
+            + (secretary?.sovp?.NoProcessInitiated ? secretary?.sovp?.NoProcessInitiated : 0) + (secretary?.sovp?.UnderProcess ? secretary?.sovp?.UnderProcess : 0)
+          }})</span>
+        </div>
+        <div class="card-body pb-0">
+          <span>{{secretary?.dsvp?.OfficerDesignation}} <span
+                  class="text-muted">{{secretary?.soinq?.OfficerName}}</span></span>
+          <span class="pull-right">
+            ({{(secretary?.dsvp?.NoProcessInitiated ? secretary?.dsvp?.NoProcessInitiated : 0) + (secretary?.dsvp?.UnderProcess ? secretary?.dsvp?.UnderProcess : 0)}})
+          </span>
+          <hr>
+          <div class="ml-1">
+            <ul>
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.sovp)">
+                <span>{{secretary?.sovp?.OfficerDesignation}} <span
+                  class="text-muted">{{secretary?.soinq?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.sovp?.NoProcessInitiated ? secretary?.sovp?.NoProcessInitiated : 0) + (secretary?.sovp?.UnderProcess ? secretary?.sovp?.UnderProcess : 0)}})
+                </span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+  </div>
+
+
+
+</div>
+
+<kendo-dialog [title]="selectedOfficer.OfficerDesignation" *ngIf="applicatonDialogOpened"
+  (close)="closeApplicationDialog()" [height]="innerHeight - 60" [width]="innerWidth - 200">
+  <div class="row">
+    <div class="col-md-12">
+      <kendo-grid style="width: 100%;" [data]="[selectedOfficer]">
+        <kendo-grid-column field="Total" title="Total" width="80" [headerClass]="'grid-header-text-center'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table" style="text-align: center;" (click)="cellCLickedFc(dataItem, 0)">{{(dataItem.Total ?
+                dataItem.Total : 0) | number}}
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="NoProcessInitiated" width="128" title="No Process Initiated"
+          [headerClass]="'grid-header-text-center'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table" style="text-align: center;" (click)="cellCLickedFc(dataItem, 10)">{{dataItem.NoProcessInitiated ?
+                dataItem.NoProcessInitiated : 0}}
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="UnderProcess" width="100" title="Under Process"
+          [headerClass]="'grid-header-text-center'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table p-strong" style="text-align: center;" (click)="cellCLickedFc(dataItem, 1)">{{(dataItem.UnderProcess ?
+                dataItem.UnderProcess : 0) | number}}
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="Waiting_Documents" width="120" title="Waiting Documents"
+          [headerClass]="'grid-header-text-center'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table" style="text-align: center;" (click)="cellCLickedFc(dataItem, 8)">{{(dataItem.Waiting_Documents ?
+                dataItem.Waiting_Documents : 0) | number}}
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="FileRequested" width="140" title="Pending File Requests"
+          [headerClass]="'grid-header-text-center'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table" style="text-align: center;" (click)="cellCLickedFc(dataItem, 12)">{{(dataItem.FileRequested ?
+                dataItem.FileRequested : 0) | number}}
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="Approved" title="Approved" width="120" [headerClass]="'grid-header-text-center'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table" style="text-align: center;" (click)="cellCLickedFc(dataItem, 2)">{{((dataItem.Approved) ?
+                (dataItem.Approved) : 0) | number}}
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="Rejected" title="Rejected" width="120" [headerClass]="'grid-header-text-center'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table" style="text-align: center;" (click)="cellCLickedFc(dataItem, 3)">{{((dataItem.Rejected) ?
+                (dataItem.Rejected) : 0) | number}}
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="FileReturned" width="140" title="Disposed" [headerClass]="'grid-header-text-center'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table" style="text-align: center;" (click)="cellCLickedFc(dataItem, 33)">
+              {{(dataItem.FileReturned +
+                dataItem.AReturn + dataItem.RReturn) | number}}
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+      </kendo-grid>
+    </div>
+  </div>
+  <br>
+  <div class="grid-wrapper" *ngIf="!kGridApplications.loading">
+    <kendo-grid [data]="kGridApplications.gridView" [sortable]="{
+           allowUnsort: kGridApplications.allowUnsort,
+           mode: kGridApplications.multiple ? 'multiple' : 'single'
+           }" [scrollable]="true" style="height: 74vh; width: 100%;" [sort]="kGridApplications.sort"
+      (sortChange)="sortChange($event)" [(pageSize)]="kGridApplications.pageSize" [skip]="kGridApplications.skip"
+      [pageable]="true" (pageChange)="pageChange($event)" [scrollable]="false">
+      <kendo-grid-column [width]="20" field="asd" title="No." [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <span>{{(rowIndex + 1)}}.</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="80" field="EmployeeName" title="Applicant" [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="employee-info" *ngIf="dataItem.ApplicationSource_Id == 5 || dataItem.ApplicationSource_Id == 8">
+            <p class="m-0">{{dataItem.DispatchFrom}}</p>
+            <p class="m-0"><strong class="p-strong">CNIC: </strong>{{dashifyCNIC(dataItem.CNIC)}}</p>
+            <p class="m-0"><strong class="p-strong">Dated:
+              </strong>{{dataItem.DispatchDated | date:'dd/MM/yyyy'}}</p>
+          </div>
+          <div class="employee-info" *ngIf="dataItem.ApplicationType_Id != 11 && dataItem.ApplicationSource_Id != 5 && dataItem.ApplicationSource_Id != 8">
+            <p class="m-0"><strong class="p-strong"> Name: </strong>
+              {{dataItem.EmployeeName ? dataItem.EmployeeName : ''}}</p>
+            <p class="m-0"><strong class="p-strong"> CNIC: </strong> {{dashifyCNIC(dataItem.CNIC)}}</p>
+            <p class="m-0" *ngIf="dataItem.FileNumber"><strong class="p-strong"> File Number: </strong>
+              {{dataItem.FileNumber}}</p>
+          </div>
+          <div class="employee-info" *ngIf="dataItem.ApplicationType_Id == 11 && dataItem.ApplicationSource_Id != 5 && dataItem.ApplicationSource_Id != 8">
+            <p class="m-0"> Developement Application</p>
+            <p class="m-0" *ngIf="dataItem.FileNumber">{{dataItem.FileNumber}}</p>
+            <p class="m-0">{{dataItem.Created_Date | date:'dd/MM/yyyy, h:mm a'}}</p>
+          </div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="80" field="EmployeeName" title="Posting" [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="employee-info" *ngIf="dataItem.ApplicationSource_Id == 5 || dataItem.ApplicationSource_Id == 8">
+            <p class="m-0"></p>
+            <p class="m-0"></p>
+            <p class="m-0"></p>
+          </div>
+          <div class="employee-info" *ngIf="dataItem.ApplicationType_Id != 11 && dataItem.ApplicationSource_Id != 5 && dataItem.ApplicationSource_Id != 8">
+            <p class="m-0"><strong
+                class="p-strong">{{dataItem.designationName ? dataItem.designationName : ''}}</strong>
+            </p>
+            <p class="m-0"><strong class="p-strong">Remarks:</strong> {{dataItem.Remarks}}</p>
+          </div>
+          <div class="employee-info" *ngIf="dataItem.ApplicationType_Id == 11 && dataItem.ApplicationSource_Id != 5 && dataItem.ApplicationSource_Id != 8">
+            <p class="m-0"></p>
+            <p class="m-0"></p>
+            <p class="m-0"></p>
+          </div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="80" field="TrackingNumber" title="Application" [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="application-info">
+            <p class="m-0" *ngIf="dataItem.ApplicationTypeName"><strong class="p-strong"> Type: </strong>
+              {{dataItem.ApplicationTypeName}}</p>
+            <p class="m-0"><strong class="p-strong"> Tracking # </strong> {{dataItem.TrackingNumber}} <i
+                class="fa fa-barcode"></i></p>
+            <p class="m-0"><u> {{dataItem.ApplicationSourceName}}</u></p>
+          </div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="80" field="PandSOfficerName" title="Office" [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="application-info">
+            <p class="m-0"><strong class="p-strong">{{dataItem.PandSOfficerName ? dataItem.PandSOfficerName :
+                   dataItem.ForwardingOfficerName ? dataItem.ForwardingOfficerName : ''}}</strong> </p>
+            <p class="m-0" *ngIf="dataItem.StatusName != 'Initiated'"><strong class="p-strong"> Status:
+              </strong>
+              <u>{{dataItem.StatusName}}</u>
+            </p>
+            <p class="m-0">{{dataItem.Created_Date | date:'dd/MM/yyyy, h:mm a'}}</p>
+          </div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="50" field="asd" title="View" [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <button style="width: 88%;
+               height: 57px;
+               padding: 6px;" kendoButton [primary]="true" [look]="'outline'" class="ml-2 animated fadeIn btn-sm"
+            (click)="openInNewTab('fts/application/' + dataItem.Id + '/' + dataItem.TrackingNumber)">View</button>
+          <!-- (click)="openApplicationWindow(dataItem)" -->
+        </ng-template>
+      </kendo-grid-column>
+      <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+        <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+        <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+        <kendo-pager-next-buttons></kendo-pager-next-buttons>
+        <div class="pager-rows-number">
+          <select #select (change)="changePagesize(select.value)">
+            <option *ngIf="kGridApplications.showInitialPageSize" [value]="kGridApplications.pageSize">
+              {{kGridApplications.pageSize}}</option>
+            <option *ngFor="let page of kGridApplications.pageSizes" [value]="page"
+              [selected]="page === kGridApplications.pageSize ? true : undefined">
+              {{page}}
+            </option>
+          </select>
+          &nbsp; items per page
+        </div>
+        <kendo-pager-info></kendo-pager-info>
+      </ng-template>
+    </kendo-grid>
+  </div>
+  <div class="grid-wrapper" *ngIf="kGridApplications.loading">
+    <kendo-grid [data]="[{},{},{},{},{},{},{}]" style="height: 74vh; width: 100%;">
+      <kendo-grid-column [width]="20" field="asd" title="No." [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="shine shim-controls"></div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="80" field="EmployeeName" title="Applicant" [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="shine shim-controls"></div>
+          <div class="shine shim-controls"></div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="80" field="TrackingNumber" title="Posting" [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="shine shim-controls"></div>
+          <div class="shine shim-controls"></div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="80" field="TrackingNumber" title="Application" [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="shine shim-controls"></div>
+          <div class="shine shim-controls"></div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="80" field="PandSOfficerName" title="Office" [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="shine shim-controls"></div>
+          <div class="shine shim-controls"></div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="50" field="asd" title="View" [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <div class="shine shim-controls" style="width: 88%;
+           height: 57px;
+           padding: 6px;"></div>
+        </ng-template>
+      </kendo-grid-column>
+      <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+        <div class="shine shim-controls"></div>
+      </ng-template>
+    </kendo-grid>
+    <div class="grid-wrapper">
+    </div>
+  </div>
+</kendo-dialog>
+
+
+<kendo-dialog [title]="'PUC - Tracking # ' + trackingNumber" *ngIf="trackingDialogOpened"
+  (close)="closeTrackingDialog()" [height]="innerHeight - 60" [width]="innerWidth - 200">
+  <app-application-details-zoom [trackingNo]="trackingNumber"></app-application-details-zoom>
+</kendo-dialog>
+<!-- 
+<kendo-excelexport [data]="vacancy" [fileName]="'Pendency_' + healthFacility?.HFTypeName + '.xlsx'" #excelexport>
+  <kendo-excelexport-column field="DsgName" title="Designation"></kendo-excelexport-column>
+  <kendo-excelexport-column field="TotalSanctioned" title="Sanctioned"></kendo-excelexport-column>
+  <kendo-excelexport-column field="TotalWorking" title="Filled"></kendo-excelexport-column>
+  <kendo-excelexport-column field="Regular" title="Regular"></kendo-excelexport-column>
+  <kendo-excelexport-column field="Adhoc" title="Adhoc"></kendo-excelexport-column>
+  <kendo-excelexport-column field="Contract" title="Contract"></kendo-excelexport-column>
+  <kendo-excelexport-column field="PHFMC" title="PHFMC"></kendo-excelexport-column>
+  <kendo-excelexport-column field="Vacant" title="Vacant"></kendo-excelexport-column>
+  <kendo-excelexport-column field="WorkingProfiles" title="Profile"></kendo-excelexport-column>
+  <kendo-excelexport-column field="CadreName" title="Cadre"></kendo-excelexport-column>
+  <kendo-excelexport-column field="BPSWorking" title="BPS"></kendo-excelexport-column>
+  <kendo-excelexport-column field="PostTypeName" title="Post Type"></kendo-excelexport-column>
+  <kendo-excelexport-column field="Created_By" title="Created By"></kendo-excelexport-column>
+  <kendo-excelexport-column field="Created_Date" title="Created Date"></kendo-excelexport-column>
+  <kendo-excelexport-column field="Last_Modified_By" title="Last Modified By"></kendo-excelexport-column>
+  <kendo-excelexport-column field="Modified_Date" title="Modified Date"></kendo-excelexport-column>
+</kendo-excelexport> -->

@@ -1,0 +1,371 @@
+<!-- <div *ngIf="loading" class="k-i-loading"></div> -->
+<div class="animated fadeIn">
+  <form [formGroup]="dailyWagerProfileForm" (ngSubmit)="SubmitDailyWagerProfileForm()"
+    (keydown.enter)="$event.preventDefault()">
+
+    <div class="card card-accent-success animated fadeIn">
+      <div class="card-header animated fadeIn">
+        <span class="m-0" style = "float:left">Daily Wages Profile</span>
+        
+      </div>
+      <div class="card-body animated fadeIn">
+        <div class="row">
+          <div class="col-md-6">
+            <input kendoTextBox id="id" name="id" placeholder="Enter Name" showErrorIcon="initial" 
+              formControlName="id" hidden/>
+          </div>
+          <div class="col-md-10">
+            <div class="row">
+              
+              <div class="col-md-6">
+                <span>User Id&nbsp;</span>
+                <input kendoTextBox id="UserId" name="UserId" placeholder="Enter User Id" 
+                  showErrorIcon="initial"
+                  formControlName="UserId" />
+              </div>
+              <div class="col-md-6">
+                <span>User Name&nbsp;</span>
+                <input kendoTextBox id="UserName" name="UserName" placeholder="Enter User Name" 
+                  showErrorIcon="initial"
+                  formControlName="UserName" />
+              </div>
+              <div class="col-md-6">
+                <span>Name&nbsp;<span class="text-danger">*</span></span>
+                <input kendoTextBox id="name" name="name" placeholder="Enter Name" showErrorIcon="initial" required
+                  formControlName="name" />
+              </div>
+              <div class="col-md-6">
+                <span>Father Name&nbsp;<span class="text-danger">*</span></span>
+                <input kendoTextBox id="fatherName" name="fatherName" placeholder="Enter Father Name"
+                  showErrorIcon="initial" required formControlName="fatherName" />
+              </div>
+              <div class="col-md-6">
+                <span>CNIC&nbsp;<span class="text-danger">*</span></span>
+                <kendo-maskedtextbox [mask]="cnicMask" id="cnic" name="cnic"showErrorIcon="initial" required
+                  formControlName="cnic" ></kendo-maskedtextbox>
+              </div>
+  
+              <div class="col-md-6">
+                <span>Mobile No&nbsp;<span class="text-danger">*</span></span>
+                <kendo-maskedtextbox [mask]="mobileMask" id="mobileNumber"  name="mobileNumber" 
+                  showErrorIcon="initial" required formControlName="mobileNumber" ></kendo-maskedtextbox>
+              </div>
+              <div class="col-md-6">
+                <label for="gender" class="k-form-field ng-star-inserted wid">
+                  <span>Gender&nbsp;<span class="text-danger">*</span></span></label>
+                <div class="form-check form-check-inline">
+                  <input type="radio" value="Male" #Male formControlName="gender" kendoRadioButton />
+                  <label class="k-labelml-2" [for]="Male">&nbsp;&nbsp; Male &nbsp;&nbsp;&nbsp;&nbsp;</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input type="radio" value="Female" #Female formControlName="gender" kendoRadioButton />
+                  <label class="k-labelml-2" [for]="Female">&nbsp;&nbsp; Female&nbsp;&nbsp;</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="ImageDiv">
+              <span style="color:red;" *ngIf="message">{{message}}</span>
+              <img [src]="PersonImageURL" class="ImagePreview">
+              <div class="upload-btn-wrapper">
+                <input type="file" #file type="file" accept='image/*' id="actual-btn"
+                (change)="CustomerImagePreview(file.files)"
+                hidden />
+            <!--our custom file upload button-->
+                <label for="actual-btn" class="filelabel">Upload
+                Image</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          
+          
+          
+
+    
+          <div *ngIf="loading" class="k-i-loading"></div>
+          <div class="col-md-6">
+            <span>Date Of Birth&nbsp;<span class="text-danger">*</span></span>
+            <kendo-datepicker [(value)]="DOBValue" id="dateOfBirth" formControlName="dateOfBirth" 
+            [format]="'dd/MM/yyyy'"></kendo-datepicker>
+          </div>
+          <div class="col-md-6">
+            <span>Address&nbsp;</span>
+            <input kendoTextBox id="address" name="address" placeholder="Enter Address" showErrorIcon="initial" required
+              formConatrolName="address">
+          </div>
+          
+          
+          <div class="col-md-6">
+            <span>Category&nbsp;<span class="text-danger">*</span></span>
+            <select id="category" class="form-control custom-select"
+            formControlName="Category" (change)="onChangedCategory($event)" required>
+      <option [ngValue]="null">Choose Category</option>
+      <option *ngFor="let Cate of CategoryList" [ngValue]="Cate">
+        {{ Cate }}
+      </option>
+    </select>
+            <!-- <span>Designation&nbsp;<span class="text-danger">*</span></span>
+            <kendo-dropdownlist [data]="DesignationList"
+              (valueChange)="onChangedDesignation($event)" formControlName="designation">
+            </kendo-dropdownlist> -->
+          </div>
+
+
+
+
+
+
+          
+          <div class="col-md-6">
+            <span>Designation&nbsp;<span class="text-danger">*</span></span>
+            <select id="designation" class="form-control custom-select"
+            formControlName="designation" (change)="onChangedDesignation($event)" required>
+      <option [ngValue]="null">Choose Designation</option>
+      <option *ngFor="let Designation of DesignationList" [ngValue]="Designation.Designation">
+        {{ Designation.Designation }}
+      </option>
+    </select>
+            <!-- <span>Designation&nbsp;<span class="text-danger">*</span></span>
+            <kendo-dropdownlist [data]="DesignationList"
+              (valueChange)="onChangedDesignation($event)" formControlName="designation">
+            </kendo-dropdownlist> -->
+          </div>
+
+
+               
+          <div class="col-md-6">
+            <span>Employement Mode&nbsp;<span class="text-danger">*</span></span>
+            <select id="employementmode" class="form-control custom-select"
+            formControlName="EmployementMode" required>
+      <option [ngValue]="null">Choose Employement Mode</option>
+      <option *ngFor="let empmode of EmployeeModeList" [ngValue]="empmode">
+        {{ empmode }}
+      </option>
+    </select>
+            <!-- <span>Designation&nbsp;<span class="text-danger">*</span></span>
+            <kendo-dropdownlist [data]="DesignationList"
+              (valueChange)="onChangedDesignation($event)" formControlName="designation">
+            </kendo-dropdownlist> -->
+          </div>
+
+          <div class="col-md-6" *ngIf="divisionsData.length > 0">
+            <span>Devision &nbsp;<span class="text-danger">*</span></span>
+            <kendo-dropdownlist 
+            formConatrolName="divisionCode"
+            [data]="divisionsData" 
+            [valuePrimitive]="false"
+        [defaultItem]="selectedFiltersModel.division" [textField]="'Name'"
+        [valueField]="'Code'" (filterChange)="handleFilter($event, 'division')"
+        (valueChange)="dropdownValueChanged($event, 'division')" 
+        [value]="selectedFiltersModel.division" 
+        [disabled]="divisionsData.length == 1"
+        required>
+      </kendo-dropdownlist>
+          </div>
+
+          <div class="col-md-6">
+            <span>District &nbsp;<span class="text-danger">*</span></span>
+            <kendo-dropdownlist 
+            formControlName="districtCode"
+            [data]="districtsData"
+              [defaultItem]="{Name: 'Select District', Code: currentUser?.HfmisCode}" 
+              [textField]="'Name'"
+              [valueField]="'Code'" 
+              [valuePrimitive]="false"
+              (filterChange)="handleFilter($event, 'district')"
+              (valueChange)="dropdownValueChanged($event, 'district')" 
+              [value]="selectedFiltersModel.district" 
+              [disabled]="districtsData.length == 1"
+              required>
+            </kendo-dropdownlist>
+          </div>
+          <div class="col-md-6">
+            <span>Tehsil &nbsp;<span class="text-danger">*</span></span>
+            <kendo-dropdownlist [data]="tehsilsData"
+              [defaultItem]="{Name: 'Select Tehsil', Code: currentUser?.HfmisCode}" 
+              [textField]="'Name'"
+              [valueField]="'Code'" 
+              [valuePrimitive]="false"
+              (filterChange)="handleFilter($event, 'tehsil')"
+              (valueChange)="dropdownValueChanged($event, 'tehsil')" 
+              [value]="selectedFiltersModel.tehsil"
+              formConatrolName="tehsilCode">
+            </kendo-dropdownlist>
+          </div>
+          <div class="col-md-6" *ngIf="isShowHF">
+            <span>Health Facility&nbsp;<span class="text-danger">*</span></span>
+            <select id="hfCode" class="form-control custom-select"
+            formControlName="HfmisCode">
+      <option [ngValue]="null">Choose Health Facility</option>
+      <option *ngFor="let bank of hfData" [ngValue]="bank.Id">
+        {{ bank.Name }}
+      </option>
+    </select>
+            
+            <!-- <kendo-dropdownlist [data]="hfData" [defaultItem]="{Name: 'Select HF', Code: currentUser?.HfmisCode}"
+              [textField]="'Name'" [valueField]="'Code'" (filterChange)="handleFilter($event, 'hf')"
+              (valueChange)="dropdownValueChanged($event, 'hf')" [value]="selectedFiltersModel.hf">
+            </kendo-dropdownlist> -->
+          </div>
+          <div class="col-md-6" *ngIf="isShowUC">
+            <span>UC&nbsp;<span class="text-danger">*</span></span>
+            <select id="UcCode" class="form-control custom-select"
+              formControlName="UcCode">
+        <option [ngValue]="null">Choose UC</option>
+        <option *ngFor="let bank of ucData" [ngValue]="bank.UcCode">
+          {{ bank.Name }}
+        </option>
+      </select>
+
+            <!-- <select class="form-control custom-select"
+            formControlName="UcCode" id="UcCode"
+            >
+            <option [ngValue]="null">-- Select UC --</option>
+            <option *ngFor="let uc of ucData; let i=index" [ngValue]="uc.UcCode">
+              {{uc.Name}}
+            </option>
+          </select> -->
+
+            <!-- <select id="ucCode" class="form-control custom-select" (change)="selectedUC($event)"
+            [(ngModel)] = "ucCode">
+      <option [ngValue]="null">Choose UC</option>
+      <option *ngFor="let bank of ucData" [ngValue]="bank.Id">
+        {{ bank.Name }}
+      </option>
+    </select> -->
+            <!-- {{dailyWagerProfileForm.value.UcCode}} -->
+            <!-- {{ucCode}} -->
+            <!-- <kendo-dropdownlist [data]="ucData" [defaultItem]="{Name: 'Select UC', Code: currentUser?.HfmisCode}"
+              [textField]="'Name'" [valueField]="'Code'" 
+              [(ngModel)] = "ucCode">
+            </kendo-dropdownlist> -->
+          </div>
+
+
+
+        </div>
+      </div>
+    </div>
+    <form formGroupName="dailyWagesAccountDetails">
+      <div class="card card-accent-success animated fadeIn">
+        <div class="card-header animated fadeIn">
+          <h5 class="m-0">Bank</h5>
+        </div>
+        <div class="card-body animated fadeIn">
+          <div class="row">
+            <input id="id" name="id" placeholder="Enter accountTitle"
+                   formControlName="id" hidden/>
+            <div class="col-md-6">
+              <span>Bank Detail&nbsp;<span class="text-danger"></span></span>
+              <select id="bankId" class="form-control custom-select"
+              formControlName="bankId">
+        <option [ngValue]="null">Choose Bank</option>
+        <option *ngFor="let bank of bankData" [ngValue]="bank.Id">
+          {{ bank.Name }}
+        </option>
+      </select>
+
+              <!-- <kendo-dropdownlist [data]="bankData" [defaultItem]="{Name: 'Select Bank', Code: currentUser?.HfmisCode}"
+                [textField]="'Name'" [valueField]="Id" [ngModel]="bankId"
+                 [value]="selectedFiltersModel.bank">
+              </kendo-dropdownlist> -->
+            </div>
+
+
+            <div class="col-md-6">
+              <span>Account Title&nbsp;<span class="text-danger"></span></span>
+              <input kendoTextBox id="accountTitle" name="accountTitle" placeholder="Enter accountTitle"
+                showErrorIcon="initial" required formControlName="accountTitle" />
+            </div>
+            <div class="col-md-6">
+              <span>Account Number&nbsp;<span class="text-danger"></span></span>
+              <input kendoTextBox id="accountNumber" name="accountNumber" placeholder="Enter Account Number"
+                showErrorIcon="initial" required formControlName="accountNumber" />
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </form>
+    <form formGroupName="dailyWagesContractDetail">
+
+      <div class="card card-accent-success animated fadeIn">
+        <div class="card-header animated fadeIn">
+          <h5 class="m-0">Daily Wages Contract Detail</h5>
+        </div>
+        <div class="card-body animated fadeIn">
+          <div class="row">
+            <input id="id" name="id" placeholder="Enter accountTitle"
+                   formControlName="id" hidden/>
+            <div class="col-md-10">
+              <div class="row">
+            
+                <div class="col-md-6">
+                  <span>Contract Start Date&nbsp;<span class="text-danger">*</span></span>
+                  <kendo-datepicker id="contractStartDate" 
+                  [(value)]="ContractStartValue"
+                  formControlName="contractStartDate" 
+                  [format]="'dd/MM/yyyy'">
+                  </kendo-datepicker>
+                </div>
+                <div class="col-md-6">
+                  <span>Contract End Date&nbsp;<span class="text-danger">*</span></span>
+                  <kendo-datepicker id="contractEndDate" 
+                  [(value)]="ContractEndValue"
+                  formControlName="contractEndDate" 
+                  [format]="'dd/MM/yyyy'">
+                  </kendo-datepicker>
+                </div>
+                <!-- <div class="col-md-6">
+                  <span>contractStatus&nbsp;<span class="text-danger">*</span></span>
+                  <input kendoTextBox id="contractStatus" name="contractStatus" placeholder="Enter contractStatus"
+                    showErrorIcon="initial" required formControlName="contractStatus" />
+                </div> -->
+    
+    
+    
+              </div>
+            </div>
+            <div class=" col-md-2">
+              <div class="ImageDiv">
+                <span style="color:red;" *ngIf="message">{{message}}</span>
+                <img [src]="contractImageURL" class="ImagePreview">
+                <div class="upload-btn-wrapper">
+                  <input type="file" #files type="file" accept='image/*' id="contract-btn"
+                  (change)="ContractImagePreview(files.files)"
+                hidden />
+            <!--our custom file upload button-->
+                <label for="contract-btn" class="filelabel Filebtn">Upload
+                Contract</label>
+                  <!--<button class="btn Filebtn">Upload Contract file</button>
+                  <input #files type="file" accept='image/*'  /> -->
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+    </form>
+    <div class="card card-accent-success animated fadeIn">
+      <div class="card-body animated fadeIn">
+        <!---->
+        <div class="row mt-2">
+          <div class="offset-md-10 col-md-2 col-sm-6 col-xs-6 control-col-st">
+            <button class="btn-block btn-lg ladda-button k-button k-primary" data-style="zoom-in"
+               type="submit"  dir="ltr">
+               <span class="ladda-label" *ngIf="!IsUpdate">Save</span>
+               <span class="ladda-label" *ngIf="IsUpdate">Update</span>
+               <span
+                class="ladda-spinner"></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+</div>

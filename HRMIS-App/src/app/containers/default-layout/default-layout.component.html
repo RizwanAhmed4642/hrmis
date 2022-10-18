@@ -1,0 +1,188 @@
+<!-- <div *ngIf="navigating == true" [ngStyle]="{'width' : loadBarWidth + '%'}" class="loading-bar"></div> -->
+
+<app-header [fixed]="true" [navbarBrandFull]="{src: 'assets/img/brand/logo-punjab.png', alt: 'Unity Platform Logo'}"
+  [navbarBrandMinimized]="{src: 'assets/img/brand/logo-punjab.png', alt: 'Unity Platform Logo'}" [sidebarToggler]="'lg'"
+  [asideMenuToggler]="false" [mobileAsideMenuToggler]="false">
+  <ul class="nav navbar-nav ml-auto hide-mobile animated fadeIn">
+    <li class="nav-item">
+      <h3 *ngIf="!searchOn" class="header-title text-white animated fadeIn">Human Resource Management Information System
+      </h3>
+      <div class="example-wrapper animated fadeIn" *ngIf="searchOn">
+        <kendo-autocomplete [data]="listItems" [valueField]="'Name'" (valueChange)="searchClicked($event)"
+          [filterable]="true" [listHeight]="'400'" (filterChange)="searchEvent.next($event)"
+          placeholder="Search Health Facility, Employee Profile" class="search-auto-complete">
+          <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+            <div class="search-list-item" *ngIf="dataItem">
+              <i class="fa"
+                [ngClass]="dataItem.Type == 1 ? 'fa-building-o' : dataItem.Type == 2 ? 'fa-user-circle' : dataItem.Type == 3 ? 'fa-file-text-o' : 'fa-search'"></i>
+              &nbsp;{{ dataItem.Name }} - <strong class="p-strong">{{ dataItem.ResultType }}</strong></div>
+          </ng-template>
+          <ng-template kendoComboBoxNoDataTemplate>
+            <h4>No Record Found</h4>
+          </ng-template>
+        </kendo-autocomplete>
+      </div>
+    </li>
+    <li class="nav-item animated fadeIn">
+      <!--   <kendo-dropdownbutton [data]="data">
+            User Settings
+        </kendo-dropdownbutton> searchOn = !searchOn-->
+      <!--   <button class="btn btn-search-success" (click)="openFullscreen()"><i class="fa fa-search"></i></button>
+     -->
+
+      <button class="btn btn-search-success" style="height: 36px !important;" [ladda]="searching" data-style="zoom-in"
+        *ngIf="user?.RoleName != 'Law wing' && user?.RoleName != 'ACR Room' && user?.RoleName != 'Central Record Room' && user?.RoleName != 'Section Officer' && user?.RoleName !=  'Office Diary' && user?.RoleName != 'Employee'"
+        (click)="searchOn = !searchOn"><i class="fa fa-search"></i></button>
+      <button class="btn btn-search-success" style="height: 36px !important;" [ladda]="searching" data-style="zoom-in"
+        *ngIf="user?.UserName == 'crr.incharge'" (click)="searchOn = !searchOn"><i class="fa fa-search"></i></button>
+    </li>
+  </ul>
+</app-header>
+<div class="app-body animated fadeIn">
+  <app-sidebar [display]="'lg'" [fixed]="true" *ngIf="navItems.length > 0">
+    <app-sidebar-header>
+      <li class="nav-item animated fadeIn" ng-reflect-ng-class="nav-item"
+        style="list-style: none;border: none !important;">
+        <div style="width: 100%; display: table;">
+          <div style="display: table-row; cursor: pointer;">
+            <!--  <div style="width: 40px; display: table-cell;vertical-align: middle;">
+              <img src="assets/img/avatars/adminavatar.png" class="img-avatar" alt="">
+            </div> -->
+            <!--  <div style="width: 10px;
+                height: 10px !important;
+                margin-top: 16px;
+                background: #46a23f;
+                border-radius: 50%;">
+            </div> -->
+            <!--   <div class="avatar"><img alt="admin@bootstrapmaster.com" class="img-avatar" src="assets/img/avatars/5.jpg"><span
+                class="avatar-status badge-success"></span></div> -->
+            <div *ngIf="currentOfficer" class="animated fadeIn"
+              style="display: table-cell;font-size: 1rem !important;vertical-align: middle;text-align: left;line-height: 1;font-family: Roboto-Bold; font-weight: 100;padding: 0.75rem 1rem;">
+              {{currentOfficer.DesignationName}}
+              <span *ngIf="currentOfficer.Name">
+                <br>
+                <small>
+                  <i style="font-family: Roboto-Regular; font-weight: 100;">{{currentOfficer.Name}}</i>
+                </small>
+              </span>
+            </div>
+            <div *ngIf="user.RoleName == 'Employee' && currentProfile" class="animated fadeIn"
+              style="display: table-cell;font-size: 1rem !important;vertical-align: middle;text-align: left;line-height: 1;font-family: Roboto-Bold; font-weight: 100;padding: 0.75rem 1rem;">
+              {{currentProfile.EmployeeName}}
+              <span *ngIf="currentProfile.Designation_Name">
+                <br>
+                <small>
+                  <u><i
+                      style="font-family: Roboto-Regular; font-weight: 100;">{{currentProfile.Designation_Name}}</i></u>
+                </small> <br>
+                <small>
+                  <i
+                    style="font-family: Roboto-Regular; font-weight: 100;">{{currentProfile.HealthFacility + ', ' + currentProfile.Tehsil + ', ' + currentProfile.District}}</i>
+                </small>
+              </span>
+            </div>
+            <div *ngIf="!currentOfficer && user.RoleName != 'Employee'" class="animated fadeIn"
+              style="display: table-cell;font-size: 1rem !important;vertical-align: middle;text-align: left;line-height: 1;font-family: Roboto-Bold; font-weight: 100;padding: 0.75rem 1rem;">
+              {{userIP}}
+              <br>
+              <small>
+                <i style="font-family: Roboto-Regular; font-weight: 100;">{{userLevelName}}</i>
+              </small>
+            </div>
+          </div>
+        </div>
+        <!--   <button kendoButton class="btn-block mt-2 px-4" *ngIf="user?.UserName.startsWith('fdo')"
+          (click)="newDialog('application')"
+          style="border-radius: 10px !important;box-shadow: 0 3px 4px 0  rgba(70, 162, 63, 0.4);" primary="true"
+          [look]="'outline'"><i class="fa fa-plus"></i> New
+          Application </button> -->
+        <!-- <button kendoButton
+          *ngIf="user?.RoleName == 'Chief Executive Officer' || user?.UserName.startsWith('ceo.') || user?.UserName == 'ordercell' || user?.UserName == 'og1'"
+          class="btn-block px-4" (click)="newDialog('order')"
+          style="border-radius: 10px !important;box-shadow: 0 3px 4px 0  rgba(70, 162, 63, 0.4);" primary="true"
+          [look]="'outline'"><i class="fa fa-plus"></i> New
+          Order </button> -->
+        <button kendoButton class="btn-block px-4"
+          *ngIf="user?.RoleName == 'Section Officer' || user?.RoleName == 'Deputy Secretary' || user?.RoleName == 'Law wing'"
+          routerLink="/fts/scanned-files"
+          style="border-radius: 10px !important;box-shadow: 0 3px 4px 0  rgba(70, 162, 63, 0.4);" primary="true"
+          [look]="'outline'"><i class="fa fa-plus"></i> File Request </button>
+        <button kendoButton class="btn-block px-4"
+          *ngIf="(user?.RoleName == 'Employee' || user?.RoleName == 'Employee Applicant') && canApply"
+          routerLink="/e/profile"
+          style="border-radius: 10px !important;box-shadow: 0 3px 4px 0  rgba(70, 162, 63, 0.4);" primary="true"
+          [look]="'outline'"><i class="fa fa-send-o"></i> Apply for Transfer </button>
+      </li>
+    </app-sidebar-header>
+
+    <app-sidebar-nav *ngIf="navItems && navItems.length > 0" [navItems]="navItems" [perfectScrollbar]
+      [disabled]="sidebarMinimized"></app-sidebar-nav>
+
+    <app-sidebar-footer>
+      <a class="nav-link animated fadeIn" (click)="logout()"><i class="fa fa-sign-out"></i> LOGOUT</a>
+    </app-sidebar-footer>
+  </app-sidebar>
+  <!-- Main content -->
+  <main class="main cssanimations csstransforms animated fadeIn">
+    <app-notification></app-notification>
+    <app-root-dialog></app-root-dialog>
+    <div class="container-fluid animated fadeIn">
+      <div *ngIf="navigating" class="animated fadeIn loading-module-routing animated fadeIn">
+      </div>
+      <!--   <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+     -->
+      <router-outlet></router-outlet>
+
+      <div id="container-floating" *ngIf="user?.UserName.startsWith('fdo') || user?.UserName.startsWith('pl')">
+        <div id="floating-button" data-toggle="tooltip" data-placement="left" data-original-title="Create"
+          (click)="newDialog('application')">
+          <p class="plus">+</p>
+        </div>
+      </div>
+      <div id="container-floating"
+        *ngIf="user?.UserName == 'og1' || user?.UserName == 'south.ordercell' || user?.UserName == 'ordercell' 
+        || user?.RoleName == 'Hisdu Order Team' || user?.RoleName == 'Chief Executive Officer' || user?.RoleName == 'Districts' || user?.RoleName == 'DG Health'|| user?.RoleName == 'PHFMC Admin' || user?.RoleName == 'PHFMC' ">
+        <div id="floating-button" data-toggle="tooltip" data-placement="left" data-original-title="Create"
+          (click)="newDialog('order')">
+          <p class="plus">+</p>
+        </div>
+      </div>
+      <div id="container-floating" *ngIf="user?.RoleName == 'RI Branch' || user?.RoleName == 'Law wing'">
+        <div id="floating-button" data-toggle="tooltip" data-placement="left" data-original-title="Create"
+          routerLink="/ri/new">
+          <p class="plus">+</p>
+        </div>
+      </div>
+      <div id="container-floating" *ngIf="user?.UserName == 'pshd'">
+        <div id="floating-button" data-toggle="tooltip" data-placement="left" data-original-title="Create"
+          routerLink="/ri/new-summary">
+          <p class="plus">+</p>
+        </div>
+      </div>
+      <div id="container-floating"
+        *ngIf="user?.UserName && (user?.RoleName == 'Deputy Secretary' || user?.RoleName == 'Administrative Office') && user?.UserName != 'pshd' && user?.UserName != 'ordercell' && user?.RoleName != 'Hisdu Order Team'">
+        <div id="floating-button" data-toggle="tooltip" data-placement="left" data-original-title="Create"
+          routerLink="/ri/new-document">
+          <p class="plus">+</p>
+        </div>
+      </div>
+      <div id="container-floating" *ngIf="user?.RoleName == 'Citizen Portal'">
+        <div id="floating-button" data-toggle="tooltip" data-placement="left" data-original-title="Create"
+          routerLink="/cp/new">
+          <p class="plus">+</p>
+        </div>
+      </div>
+    </div>
+    <!-- /.container-fluid -->
+  </main>
+</div>
+
+<!-- <app-footer>
+  <span style="width: 100%;">
+    <div class="mb-2">
+      <h6 class="footer-text">Government of The Punjab<br>
+        &copy; 2019 <u>HISDU</u>. All rights reserved.
+      </h6>
+    </div>
+  </span>
+</app-footer> -->

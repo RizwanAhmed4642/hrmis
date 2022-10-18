@@ -1,0 +1,242 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3">
+        Health Facility Type
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3 col-sm-12 control-col-st">
+      <label class="k-form-field"
+        ><span>Health Facility Category</span>
+
+        <!--  <kendo-dropdownlist [data]="dropDowns.hfCategoryData" [textField]="'Name'" [valueField]="'Id'" (valueChange)="dropdownValueChanged($event, 'hfCategory')"
+          [value]="dropDowns.selectedFiltersModel.hfCategory" [defaultItem]="dropDowns.defultFiltersModel.hfCategory">
+        </kendo-dropdownlist> -->
+
+        <kendo-dropdownlist
+          [data]="dropDowns.hfCategoryData"
+          [textField]="'Name'"
+          [valueField]="'Id'"
+          [valuePrimitive]="true"
+          [(ngModel)]="hftype.HFCat_Id"
+          [defaultItem]="dropDowns.defultFiltersModel.hfCategory"
+        >
+        </kendo-dropdownlist>
+      </label>
+    </div>
+
+    <div class="col-md-4 col-sm-12 control-col">
+      <label class="k-form-field"
+        ><span>Health Facility Type Name</span>
+        <input
+          kendoTextBox
+          type="text"
+          name="HfTypeName"
+          [(ngModel)]="hftype.Name"
+          #HfTypeName="ngModel"
+        />
+      </label>
+    </div>
+
+    <div class="col-md-3 col-sm-12 control-col-end">
+      <button
+        kendoButton
+        (click)="addHfType()"
+        [disabled]="hftype.HFCat_Id == 0 || !hftype?.Name"
+        data-style="zoom-in"
+        [ladda]="addingHft"
+        class="ml-2 btn-align-v"
+        type="button"
+        [primary]="true"
+      >
+        Add Health Facility Type
+      </button>
+    </div>
+  </div>
+
+  <div class="row row-panel">
+    <div class="col-md-12">
+      <div class="grid-wrapper">
+        <kendo-grid
+          [data]="gridView"
+          [sortable]="{
+            allowUnsort: allowUnsort,
+            mode: multiple ? 'multiple' : 'single'
+          }"
+          [selectable]="true"
+          [sort]="sort"
+          (sortChange)="sortChange($event)"
+          [(pageSize)]="pageSize"
+          [skip]="skip"
+          [pageable]="true"
+          (pageChange)="pageChange($event)"
+          [scrollable]="false"
+        >
+          <kendo-grid-column
+            [width]="10"
+            field="asd"
+            title="No."
+            [headerClass]="'grid-header-custom'"
+            [style]="{
+              'background-color': '#fff',
+              color: '#000',
+              'border-bottom': '1px solid #c8ced3'
+            }"
+          >
+            <ng-template
+              kendoGridCellTemplate
+              let-dataItem
+              let-rowIndex="rowIndex"
+            >
+              {{ rowIndex + 1 }}
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column
+            [width]="64"
+            field="Health Facility Type Name"
+            Title="Health Facility Type Name"
+            [headerClass]="'grid-header-custom'"
+            [style]="{
+              'background-color': '#fff',
+              color: '#000',
+              'border-bottom': '1px solid #c8ced3'
+            }"
+          >
+            <ng-template
+              kendoGridCellTemplate
+              let-dataItem
+              let-rowIndex="rowIndex"
+            >
+              {{ dataItem.Name }}
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column
+            [width]="64"
+            field="Health Facility Category"
+            Title="Health Facility Category"
+            [headerClass]="'grid-header-custom'"
+            [style]="{
+              'background-color': '#fff',
+              color: '#000',
+              'border-bottom': '1px solid #c8ced3'
+            }"
+          >
+            <ng-template
+              kendoGridCellTemplate
+              let-dataItem
+              let-rowIndex="rowIndex"
+            >
+              {{ dataItem.HfCatName }}
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="asd"
+            title="Action"
+            [width]="10"
+            [headerClass]="'grid-header-custom'"
+            [style]="{
+              'background-color': '#fff',
+              color: '#000',
+              'border-bottom': '1px solid #c8ced3'
+            }"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <a (click)="openHfTypeWindow(dataItem)">
+                <img
+                  class=" icon-svg"
+                  src="../../../assets/img/icons/edit2.svg"
+                  alt=""
+              /></a>
+            </ng-template>
+          </kendo-grid-column>
+          <ng-template
+            kendoPagerTemplate
+            let-totalPages="totalPages"
+            let-currentPage="currentPage"
+          >
+            <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+            <kendo-pager-numeric-buttons
+              [buttonCount]="10"
+            ></kendo-pager-numeric-buttons>
+            <kendo-pager-next-buttons></kendo-pager-next-buttons>
+            <div class="pager-rows-number">
+              <select #select (change)="changePagesize(select.value)">
+                <option *ngIf="showInitialPageSize" [value]="pageSize">{{
+                  pageSize
+                }}</option>
+                <option
+                  *ngFor="let page of pageSizes"
+                  [value]="page"
+                  [selected]="page === pageSize ? true : undefined"
+                >
+                  {{ page }}
+                </option>
+              </select>
+              &nbsp; items per page
+            </div>
+            <kendo-pager-info></kendo-pager-info>
+          </ng-template>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+</div>
+
+<kendo-dialog
+  [title]="'Edit Health Facility Type'"
+  *ngIf="HfTypeDialogOpened && selectedHfType"
+  (close)="closeHfTypeWindow()"
+  [minWidth]="450"
+  [width]="550"
+>
+  <div class="row p-3">
+    <div class="col-md-12">
+      <label class="k-form-field"
+        ><span>Health Facility Category</span>
+        <!-- <kendo-dropdownlist [data]="dropDowns.hfCategory" [textField]="'Name'" [valueField]="'Id'" (valueChange)="dropdownValueChanged($event, 'hfCategory')"
+          [value]="dropDowns.selectedFiltersModel.hfCategory" [defaultItem]="dropDowns.defultFiltersModel.hfCategory">
+        </kendo-dropdownlist> -->
+
+        <kendo-dropdownlist
+          [data]="dropDowns.hfCategoryData"
+          [textField]="'Name'"
+          [valueField]="'Id'"
+          [valuePrimitive]="true"
+          [(ngModel)]="selectedHfType.HFCat_Id"
+          [defaultItem]="dropDowns.defultFiltersModel.hfCategory"
+        >
+        </kendo-dropdownlist>
+        `
+      </label>
+    </div>
+    <div class="col-md-12">
+      <label class="k-form-field"
+        ><span>Health Facility Type Name</span>
+        <input
+          kendoTextBox
+          type="text"
+          name="HfTypeName"
+          [(ngModel)]="selectedHfType.Name"
+          #HfTypeName="ngModel"
+        />
+      </label>
+    </div>
+  </div>
+  <kendo-dialog-actions
+    *ngIf="HfTypeDialogOpened && selectedHfType"
+    class="animated fadeIn"
+  >
+    <button
+      kendoButton
+      data-style="zoom-in"
+      (click)="editHfType()"
+      primary="true"
+    >
+      Save
+    </button>
+    <!-- <button kendoButton class="btn-danger" (click)="removeHfTypeWindow()">Remove</button> -->
+    <button kendoButton (click)="closeHfTypeWindow()">Cancel</button>
+  </kendo-dialog-actions>
+</kendo-dialog>

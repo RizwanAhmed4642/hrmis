@@ -1,0 +1,252 @@
+<div *ngIf="!profile" class="k-i-loading"></div>
+<div class="animated fadeIn" *ngIf="profile">
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="onlineFts-top-h3">
+                {{profile.EmployeeName ? profile.EmployeeName : 'Employee Profile'}}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="animated fadeIn" *ngIf="profile">
+    <div class="row">
+        <div class="col-md-6 col-sm-12 control-col-st">
+            
+            <table class="table table-50 view-table" style="background: transparent;">
+                <tbody>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Photo</strong></td>
+                        <td>
+                            <img class="pic-shadow" width="100" height="100" [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + profile.CNIC + '_23.jpg'" onError="this.src='../../../assets/img/notfound.png'" alt="">
+                        </td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">First Name</strong></td>
+                        <td>{{profile.EmployeeName}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Last Name</strong></td>
+                        <td>{{profile.FatherName}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">CNIC</strong></td>
+                        <td>{{dashifyCNIC(profile.CNIC)}} </td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">D.O.B</strong></td>
+                        <td>{{profile.DateOfBirth | date:'dd-MM-yyyy'}} </td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Gender</strong></td>
+                        <td>{{profile.Gender}} </td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Domicile</strong></td>
+                        <td>{{profile.Domicile_Name}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Marital Status</strong></td>
+                        <td>{{profile.MaritalStatus}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Bloodgroup</strong></td>
+                        <td>{{profile.BloodGroup}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Religion</strong></td>
+                        <td>{{profile.Religion_Name}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Mother Tongue</strong></td>
+                        <td>{{profile.Language_Name}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Mobile Number</strong></td>
+                        <td>{{profile.MobileNo}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">E-mail</strong></td>
+                        <td>{{profile.EMaiL}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Landline Number</strong></td>
+                        <td>{{profile.LandlineNo}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Fax Number</strong></td>
+                        <td>{{profile.Faxno}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Permanent Address</strong></td>
+                        <td>{{profile.PermanentAddress}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Correspondence
+                    Address</strong></td>
+                        <td>{{profile.CorrespondenceAddress}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-6 col-sm-12 control-col-end">
+            <table class="table table-50 view-table" style="background: transparent;">
+                <tbody>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Health Facility</strong></td>
+                        <td>{{profile.HealthFacility ? profile.HealthFacility + ', ' + (profile.Tehsil == profile.District ? profile.Tehsil : profile.Tehsil + ', ' + profile.District) : ''}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p" *ngIf="profile.WorkingHealthFacility">
+                        <td><strong class="onlineFts-p-strong">Working Health Facility</strong></td>
+                        <td>{{profile.WorkingHealthFacility + ', ' + (profile.WorkingTehsil == profile.WorkingDistrict ? profile.WorkingTehsil : profile.WorkingTehsil + ', ' + profile.WorkingDistrict)}}
+                            </td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Actual Designation</strong></td>
+                        <td>{{profile.Designation_Name}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Working Designation</strong></td>
+                        <td>{{profile.WDesignation_Name}}</td>
+                    </tr>
+                    <tr *ngIf="profile.AdditionalCharge">
+                        <td><strong class="onlineFts-p-strong">Additional Charge</strong></td>
+                        <td>{{profile.AdditionalCharge}}</td>
+                    </tr>
+                    <tr *ngIf="profile.HoD == 1">
+                        <td><strong class="onlineFts-p-strong">Head of Department</strong></td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Current Grade BPS</strong></td>
+                        <td>{{profile.CurrentGradeBPS}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Joining Grade BPS</strong></td>
+                        <td>{{profile.JoiningGradeBPS}}</td>
+                    </tr>
+                    <!--     <tr (click)="openEditDialog('Postaanctionedwithscale')" class="edit-enabler cursor-p">
+                <td><strong class="onlineFts-p-strong">Post Sanctioned with Scale</strong></td>
+                <td>{{profile.Postaanctionedwithscale}}
+                </td>
+            </tr> -->
+                    <!--   <tr (click)="openEditDialog('PrivatePractice')" class="edit-enabler cursor-p">
+                <td><strong class="onlineFts-p-strong">Private Practice</strong></td>
+                <td>{{profile.PrivatePractice}}</td>
+            </tr> -->
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Status</strong></td>
+                        <td>{{profile.StatusName}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Seniority Number</strong></td>
+                        <td>{{profile.SeniorityNo}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Personnel Number</strong></td>
+                        <td>{{profile.PersonnelNo}}</td>
+                    </tr>
+
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Present Posting Order No</strong></td>
+                        <td>{{profile.PresentPostingOrderNo}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Present Posting Date</strong></td>
+                        <td>{{profile.PresentPostingDate | date:'dd-MM-yyyy'}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Present Joining Date</strong></td>
+                        <td>{{profile.PresentStationLengthOfService | date:'dd-MM-yyyy'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-50 view-table mt-4" style="background: #f7f8fa;">
+                <tbody>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Department</strong></td>
+                        <td>{{profile.Department_Name}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Post Type</strong></td>
+                        <td>{{profile.PostType_Name}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Cadre</strong></td>
+                        <td>{{profile.Cadre_Name}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Employment Mode</strong></td>
+                        <td>{{profile.EmpMode_Name}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Length of Service</strong></td>
+                        <td>{{profile.LengthOfService}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Qualification</strong></td>
+                        <td>{{profile.QualificationName}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p" *ngIf="profile.AdditionalQualification">
+                        <td><strong class="onlineFts-p-strong">Additional Qualification</strong></td>
+                        <td>{{profile.AdditionalQualification}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- <table class="table table-50 view-table mt-4" style="background: #f7f8fa;">
+                <tbody>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Date of First Appointment</strong></td>
+                        <td>{{profile.DateOfFirstAppointment | date:'dd-MM-yyyy'}}
+                        </td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Date of Regularization</strong></td>
+                        <td>{{profile.DateOfRegularization | date:'dd-MM-yyyy'}}
+                        </td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Superannuation Date</strong></td>
+                        <td>{{profile.SuperAnnuationDate | date:'dd-MM-yyyy'}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Contract Start Date</strong></td>
+                        <td>{{profile.ContractStartDate | date:'dd-MM-yyyy'}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Contract End Date</strong></td>
+                        <td>{{profile.ContractEndDate | date:'dd-MM-yyyy'}}</td>
+                    </tr>
+                    <tr class="edit-enabler cursor-p">
+                        <td><strong class="onlineFts-p-strong">Last Promotion Date</strong></td>
+                        <td>{{profile.LastPromotionDate | date:'dd-MM-yyyy'}}</td>
+                    </tr>
+                </tbody>
+            </table> -->
+        </div>
+    </div>
+</div>
+
+
+<!-- Grid for file master -->
+<!-- 
+<kendo-grid [data]="fileMaster">
+    <kendo-grid-column field="FileNumber" [title]="'File No.'" width="10" [headerClass]="'grid-header-text'" [style]="{'background-color': '#fff','color': '#000', 'padding': '12px 8px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+    </kendo-grid-column>
+    
+    <kendo-grid-column field="Name" [title]="'Filename'" width="10" [headerClass]="'grid-header-text'" [style]="{'background-color': '#fff','color': '#000', 'padding': '12px 8px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+    </kendo-grid-column>
+
+    <kendo-grid-column field="Barcode" [title]="'Barcode'" width="10" [headerClass]="'grid-header-text'" [style]="{'background-color': '#fff','color': '#000', 'padding': '12px 8px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+    </kendo-grid-column>
+
+    <kendo-grid-column field="Rack" [title]="'Rack No.'" width="10" [headerClass]="'grid-header-text'" [style]="{'background-color': '#fff','color': '#000', 'padding': '12px 8px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+    </kendo-grid-column>
+
+    <kendo-grid-column field="Shelf" [title]="'Shelf No.'" width="10" [headerClass]="'grid-header-text'" [style]="{'background-color': '#fff','color': '#000', 'padding': '12px 8px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+    </kendo-grid-column>
+  
+  
+  </kendo-grid> -->
+    

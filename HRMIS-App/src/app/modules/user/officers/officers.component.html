@@ -1,0 +1,96 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3">
+        P&SHD Officers
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" routerLink="new" [look]="'outline'">New Office</button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-9 col-sm-12 control-col-st">
+      <label class="k-form-field">
+        <span>Search by Name / CNIC</span>
+        <input type="text" [(ngModel)]="searchFilters.Query" (input)="inputChange.next(searchFilters.Query)"
+          placeholder="Type..." kendoTextBox>
+      </label>
+    </div>
+    <!--  <div class="col-md-5 col-sm-12 control-col">
+      <label class="k-form-field">
+        <span>Designation</span>
+        <kendo-dropdownlist [data]="dropDowns.designationsData" [textField]="'Name'" [valueField]="'Id'"
+          [(ngModel)]="searchFilters.Designation_Id" (valueChange)="getAllPandSOfficers()" [valuePrimitive]="true" [value]="0"
+          [defaultItem]="dropDowns.defultFiltersModel.designation" required>
+        </kendo-dropdownlist>
+      </label>
+    </div> -->
+    <div class="col-md-3 col-sm-12 mt-1 control-col-end">
+      <label class="k-form-field">
+        <button kendoButton class="btn-block btn-align-v" (click)="getAllPandSOfficers()"
+          [primary]="true">SEARCH</button>
+      </label>
+    </div>
+  </div>
+  <div class="row row-panel">
+    <kendo-grid [data]="kGrid.gridView" *ngIf="kGrid.totalRecords > 0" [sortable]="{
+                        allowUnsort: kGrid.allowUnsort,
+                        mode: kGrid.multiple ? 'multiple' : 'single'
+                        }" [sort]="kGrid.sort" (sortChange)="sortChange($event)" [scrollable]="false">
+      <kendo-grid-column [width]="5" field="asd" title="No." [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          {{(rowIndex + 1)}}.
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="20" field="Name" title="Name" [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="row" [routerLink]="'/user/officer/' + dataItem.User_Id + '/' + dataItem.Id + '/edit'">
+            <div class="col-md-12">
+              <div class="employee-info cursor-p"
+                [routerLink]="'/user/officer/' + dataItem.User_Id + '/' + dataItem.Id + '/edit'">
+                <p class="m-0">{{dataItem.Name ? dataItem.Name : ''}}</p>
+                <p class="m-0" *ngIf="dataItem.CNIC">CNIC: {{dashifyCNIC(dataItem.CNIC)}}</p>
+                <p class="m-0"><i class="fa-fa-mobile"></i> {{dataItem.Contact ? dataItem.Contact : ''}}</p>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="40" field="DesignationName" title="Designation" [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="row" [routerLink]="'/user/officer/' + dataItem.User_Id + '/' + dataItem.Id + '/edit'">
+            <div class="col-md-12">
+              <div class="employee-info cursor-p"
+                [routerLink]="'/user/officer/' + dataItem.User_Id + '/' + dataItem.Id + '/edit'">
+                <p class="m-0"><strong
+                    class="p-strong">{{dataItem.DesignationName ? dataItem.DesignationName : ''}}</strong></p>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </kendo-grid-column>
+
+      <kendo-grid-column [width]="20" field="Program" title="Wing / Program / Unit:"
+        [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="row" [routerLink]="'/user/officer/' + dataItem.User_Id + '/' + dataItem.Id + '/edit'">
+            <div class="col-md-12">
+              <div class="employee-info cursor-p"
+                [routerLink]="'/user/officer/' + dataItem.User_Id + '/' + dataItem.Id + '/edit'">
+                <p class="m-0">{{dataItem.Program ? dataItem.Program : ''}}</p>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+    <div *ngIf="kGrid.loading" class="k-i-loading"></div>
+  </div>
+</div>

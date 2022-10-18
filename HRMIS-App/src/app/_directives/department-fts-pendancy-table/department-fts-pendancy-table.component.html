@@ -1,0 +1,1665 @@
+<div class="animated fadeIn">
+  <div class="text-center p-2" style="background: #46a23f;color:white;height: 64px;">
+    <img src="../../../assets/img/brand/logo-punjab.png" alt="" style="float:left;">
+    <h1 class="p-strong animated fadeIn text-center" style="background: transparent !important;">
+      PUCs Pendency Status <span *ngIf="rangeDept.start"> -
+        <small *ngIf="rangeDept.start" class="animated fadeIn">{{rangeDept.start | date:'dd/MM/yyyy'}} - {{rangeDept.end |
+           date:'dd/MM/yyyy'}}</small></span>
+
+
+      <span class="pull-right">
+        <button [hidden]="!showB" #anchor class="btn btn-secondary btn-block" (click)="showFilters = !showFilters"
+          kendoButton>
+          <i class="fa fa-calendar"></i>&nbsp;Calendar
+        </button>
+      </span>
+    </h1>
+    <!--  <h4 (click)="showFilters = !showFilters" class="animated fadeIn text-center"
+      style="background: transparent !important;">
+      <i>Pendency Status Report</i> <span *ngIf="rangeDept.start"> -
+        <small *ngIf="rangeDept.start" class="animated fadeIn">{{rangeDept.start | date:'dd/MM/yyyy'}} - {{rangeDept.end |
+           date:'dd/MM/yyyy'}}</small></span>
+    </h4> -->
+
+  </div>
+  <div class="animated fadeIn" [hidden]="!showFilters">
+    <div class="row animated fadeIn mt-1 w-80">
+      <div class="col-md-2 offset-md-6 control-col-st">
+        <label class="k-form-field">
+          <span class="label">Start Date</span>
+          <kendo-datepicker placeholder="Enter Start Date" [format]="'dd/MM/yyyy'" [min]="minDate" [max]="maxDate"
+            [(ngModel)]="rangeDept.start"></kendo-datepicker>
+        </label>
+
+      </div>
+      <div class="col-md-2 control-col">
+        <label class="k-form-field">
+          <span class="label">End Date</span>
+          <kendo-datepicker placeholder="Enter Start Date" [format]="'dd/MM/yyyy'" [min]="minDate" [max]="maxDate"
+            [(ngModel)]="rangeDept.end"></kendo-datepicker>
+        </label>
+      </div>
+      <div class="col-md-2 control-col-end col-sm-12">
+        <label class="k-form-field">
+          <span class="label">&nbsp;</span>
+          <button kendoButton class="btn-block" *ngIf="rangeDept.start" [ladda]="kGrid.loading" data-style="zoom-in"
+            (click)="getDepartmentReport()" [primary]="true">Get Report</button>
+        </label>
+
+        <!-- <label class="k-form-field">
+          <span>Select Date Range</span>
+          <kendo-daterange>
+            <label hidden>
+              <span class="label">Start</span>
+              <kendo-dateinput kendoDateRangeStartInput [(value)]="rangeDept.start"></kendo-dateinput>
+            </label>
+            <label hidden>
+              <span class="label">End</span>
+              <kendo-dateinput kendoDateRangeEndInput [(value)]="rangeDept.end"></kendo-dateinput>
+            </label>
+            <button #anchor [look]="'outline'" class="btn-block" (click)="popup.toggle()" kendoButton [primary]="true">
+              <i class="fa fa-calendar"></i>&nbsp;Date Range
+            </button>
+            <kendo-daterange-popup id="popupcal" #popup [anchor]="anchor">
+              <ng-template kendoDateRangePopupTemplate>
+                <div class="pt-2 pb-2 pl-4 pr-4">
+                  <span *ngIf="rangeDept.start"><strong class="p-strong">Start
+                      Date:</strong>&nbsp;<u>{{rangeDept.start | date:'d, MMMM - yyyy'}}</u>&nbsp;</span>
+                  <span *ngIf="rangeDept.end">&nbsp;<strong class="p-strong">End
+                      Date:</strong>&nbsp;<u>{{rangeDept.end | date:'d, MMMM - yyyy'}}</u></span>
+ 
+                  &nbsp; <button kendoButton class="animated fadeIn" *ngIf="rangeDept.start" [ladda]="kGrid.loading"
+                    data-style="zoom-in" (click)="getDepartmentReport()" [primary]="true">APPLY
+                    RANGE</button>
+                </div>
+                <kendo-multiviewcalendar kendoDateRangeSelection>
+                </kendo-multiviewcalendar>
+              </ng-template>
+            </kendo-daterange-popup>
+          </kendo-daterange>
+        </label> -->
+      </div>
+      <!--  <div class="col-md-5 col-sm-12 control-col-end">
+       <input type="checkbox" id="liverep" [(ngModel)]="liveReporting" class="k-checkbox" />
+       <label class="k-checkbox-label" for="liverep">Live reporting</label>
+     </div> -->
+    </div>
+    <hr>
+  </div>
+  <div class="k-i-loading" *ngIf="kGrid.loading && !searchQuery"></div>
+  <div class="row p-0 m-0">
+    <!-- <div class="col-md-3 h1 mt-1 p-strong" style="font-size:1.8vw !important;line-height: 2.2;">
+      Total Pendency ({{(secretary?.asadmn?.NoProcessInitiated ? secretary?.asadmn?.NoProcessInitiated : 0) + (secretary?.asadmn?.UnderProcess ? secretary?.asadmn?.UnderProcess : 0)
+        + (secretary?.dsadmin?.NoProcessInitiated ? secretary?.dsadmin?.NoProcessInitiated : 0) + (secretary?.dsadmin?.UnderProcess ? secretary?.dsadmin?.UnderProcess : 0)
+        + (secretary?.soahpi?.NoProcessInitiated ? secretary?.soahpi?.NoProcessInitiated : 0) + (secretary?.soahpi?.UnderProcess ? secretary?.soahpi?.UnderProcess : 0)
+        + (secretary?.soahpii?.NoProcessInitiated ? secretary?.soahpii?.NoProcessInitiated : 0) + (secretary?.soahpii?.UnderProcess ? secretary?.soahpii?.UnderProcess : 0)
+        + (secretary?.sodhas?.NoProcessInitiated ? secretary?.sodhas?.NoProcessInitiated : 0) + (secretary?.sodhas?.UnderProcess ? secretary?.sodhas?.UnderProcess : 0)
+        + (secretary?.sogci?.NoProcessInitiated ? secretary?.sogci?.NoProcessInitiated : 0) + (secretary?.sogci?.UnderProcess ? secretary?.sogci?.UnderProcess : 0)
+        + (secretary?.sogcii?.NoProcessInitiated ? secretary?.sogcii?.NoProcessInitiated : 0) + (secretary?.sogcii?.UnderProcess ? secretary?.sogcii?.UnderProcess : 0)
+        + (secretary?.soinq?.NoProcessInitiated ? secretary?.soinq?.NoProcessInitiated : 0) + (secretary?.soinq?.UnderProcess ? secretary?.soinq?.UnderProcess : 0)
+        + (secretary?.sosc?.NoProcessInitiated ? secretary?.sosc?.NoProcessInitiated : 0) + (secretary?.sosc?.UnderProcess ? secretary?.sosc?.UnderProcess : 0)
+        + (secretary?.dsestab?.NoProcessInitiated ? secretary?.dsestab?.NoProcessInitiated : 0) + (secretary?.dsestab?.UnderProcess ? secretary?.dsestab?.UnderProcess : 0)
+        + (secretary?.sowmoi?.NoProcessInitiated ? secretary?.sowmoi?.NoProcessInitiated : 0) + (secretary?.sowmoi?.UnderProcess ? secretary?.sowmoi?.UnderProcess : 0)
+        + (secretary?.sowmoii?.NoProcessInitiated ? secretary?.sowmoii?.NoProcessInitiated : 0) + (secretary?.sowmoii?.UnderProcess ? secretary?.sowmoii?.UnderProcess : 0)
+        + (secretary?.sonursing?.NoProcessInitiated ? secretary?.sonursing?.NoProcessInitiated : 0) + (secretary?.sonursing?.UnderProcess ? secretary?.sonursing?.UnderProcess : 0)
+        + (secretary?.dsg?.NoProcessInitiated ? secretary?.dsg?.NoProcessInitiated : 0) + (secretary?.dsg?.UnderProcess ? secretary?.dsg?.UnderProcess : 0)
+        + (secretary?.socentral?.NoProcessInitiated ? secretary?.socentral?.NoProcessInitiated : 0) + (secretary?.socentral?.UnderProcess ? secretary?.socentral?.UnderProcess : 0)
+        + (secretary?.sog?.NoProcessInitiated ? secretary?.sog?.NoProcessInitiated : 0) + (secretary?.sog?.UnderProcess ? secretary?.sog?.UnderProcess : 0)
+        + (secretary?.sonorth?.NoProcessInitiated ? secretary?.sonorth?.NoProcessInitiated : 0) + (secretary?.sonorth?.UnderProcess ? secretary?.sonorth?.UnderProcess : 0)
+        + (secretary?.sosouth?.NoProcessInitiated ? secretary?.sosouth?.NoProcessInitiated : 0) + (secretary?.sosouth?.UnderProcess ? secretary?.sosouth?.UnderProcess : 0)
+        + (secretary?.dspromotion?.NoProcessInitiated ? secretary?.dspromotion?.NoProcessInitiated : 0) + (secretary?.dspromotion?.UnderProcess ? secretary?.dspromotion?.UnderProcess : 0)
+        + (secretary?.soconf?.NoProcessInitiated ? secretary?.soconf?.NoProcessInitiated : 0) + (secretary?.soconf?.UnderProcess ? secretary?.soconf?.UnderProcess : 0)
+        + (secretary?.sopromotion?.NoProcessInitiated ? secretary?.sopromotion?.NoProcessInitiated : 0) + (secretary?.sopromotion?.UnderProcess ? secretary?.sopromotion?.UnderProcess : 0)
+        + (secretary?.dsstaff?.NoProcessInitiated ? secretary?.dsstaff?.NoProcessInitiated : 0) + (secretary?.dsstaff?.UnderProcess ? secretary?.dsstaff?.UnderProcess : 0)
+        + (secretary?.sopharmacy?.NoProcessInitiated ? secretary?.sopharmacy?.NoProcessInitiated : 0) + (secretary?.sopharmacy?.UnderProcess ? secretary?.sopharmacy?.UnderProcess : 0)
+        + (secretary?.sodental?.NoProcessInitiated ? secretary?.sodental?.NoProcessInitiated : 0) + (secretary?.sodental?.UnderProcess ? secretary?.sodental?.UnderProcess : 0)
+        + (secretary?.soliason?.NoProcessInitiated ? secretary?.soliason?.NoProcessInitiated : 0) + (secretary?.soliason?.UnderProcess ? secretary?.soliason?.UnderProcess : 0)
+        + (secretary?.asdc?.NoProcessInitiated ? secretary?.asdc?.NoProcessInitiated : 0) + (secretary?.asdc?.UnderProcess ? secretary?.asdc?.UnderProcess : 0)
+        + (secretary?.dsdc?.NoProcessInitiated ? secretary?.dsdc?.NoProcessInitiated : 0) + (secretary?.dsdc?.UnderProcess ? secretary?.dsdc?.UnderProcess : 0)
+        + (secretary?.sodci?.NoProcessInitiated ? secretary?.sodci?.NoProcessInitiated : 0) + (secretary?.sodci?.UnderProcess ? secretary?.sodci?.UnderProcess : 0)
+        + (secretary?.sodcii?.NoProcessInitiated ? secretary?.sodcii?.NoProcessInitiated : 0) + (secretary?.sodcii?.UnderProcess ? secretary?.sodcii?.UnderProcess : 0)
+        + (secretary?.astech?.NoProcessInitiated ? secretary?.astech?.NoProcessInitiated : 0) + (secretary?.astech?.UnderProcess ? secretary?.astech?.UnderProcess : 0)
+        + (secretary?.socnc?.NoProcessInitiated ? secretary?.socnc?.NoProcessInitiated : 0) + (secretary?.socnc?.UnderProcess ? secretary?.socnc?.UnderProcess : 0)
+        + (secretary?.sohd?.NoProcessInitiated ? secretary?.sohd?.NoProcessInitiated : 0) + (secretary?.sohd?.UnderProcess ? secretary?.sohd?.UnderProcess : 0)
+        + (secretary?.sophp?.NoProcessInitiated ? secretary?.sophp?.NoProcessInitiated : 0) + (secretary?.sophp?.UnderProcess ? secretary?.sophp?.UnderProcess : 0)
+        + (secretary?.dsvp?.NoProcessInitiated ? secretary?.dsvp?.NoProcessInitiated : 0) + (secretary?.dsvp?.UnderProcess ? secretary?.dsvp?.UnderProcess : 0)
+        + (secretary?.sovp?.NoProcessInitiated ? secretary?.sovp?.NoProcessInitiated : 0) + (secretary?.sovp?.UnderProcess ? secretary?.sovp?.UnderProcess : 0) + (secretary?.sond?.NoProcessInitiated ? secretary?.sond?.NoProcessInitiated : 0) + (secretary?.sond?.UnderProcess ? secretary?.sond?.UnderProcess : 0)
+        + (secretary?.sobugdet?.NoProcessInitiated ? secretary?.sobugdet?.NoProcessInitiated : 0) + (secretary?.sobugdet?.UnderProcess ? secretary?.sobugdet?.UnderProcess : 0)
+      }})
+    </div> -->
+    <div class="col-md-6 col-sm-12 control-col-st">
+      <label class="k-form-field">
+        <input type="text" class="btn-align-v" style="font-size:2vw !important;" #searchRef
+          (input)="inputChange.next(searchRef.value)" placeholder="Search by Name, CNIC, Mobile Number" kendoTextBox>
+      </label>
+    </div>
+    <div class="col-md-6 col-sm-12 control-col-end">
+      <label class="k-form-field">
+        <input type="text" class="btn-align-v" style="font-size:2vw !important;" placeholder="Search Tracking..."
+          #trackingSearchRef kendoTextBox (input)="showTrackingDetail = false"
+          (keyup.enter)="searchApplication(trackingSearchRef.value)">
+      </label>
+    </div>
+    <!-- <div class="col-md-4 col-sm-12 control-col-end">
+      <label class="k-form-field">
+        <span>Application Type</span>
+        <kendo-dropdownlist [data]="dropDowns.applicationTypesData" [textField]="'Name'" [valueField]="'Id'"
+          (valueChange)="dropdownValueChanged($event, 'types')" [value]="dropDowns.selectedFiltersModel.applicationType"
+          [defaultItem]="dropDowns.defultFiltersModel.applicationType">
+        </kendo-dropdownlist>
+      </label>
+    </div> -->
+    <!--  <div class="col-md-1 col-sm-12 control-col-end">
+      <label class="k-form-field mt-1">
+        <button kendoButton style="height: 85px !important;font-size:50px !important;" class="btn-block btn-align-v"
+          [ladda]="searchingTrack" data-style="zoom-in" (click)="searchApplication(trackingSearchRef.value)"
+          [primary]="true"><i class="fa fa-search"></i></button>
+      </label>
+    </div> -->
+
+  </div>
+
+  <div class="row p-0 m-0 animated fadeIn font-5xl">
+    <div class="col-md-12">
+      <kendo-grid *ngIf="!kGrid.loading && searchQuery" [data]="kGridSearchedApplications.gridView" [sortable]="{
+        allowUnsort: kGridSearchedApplications.allowUnsort,
+        mode: kGridSearchedApplications.multiple ? 'multiple' : 'single'
+        }" [scrollable]="true" style="height: 74vh; width: 100%;" [sort]="kGridSearchedApplications.sort"
+        (sortChange)="pageSearchChange($event)" [(pageSize)]="kGridSearchedApplications.pageSize"
+        [skip]="kGridSearchedApplications.skip" [pageable]="true" (pageChange)="sortSearchChange($event)"
+        [scrollable]="false">
+        <kendo-grid-column [width]="20" field="asd" title="No." [headerClass]="'grid-header-custom font-3xl'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <span class="font-3xl">{{(rowIndex + 1)}}.</span>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="80" field="EmployeeName" title="Applicant"
+          [headerClass]="'grid-header-custom font-3xl'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="employee-info font-3xl"
+              *ngIf="dataItem.ApplicationSource_Id == 5 || dataItem.ApplicationSource_Id == 8">
+              <p class="m-0">{{dataItem.DispatchFrom}}</p>
+              <p class="m-0"><strong class="p-strong">CNIC: </strong>{{dashifyCNIC(dataItem.CNIC)}}</p>
+              <p class="m-0"><strong class="p-strong">Dated:
+                </strong>{{dataItem.DispatchDated | date:'dd/MM/yyyy'}}</p>
+            </div>
+            <div class="employee-info font-3xl"
+              *ngIf="dataItem.ApplicationType_Id != 11 && dataItem.ApplicationSource_Id != 5 && dataItem.ApplicationSource_Id != 8">
+              <p class="m-0"><strong class="p-strong"> Name: </strong>
+                {{dataItem.EmployeeName ? dataItem.EmployeeName : ''}}</p>
+              <p class="m-0"><strong class="p-strong"> CNIC: </strong> {{dashifyCNIC(dataItem.CNIC)}}</p>
+              <p class="m-0" *ngIf="dataItem.FileNumber"><strong class="p-strong"> File Number: </strong>
+                {{dataItem.FileNumber}}</p>
+            </div>
+            <div class="employee-info font-3xl"
+              *ngIf="dataItem.ApplicationType_Id == 11 && dataItem.ApplicationSource_Id != 5 && dataItem.ApplicationSource_Id != 8">
+              <p class="m-0"> Developement Application</p>
+              <p class="m-0" *ngIf="dataItem.FileNumber">{{dataItem.FileNumber}}</p>
+              <p class="m-0">{{dataItem.Created_Date | date:'dd/MM/yyyy, h:mm a'}}</p>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="80" field="EmployeeName" title="Posting"
+          [headerClass]="'grid-header-custom font-3xl'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="employee-info font-3xl"
+              *ngIf="dataItem.ApplicationSource_Id == 5 || dataItem.ApplicationSource_Id == 8">
+              <p class="m-0"></p>
+              <p class="m-0"></p>
+              <p class="m-0"></p>
+            </div>
+            <div class="employee-info font-3xl"
+              *ngIf="dataItem.ApplicationType_Id != 11 && dataItem.ApplicationSource_Id != 5 && dataItem.ApplicationSource_Id != 8">
+              <p class="m-0"><strong
+                  class="p-strong">{{dataItem.designationName ? dataItem.designationName : ''}}</strong>
+              </p>
+              <p class="m-0"><strong class="p-strong">Remarks:</strong> {{dataItem.Remarks}}</p>
+            </div>
+            <div class="employee-info font-3xl"
+              *ngIf="dataItem.ApplicationType_Id == 11 && dataItem.ApplicationSource_Id != 5 && dataItem.ApplicationSource_Id != 8">
+              <p class="m-0"></p>
+              <p class="m-0"></p>
+              <p class="m-0"></p>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="80" field="TrackingNumber" title="Application"
+          [headerClass]="'grid-header-custom font-3xl'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="application-info font-3xl">
+              <p class="m-0" *ngIf="dataItem.ApplicationTypeName"><strong class="p-strong"> Type: </strong>
+                {{dataItem.ApplicationTypeName}}</p>
+              <p class="m-0"><strong class="p-strong"> Tracking # </strong> {{dataItem.TrackingNumber}} <i
+                  class="fa fa-barcode"></i></p>
+              <p class="m-0"><u> {{dataItem.ApplicationSourceName}}</u><small class="pull-right"
+                  *ngIf="dataItem.Purpose"><i class="animated fadeIn">({{dataItem.Purpose}})</i></small></p>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="80" field="PandSOfficerName" title="Office"
+          [headerClass]="'grid-header-custom font-3xl'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="application-info font-3xl">
+              <p class="m-0"><strong class="p-strong">{{dataItem.PandSOfficerName ? dataItem.PandSOfficerName :
+                dataItem.ForwardingOfficerName ? dataItem.ForwardingOfficerName : ''}}</strong> </p>
+              <p class="m-0" *ngIf="dataItem.StatusName != 'Initiated'"><strong class="p-strong"> Status:
+                </strong>
+                <u>{{dataItem.StatusName}}</u>
+              </p>
+              <p class="m-0">{{dataItem.Created_Date | date:'dd/MM/yyyy, h:mm a'}}</p>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="50" field="asd" title="View" [headerClass]="'grid-header-custom font-3xl'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <button style="width: 88%;
+            height: 57px;
+            padding: 6px;" kendoButton [primary]="true" [look]="'outline'" class="ml-2 animated fadeIn btn-sm"
+              (click)="openInNewTab('fts/application/' + dataItem.Id + '/' + dataItem.TrackingNumber)">View</button>
+            <!-- (click)="openApplicationWindow(dataItem)" -->
+          </ng-template>
+        </kendo-grid-column>
+        <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+          <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+          <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+          <kendo-pager-next-buttons></kendo-pager-next-buttons>
+          <div class="pager-rows-number">
+            <select #select (change)="changeSearchPagesize(select.value)">
+              <option *ngIf="kGridSearchedApplications.showInitialPageSize"
+                [value]="kGridSearchedApplications.pageSize">
+                {{kGridSearchedApplications.pageSize}}</option>
+              <option *ngFor="let page of kGridSearchedApplications.pageSizes" [value]="page"
+                [selected]="page === kGridSearchedApplications.pageSize ? true : undefined">
+                {{page}}
+              </option>
+            </select>
+            &nbsp; items per page
+          </div>
+          <kendo-pager-info></kendo-pager-info>
+        </ng-template>
+      </kendo-grid>
+
+      <div class="grid-wrapper" *ngIf="kGrid.loading && searchQuery">
+        <kendo-grid [data]="[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}]" style="height: 74vh; width: 100%;">
+          <kendo-grid-column [width]="20" field="asd" title="No." [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="shine shim-controls"></div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="80" field="EmployeeName" title="Applicant" [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="shine shim-controls"></div>
+              <div class="shine shim-controls"></div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="80" field="TrackingNumber" title="Posting" [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="shine shim-controls"></div>
+              <div class="shine shim-controls"></div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="80" field="TrackingNumber" title="Application"
+            [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="shine shim-controls"></div>
+              <div class="shine shim-controls"></div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="80" field="PandSOfficerName" title="Office" [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="shine shim-controls"></div>
+              <div class="shine shim-controls"></div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="50" field="asd" title="View" [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <div class="shine shim-controls" style="width: 88%;
+               height: 57px;
+               padding: 6px;"></div>
+            </ng-template>
+          </kendo-grid-column>
+          <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+            <div class="shine shim-controls"></div>
+          </ng-template>
+        </kendo-grid>
+        <div class="grid-wrapper">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="row p-0 m-0 animated fadeIn font-5xl" *ngIf="!kGrid.loading && !searchQuery">
+    <div class="col-md-12">
+      <div class="card mb-0 box-cstm">
+        <div class="card-body pb-0">
+          <table class="table-stats" style="font-size: 17px;">
+            <thead>
+              <tr>
+                <th style="width:50%">Officer</th>
+                <th style="width:10%">Total Under Process</th>
+                <th style="width:10%">1 - 7 Days</th>
+                <th style="width:10%">8 - 15 Days</th>
+                <th style="width:10%">16 - 30 Days</th>
+                <th style="width:10%">30+ Days</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr (click)="openApplicationDialog(secretary?.pendancy)" style="font-size: 17px;">
+                <td><span>{{secretary?.pendancy?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.pendancy?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.pendancy?.NoProcessInitiated ? secretary?.pendancy?.NoProcessInitiated : 0) + (secretary?.pendancy?.UnderProcess ? secretary?.pendancy?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.pendancy?.UnderProcessGT7Days ? secretary?.pendancy?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.pendancy?.UnderProcessGT15Days ? secretary?.pendancy?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.pendancy?.UnderProcessGT30Days ? secretary?.pendancy?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.pendancy?.UnderProcessUntilToday ? secretary?.pendancy?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row p-0 m-0 animated fadeIn font-5xl" *ngIf="!kGrid.loading && !searchQuery">
+    <div class="col-md-6">
+      <div class="card mb-0 box-cstm">
+        <div class="card-header font-4xl p-strong">
+          Admn Wing <span class="pull-right">({{(secretary?.asadmn?.NoProcessInitiated ? secretary?.asadmn?.NoProcessInitiated : 0) + (secretary?.asadmn?.UnderProcess ? secretary?.asadmn?.UnderProcess : 0)
+            + (secretary?.dsadmin?.NoProcessInitiated ? secretary?.dsadmin?.NoProcessInitiated : 0) + (secretary?.dsadmin?.UnderProcess ? secretary?.dsadmin?.UnderProcess : 0)
+            + (secretary?.soahpi?.NoProcessInitiated ? secretary?.soahpi?.NoProcessInitiated : 0) + (secretary?.soahpi?.UnderProcess ? secretary?.soahpi?.UnderProcess : 0)
+            + (secretary?.soahpii?.NoProcessInitiated ? secretary?.soahpii?.NoProcessInitiated : 0) + (secretary?.soahpii?.UnderProcess ? secretary?.soahpii?.UnderProcess : 0)
+            + (secretary?.sodhas?.NoProcessInitiated ? secretary?.sodhas?.NoProcessInitiated : 0) + (secretary?.sodhas?.UnderProcess ? secretary?.sodhas?.UnderProcess : 0)
+            + (secretary?.sogci?.NoProcessInitiated ? secretary?.sogci?.NoProcessInitiated : 0) + (secretary?.sogci?.UnderProcess ? secretary?.sogci?.UnderProcess : 0)
+            + (secretary?.sogcii?.NoProcessInitiated ? secretary?.sogcii?.NoProcessInitiated : 0) + (secretary?.sogcii?.UnderProcess ? secretary?.sogcii?.UnderProcess : 0)
+            + (secretary?.soinq?.NoProcessInitiated ? secretary?.soinq?.NoProcessInitiated : 0) + (secretary?.soinq?.UnderProcess ? secretary?.soinq?.UnderProcess : 0)
+            + (secretary?.sosc?.NoProcessInitiated ? secretary?.sosc?.NoProcessInitiated : 0) + (secretary?.sosc?.UnderProcess ? secretary?.sosc?.UnderProcess : 0)
+            + (secretary?.dsestab?.NoProcessInitiated ? secretary?.dsestab?.NoProcessInitiated : 0) + (secretary?.dsestab?.UnderProcess ? secretary?.dsestab?.UnderProcess : 0)
+            + (secretary?.sowmoi?.NoProcessInitiated ? secretary?.sowmoi?.NoProcessInitiated : 0) + (secretary?.sowmoi?.UnderProcess ? secretary?.sowmoi?.UnderProcess : 0)
+            + (secretary?.sowmoii?.NoProcessInitiated ? secretary?.sowmoii?.NoProcessInitiated : 0) + (secretary?.sowmoii?.UnderProcess ? secretary?.sowmoii?.UnderProcess : 0)
+            + (secretary?.sonursing?.NoProcessInitiated ? secretary?.sonursing?.NoProcessInitiated : 0) + (secretary?.sonursing?.UnderProcess ? secretary?.sonursing?.UnderProcess : 0)
+            + (secretary?.dsg?.NoProcessInitiated ? secretary?.dsg?.NoProcessInitiated : 0) + (secretary?.dsg?.UnderProcess ? secretary?.dsg?.UnderProcess : 0)
+            + (secretary?.socentral?.NoProcessInitiated ? secretary?.socentral?.NoProcessInitiated : 0) + (secretary?.socentral?.UnderProcess ? secretary?.socentral?.UnderProcess : 0)
+            + (secretary?.sog?.NoProcessInitiated ? secretary?.sog?.NoProcessInitiated : 0) + (secretary?.sog?.UnderProcess ? secretary?.sog?.UnderProcess : 0)
+            + (secretary?.sonorth?.NoProcessInitiated ? secretary?.sonorth?.NoProcessInitiated : 0) + (secretary?.sonorth?.UnderProcess ? secretary?.sonorth?.UnderProcess : 0)
+            + (secretary?.sosouth?.NoProcessInitiated ? secretary?.sosouth?.NoProcessInitiated : 0) + (secretary?.sosouth?.UnderProcess ? secretary?.sosouth?.UnderProcess : 0)
+            + (secretary?.dspromotion?.NoProcessInitiated ? secretary?.dspromotion?.NoProcessInitiated : 0) + (secretary?.dspromotion?.UnderProcess ? secretary?.dspromotion?.UnderProcess : 0)
+            + (secretary?.soconf?.NoProcessInitiated ? secretary?.soconf?.NoProcessInitiated : 0) + (secretary?.soconf?.UnderProcess ? secretary?.soconf?.UnderProcess : 0)
+            + (secretary?.soconf2?.NoProcessInitiated ? secretary?.soconf2?.NoProcessInitiated : 0) + (secretary?.soconf2?.UnderProcess ? secretary?.soconf2?.UnderProcess : 0)
+            + (secretary?.sopromotion?.NoProcessInitiated ? secretary?.sopromotion?.NoProcessInitiated : 0) + (secretary?.sopromotion?.UnderProcess ? secretary?.sopromotion?.UnderProcess : 0)
+            + (secretary?.sopension?.NoProcessInitiated ? secretary?.sopension?.NoProcessInitiated : 0) + (secretary?.sopension?.UnderProcess ? secretary?.sopension?.UnderProcess : 0)
+            + (secretary?.dsstaff?.NoProcessInitiated ? secretary?.dsstaff?.NoProcessInitiated : 0) + (secretary?.dsstaff?.UnderProcess ? secretary?.dsstaff?.UnderProcess : 0)
+            + (secretary?.sopharmacy?.NoProcessInitiated ? secretary?.sopharmacy?.NoProcessInitiated : 0) + (secretary?.sopharmacy?.UnderProcess ? secretary?.sopharmacy?.UnderProcess : 0)
+            + (secretary?.sodental?.NoProcessInitiated ? secretary?.sodental?.NoProcessInitiated : 0) + (secretary?.sodental?.UnderProcess ? secretary?.sodental?.UnderProcess : 0)
+            + (secretary?.soliason?.NoProcessInitiated ? secretary?.soliason?.NoProcessInitiated : 0) + (secretary?.soliason?.UnderProcess ? secretary?.soliason?.UnderProcess : 0)
+          }})</span>
+        </div>
+        <div class="card-body pb-0">
+          <table class="table-stats" style="font-size: 14px;">
+            <thead>
+              <tr>
+                <th style="width:50%">Officer</th>
+                <th style="width:10%">Total Under Process</th>
+                <th style="width:10%">1 - 7 Days</th>
+                <th style="width:10%">8 - 15 Days</th>
+                <th style="width:10%">16 - 30 Days</th>
+                <th style="width:10%">30+ Days</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr (click)="openApplicationDialog(secretary?.asadmn)" style="font-size: 17px;">
+                <td><span>{{secretary?.asadmn?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.asadmn?.OfficerName}}</span></span></td>
+                <td>
+                  {{(secretary?.asadmn?.NoProcessInitiated ? secretary?.asadmn?.NoProcessInitiated : 0) + (secretary?.asadmn?.UnderProcess ? secretary?.asadmn?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.asadmn?.UnderProcessGT7Days ? secretary?.asadmn?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.asadmn?.UnderProcessGT15Days ? secretary?.asadmn?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.asadmn?.UnderProcessGT30Days ? secretary?.asadmn?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.asadmn?.UnderProcessUntilToday ? secretary?.asadmn?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.dsadmin)"
+                style="background: #000000d9;color: white;font-size: 16px;">
+                <td><span>{{secretary?.dsadmin?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.dsadmin?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.dsadmin?.NoProcessInitiated ? secretary?.dsadmin?.NoProcessInitiated : 0) + (secretary?.dsadmin?.UnderProcess ? secretary?.dsadmin?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.dsadmin?.UnderProcessGT7Days ? secretary?.dsadmin?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.dsadmin?.UnderProcessGT15Days ? secretary?.dsadmin?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.dsadmin?.UnderProcessGT30Days ? secretary?.dsadmin?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.dsadmin?.UnderProcessUntilToday ? secretary?.dsadmin?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.soahpi)">
+                <td><span>{{secretary?.soahpi?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.soahpi?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.soahpi?.NoProcessInitiated ? secretary?.soahpi?.NoProcessInitiated : 0) + (secretary?.soahpi?.UnderProcess ? secretary?.soahpi?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.soahpi?.UnderProcessGT7Days ? secretary?.soahpi?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.soahpi?.UnderProcessGT15Days ? secretary?.soahpi?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.soahpi?.UnderProcessGT30Days ? secretary?.soahpi?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.soahpi?.UnderProcessUntilToday ? secretary?.soahpi?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.soahpii)">
+                <td><span>{{secretary?.soahpii?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.soahpii?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.soahpii?.NoProcessInitiated ? secretary?.soahpii?.NoProcessInitiated : 0) + (secretary?.soahpii?.UnderProcess ? secretary?.soahpii?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.soahpii?.UnderProcessGT7Days ? secretary?.soahpii?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.soahpii?.UnderProcessGT15Days ? secretary?.soahpii?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.soahpii?.UnderProcessGT30Days ? secretary?.soahpii?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.soahpii?.UnderProcessUntilToday ? secretary?.soahpii?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.sodhas)">
+                <td><span>{{secretary?.sodhas?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.sodhas?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.sodhas?.NoProcessInitiated ? secretary?.sodhas?.NoProcessInitiated : 0) + (secretary?.sodhas?.UnderProcess ? secretary?.sodhas?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.sodhas?.UnderProcessGT7Days ? secretary?.sodhas?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.sodhas?.UnderProcessGT15Days ? secretary?.sodhas?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.sodhas?.UnderProcessGT30Days ? secretary?.sodhas?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.sodhas?.UnderProcessUntilToday ? secretary?.sodhas?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.sogci)">
+                <td><span>{{secretary?.sogci?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.sogci?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.sogci?.NoProcessInitiated ? secretary?.sogci?.NoProcessInitiated : 0) + (secretary?.sogci?.UnderProcess ? secretary?.sogci?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.sogci?.UnderProcessGT7Days ? secretary?.sogci?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.sogci?.UnderProcessGT15Days ? secretary?.sogci?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.sogci?.UnderProcessGT30Days ? secretary?.sogci?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.sogci?.UnderProcessUntilToday ? secretary?.sogci?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.sogcii)">
+                <td><span>{{secretary?.sogcii?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.sogcii?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.sogcii?.NoProcessInitiated ? secretary?.sogcii?.NoProcessInitiated : 0) + (secretary?.sogcii?.UnderProcess ? secretary?.sogcii?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.sogcii?.UnderProcessGT7Days ? secretary?.sogcii?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.sogcii?.UnderProcessGT15Days ? secretary?.sogcii?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.sogcii?.UnderProcessGT30Days ? secretary?.sogcii?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.sogcii?.UnderProcessUntilToday ? secretary?.sogcii?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.soinq)">
+                <td><span>{{secretary?.soinq?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.soinq?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.soinq?.NoProcessInitiated ? secretary?.soinq?.NoProcessInitiated : 0) + (secretary?.soinq?.UnderProcess ? secretary?.soinq?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.soinq?.UnderProcessGT7Days ? secretary?.soinq?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.soinq?.UnderProcessGT15Days ? secretary?.soinq?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.soinq?.UnderProcessGT30Days ? secretary?.soinq?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.soinq?.UnderProcessUntilToday ? secretary?.soinq?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.sosc)">
+                <td><span>{{secretary?.sosc?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.sosc?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.sosc?.NoProcessInitiated ? secretary?.sosc?.NoProcessInitiated : 0) + (secretary?.sosc?.UnderProcess ? secretary?.sosc?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.sosc?.UnderProcessGT7Days ? secretary?.sosc?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.sosc?.UnderProcessGT15Days ? secretary?.sosc?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.sosc?.UnderProcessGT30Days ? secretary?.sosc?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.sosc?.UnderProcessUntilToday ? secretary?.sosc?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.dsestab)"
+                style="background: #000000d9;color: white;font-size: 16px;">
+                <td><span>{{secretary?.dsestab?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.dsestab?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.dsestab?.NoProcessInitiated ? secretary?.dsestab?.NoProcessInitiated : 0) + (secretary?.dsestab?.UnderProcess ? secretary?.dsestab?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.dsestab?.UnderProcessGT7Days ? secretary?.dsestab?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.dsestab?.UnderProcessGT15Days ? secretary?.dsestab?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.dsestab?.UnderProcessGT30Days ? secretary?.dsestab?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.dsestab?.UnderProcessUntilToday ? secretary?.dsestab?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.sowmoi)">
+                <td><span>{{secretary?.sowmoi?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.sowmoi?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.sowmoi?.NoProcessInitiated ? secretary?.sowmoi?.NoProcessInitiated : 0) + (secretary?.sowmoi?.UnderProcess ? secretary?.sowmoi?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.sowmoi?.UnderProcessGT7Days ? secretary?.sowmoi?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.sowmoi?.UnderProcessGT15Days ? secretary?.sowmoi?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.sowmoi?.UnderProcessGT30Days ? secretary?.sowmoi?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.sowmoi?.UnderProcessUntilToday ? secretary?.sowmoi?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.sowmoii)">
+                <td><span>{{secretary?.sowmoii?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.sowmoii?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.sowmoii?.NoProcessInitiated ? secretary?.sowmoii?.NoProcessInitiated : 0) + (secretary?.sowmoii?.UnderProcess ? secretary?.sowmoii?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.sowmoii?.UnderProcessGT7Days ? secretary?.sowmoii?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.sowmoii?.UnderProcessGT15Days ? secretary?.sowmoii?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.sowmoii?.UnderProcessGT30Days ? secretary?.sowmoii?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.sowmoii?.UnderProcessUntilToday ? secretary?.sowmoii?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.sonursing)">
+                <td><span>{{secretary?.sonursing?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.sonursing?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.sonursing?.NoProcessInitiated ? secretary?.sonursing?.NoProcessInitiated : 0) + (secretary?.sonursing?.UnderProcess ? secretary?.sonursing?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.sonursing?.UnderProcessGT7Days ? secretary?.sonursing?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.sonursing?.UnderProcessGT15Days ? secretary?.sonursing?.UnderProcessGT15Days : 0)}}
+                </td>
+                <td>{{(secretary?.sonursing?.UnderProcessGT30Days ? secretary?.sonursing?.UnderProcessGT30Days : 0)}}
+                </td>
+                <td>
+                  {{(secretary?.sonursing?.UnderProcessUntilToday ? secretary?.sonursing?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.dsg)"
+                style="background: #000000d9;color: white;font-size: 16px;">
+                <td><span>{{secretary?.dsg?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.dsg?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.dsg?.NoProcessInitiated ? secretary?.dsg?.NoProcessInitiated : 0) + (secretary?.dsg?.UnderProcess ? secretary?.dsg?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.dsg?.UnderProcessGT7Days ? secretary?.dsg?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.dsg?.UnderProcessGT15Days ? secretary?.dsg?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.dsg?.UnderProcessGT30Days ? secretary?.dsg?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.dsg?.UnderProcessUntilToday ? secretary?.dsg?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.socentral)">
+                <td><span>{{secretary?.socentral?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.socentral?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.socentral?.NoProcessInitiated ? secretary?.socentral?.NoProcessInitiated : 0) + (secretary?.socentral?.UnderProcess ? secretary?.socentral?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.socentral?.UnderProcessGT7Days ? secretary?.socentral?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.socentral?.UnderProcessGT15Days ? secretary?.socentral?.UnderProcessGT15Days : 0)}}
+                </td>
+                <td>{{(secretary?.socentral?.UnderProcessGT30Days ? secretary?.socentral?.UnderProcessGT30Days : 0)}}
+                </td>
+                <td>
+                  {{(secretary?.socentral?.UnderProcessUntilToday ? secretary?.socentral?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.sog)">
+                <td><span>{{secretary?.sog?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.sog?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.sog?.NoProcessInitiated ? secretary?.sog?.NoProcessInitiated : 0) + (secretary?.sog?.UnderProcess ? secretary?.sog?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.sog?.UnderProcessGT7Days ? secretary?.sog?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.sog?.UnderProcessGT15Days ? secretary?.sog?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.sog?.UnderProcessGT30Days ? secretary?.sog?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.sog?.UnderProcessUntilToday ? secretary?.sog?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.sonorth)">
+                <td><span>{{secretary?.sonorth?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.sonorth?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.sonorth?.NoProcessInitiated ? secretary?.sonorth?.NoProcessInitiated : 0) + (secretary?.sonorth?.UnderProcess ? secretary?.sonorth?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.sonorth?.UnderProcessGT7Days ? secretary?.sonorth?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.sonorth?.UnderProcessGT15Days ? secretary?.sonorth?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.sonorth?.UnderProcessGT30Days ? secretary?.sonorth?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.sonorth?.UnderProcessUntilToday ? secretary?.sonorth?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <!--   <tr (click)="openApplicationDialog(secretary?.sosouth)">
+                <td><span>{{secretary?.sosouth?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.sosouth?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.sosouth?.NoProcessInitiated ? secretary?.sosouth?.NoProcessInitiated : 0) + (secretary?.sosouth?.UnderProcess ? secretary?.sosouth?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.sosouth?.UnderProcessGT7Days ? secretary?.sosouth?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.sosouth?.UnderProcessGT15Days ? secretary?.sosouth?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.sosouth?.UnderProcessGT30Days ? secretary?.sosouth?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.sosouth?.UnderProcessUntilToday ? secretary?.sosouth?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr> -->
+              <tr (click)="openApplicationDialog(secretary?.sopharmacy)">
+                <td><span>{{secretary?.sopharmacy?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.sopharmacy?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.sopharmacy?.NoProcessInitiated ? secretary?.sopharmacy?.NoProcessInitiated : 0) + (secretary?.sopharmacy?.UnderProcess ? secretary?.sopharmacy?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.sopharmacy?.UnderProcessGT7Days ? secretary?.sopharmacy?.UnderProcessGT7Days : 0)}}
+                </td>
+                <td>{{(secretary?.sopharmacy?.UnderProcessGT15Days ? secretary?.sopharmacy?.UnderProcessGT15Days : 0)}}
+                </td>
+                <td>{{(secretary?.sopharmacy?.UnderProcessGT30Days ? secretary?.sopharmacy?.UnderProcessGT30Days : 0)}}
+                </td>
+                <td>
+                  {{(secretary?.sopharmacy?.UnderProcessUntilToday ? secretary?.sopharmacy?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.dspromotion)"
+                style="background: #000000d9;color: white;font-size: 16px;">
+                <td><span>{{secretary?.dspromotion?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.dspromotion?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.dspromotion?.NoProcessInitiated ? secretary?.dspromotion?.NoProcessInitiated : 0) + (secretary?.dspromotion?.UnderProcess ? secretary?.dspromotion?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.dspromotion?.UnderProcessGT7Days ? secretary?.dspromotion?.UnderProcessGT7Days : 0)}}
+                </td>
+                <td>
+                  {{(secretary?.dspromotion?.UnderProcessGT15Days ? secretary?.dspromotion?.UnderProcessGT15Days : 0)}}
+                </td>
+                <td>
+                  {{(secretary?.dspromotion?.UnderProcessGT30Days ? secretary?.dspromotion?.UnderProcessGT30Days : 0)}}
+                </td>
+                <td>
+                  {{(secretary?.dspromotion?.UnderProcessUntilToday ? secretary?.dspromotion?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.soconf)">
+                <td><span>{{secretary?.soconf?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.soconf?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.soconf?.NoProcessInitiated ? secretary?.soconf?.NoProcessInitiated : 0) + (secretary?.soconf?.UnderProcess ? secretary?.soconf?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.soconf?.UnderProcessGT7Days ? secretary?.soconf?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.soconf?.UnderProcessGT15Days ? secretary?.soconf?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.soconf?.UnderProcessGT30Days ? secretary?.soconf?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.soconf?.UnderProcessUntilToday ? secretary?.soconf?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.soconf2)">
+                <td><span>{{secretary?.soconf2?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.soconf2?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.soconf2?.NoProcessInitiated ? secretary?.soconf2?.NoProcessInitiated : 0) + (secretary?.soconf2?.UnderProcess ? secretary?.soconf2?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.soconf2?.UnderProcessGT7Days ? secretary?.soconf2?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.soconf2?.UnderProcessGT15Days ? secretary?.soconf2?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.soconf2?.UnderProcessGT30Days ? secretary?.soconf2?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.soconf2?.UnderProcessUntilToday ? secretary?.soconf2?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.sopromotion)">
+                <td><span>{{secretary?.sopromotion?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.sopromotion?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.sopromotion?.NoProcessInitiated ? secretary?.sopromotion?.NoProcessInitiated : 0) + (secretary?.sopromotion?.UnderProcess ? secretary?.sopromotion?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.sopromotion?.UnderProcessGT7Days ? secretary?.sopromotion?.UnderProcessGT7Days : 0)}}
+                </td>
+                <td>
+                  {{(secretary?.sopromotion?.UnderProcessGT15Days ? secretary?.sopromotion?.UnderProcessGT15Days : 0)}}
+                </td>
+                <td>
+                  {{(secretary?.sopromotion?.UnderProcessGT30Days ? secretary?.sopromotion?.UnderProcessGT30Days : 0)}}
+                </td>
+                <td>
+                  {{(secretary?.sopromotion?.UnderProcessUntilToday ? secretary?.sopromotion?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.sopension)">
+                <td><span>{{secretary?.sopension?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.sopension?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.sopension?.NoProcessInitiated ? secretary?.sopension?.NoProcessInitiated : 0) + (secretary?.sopension?.UnderProcess ? secretary?.sopension?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.sopension?.UnderProcessGT7Days ? secretary?.sopension?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.sopension?.UnderProcessGT15Days ? secretary?.sopension?.UnderProcessGT15Days : 0)}}
+                </td>
+                <td>{{(secretary?.sopension?.UnderProcessGT30Days ? secretary?.sopension?.UnderProcessGT30Days : 0)}}
+                </td>
+                <td>
+                  {{(secretary?.sopension?.UnderProcessUntilToday ? secretary?.sopension?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.dsstaff)"
+                style="background: #000000d9;color: white;font-size: 16px;">
+                <td><span>{{secretary?.dsstaff?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.dsstaff?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.dsstaff?.NoProcessInitiated ? secretary?.dsstaff?.NoProcessInitiated : 0) + (secretary?.dsstaff?.UnderProcess ? secretary?.dsstaff?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.dsstaff?.UnderProcessGT7Days ? secretary?.dsstaff?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.dsstaff?.UnderProcessGT15Days ? secretary?.dsstaff?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.dsstaff?.UnderProcessGT30Days ? secretary?.dsstaff?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.dsstaff?.UnderProcessUntilToday ? secretary?.dsstaff?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.sodental)">
+                <td><span>{{secretary?.sodental?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.sodental?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.sodental?.NoProcessInitiated ? secretary?.sodental?.NoProcessInitiated : 0) + (secretary?.sodental?.UnderProcess ? secretary?.sodental?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.sodental?.UnderProcessGT7Days ? secretary?.sodental?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.sodental?.UnderProcessGT15Days ? secretary?.sodental?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.sodental?.UnderProcessGT30Days ? secretary?.sodental?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.sodental?.UnderProcessUntilToday ? secretary?.sodental?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+
+        </div>
+      </div>
+
+      <!--  <div class="card mb-0 box-cstm">
+        <div class="card-header font-4xl p-strong">
+          South Punjab <span class="pull-right">({{(secretary?.asadmn?.NoProcessInitiated ? secretary?.asadmn?.NoProcessInitiated : 0) + (secretary?.asadmn?.UnderProcess ? secretary?.asadmn?.UnderProcess : 0)
+            + (secretary?.dsadmin?.NoProcessInitiated ? secretary?.dsadmin?.NoProcessInitiated : 0) + (secretary?.dsadmin?.UnderProcess ? secretary?.dsadmin?.UnderProcess : 0)
+            + (secretary?.soahpi?.NoProcessInitiated ? secretary?.soahpi?.NoProcessInitiated : 0) + (secretary?.soahpi?.UnderProcess ? secretary?.soahpi?.UnderProcess : 0)
+            + (secretary?.soahpii?.NoProcessInitiated ? secretary?.soahpii?.NoProcessInitiated : 0) + (secretary?.soahpii?.UnderProcess ? secretary?.soahpii?.UnderProcess : 0)
+            + (secretary?.sodhas?.NoProcessInitiated ? secretary?.sodhas?.NoProcessInitiated : 0) + (secretary?.sodhas?.UnderProcess ? secretary?.sodhas?.UnderProcess : 0)
+            + (secretary?.sogci?.NoProcessInitiated ? secretary?.sogci?.NoProcessInitiated : 0) + (secretary?.sogci?.UnderProcess ? secretary?.sogci?.UnderProcess : 0)
+            + (secretary?.sogcii?.NoProcessInitiated ? secretary?.sogcii?.NoProcessInitiated : 0) + (secretary?.sogcii?.UnderProcess ? secretary?.sogcii?.UnderProcess : 0)
+            + (secretary?.soinq?.NoProcessInitiated ? secretary?.soinq?.NoProcessInitiated : 0) + (secretary?.soinq?.UnderProcess ? secretary?.soinq?.UnderProcess : 0)
+            + (secretary?.sosc?.NoProcessInitiated ? secretary?.sosc?.NoProcessInitiated : 0) + (secretary?.sosc?.UnderProcess ? secretary?.sosc?.UnderProcess : 0)
+            + (secretary?.dsestab?.NoProcessInitiated ? secretary?.dsestab?.NoProcessInitiated : 0) + (secretary?.dsestab?.UnderProcess ? secretary?.dsestab?.UnderProcess : 0)
+            + (secretary?.sowmoi?.NoProcessInitiated ? secretary?.sowmoi?.NoProcessInitiated : 0) + (secretary?.sowmoi?.UnderProcess ? secretary?.sowmoi?.UnderProcess : 0)
+            + (secretary?.sowmoii?.NoProcessInitiated ? secretary?.sowmoii?.NoProcessInitiated : 0) + (secretary?.sowmoii?.UnderProcess ? secretary?.sowmoii?.UnderProcess : 0)
+            + (secretary?.sonursing?.NoProcessInitiated ? secretary?.sonursing?.NoProcessInitiated : 0) + (secretary?.sonursing?.UnderProcess ? secretary?.sonursing?.UnderProcess : 0)
+            + (secretary?.dsg?.NoProcessInitiated ? secretary?.dsg?.NoProcessInitiated : 0) + (secretary?.dsg?.UnderProcess ? secretary?.dsg?.UnderProcess : 0)
+            + (secretary?.socentral?.NoProcessInitiated ? secretary?.socentral?.NoProcessInitiated : 0) + (secretary?.socentral?.UnderProcess ? secretary?.socentral?.UnderProcess : 0)
+            + (secretary?.sog?.NoProcessInitiated ? secretary?.sog?.NoProcessInitiated : 0) + (secretary?.sog?.UnderProcess ? secretary?.sog?.UnderProcess : 0)
+            + (secretary?.sonorth?.NoProcessInitiated ? secretary?.sonorth?.NoProcessInitiated : 0) + (secretary?.sonorth?.UnderProcess ? secretary?.sonorth?.UnderProcess : 0)
+            + (secretary?.sosouth?.NoProcessInitiated ? secretary?.sosouth?.NoProcessInitiated : 0) + (secretary?.sosouth?.UnderProcess ? secretary?.sosouth?.UnderProcess : 0)
+            + (secretary?.dspromotion?.NoProcessInitiated ? secretary?.dspromotion?.NoProcessInitiated : 0) + (secretary?.dspromotion?.UnderProcess ? secretary?.dspromotion?.UnderProcess : 0)
+            + (secretary?.soconf?.NoProcessInitiated ? secretary?.soconf?.NoProcessInitiated : 0) + (secretary?.soconf?.UnderProcess ? secretary?.soconf?.UnderProcess : 0)
+            + (secretary?.soconf2?.NoProcessInitiated ? secretary?.soconf2?.NoProcessInitiated : 0) + (secretary?.soconf2?.UnderProcess ? secretary?.soconf2?.UnderProcess : 0)
+            + (secretary?.sopromotion?.NoProcessInitiated ? secretary?.sopromotion?.NoProcessInitiated : 0) + (secretary?.sopromotion?.UnderProcess ? secretary?.sopromotion?.UnderProcess : 0)
+            + (secretary?.sopension?.NoProcessInitiated ? secretary?.sopension?.NoProcessInitiated : 0) + (secretary?.sopension?.UnderProcess ? secretary?.sopension?.UnderProcess : 0)
+            + (secretary?.dsstaff?.NoProcessInitiated ? secretary?.dsstaff?.NoProcessInitiated : 0) + (secretary?.dsstaff?.UnderProcess ? secretary?.dsstaff?.UnderProcess : 0)
+            + (secretary?.sopharmacy?.NoProcessInitiated ? secretary?.sopharmacy?.NoProcessInitiated : 0) + (secretary?.sopharmacy?.UnderProcess ? secretary?.sopharmacy?.UnderProcess : 0)
+            + (secretary?.sodental?.NoProcessInitiated ? secretary?.sodental?.NoProcessInitiated : 0) + (secretary?.sodental?.UnderProcess ? secretary?.sodental?.UnderProcess : 0)
+            + (secretary?.soliason?.NoProcessInitiated ? secretary?.soliason?.NoProcessInitiated : 0) + (secretary?.soliason?.UnderProcess ? secretary?.soliason?.UnderProcess : 0)
+          }})</span>
+        </div>
+        <div class="card-body pb-0">
+          <table class="table-stats" style="font-size: 14px;">
+            <thead>
+              <tr>
+                <th style="width:50%">Officer</th>
+                <th style="width:10%">Total Under Process</th>
+                <th style="width:10%">1 - 7 Days</th>
+                <th style="width:10%">8 - 15 Days</th>
+                <th style="width:10%">16 - 30 Days</th>
+                <th style="width:10%">30+ Days</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr (click)="openApplicationDialog(secretary?.admnSouth)"
+                style="background: #000000d9;color: white;font-size: 16px;">
+                <td><span>{{secretary?.admnSouth?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.admnSouth?.OfficerName}}</span></span></td>
+                <td>
+                  {{(secretary?.admnSouth?.NoProcessInitiated ? secretary?.admnSouth?.NoProcessInitiated : 0) + (secretary?.admnSouth?.UnderProcess ? secretary?.admnSouth?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.admnSouth?.UnderProcessGT7Days ? secretary?.admnSouth?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.admnSouth?.UnderProcessGT15Days ? secretary?.admnSouth?.UnderProcessGT15Days : 0)}}
+                </td>
+                <td>{{(secretary?.admnSouth?.UnderProcessGT30Days ? secretary?.admnSouth?.UnderProcessGT30Days : 0)}}
+                </td>
+                <td>
+                  {{(secretary?.admnSouth?.UnderProcessUntilToday ? secretary?.admnSouth?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.dnf)">
+                <td><span>{{secretary?.dnf?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.dnf?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.dnf?.NoProcessInitiated ? secretary?.dnf?.NoProcessInitiated : 0) + (secretary?.dnf?.UnderProcess ? secretary?.dnf?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.dnf?.UnderProcessGT7Days ? secretary?.dnf?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.dnf?.UnderProcessGT15Days ? secretary?.dnf?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.dnf?.UnderProcessGT30Days ? secretary?.dnf?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.dnf?.UnderProcessUntilToday ? secretary?.dnf?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.purchase)">
+                <td><span>{{secretary?.purchase?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.purchase?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.purchase?.NoProcessInitiated ? secretary?.purchase?.NoProcessInitiated : 0) + (secretary?.purchase?.UnderProcess ? secretary?.purchase?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.purchase?.UnderProcessGT7Days ? secretary?.purchase?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.purchase?.UnderProcessGT15Days ? secretary?.purchase?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.purchase?.UnderProcessGT30Days ? secretary?.purchase?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.purchase?.UnderProcessUntilToday ? secretary?.purchase?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.coordSouth)">
+                <td><span>{{secretary?.coordSouth?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.coordSouth?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.coordSouth?.NoProcessInitiated ? secretary?.coordSouth?.NoProcessInitiated : 0) + (secretary?.coordSouth?.UnderProcess ? secretary?.coordSouth?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.coordSouth?.UnderProcessGT7Days ? secretary?.coordSouth?.UnderProcessGT7Days : 0)}}
+                </td>
+                <td>{{(secretary?.coordSouth?.UnderProcessGT15Days ? secretary?.coordSouth?.UnderProcessGT15Days : 0)}}
+                </td>
+                <td>{{(secretary?.coordSouth?.UnderProcessGT30Days ? secretary?.coordSouth?.UnderProcessGT30Days : 0)}}
+                </td>
+                <td>
+                  {{(secretary?.coordSouth?.UnderProcessUntilToday ? secretary?.coordSouth?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.dnp)">
+                <td><span>{{secretary?.dnp?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.dnp?.OfficerName}}</span></span></td>
+                <td>
+                  {{(secretary?.dnp?.NoProcessInitiated ? secretary?.dnp?.NoProcessInitiated : 0) + (secretary?.dnp?.UnderProcess ? secretary?.dnp?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.dnp?.UnderProcessGT7Days ? secretary?.dnp?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.dnp?.UnderProcessGT15Days ? secretary?.dnp?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.dnp?.UnderProcessGT30Days ? secretary?.dnp?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.dnp?.UnderProcessUntilToday ? secretary?.dnp?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.ncSouth)">
+                <td><span>{{secretary?.ncSouth?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.ncSouth?.OfficerName}}</span></span></td>
+                <td>
+                  {{(secretary?.ncSouth?.NoProcessInitiated ? secretary?.ncSouth?.NoProcessInitiated : 0) + (secretary?.ncSouth?.UnderProcess ? secretary?.ncSouth?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.ncSouth?.UnderProcessGT7Days ? secretary?.ncSouth?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.ncSouth?.UnderProcessGT15Days ? secretary?.ncSouth?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.ncSouth?.UnderProcessGT30Days ? secretary?.ncSouth?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.ncSouth?.UnderProcessUntilToday ? secretary?.ncSouth?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.ahpSouth)">
+                <td><span>{{secretary?.ahpSouth?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.ahpSouth?.OfficerName}}</span></span></td>
+                <td>
+                  {{(secretary?.ahpSouth?.NoProcessInitiated ? secretary?.ahpSouth?.NoProcessInitiated : 0) + (secretary?.ahpSouth?.UnderProcess ? secretary?.ahpSouth?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.ahpSouth?.UnderProcessGT7Days ? secretary?.ahpSouth?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.ahpSouth?.UnderProcessGT15Days ? secretary?.ahpSouth?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.ahpSouth?.UnderProcessGT30Days ? secretary?.ahpSouth?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.ahpSouth?.UnderProcessUntilToday ? secretary?.ahpSouth?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.bnaSouth)">
+                <td><span>{{secretary?.bnaSouth?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.bnaSouth?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.bnaSouth?.NoProcessInitiated ? secretary?.bnaSouth?.NoProcessInitiated : 0) + (secretary?.bnaSouth?.UnderProcess ? secretary?.bnaSouth?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.bnaSouth?.UnderProcessGT7Days ? secretary?.bnaSouth?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.bnaSouth?.UnderProcessGT15Days ? secretary?.bnaSouth?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.bnaSouth?.UnderProcessGT30Days ? secretary?.bnaSouth?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.bnaSouth?.UnderProcessUntilToday ? secretary?.bnaSouth?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.techiiSouth)"
+                style="background: #000000d9;color: white;font-size: 16px;">
+                <td><span>{{secretary?.techiiSouth?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.techiiSouth?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.techiiSouth?.NoProcessInitiated ? secretary?.techiiSouth?.NoProcessInitiated : 0) + (secretary?.techiiSouth?.UnderProcess ? secretary?.techiiSouth?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.techiiSouth?.UnderProcessGT7Days ? secretary?.techiiSouth?.UnderProcessGT7Days : 0)}}
+                </td>
+                <td>
+                  {{(secretary?.techiiSouth?.UnderProcessGT15Days ? secretary?.techiiSouth?.UnderProcessGT15Days : 0)}}
+                </td>
+                <td>
+                  {{(secretary?.techiiSouth?.UnderProcessGT30Days ? secretary?.techiiSouth?.UnderProcessGT30Days : 0)}}
+                </td>
+                <td>
+                  {{(secretary?.techiiSouth?.UnderProcessUntilToday ? secretary?.techiiSouth?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.techiSouth)">
+                <td><span>{{secretary?.techiSouth?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.techiSouth?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.techiSouth?.NoProcessInitiated ? secretary?.techiSouth?.NoProcessInitiated : 0) + (secretary?.techiSouth?.UnderProcess ? secretary?.techiSouth?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.techiSouth?.UnderProcessGT7Days ? secretary?.techiSouth?.UnderProcessGT7Days : 0)}}
+                </td>
+                <td>{{(secretary?.techiSouth?.UnderProcessGT15Days ? secretary?.techiSouth?.UnderProcessGT15Days : 0)}}
+                </td>
+                <td>{{(secretary?.techiSouth?.UnderProcessGT30Days ? secretary?.techiSouth?.UnderProcessGT30Days : 0)}}
+                </td>
+                <td>
+                  {{(secretary?.techiSouth?.UnderProcessUntilToday ? secretary?.techiSouth?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.gcw)">
+                <td><span>{{secretary?.gcw?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.gcw?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.gcw?.NoProcessInitiated ? secretary?.gcw?.NoProcessInitiated : 0) + (secretary?.gcw?.UnderProcess ? secretary?.gcw?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.gcw?.UnderProcessGT7Days ? secretary?.gcw?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.gcw?.UnderProcessGT15Days ? secretary?.gcw?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.gcw?.UnderProcessGT30Days ? secretary?.gcw?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.gcw?.UnderProcessUntilToday ? secretary?.gcw?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.gcm)">
+                <td><span>{{secretary?.gcm?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.gcm?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.gcm?.NoProcessInitiated ? secretary?.gcm?.NoProcessInitiated : 0) + (secretary?.gcm?.UnderProcess ? secretary?.gcm?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.gcm?.UnderProcessGT7Days ? secretary?.gcm?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.gcm?.UnderProcessGT15Days ? secretary?.gcm?.UnderProcessGT15Days : 0)}}
+                </td>
+                <td>{{(secretary?.gcm?.UnderProcessGT30Days ? secretary?.gcm?.UnderProcessGT30Days : 0)}}
+                </td>
+                <td>
+                  {{(secretary?.gcm?.UnderProcessUntilToday ? secretary?.gcm?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.inquiry)">
+                <td><span>{{secretary?.inquiry?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.inquiry?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.inquiry?.NoProcessInitiated ? secretary?.inquiry?.NoProcessInitiated : 0) + (secretary?.inquiry?.UnderProcess ? secretary?.inquiry?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.inquiry?.UnderProcessGT7Days ? secretary?.inquiry?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.inquiry?.UnderProcessGT15Days ? secretary?.inquiry?.UnderProcessGT15Days : 0)}}
+                </td>
+                <td>{{(secretary?.inquiry?.UnderProcessGT30Days ? secretary?.inquiry?.UnderProcessGT30Days : 0)}}
+                </td>
+                <td>
+                  {{(secretary?.inquiry?.UnderProcessUntilToday ? secretary?.inquiry?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.general)">
+                <td><span>{{secretary?.general?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.general?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.general?.NoProcessInitiated ? secretary?.general?.NoProcessInitiated : 0) + (secretary?.general?.UnderProcess ? secretary?.general?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.general?.UnderProcessGT7Days ? secretary?.general?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.general?.UnderProcessGT15Days ? secretary?.general?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.general?.UnderProcessGT30Days ? secretary?.general?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.general?.UnderProcessUntilToday ? secretary?.general?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div> -->
+    </div>
+    <div class="col-md-6">
+      <div class="card mb-0 box-cstm">
+        <div class="card-header font-4xl p-strong">
+          Drug Control Wing<span class="pull-right">({{(secretary?.asdc?.NoProcessInitiated ? secretary?.asdc?.NoProcessInitiated : 0) + (secretary?.asdc?.UnderProcess ? secretary?.asdc?.UnderProcess : 0)
+            + (secretary?.dsdc?.NoProcessInitiated ? secretary?.dsdc?.NoProcessInitiated : 0) + (secretary?.dsdc?.UnderProcess ? secretary?.dsdc?.UnderProcess : 0)
+            + (secretary?.sodci?.NoProcessInitiated ? secretary?.sodci?.NoProcessInitiated : 0) + (secretary?.sodci?.UnderProcess ? secretary?.sodci?.UnderProcess : 0)
+            + (secretary?.sodcii?.NoProcessInitiated ? secretary?.sodcii?.NoProcessInitiated : 0) + (secretary?.sodcii?.UnderProcess ? secretary?.sodcii?.UnderProcess : 0)
+          }})</span>
+        </div>
+        <div class="card-body pb-0">
+          <table class="table-stats" style="font-size: 14px;">
+            <thead>
+              <tr>
+                <th style="width:50%"> Officer</th>
+                <th style="width:10%">Total Under Process</th>
+                <th style="width:10%">1 - 7 Days</th>
+                <th style="width:10%">8 - 15 Days</th>
+                <th style="width:10%">16 - 30 Days</th>
+                <th style="width:10%">30+ Days</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr (click)="openApplicationDialog(secretary?.asdc)" style="font-size: 16px;">
+                <td><span>{{secretary?.asdc?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.asdc?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.asdc?.NoProcessInitiated ? secretary?.asdc?.NoProcessInitiated : 0) + (secretary?.asdc?.UnderProcess ? secretary?.asdc?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.asdc?.UnderProcessGT7Days ? secretary?.asdc?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.asdc?.UnderProcessGT15Days ? secretary?.asdc?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.asdc?.UnderProcessGT30Days ? secretary?.asdc?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.asdc?.UnderProcessUntilToday ? secretary?.asdc?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.dsdc)"
+                style="background: #000000d9;color: white;font-size: 16px;">
+                <td><span>{{secretary?.dsdc?.OfficerDesignation}} <br><span
+                      class="text-muted p-strong">{{secretary?.dsdc?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.dsdc?.NoProcessInitiated ? secretary?.dsdc?.NoProcessInitiated : 0) + (secretary?.dsdc?.UnderProcess ? secretary?.dsdc?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.dsdc?.UnderProcessGT7Days ? secretary?.dsdc?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.dsdc?.UnderProcessGT15Days ? secretary?.dsdc?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.dsdc?.UnderProcessGT30Days ? secretary?.dsdc?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.dsdc?.UnderProcessUntilToday ? secretary?.dsdc?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.sodci)">
+                <td><span>{{secretary?.sodci?.OfficerDesignation}} <br><span
+                      class="text-muted p-strong">{{secretary?.sodci?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.sodci?.NoProcessInitiated ? secretary?.sodci?.NoProcessInitiated : 0) + (secretary?.sodci?.UnderProcess ? secretary?.sodci?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.sodci?.UnderProcessGT7Days ? secretary?.sodci?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.sodci?.UnderProcessGT15Days ? secretary?.sodci?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.sodci?.UnderProcessGT30Days ? secretary?.sodci?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.sodci?.UnderProcessUntilToday ? secretary?.sodci?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.sodcii)">
+                <td><span>{{secretary?.sodcii?.OfficerDesignation}} <br><span
+                      class="text-muted p-strong">{{secretary?.sodcii?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.sodcii?.NoProcessInitiated ? secretary?.sodcii?.NoProcessInitiated : 0) + (secretary?.sodcii?.UnderProcess ? secretary?.sodcii?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.sodcii?.UnderProcessGT7Days ? secretary?.sodcii?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.sodcii?.UnderProcessGT15Days ? secretary?.sodcii?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.sodcii?.UnderProcessGT30Days ? secretary?.sodcii?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.sodcii?.UnderProcessUntilToday ? secretary?.sodcii?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.sohp)">
+                <td><span>{{secretary?.sohp?.OfficerDesignation}} <br><span
+                      class="text-muted p-strong">{{secretary?.sohp?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.sohp?.NoProcessInitiated ? secretary?.sohp?.NoProcessInitiated : 0) + (secretary?.sohp?.UnderProcess ? secretary?.sohp?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.sohp?.UnderProcessGT7Days ? secretary?.sohp?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.sohp?.UnderProcessGT15Days ? secretary?.sohp?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.sohp?.UnderProcessGT30Days ? secretary?.sohp?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.sohp?.UnderProcessUntilToday ? secretary?.sohp?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card box-cstm">
+        <div class="card-header font-4xl p-strong">
+          Technical Wing<span class="pull-right">({{(secretary?.astech?.NoProcessInitiated ? secretary?.astech?.NoProcessInitiated : 0) + (secretary?.astech?.UnderProcess ? secretary?.astech?.UnderProcess : 0)
+            + (secretary?.socnc?.NoProcessInitiated ? secretary?.socnc?.NoProcessInitiated : 0) + (secretary?.socnc?.UnderProcess ? secretary?.socnc?.UnderProcess : 0)
+            + (secretary?.sohd?.NoProcessInitiated ? secretary?.sohd?.NoProcessInitiated : 0) + (secretary?.sohd?.UnderProcess ? secretary?.sohd?.UnderProcess : 0)
+            + (secretary?.sophp?.NoProcessInitiated ? secretary?.sophp?.NoProcessInitiated : 0) + (secretary?.sophp?.UnderProcess ? secretary?.sophp?.UnderProcess : 0)
+          }})</span>
+        </div>
+        <div class="card-body pb-0">
+          <table class="table-stats" style="font-size: 14px;">
+            <thead>
+              <tr>
+                <th style="width:50%">Officer</th>
+                <th style="width:10%">Total Under Process</th>
+                <th style="width:10%">1 - 7 Days</th>
+                <th style="width:10%">8 - 15 Days</th>
+                <th style="width:10%">16 - 30 Days</th>
+                <th style="width:10%">30+ Days</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr (click)="openApplicationDialog(secretary?.astech)" style="font-size: 16px;">
+                <td><span>{{secretary?.astech?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.astech?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.astech?.NoProcessInitiated ? secretary?.astech?.NoProcessInitiated : 0) + (secretary?.astech?.UnderProcess ? secretary?.astech?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.astech?.UnderProcessGT7Days ? secretary?.astech?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.astech?.UnderProcessGT15Days ? secretary?.astech?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.astech?.UnderProcessGT30Days ? secretary?.astech?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.astech?.UnderProcessUntilToday ? secretary?.astech?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+              <tr style="background: #000000d9;color: white;font-size: 16px;">
+                <td><span>Deputy Secretary (Technical-I) <br><span class="text-muted p-strong">(Dr. Sumaira
+                      Ashraf)</span></span></td>
+                <td>
+                  {{0}}
+                </td>
+                <td>
+                  {{0}}
+                </td>
+                <td>{{0}}</td>
+                <td>{{0}}</td>
+                <td>{{0}}</td>
+              </tr>
+              <tr style="background: #000000d9;color: white;font-size: 16px;">
+                <td><span>Deputy Secretary (Technical-II) <br><span class="text-muted p-strong">(Vacant)</span></span>
+                </td>
+                <td>
+                  {{0}}
+                </td>
+                <td>
+                  {{0}}
+                </td>
+                <td>{{0}}</td>
+                <td>{{0}}</td>
+                <td>{{0}}</td>
+              </tr>
+              <!--     <tr (click)="openApplicationDialog(secretary?.dstechii)">
+                <td><span>{{secretary?.dstechii?.OfficerDesignation}} <br><span
+                      class="text-muted p-strong">{{secretary?.dstechii?.OfficerName}}</span></span></td>
+                <td>
+                  {{(secretary?.dstechii?.NoProcessInitiated ? secretary?.dstechii?.NoProcessInitiated : 0) + (secretary?.dstechii?.UnderProcess ? secretary?.dstechii?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.dstechii?.UnderProcessGT7Days ? secretary?.dstechii?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.dstechii?.UnderProcessGT15Days ? secretary?.dstechii?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.dstechii?.UnderProcessGT30Days ? secretary?.dstechii?.UnderProcessGT30Days : 0)}}</td>
+              </tr> -->
+              <tr (click)="openApplicationDialog(secretary?.socnc)">
+                <td><span>{{secretary?.socnc?.OfficerDesignation}} <br><span
+                      class="text-muted p-strong">{{secretary?.socnc?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.socnc?.NoProcessInitiated ? secretary?.socnc?.NoProcessInitiated : 0) + (secretary?.socnc?.UnderProcess ? secretary?.socnc?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.socnc?.UnderProcessGT7Days ? secretary?.socnc?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.socnc?.UnderProcessGT15Days ? secretary?.socnc?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.socnc?.UnderProcessGT30Days ? secretary?.socnc?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.socnc?.UnderProcessUntilToday ? secretary?.socnc?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.sohd)">
+                <td><span>{{secretary?.sohd?.OfficerDesignation}} <br><span
+                      class="text-muted p-strong">{{secretary?.sohd?.OfficerName}}</span></span></td>
+                <td>
+                  {{(secretary?.sohd?.NoProcessInitiated ? secretary?.sohd?.NoProcessInitiated : 0) + (secretary?.sohd?.UnderProcess ? secretary?.sohd?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.sohd?.UnderProcessGT7Days ? secretary?.sohd?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.sohd?.UnderProcessGT15Days ? secretary?.sohd?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.sohd?.UnderProcessGT30Days ? secretary?.sohd?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.sohd?.UnderProcessUntilToday ? secretary?.sohd?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.sophp)">
+                <td><span>{{secretary?.sophp?.OfficerDesignation}} <br><span
+                      class="text-muted p-strong">{{secretary?.sophp?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.sophp?.NoProcessInitiated ? secretary?.sophp?.NoProcessInitiated : 0) + (secretary?.sophp?.UnderProcess ? secretary?.sophp?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.sophp?.UnderProcessGT7Days ? secretary?.sophp?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.sophp?.UnderProcessGT15Days ? secretary?.sophp?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.sophp?.UnderProcessGT30Days ? secretary?.sophp?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.sophp?.UnderProcessUntilToday ? secretary?.sophp?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+              <tr>
+                <td><span>Section (EP&C) <br><span class="text-muted p-strong">Mr. Muzzamil Khan</span></span></td>
+                <td>
+                  {{0}}
+                </td>
+                <td>{{0}}</td>
+                <td>{{0}}</td>
+                <td>{{0}}</td>
+                <td>{{0}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card box-cstm">
+        <div class="card-header font-4xl p-strong">
+          Development Wing<span class="pull-right">({{(secretary?.sond?.NoProcessInitiated ? secretary?.sond?.NoProcessInitiated : 0) + (secretary?.sond?.UnderProcess ? secretary?.sond?.UnderProcess : 0)
+            + (secretary?.asdev?.NoProcessInitiated ? secretary?.asdev?.NoProcessInitiated : 0) + (secretary?.asdev?.UnderProcess ? secretary?.asdev?.UnderProcess : 0)
+            + (secretary?.sobugdet?.NoProcessInitiated ? secretary?.sobugdet?.NoProcessInitiated : 0) + (secretary?.sobugdet?.UnderProcess ? secretary?.sobugdet?.UnderProcess : 0)
+          }})</span>
+        </div>
+        <div class="card-body pb-0">
+
+          <table class="table-stats" style="font-size: 14px;">
+            <thead>
+              <tr>
+                <th style="width:50%"> Officer</th>
+                <th style="width:10%">Total Under Process</th>
+                <th style="width:10%">1 - 7 Days</th>
+                <th style="width:10%">8 - 15 Days</th>
+                <th style="width:10%">16 - 30 Days</th>
+                <th style="width:10%">30+ Days</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr (click)="openApplicationDialog(secretary?.asdev)" style="font-size: 16px;">
+                <td><span>{{secretary?.asdev?.OfficerDesignation}} <br> <span
+                      class="text-muted p-strong">{{secretary?.asdev?.OfficerName}}</span></span></td>
+
+                <td>
+                  {{(secretary?.asdev?.NoProcessInitiated ? secretary?.asdev?.NoProcessInitiated : 0) + (secretary?.asdev?.UnderProcess ? secretary?.asdev?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.asdev?.UnderProcessGT7Days ? secretary?.asdev?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.asdev?.UnderProcessGT15Days ? secretary?.asdev?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.asdev?.UnderProcessGT30Days ? secretary?.asdev?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.asdev?.UnderProcessUntilToday ? secretary?.asdev?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+              <tr style="background: #000000d9;color: white;font-size: 16px;">
+                <td><span>Deputy Secretary (Development) <br><span class="text-muted p-strong">Ms.
+                      Noor-Ul-Ain</span></span>
+                </td>
+                <td>
+                  {{0}}
+                </td>
+                <td>{{0}}</td>
+                <td>{{0}}</td>
+                <td>{{0}}</td>
+                <td>{{0}}</td>
+              </tr>
+              <tr style="background: #000000d9;color: white;font-size: 16px;">
+                <td><span>Deputy Secretary (Budget & Accounts) <br><span class="text-muted p-strong">Mr. Wajid
+                      Ali</span></span>
+                </td>
+                <td>
+                  {{0}}
+                </td>
+                <td>{{0}}</td>
+                <td>{{0}}</td>
+                <td>{{0}}</td>
+                <td>{{0}}</td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.sond)">
+                <td><span>{{secretary?.sond?.OfficerDesignation}} <br><span
+                      class="text-muted p-strong">{{secretary?.sond?.OfficerName}}</span></span></td>
+                <td>
+                  {{(secretary?.sond?.NoProcessInitiated ? secretary?.sond?.NoProcessInitiated : 0) + (secretary?.sond?.UnderProcess ? secretary?.sond?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.sond?.UnderProcessGT7Days ? secretary?.sond?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.sond?.UnderProcessGT15Days ? secretary?.sond?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.sond?.UnderProcessGT30Days ? secretary?.sond?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.sond?.UnderProcessUntilToday ? secretary?.sond?.UnderProcessUntilToday : 0)}}</td>
+              </tr>
+              <tr (click)="openApplicationDialog(secretary?.sobugdet)">
+                <td><span>{{secretary?.sobugdet?.OfficerDesignation}} <br><span
+                      class="text-muted p-strong">{{secretary?.sobugdet?.OfficerName}}</span></span></td>
+                <td>
+                  {{(secretary?.sobugdet?.NoProcessInitiated ? secretary?.sobugdet?.NoProcessInitiated : 0) + (secretary?.sobugdet?.UnderProcess ? secretary?.sobugdet?.UnderProcess : 0)}}
+                </td>
+                <td>{{(secretary?.sobugdet?.UnderProcessGT7Days ? secretary?.sobugdet?.UnderProcessGT7Days : 0)}}</td>
+                <td>{{(secretary?.sobugdet?.UnderProcessGT15Days ? secretary?.sobugdet?.UnderProcessGT15Days : 0)}}</td>
+                <td>{{(secretary?.sobugdet?.UnderProcessGT30Days ? secretary?.sobugdet?.UnderProcessGT30Days : 0)}}</td>
+                <td>{{(secretary?.sobugdet?.UnderProcessUntilToday ? secretary?.sobugdet?.UnderProcessUntilToday : 0)}}
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!--    <div class="col-md-3 control-col-end">
+   
+      <div class="card" style="background: #b28900e3;">
+        <div class="card-header font-4xl p-strong">
+          Vertical Programs<span class="pull-right">({{(secretary?.dsvp?.NoProcessInitiated ? secretary?.dsvp?.NoProcessInitiated : 0) + (secretary?.dsvp?.UnderProcess ? secretary?.dsvp?.UnderProcess : 0)
+            + (secretary?.sovp?.NoProcessInitiated ? secretary?.sovp?.NoProcessInitiated : 0) + (secretary?.sovp?.UnderProcess ? secretary?.sovp?.UnderProcess : 0)
+          }})</span>
+        </div>
+        <div class="card-body pb-0">
+          <span>{{secretary?.dsvp?.OfficerDesignation}} <span
+                  class="text-muted">{{secretary?.soinq?.OfficerName}}</span></span>
+          <span class="pull-right">
+            ({{(secretary?.dsvp?.NoProcessInitiated ? secretary?.dsvp?.NoProcessInitiated : 0) + (secretary?.dsvp?.UnderProcess ? secretary?.dsvp?.UnderProcess : 0)}})
+          </span>
+          <hr>
+          <div class="ml-1">
+            <ul>
+              <li class="hover-success cursor-p" (click)="openApplicationDialog(secretary?.sovp)">
+                <span>{{secretary?.sovp?.OfficerDesignation}} <span
+                  class="text-muted">{{secretary?.soinq?.OfficerName}}</span></span>
+                <span class="pull-right">
+                  ({{(secretary?.sovp?.NoProcessInitiated ? secretary?.sovp?.NoProcessInitiated : 0) + (secretary?.sovp?.UnderProcess ? secretary?.sovp?.UnderProcess : 0)}})
+                </span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+  </div>
+
+
+
+</div>
+
+<kendo-dialog [title]="selectedOfficer.OfficerDesignation" *ngIf="applicatonDialogOpened"
+  (close)="closeApplicationDialog()" [height]="innerHeight - 60" [width]="innerWidth - 200">
+  <div class="row">
+    <div class="col-md-12">
+      <kendo-grid style="width: 100%;" [data]="[selectedOfficer]">
+        <kendo-grid-column field="Total" title="Total" width="80" [headerClass]="'grid-header-text-center'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table" style="text-align: center;" (click)="cellCLickedFc(dataItem, 0)">{{(dataItem.Total ?
+                dataItem.Total : 0) | number}}
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="NoProcessInitiated" width="128" title="No Process Initiated"
+          [headerClass]="'grid-header-text-center'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table" style="text-align: center;" (click)="cellCLickedFc(dataItem, 10)">{{dataItem.NoProcessInitiated ?
+                dataItem.NoProcessInitiated : 0}}
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="UnderProcess" width="100" title="Under Process"
+          [headerClass]="'grid-header-text-center'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table p-strong" style="text-align: center;" (click)="cellCLickedFc(dataItem, 1)">{{(dataItem.UnderProcess ?
+                dataItem.UnderProcess : 0) | number}}
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="Waiting_Documents" width="120" title="Waiting Documents"
+          [headerClass]="'grid-header-text-center'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table" style="text-align: center;" (click)="cellCLickedFc(dataItem, 8)">{{(dataItem.Waiting_Documents ?
+                dataItem.Waiting_Documents : 0) | number}}
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="FileRequested" width="140" title="Pending File Requests"
+          [headerClass]="'grid-header-text-center'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table" style="text-align: center;" (click)="cellCLickedFc(dataItem, 12)">{{(dataItem.FileRequested ?
+                dataItem.FileRequested : 0) | number}}
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="Approved" title="Approved" width="120" [headerClass]="'grid-header-text-center'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table" style="text-align: center;" (click)="cellCLickedFc(dataItem, 2)">{{((dataItem.Approved) ?
+                (dataItem.Approved) : 0) | number}}
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="Rejected" title="Rejected" width="120" [headerClass]="'grid-header-text-center'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table" style="text-align: center;" (click)="cellCLickedFc(dataItem, 3)">{{((dataItem.Rejected) ?
+                (dataItem.Rejected) : 0) | number}}
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="FileReturned" width="140" title="Disposed" [headerClass]="'grid-header-text-center'"
+          [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="hoverable-table" style="text-align: center;" (click)="cellCLickedFc(dataItem, 33)">
+              {{(dataItem.FileReturned +
+                dataItem.AReturn + dataItem.RReturn) | number}}
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+      </kendo-grid>
+    </div>
+  </div>
+  <br>
+  <div class="grid-wrapper" *ngIf="!kGridApplications.loading">
+    <kendo-grid [data]="kGridApplications.gridView" [sortable]="{
+           allowUnsort: kGridApplications.allowUnsort,
+           mode: kGridApplications.multiple ? 'multiple' : 'single'
+           }" [scrollable]="true" style="height: 74vh; width: 100%;" [sort]="kGridApplications.sort"
+      (sortChange)="sortChange($event)" [(pageSize)]="kGridApplications.pageSize" [skip]="kGridApplications.skip"
+      [pageable]="true" (pageChange)="pageChange($event)" [scrollable]="false">
+      <kendo-grid-column [width]="20" field="asd" title="No." [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <span>{{(rowIndex + 1)}}.</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="80" field="EmployeeName" title="Applicant" [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="employee-info" *ngIf="dataItem.ApplicationSource_Id == 5 || dataItem.ApplicationSource_Id == 8">
+            <p class="m-0"><strong class="p-strong">From:
+              </strong>{{dataItem.DispatchFrom}}</p>
+            <p class="m-0"><strong class="p-strong">Subject:
+              </strong>{{dataItem.DispatchSubject}}</p>
+            <p class="m-0" *ngIf="dataItem.CNIC"><strong class="p-strong">CNIC:
+              </strong>{{dashifyCNIC(dataItem.CNIC)}}</p>
+            <p class="m-0"><strong class="p-strong">Dated:
+              </strong>{{dataItem.DispatchDated | date:'dd/MM/yyyy'}}</p>
+            <p class="m-0">{{dataItem.Created_Date | date:'d/M/yy, h:mm a'}} <small class="pull-right"
+                [ngClass]="dataItem.Limit == 6 ? 'text-warning' : dataItem.Limit == 7 ? 'text-red' : ''">
+                <span>{{dataItem.DateDiff | durationMoment}}</span></small></p>
+          </div>
+          <div class="employee-info" *ngIf="dataItem.ApplicationSource_Id == 10">
+            <p class="m-0"><strong class="p-strong">FileNumber:
+              </strong>{{dataItem.DispatchNumber}}</p>
+            <p class="m-0"><strong class="p-strong">Subject / Title:
+              </strong>{{dataItem.DispatchSubject}}</p>
+            <p class="m-0" *ngIf="dataItem.CNIC"><strong class="p-strong">CNIC:
+              </strong>{{dashifyCNIC(dataItem.CNIC)}}</p>
+          </div>
+          <div class="employee-info"
+            *ngIf="dataItem.ApplicationType_Id != 11 && dataItem.ApplicationSource_Id != 10 && dataItem.ApplicationType_Id != 14 && dataItem.ApplicationSource_Id != 5 && dataItem.ApplicationSource_Id != 8">
+            <p class="m-0"><strong class="p-strong"> Name: </strong>
+              {{dataItem.EmployeeName ? dataItem.EmployeeName : ''}}</p>
+            <p class="m-0"><strong class="p-strong"> CNIC: </strong> {{dashifyCNIC(dataItem.CNIC)}}</p>
+            <p class="m-0" *ngIf="!dataItem.FileNumber"><strong class="p-strong"> Designation: </strong>
+              {{dataItem.designationName}}</p>
+            <p class="m-0" *ngIf="dataItem.FileNumber"><strong class="p-strong"> File Number: </strong>
+              {{dataItem.FileNumber}}</p>
+            <p class="m-0">{{dataItem.Created_Date | date:'d/M/yy, h:mm a'}} <small class="pull-right"
+                [ngClass]="dataItem.Limit == 6 ? 'text-warning' : dataItem.Limit == 7 ? 'text-red' : ''">
+                <span>{{dataItem.DateDiff | durationMoment}}</span></small></p>
+          </div>
+          <div class="employee-info"
+            *ngIf="dataItem.ApplicationType_Id == 11 && dataItem.ApplicationSource_Id != 5 && dataItem.ApplicationSource_Id != 8">
+            <p class="m-0"> Developement Application</p>
+            <p class="m-0" *ngIf="dataItem.FileNumber">{{dataItem.FileNumber}}</p>
+            <p class="m-0">{{dataItem.Created_Date | date:'d/M/yy, h:mm a'}} <small class="pull-right"
+                [ngClass]="dataItem.Limit == 6 ? 'text-warning' : dataItem.Limit == 7 ? 'text-red' : ''">
+                <span>{{dataItem.DateDiff | durationMoment}}</span></small></p>
+          </div>
+          <div class="employee-info"
+            *ngIf="dataItem.ApplicationType_Id == 14 && dataItem.ApplicationSource_Id != 5 && dataItem.ApplicationSource_Id != 8">
+            <p class="m-0"> Citizen Portal Complaint</p>
+            <p class="m-0" *ngIf="dataItem.DispatchNumber"><strong class="p-strong"> Code: </strong>
+              {{dataItem.DispatchNumber}}</p>
+            <p class="m-0">{{dataItem.Created_Date | date:'d/M/yy, h:mm a'}} <small class="pull-right"
+                [ngClass]="dataItem.Limit == 6 ? 'text-warning' : dataItem.Limit == 7 ? 'text-red' : ''">
+                <span>{{dataItem.DateDiff | durationMoment}}</span></small></p>
+          </div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="80" field="EmployeeName" title="Posting" [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="employee-info" *ngIf="dataItem.ApplicationSource_Id == 5 || dataItem.ApplicationSource_Id == 8">
+            <p class="m-0"></p>
+            <p class="m-0"></p>
+            <p class="m-0"></p>
+          </div>
+          <div class="employee-info"
+            *ngIf="dataItem.ApplicationType_Id != 11 && dataItem.ApplicationSource_Id != 5 && dataItem.ApplicationSource_Id != 8">
+            <p class="m-0"><strong
+                class="p-strong">{{dataItem.designationName ? dataItem.designationName : ''}}</strong>
+            </p>
+            <p class="m-0"><strong class="p-strong">Remarks:</strong> {{dataItem.Remarks}}</p>
+          </div>
+          <div class="employee-info"
+            *ngIf="dataItem.ApplicationType_Id == 11 && dataItem.ApplicationSource_Id != 5 && dataItem.ApplicationSource_Id != 8">
+            <p class="m-0"></p>
+            <p class="m-0"></p>
+            <p class="m-0"></p>
+          </div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="80" field="TrackingNumber" title="Application" [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="application-info">
+            <p class="m-0" *ngIf="dataItem.ApplicationTypeName">{{dataItem.ApplicationTypeName}}</p>
+            <p class="m-0"><strong class="p-strong"> Tracking # </strong> <span
+                [ngClass]="dataItem.Limit >= 4 && dataItem.Limit <= 6  ? 'text-gold' : dataItem.Limit >= 7 ? 'text-red' : ''">{{dataItem.TrackingNumber}}</span>
+              &nbsp;<i class="fa fa-barcode"></i></p>
+            <p class="m-0 h5"><u> {{dataItem.ApplicationSourceName}}</u></p>
+          </div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="80" field="PandSOfficerName" title="Office" [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="application-info">
+            <p class="m-0"><strong class="p-strong">{{dataItem.PandSOfficerName ? dataItem.PandSOfficerName :
+                   dataItem.ForwardingOfficerName ? dataItem.ForwardingOfficerName : ''}}</strong> </p>
+            <p class="m-0" *ngIf="dataItem.StatusName != 'Initiated'"><strong class="p-strong"> Status:
+              </strong>
+              <u>{{dataItem.StatusName}}</u>
+            </p>
+            <p class="m-0">{{dataItem.Created_Date | date:'dd/MM/yyyy, h:mm a'}}</p>
+          </div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="50" field="asd" title="View" [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <button style="width: 88%;
+               height: 57px;
+               padding: 6px;" kendoButton [primary]="true" [look]="'outline'" class="ml-2 animated fadeIn btn-sm"
+            (click)="openInNewTab('fts/application/' + dataItem.Id + '/' + dataItem.TrackingNumber)">View</button>
+          <!-- (click)="openApplicationWindow(dataItem)" -->
+        </ng-template>
+      </kendo-grid-column>
+      <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+        <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+        <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+        <kendo-pager-next-buttons></kendo-pager-next-buttons>
+        <div class="pager-rows-number">
+          <select #select (change)="changePagesize(select.value)">
+            <option *ngIf="kGridApplications.showInitialPageSize" [value]="kGridApplications.pageSize">
+              {{kGridApplications.pageSize}}</option>
+            <option *ngFor="let page of kGridApplications.pageSizes" [value]="page"
+              [selected]="page === kGridApplications.pageSize ? true : undefined">
+              {{page}}
+            </option>
+          </select>
+          &nbsp; items per page
+        </div>
+        <kendo-pager-info></kendo-pager-info>
+      </ng-template>
+    </kendo-grid>
+  </div>
+  <div class="grid-wrapper" *ngIf="kGridApplications.loading">
+    <kendo-grid [data]="[{},{},{},{},{},{},{}]" style="height: 74vh; width: 100%;">
+      <kendo-grid-column [width]="20" field="asd" title="No." [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="shine shim-controls"></div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="80" field="EmployeeName" title="Applicant" [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="shine shim-controls"></div>
+          <div class="shine shim-controls"></div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="80" field="TrackingNumber" title="Posting" [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="shine shim-controls"></div>
+          <div class="shine shim-controls"></div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="80" field="TrackingNumber" title="Application" [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="shine shim-controls"></div>
+          <div class="shine shim-controls"></div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="80" field="PandSOfficerName" title="Office" [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          <div class="shine shim-controls"></div>
+          <div class="shine shim-controls"></div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="50" field="asd" title="View" [headerClass]="'grid-header-custom'"
+        [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <div class="shine shim-controls" style="width: 88%;
+           height: 57px;
+           padding: 6px;"></div>
+        </ng-template>
+      </kendo-grid-column>
+      <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+        <div class="shine shim-controls"></div>
+      </ng-template>
+    </kendo-grid>
+    <div class="grid-wrapper">
+    </div>
+  </div>
+</kendo-dialog>
+
+
+<kendo-dialog [title]="'PUC - Tracking # ' + trackingNumber" *ngIf="trackingDialogOpened"
+  (close)="closeTrackingDialog()" [height]="innerHeight - 60" [width]="innerWidth - 200">
+  <app-application-details-zoom [trackingNo]="trackingNumber"></app-application-details-zoom>
+</kendo-dialog>
+<!-- 
+<kendo-excelexport [data]="vacancy" [fileName]="'Pendency_' + healthFacility?.HFTypeName + '.xlsx'" #excelexport>
+  <kendo-excelexport-column field="DsgName" title="Designation"></kendo-excelexport-column>
+  <kendo-excelexport-column field="TotalSanctioned" title="Sanctioned"></kendo-excelexport-column>
+  <kendo-excelexport-column field="TotalWorking" title="Filled"></kendo-excelexport-column>
+  <kendo-excelexport-column field="Regular" title="Regular"></kendo-excelexport-column>
+  <kendo-excelexport-column field="Adhoc" title="Adhoc"></kendo-excelexport-column>
+  <kendo-excelexport-column field="Contract" title="Contract"></kendo-excelexport-column>
+  <kendo-excelexport-column field="PHFMC" title="PHFMC"></kendo-excelexport-column>
+  <kendo-excelexport-column field="Vacant" title="Vacant"></kendo-excelexport-column>
+  <kendo-excelexport-column field="WorkingProfiles" title="Profile"></kendo-excelexport-column>
+  <kendo-excelexport-column field="CadreName" title="Cadre"></kendo-excelexport-column>
+  <kendo-excelexport-column field="BPSWorking" title="BPS"></kendo-excelexport-column>
+  <kendo-excelexport-column field="PostTypeName" title="Post Type"></kendo-excelexport-column>
+  <kendo-excelexport-column field="Created_By" title="Created By"></kendo-excelexport-column>
+  <kendo-excelexport-column field="Created_Date" title="Created Date"></kendo-excelexport-column>
+  <kendo-excelexport-column field="Last_Modified_By" title="Last Modified By"></kendo-excelexport-column>
+  <kendo-excelexport-column field="Modified_Date" title="Modified Date"></kendo-excelexport-column>
+</kendo-excelexport> -->

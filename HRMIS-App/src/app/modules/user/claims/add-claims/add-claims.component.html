@@ -1,0 +1,40 @@
+<div *ngIf="loading" class="k-i-loading"></div>
+<div class="animated fadeIn" *ngIf="!loading">
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3">
+        User Claims - <span class="text-muted">{{user?.UserName}}</span>
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" routerLink="/user">Back to List</button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 control-col-st">
+      <label class="k-form-field">
+        <span>Claim Type</span>
+        <input type="text" [(ngModel)]="newClaim.ClaimType" kendoTextBox>
+      </label>
+    </div>
+    <div class="col-md-6 control-col">
+      <label class="k-form-field">
+        <span>Value</span>
+        <input type="text" [(ngModel)]="newClaim.ClaimValue" kendoTextBox>
+      </label>
+    </div>
+    <div class="col-md-2 mt-1 control-col-end">
+      <label class="k-form-field">
+        <button kendoButton class="btn-block btn-align-v" [disabled]="!newClaim.ClaimType || !newClaim.ClaimValue"
+          (click)="addClaim()" [primary]="true">Add</button>
+      </label>
+    </div>
+  </div>
+  <div class="row row-panel">
+    <div class="col-md-12">
+
+    </div>
+  </div>
+</div>

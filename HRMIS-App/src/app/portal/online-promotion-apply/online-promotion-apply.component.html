@@ -1,0 +1,32 @@
+<div class="app-body">
+    <main class="main d-flex align-items-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mx-auto">
+                    <div class="card mx-4 animated fadeIn"
+                        style="background-color: transparent;border: none !important; margin-top: 0px !important;padding: 0px !important;">
+                        <div class="card-body" style="padding: 0px !important;">
+                            <div class="d-flex">
+                                <div class="dept-name" style="width: 100%;padding: 5px 0px 0px 0px;">
+                                    <div class="dept-second">
+                                        <img src="../../../assets/img/brand/mobilelogo.png" alt=""><span
+                                            class="ml-2 pull-right mt-3">Apply for Promotion</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="animated fadeIn" *ngIf="registerFlag">
+                                <router-outlet></router-outlet>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-2">
+                <p class="mb-1 text-muted">
+                    Powered by Health Information and Service Delivery Unit (HISDU)
+                </p>
+            </div>
+        </div>
+    </main>
+</div>

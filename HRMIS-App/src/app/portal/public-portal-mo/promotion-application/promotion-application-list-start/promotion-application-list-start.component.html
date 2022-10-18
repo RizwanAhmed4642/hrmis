@@ -1,0 +1,115 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="top-h3">
+                Promotion Applications
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3 control-col-st">
+        <kendo-datepicker [format]="'dd/MM/yyyy'" dataType="string" [(ngModel)]="dateStart">
+        </kendo-datepicker>
+    </div>
+    <div class="col-md-3 control-col">
+        <kendo-datepicker [format]="'dd/MM/yyyy'" dataType="string" [(ngModel)]="dateEnd">
+        </kendo-datepicker>
+    </div>
+    <div class="col-md-4 control-col">
+        <input type="text" placeholder="Search . . ." kendoTextBox [(ngModel)]="openSearch">
+    </div>
+    <div class="col-md-2 control-col-end">
+        <div class="row">
+            <div class="col-md-6 control-col-st">
+                <button kendoButton primary="true" class="btn-block" (click)="loadData()"><i
+                        class="fa fa-search"></i></button>
+            </div>
+            <div class="col-md-6 control-col-end">
+                <button kendoButton primary="true" look="outline" class="btn-block" (click)="clear()"><i
+                        class="fa fa-eraser"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row row-panel">
+    <div class="col-md-12">
+        <div class="grid-top-header-custom animated fadeIn" *ngIf="kGrid.totalRecords > 0">
+            <div class="pager-rows-number">
+                <span>
+                    {{(kGrid.skip + 1) + ' - ' + (kGrid.pageSize <= kGrid.totalRecords ? (kGrid.pageSize + kGrid.skip) :
+                                kGrid.totalRecords) + ' of ' + kGrid.numberWithCommas(kGrid.totalRecords) + ' items ' }}
+                </span>
+                <span class="pull-right">
+                    Show &nbsp; <select #select (change)="changePagesize(select.value)">
+                        <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}
+                        </option>
+                        <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+                            [selected]="page === kGrid.pageSize ? true : undefined">
+                            {{page}}
+                        </option>
+                    </select>
+                    &nbsp; items per page
+                </span>
+            </div>
+        </div>
+        <div class="grid-wrapper">
+            <kendo-grid [data]="kGrid.gridView" [sortable]="{
+                              allowUnsort: kGrid.allowUnsort,
+                              mode: kGrid.multiple ? 'multiple' : 'single'
+                              }" [scrollable]="false" [sort]="kGrid.sort" (sortChange)="sortChange($event)"
+                [(pageSize)]="kGrid.pageSize" [skip]="kGrid.skip" [pageable]="true" (pageChange)="pageChange($event)">
+                <kendo-grid-column [width]="7" field="asd" title="No." [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        {{(rowIndex + 1)}}.
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="28" field="EmployeeName" title="Applicant"
+                    [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="grid-list-item">
+                                    <p class="m-0">{{dataItem.Name}}</p>
+                                    <p class="m-0">{{dashifyCNIC(dataItem.CNIC)}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="28" field="EmployeeName" title="Speciality"
+                    [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="grid-list-item">
+                                    <p class="m-0">{{dataItem.AppliedForDesignationName}}</p>
+                                    <p class="m-0">{{dataItem.AppliedForDesignationSrName}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="28" field="EmployeeName" title="Action" [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="grid-list-item">
+                                    <a [href]="'/promotion-applications/' + dataItem.Id"
+                                        class="k-button k-primary text-white">Detail</a>
+                                    <a target="_blank"
+                                        [href]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/PromotionJobApplication/SignedCopy/' + dataItem.SignedCopyFielpath"
+                                        class="k-button k-primary ml-2 text-white">Signed Copy</a>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </kendo-grid-column>
+            </kendo-grid>
+        </div>
+    </div>
+</div>

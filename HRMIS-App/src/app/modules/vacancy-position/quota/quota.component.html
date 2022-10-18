@@ -1,0 +1,112 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-6 col-xs-12">
+            <div class="top-h3">
+                Vacancy Position (Initial / Promotion Quota)
+            </div>
+        </div>
+        <div class="col-md-6 col-xs-12">
+
+        </div>
+    </div>
+
+    <div class="row row-panel">
+        <div class="col-md-12">
+            <i class="fa fa-arrow-left text-muted cursor-p" (click)="back()"></i>
+            <kendo-grid [data]="selectedReport">
+                <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-custom'"
+                    [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{(rowIndex + 1)}}.
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column *ngIf="showDesignation" field="DesignationName" [title]="'Designation'" width="10"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0 cursor-p" (click)="designationClicked(dataItem.Designation_Id)">
+                            {{dataItem.DesignationName}} <span
+                                class="pull-right text-muted">{{dataItem.quota?.Initial}}%
+                                | {{dataItem.quota?.Promotion}}%</span></p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column *ngIf="showDistrict" field="DistrictName" [title]="'District'" width="10"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0 cursor-p"
+                            (click)="districtClicked(dataItem.DistrictCode, dataItem.Designation_Id)">
+                            {{dataItem.DistrictName}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column *ngIf="showHF" field="HealthFacility" [title]="'Health Facility'" width="10"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0 cursor-p" (click)="districtClicked(dataItem.DistrictCode)">
+                            {{dataItem.HealthFacility}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="TotalSanctioned" [title]="'Sanctioned'" width="10"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{dataItem.TotalSanctioned}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="TotalWorking" [title]="'Filled'" width="10"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{dataItem.TotalWorking}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="Vacant" [title]="'Vacant'" width="10" [headerClass]="'grid-header-custom'"
+                    [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{dataItem.Vacant}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <!--  <kendo-grid-column field="Profiles" [title]="'Profiles'" width="10" [headerClass]="'grid-header-custom'"
+                    [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{dataItem.Profiles}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="InitialRecruitment" [title]="'Initial Recruitment'" width="10"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{dataItem.InitialRecruitment}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="ByPromotion" [title]="'By Promotion'" width="10"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{dataItem.ByPromotion}}</p>
+                    </ng-template>
+                </kendo-grid-column> -->
+                <kendo-grid-column field="WorkingProfiles" [title]="'Working Profiles'" width="10"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0"
+                            [ngClass]="dataItem.TotalWorking == dataItem.WorkingProfiles ? '' : 'text-danger'">
+                            {{dataItem.WorkingProfiles}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="WorkingInitialRecruitment" [title]="'InitialRecruitment'" width="10"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0"
+                            [ngClass]="dataItem.WorkingProfiles == (dataItem.WorkingInitialRecruitment + dataItem.WorkingByPromotion) ? '' : 'text-danger'">
+                            {{dataItem.WorkingInitialRecruitment}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="WorkingByPromotion" [title]="'ByPromotion'" width="10"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0"
+                            [ngClass]="dataItem.WorkingProfiles == (dataItem.WorkingInitialRecruitment + dataItem.WorkingByPromotion) ? '' : 'text-danger'">
+                            {{dataItem.WorkingByPromotion}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+
+            </kendo-grid>
+        </div>
+    </div>
+</div>

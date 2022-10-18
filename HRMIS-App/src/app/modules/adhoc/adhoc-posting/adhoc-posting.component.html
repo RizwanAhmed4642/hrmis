@@ -1,0 +1,691 @@
+<div class="p-1 animated fadeIn" style="background: #46a23f;color:white;">
+
+  <label class="k-form-field animated fadeIn" style="width: 25% !important;">
+    <span>Post</span>
+    <kendo-dropdownlist [data]="adhocInterviews" [textField]="'DesignationName'" [valueField]="'Designation_Id'"
+      (valueChange)="dropdownValueChanged($event, 'designation')"
+      [value]="dropDowns.selectedFiltersModel.designationInterview">
+      <ng-template kendoDropDownListItemTemplate let-dataItem>
+        <p class="m-0"><span>{{ dataItem.DesignationName }}</span>&nbsp;<small
+            class="text-muted"><i>({{ dataItem.Batches }}&nbsp;batch{{dataItem.Batches > 1 ? 'es' : ''}})</i></small>
+        </p>
+      </ng-template>
+    </kendo-dropdownlist>
+  </label>
+  <label class="k-form-field animated fadeIn" style="width: 25% !important;">
+    <span>Batch</span>
+    <kendo-dropdownlist [data]="interviewBatches" [textField]="'BatchNo'" [valueField]="'Id'"
+      (valueChange)="getAdhocInterviewBatchApplications($event)"
+      [value]="dropDowns.selectedFiltersModel.interviewBatch">
+      <ng-template kendoDropDownListItemTemplate let-dataItem>
+        <p class="m-0"><span>{{ dataItem.BatchNo }}</span>&nbsp;<small
+            class="text-muted"><i>({{ dataItem.Candidates }}&nbsp;candidates)</i></small>
+        </p>
+      </ng-template>
+    </kendo-dropdownlist>
+  </label>
+  <label class="k-form-field animated fadeIn" style="width: 24% !important;">
+    <span class="animated fadeIn" *ngIf="selectedBatch.Id > 0">Status</span>
+    <kendo-dropdownlist class="animated fadeIn" *ngIf="selectedBatch.Id > 0" [data]="dropDowns.candidateStatus"
+      [defaultItem]="dropDowns.defultFiltersModel.candidateStatus" [textField]="'Name'" [valueField]="'Id'"
+      (valueChange)="searchAdhocInterviewBatchApplications($event.Id)"
+      [value]="dropDowns.selectedFiltersModel.candidateStatus">
+    </kendo-dropdownlist>
+  </label>
+  <label class="k-form-field h3 p-strong animated fadeIn" style="width: 24% !important;">
+    <span class="ml-3">Adhoc Interviews</span>
+  </label>
+</div>
+<div class="d-flex animated fadeIn" style="height: 88vh;overflow-y: auto;">
+  <div style="width: 25%;">
+
+    <label class="k-form-field ml-1 animated fadeIn" *ngIf="selectedBatch.Applications">
+      <span class="p-strong">Search Name / CNIC / Application Number</span>
+      <input type="text" #searchRef (input)="inputChange.next(searchRef.value)" placeholder="Type Name, CNIC..."
+        kendoTextBox>
+    </label>
+
+    <div class="mt-2 animated fadeIn" style="height: 77vh;overflow-y: auto;">
+      <div *ngIf="loadingApplications" class="k-i-loading"></div>
+      <div class="mx-1 my-2" *ngFor="let dataItem of selectedBatch.Applications;let i = index;">
+        <div class="order-thumb" (click)="dropdownValueChanged(dataItem, 'application')"
+          [ngClass]="dataItem.Application_Id == application.Id ? 'active' : ''">
+          <div class="order-thumb-employee mt-1 p-2">
+            <h5>{{dataItem.Name ? dataItem.Name : ''}} <small class="pull-right text-muted font-sm">
+                <i class="fa fa-exclamation-circle text-danger mx-2" *ngIf="dataItem.IsPresent == null"></i>
+                <i class="fa fa-check text-success mx-2" *ngIf="dataItem.IsPresent"></i>
+                <i class="fa fa-lock mx-2" *ngIf="dataItem.IsLocked"></i>
+                {{dataItem.Application_Id}}</small>
+            </h5>
+            <p class="m-0"><strong class="p-strong"> Father Name: </strong>
+              {{dataItem.FatherName ? dataItem.FatherName : ''}}
+              <!-- <span class="pull-right"><strong class="p-strong">
+                  Status: </strong> {{dataItem.Status}}</span> -->
+            </p>
+            <p class="m-0"><strong class="p-strong"> CNIC: </strong> {{dashifyCNIC(dataItem.CNIC)}}</p>
+            <!--  <p class="m-0"><strong class="p-strong"> PNC # </strong> {{dataItem.PMDCNumber}}</p>
+              <p class="m-0"><strong class="p-strong"> Application # </strong> {{dataItem.ApplicationNumber}}</p> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="animated fadeIn" style="width: 75%;height: 88vh;overflow-y: auto;">
+    <div *ngIf="loadingApplication" class="k-i-loading"></div>
+    <div class="animated fadeIn pl-3 pb-3 pt-2" *ngIf="applicant.Id > 0 && !loadingApplication">
+      <div class="animated fadeIn mt-4" style="width: 99%;">
+        <table class="table table-sm border-c my-4 animated fadeIn">
+          <tr class="animated fadeIn">
+            <td>
+              <p class="m-0">
+                <i class="fa fa-barcode"></i>&nbsp;Application #&nbsp;{{application.Id}}
+              </p>
+            </td>
+            <td colspan="3" class="text-center animated fadeIn">
+              <!--  {{application.DesignationName}} -->
+              <!--  <h4 *ngIf="application.Status_Id == 3" class="text-danger"><i class="fa fa-times"></i> Application
+                Rejected
+                <small><i>&nbsp;<span *ngIf="!application.AcceptedByGrievance">District
+                      {{application.StatusChangedByDistrict}}</span><span
+                      *ngIf="application.AcceptedByGrievance">Grievance
+                      Committee</span> on <span
+                      *ngIf="!application.AcceptedByGrievance">{{application.StatusChangedDateTime | date: 'dd/MM/yyyy hh:mm a'}}</span>
+                    <span
+                      *ngIf="application.AcceptedByGrievance">{{application.GrievanceDateTime | date: 'dd/MM/yyyy hh:mm a'}}</span></i></small>
+              </h4> -->
+              <div *ngIf="application.Status_Id == 2" class="text-success h3 m-0"><small><i class="fa fa-check"></i>
+                  Accepted by
+                  <i>&nbsp;<span *ngIf="!application.AcceptedByGrievance">District
+                      {{application.StatusChangedByDistrict}}</span><span
+                      *ngIf="application.AcceptedByGrievance">Grievance
+                      Committee</span> on <span
+                      *ngIf="!application.AcceptedByGrievance">{{application.StatusChangedDateTime | date: 'dd/MM/yyyy hh:mm a'}}</span>
+                    <span
+                      *ngIf="application.AcceptedByGrievance">{{application.GrievanceDateTime | date: 'dd/MM/yyyy hh:mm a'}}</span></i></small>
+              </div>
+            </td>
+            <td>
+              <!-- <button class="animated fadeIn" *ngIf="application.Status_Id == 4" kendoButton primary="true" ladda
+                style="width:48%;" (click)="changeStatus('Accepted')"><i class="fa fa-check"></i>
+                Accept</button>
+              <button class="animated fadeIn" look="outline" *ngIf="application.Status_Id == 2" kendoButton primary="true"
+                ladda style="width:48%;"><i class="fa fa-check"></i>
+                Accepted</button>
+              <button *ngIf="application.Status_Id == 3" ladda style="width:48%;"
+                class="btn btn-outline-danger ml-2 animated fadeIn"><i class="fa fa-times"></i>
+                Rejected</button>
+              <button *ngIf="application.Status_Id == 4" ladda style="width:48%;" class="btn btn-danger ml-2 animated fadeIn"
+                (click)="changeStatus('Rejected')"><i class="fa fa-times"></i>
+                Reject</button> -->
+              <p class="m-0 pull-right">
+                <i class="fa fa-clock-o"></i>&nbsp;{{application.CreatedDate | date: 'dd/MM/yyyy hh:mm a'}}
+              </p>
+            </td>
+          </tr>
+          <tr class="animated fadeIn">
+            <td rowspan="5" style="width: 200px;">
+              <img onError="this.src='../../../assets/img/notfound.png'"
+                class="image--cover d-block cursor-p zoom animated fadeIn ml-2"
+                [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/AdhocApplicants/Photo/' + applicant.CNIC + '_23.jpg'">
+            </td>
+            <td class="p-strong">Name</td>
+            <td>{{applicant.Name}}</td>
+            <td class="p-strong">S/D/W of</td>
+            <td>{{applicant.FatherName}}</td>
+          </tr>
+          <tr class="animated fadeIn">
+            <td class="p-strong">CNIC</td>
+            <td>{{dashifyCNIC(applicant.CNIC)}}</td>
+            <td class="p-strong">Mobile No.</td>
+            <td>{{applicant.MobileNumber}}</td>
+          </tr>
+          <tr class="animated fadeIn">
+            <td class="p-strong">Date of Birth</td>
+            <td>{{applicant.DOB | date: 'dd/MM/yyyy'}}</td>
+            <td class="p-strong">Email</td>
+            <td>{{applicant.Email}}</td>
+          </tr>
+          <tr class="animated fadeIn">
+            <td class="p-strong">Gender</td>
+            <td>{{applicant.Gender}}</td>
+            <td class="p-strong">Marital Status</td>
+            <td>{{applicant.MaritalStatus}}</td>
+          </tr>
+          <tr class="animated fadeIn">
+            <td class="p-strong">Address</td>
+            <td colspan="3">{{applicant.Address}}</td>
+          </tr>
+          <tr class="animated fadeIn" *ngIf="interviewBatchApplication.IsPresent == true && !verificationComplete">
+            <td colspan="4">
+              <h3 class="mb-0"><i class="fa fa-info-circle text-success"></i></h3>
+              <ul class="mt-2 p-strong info-custom-box mx-auto">
+                <li>- Verify all documents to proceed further</li>
+              </ul>
+            </td>
+            <td class="p-strong"></td>
+          </tr>
+          <tr class="animated fadeIn" *ngIf="interviewBatchApplication.IsPresent == true && !presenting && (positionSaved || rejectedVerification) && verificationComplete 
+            && !interviewBatchApplication.InterviewMarks && interviewBatchApplication.IsRejected == null">
+            <td class="p-strong">
+              <label class="k-form-field" *ngIf="!interviewBatchApplication.InterviewMarks && !rejectedVerification">
+                <span>Interview Marks</span>
+                <input type="text" [(ngModel)]="interviewMarks" placeholder="Enter 1 - 5" kendoTextBox>
+              </label>
+            </td>
+            <td>
+              <button *ngIf="!interviewBatchApplication.InterviewMarks && !rejectedVerification"
+                class="btn btn-success btn-block mt-4" (click)="saveAdhocInterviewBatchApplication()"
+                [disabled]="!interviewMarks || interviewMarks < 0 || interviewMarks > 5 || !verificationComplete"
+                [ladda]="saving" data-style="zoom-in"><i class="fa fa-check"></i> Save</button>
+            </td>
+            <td>
+              <div>
+              </div>
+            </td>
+            <td colspan="2">
+              <button
+                *ngIf="!interviewBatchApplication.InterviewMarks && rejectedVerification && interviewBatchApplication.IsRejected == null"
+                class="btn btn-danger btn-block mt-4" (click)="rejectAdhocInterviewBatchApplication()"
+                [ladda]="rejecting" data-style="zoom-in" primary="true" [disabled]="!verificationComplete"><i
+                  class="fa fa-times"></i>
+                Reject
+                Application</button>
+            </td>
+          </tr>
+          <tr class="animated fadeIn"
+            *ngIf="verificationComplete && !rejectedVerification && !positionSaved && interviewBatchApplication.IsPresent != null"
+            style="border-bottom: none !important;">
+            <td>
+              <h3 class="mb-0 mt-3 text-center">&nbsp;</h3>
+            </td>
+            <td colspan="4">
+              <h2 class="m-0 p-strong">Position Holder in
+                {{application.Designation_Id == 802 || application.Designation_Id == 1320 ? 'MBBS' : 'BDS/GN'}}?</h2>
+            </td>
+          </tr>
+          <tr class="animated fadeIn"
+            *ngIf="verificationComplete && !rejectedVerification && !positionSaved && interviewBatchApplication.IsPresent != null"
+            style="border-bottom: none !important;">
+            <td>
+            </td>
+            <td>
+              <label class="k-form-field">
+                <span style="font-size: 20px;">Yes / No</span>
+                <kendo-dropdownlist [(ngModel)]="interviewBatchApplication.PositionHolder" [data]="['Yes' , 'No']"
+                  [defaultItem]="'Select...'">
+                </kendo-dropdownlist>
+              </label>
+            </td>
+            <td>
+              <label class="k-form-field animated fadeIn" *ngIf="interviewBatchApplication.PositionHolder == 'Yes'">
+                <span>1st, 2nd, 3rd</span>
+                <kendo-dropdownlist [(ngModel)]="interviewBatchApplication.Position" [data]="[1, 2, 3]"
+                  [defaultItem]="'Select...'">
+                </kendo-dropdownlist>
+              </label>
+            </td>
+            <td>
+              <label class="k-form-field animated fadeIn" *ngIf="interviewBatchApplication.PositionHolder == 'Yes'">
+                <span>Supporting Document</span>
+                <input type="file"
+                  [ngClass]="interviewBatchApplication.error ? 'text-danger p-strong' : interviewBatchApplication.attached ? 'text-success p-strong' : ''"
+                  (change)="readUrl($event, interviewBatchApplication)" style="width: 100%;">
+              </label>
+            </td>
+            <td>
+              <label class="k-form-field animated fadeIn"
+                *ngIf="interviewBatchApplication.PositionHolder == 'Yes' || interviewBatchApplication.PositionHolder == 'No'">
+                <span>&nbsp;</span>
+                <button class="btn btn-success btn-block mt-1"
+                  [disabled]="(!interviewBatchApplication.Position && interviewBatchApplication.PositionHolder == 'Yes') 
+                  || (interviewBatchApplication.PositionHolder != 'Yes' && interviewBatchApplication.PositionHolder != 'No') 
+                  || (!interviewBatchApplication.photoFile && !interviewBatchApplication.PositionDoc && interviewBatchApplication.PositionHolder == 'Yes')"
+                  (click)="positionAdhocInterviewBatchApplication()" [ladda]="saving" data-style="zoom-in"><i
+                    class="fa fa-check"></i> Save</button>
+              </label>
+            </td>
+          </tr>
+          <tr class="animated fadeIn" *ngIf="interviewBatchApplication.IsPresent == null || presenting || absenting"
+            style="border-bottom: none !important;">
+            <td>
+              <h3 class="mb-0 mt-3 text-center">&nbsp;</h3>
+            </td>
+            <td colspan="4">
+              <h2 class="m-0 p-strong">Mark Attendance to Proceed For Verification</h2>
+            </td>
+          </tr>
+          <tr class="animated fadeIn" *ngIf="interviewBatchApplication.IsPresent == null || presenting || absenting">
+            <td>
+              <h3 class="m-0">&nbsp;</h3>
+            </td>
+            <td>
+              <button class="btn btn-primary btn-lg btn-block" (click)="presentAdhocInterviewBatchApplication()"
+                [ladda]="presenting" data-style="zoom-in"><i class="fa fa-check"></i>
+                Present</button>
+            </td>
+            <td>
+              <button class="btn btn-warning btn-lg btn-block" (click)="absentAdhocInterviewBatchApplication()"
+                [ladda]="absenting" data-style="zoom-in"><i class="fa fa-exclamation"></i>
+                Absent</button>
+            </td>
+          </tr>
+        </table>
+        <div class="row animated fadeIn"
+          *ngIf="interviewBatchApplication.IsPresent == false || interviewBatchApplication.IsRejected == true || interviewBatchApplication.InterviewMarks >= 0">
+          <div class="col-md-12">
+            <label class="k-form-field h3" *ngIf="interviewBatchApplication.IsPresent == false">
+              Candidate
+              is absent
+            </label>
+            <div class="animated fadeIn" *ngIf="interviewBatchApplication.IsRejected == true">
+              <p class="m-0 h3">
+                Rejected
+              </p>
+              <p class="m-0 text-muted">
+                <small><i class="fa fa-times-circle-o text-danger"></i> by
+                  {{interviewBatchApplication.InterviewMarksBy}} @
+                  {{interviewBatchApplication.RejectedDatetime | date: 'dd/MM/yyyy hh:mm a' }}</small>
+              </p>
+            </div>
+            <div class="animated fadeIn" *ngIf="interviewBatchApplication.InterviewMarks >= 0">
+              <p class="m-0 h3">
+                <span class="p-strong">Interview Marks:</span>&nbsp;{{interviewBatchApplication.InterviewMarks}}
+              </p>
+              <p class="m-0 text-muted">
+                <small><i class="fa fa-check-circle-o text-success"></i> verified by
+                  {{interviewBatchApplication.InterviewMarksBy}} @
+                  {{interviewBatchApplication.InterviewMarksDatetime | date: 'dd/MM/yyyy hh:mm a' }}</small>
+              </p>
+            </div>
+            <hr *ngIf="!interviewBatchApplication.IsLocked">
+            <div class="row animated fadeIn" *ngIf="!interviewBatchApplication.IsLocked">
+              <div class="col-md-3 animated fadeIn">
+                <button kendoButton primary="true" class="btn-block mt-1" look="outline"
+                  (click)="resetAdhocInterviewBatchApplication()" [ladda]="reseting" data-style="zoom-in"><i
+                    class="fa fa-refresh"></i> Reset</button>
+              </div>
+              <div class="col-md-3 animated fadeIn">
+                <button kendoButton primary="true" class="btn-block mt-1" (click)="lockAdhocInterviewBatchApplication()"
+                  [ladda]="locking" data-style="zoom-in"><i class="fa fa-lock"></i> Lock</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr class="animated fadeIn"
+          *ngIf="interviewBatchApplication.IsPresent == false || interviewBatchApplication.IsRejected == true || interviewBatchApplication.InterviewMarks">
+        <tabset class="animated fadeIn" [justified]="true"
+          *ngIf="interviewBatchApplication.IsPresent == true && !presenting">
+          <tab heading="Documents">
+            <kendo-grid [data]="documents">
+              <kendo-grid-column [width]="10" field="asd" title="No." [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p class="m-0">{{(rowIndex + 1)}}.</p>
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column [width]="10" field="DocumentName" title="Document" [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <!--    <div class="d-flex">
+                    <div style="width: 48%;"> -->
+                  <img width="75px" class="d-block cursor-p zoom animated fadeIn"
+                    [src]="dataItem.UploadPath && dataItem.UploadPath.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + dataItem.UploadPath"
+                    (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + dataItem.UploadPath)"
+                    draggable="false" alt="">
+
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column [width]="50" field="DocumentName" title="Detail" [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p *ngIf="dataItem.Name != 'PMC'" class="m-0 p-strong">{{dataItem.Name}}
+                  </p>
+                  <p *ngIf="dataItem.Name != 'PMC'" class="m-0">{{dataItem.Name == 'CNIC' ? dashifyCNIC(applicant.CNIC) : 
+                    dataItem.Name == 'Domicile' ? applicant.DomicileName : ''}}
+                  </p>
+                  <p class="m-0 p-strong" *ngIf="dataItem.Name == 'PMC'">
+                    {{application.Desgination_Id == 302 ? 'PNC' : 'PMC'}} #
+                    {{applicant.PMDCNumber}} </p>
+                  <div *ngIf="dataItem.scrutiny">
+                    <p class="m-0">
+                      <i class="fa"
+                        [ngClass]="dataItem.scrutiny?.IsAccepted == true ? 'fa-check-circle-o text-success' : dataItem.scrutiny?.IsRejected == true ? 'fa-times text-danger' : ''"></i>&nbsp;
+                      {{dataItem.scrutiny?.IsAccepted == true ? 'Accepted' : dataItem.scrutiny?.IsRejected == true ? 'Rejected' : ''}}
+                      by {{dataItem.scrutiny?.CreatedBy}}
+                    </p>
+                    <p class="m-0" *ngIf="dataItem.scrutiny?.ReasonDetail"><span
+                        class="p-strong">Reason:</span>&nbsp;{{dataItem.scrutiny?.ReasonDetail}}
+                    </p>
+                    <p class="m-0" *ngIf="dataItem.scrutiny?.Remarks"><span
+                        class="p-strong">Remarks:</span>&nbsp;{{dataItem.scrutiny?.Remarks}}
+                    </p>
+                  </div>
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column field="References" [title]="'Action'" [width]="30" [headerClass]="'grid-header-custom'"
+                [class]="{ 'grid-cell-custom': true }">
+                <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                  <div *ngIf="!dataItem.verification">
+                    <button class="animated fadeIn" class="btn btn-sm" kendoButton primary="true"
+                      [ladda]="dataItem.saving" data-style="zoom-in"
+                      (click)="saveAdhocApplicationVerification(true, dataItem, true)"><i class="fa fa-check"></i>
+                      Verify</button>
+                    <button class="btn btn-sm btn-danger ml-2 animated fadeIn" [ladda]="dataItem.rejecting"
+                      data-style="zoom-in" (click)="saveAdhocApplicationVerification(false, dataItem, true)"><i
+                        class="fa fa-times"></i>
+                      Not Verified</button>
+                  </div>
+                  <div class="animated fadeIn" *ngIf="dataItem.verification">
+                    <p class="m-0 text-success p-strong"><i class="fa"
+                        [ngClass]="dataItem.verification?.Verified == true ? 'fa-check-circle-o text-success' : dataItem.verification?.Verified == false ? 'fa-times text-danger' : ''"></i>&nbsp;
+                      {{dataItem.verification?.Verified == true ? 'Verified' : dataItem.verification?.Verified == false ? 'Not Verified' : ''}}
+                    </p>
+                    <button kendoButton primary="true" *ngIf="!interviewBatchApplication.IsLocked"
+                      class="btn-sm ml-2 animated fadeIn mt-1" [ladda]="dataItem.undoing" data-style="zoom-in"
+                      (click)="saveAdhocApplicationVerification(false, dataItem, false)"><i class="fa fa-refresh"></i>
+                      Undo</button>
+                  </div>
+                </ng-template>
+              </kendo-grid-column>
+            </kendo-grid>
+            <kendo-grid [data]="applicant.Qualifications">
+              <kendo-grid-column [width]="10" field="asd" title="No." [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p class="m-0">{{(rowIndex + 1)}}.</p>
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column [width]="10" field="DocumentName" [title]="''" [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <img width="75px" class="d-block cursor-p zoom animated fadeIn"
+                    [src]="dataItem.UploadPath && dataItem.UploadPath.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + dataItem.UploadPath"
+                    (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + dataItem.UploadPath)"
+                    draggable="false" alt="">
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column [width]="50" field="DocumentName" title="Academic" [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p class="m-0">{{dataItem.Institute}}
+                  </p>
+                  <p class="m-0"><u><i class="p-strong">{{dataItem.DegreeName}}</i></u></p>
+                  <p class="m-0" *ngIf="dataItem.Required_Degree_Id != 121">Marks:
+                    <span class="p-strong">{{dataItem.ObtainedMarks}}/{{dataItem.TotalMarks}}</span> &nbsp;<small
+                      class="text-muted">Year {{dataItem.PassingYear | date:'yyyy'}}</small></p>
+                  <p class="m-0 text-muted"> <small
+                      *ngIf="(dataItem.Required_Degree_Id == 116 || dataItem.Required_Degree_Id == 113 || dataItem.Required_Degree_Id == 134 || dataItem.Required_Degree_Id == 117 || dataItem.Required_Degree_Id == 62) && !dataItem.verification"><i
+                        class="fa fa-exclamation-circle"></i> Please review
+                      carefully if the marks of
+                      Islamiyat or Pak
+                      Studies are
+                      included then update the marks by using the change option</small></p>
+                  <p class="m-0 text-success cursor-p p-strong" (click)="dataItem.change = true"
+                    *ngIf="(dataItem.Required_Degree_Id == 116 || dataItem.Required_Degree_Id == 113 || dataItem.Required_Degree_Id == 134 || dataItem.Required_Degree_Id == 117 || dataItem.Required_Degree_Id == 62) && !dataItem.verification">
+                    <i>Change Marks</i></p>
+                  <div class="row animated fadeIn" *ngIf="dataItem.change">
+                    <div class="col-md-4">
+                      <label class="k-form-field">
+                        <small>Total Marks<span class="animated fadeIn">/CGPA</span>&nbsp;<span
+                            class="text-danger">*</span></small>
+                        <input kendoTextBox type="text" [(ngModel)]="dataItem.TotalMarks" />
+                      </label>
+                    </div>
+                    <div class="col-md-4">
+                      <label class="k-form-field animated fadeIn">
+                        <small>Obtained Marks<span class="animated fadeIn">/CGPA</span>&nbsp;<span
+                            class="text-danger">*</span></small>
+                        <input kendoTextBox type="text" [(ngModel)]="dataItem.ObtainedMarks" />
+                      </label>
+                    </div>
+                    <div class="col-md-4">
+                      <label class="k-form-field animated fadeIn">
+                        <span>&nbsp;</span>
+                        <button class="btn btn-success btn-block" (click)="changeAdhocApplicantQualification(dataItem)"
+                          [ladda]="dataItem.savings" data-style="zoom-in"><i class="fa fa-check"></i> Save</button>
+                      </label>
+                    </div>
+                  </div>
+
+
+                  <div>
+                    <p class="m-0">
+                      <i class="fa"
+                        [ngClass]="dataItem.scrutiny?.IsAccepted == true ? 'fa-check-circle-o text-success' : dataItem.scrutiny?.IsRejected == true ? 'fa-times text-danger' : ''"></i>&nbsp;
+                      {{dataItem.scrutiny?.IsAccepted == true ? 'Accepted' : dataItem.scrutiny?.IsRejected == true ? 'Rejected' : ''}}
+                      by {{dataItem.scrutiny?.CreatedBy}}
+                    </p>
+                    <p class="m-0" *ngIf="dataItem.scrutiny?.ReasonDetail"><span
+                        class="p-strong">Reason:</span>&nbsp;{{dataItem.scrutiny?.ReasonDetail}}
+                    </p>
+                    <p class="m-0" *ngIf="dataItem.scrutiny?.Remarks"><span
+                        class="p-strong">Remarks:</span>&nbsp;{{dataItem.scrutiny?.Remarks}}
+                    </p>
+                  </div>
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column field="References" [title]="''" [width]="30" [headerClass]="'grid-header-custom'"
+                [class]="{ 'grid-cell-custom': true }">
+                <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                  <div *ngIf="!dataItem.verification">
+                    <button class="animated fadeIn" class="btn btn-sm" kendoButton primary="true"
+                      [ladda]="dataItem.saving" data-style="zoom-in"
+                      (click)="saveAdhocApplicationVerification(true, dataItem, true)"><i class="fa fa-check"></i>
+                      Verify</button>
+                    <button class="btn btn-sm btn-danger ml-2 animated fadeIn" [ladda]="dataItem.rejecting"
+                      data-style="zoom-in" (click)="saveAdhocApplicationVerification(false, dataItem, true)"><i
+                        class="fa fa-times"></i>
+                      Not Verified</button>
+                  </div>
+                  <div class="animated fadeIn" *ngIf="dataItem.verification">
+                    <p class="m-0 text-success p-strong"><i class="fa"
+                        [ngClass]="dataItem.verification?.Verified == true ? 'fa-check-circle-o text-success' : dataItem.verification?.Verified == false ? 'fa-times text-danger' : ''"></i>&nbsp;
+                      {{dataItem.verification?.Verified == true ? 'Verified' : dataItem.verification?.Verified == false ? 'Not Verified' : ''}}
+                    </p>
+                    <button kendoButton primary="true" class="btn-sm ml-2 animated fadeIn mt-1"
+                      *ngIf="!interviewBatchApplication.IsLocked" [ladda]="dataItem.undoing" data-style="zoom-in"
+                      (click)="saveAdhocApplicationVerification(false, dataItem, false)"><i class="fa fa-refresh"></i>
+                      Undo</button>
+                  </div>
+                </ng-template>
+              </kendo-grid-column>
+            </kendo-grid>
+            <kendo-grid [data]="applicant.ApplicantExperiences">
+              <kendo-grid-column [width]="10" field="asd" title="No." [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p class="m-0">{{(rowIndex + 1)}}.</p>
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column [width]="10" field="DocumentName" [title]="''" [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <img width="75px" class="d-block cursor-p zoom animated fadeIn"
+                    [src]="dataItem.UploadPath && dataItem.UploadPath.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + dataItem.UploadPath"
+                    (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + dataItem.UploadPath)"
+                    draggable="false" alt="">
+
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column [width]="50" field="DocumentName" title="Organization / Job Title"
+                [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p class="m-0">{{dataItem.Organization}}</p>
+                  <p class="m-0">Designation: {{dataItem.JobTitle}}</p>
+                  <p class="m-0">From: {{dataItem.FromDate | date: 'dd/MM/yyyy'}}</p>
+                  <p class="m-0">To: {{dataItem.ToDate | date: 'dd/MM/yyyy'}}</p>
+                  <p class="m-0">{{dataItem.exp}} year</p>
+                  <div>
+                    <p class="m-0">
+                      <i class="fa"
+                        [ngClass]="dataItem.scrutiny?.IsAccepted == true ? 'fa-check-circle-o text-success' : dataItem.scrutiny?.IsRejected == true ? 'fa-times text-danger' : ''"></i>&nbsp;
+                      {{dataItem.scrutiny?.IsAccepted == true ? 'Accepted' : dataItem.scrutiny?.IsRejected == true ? 'Rejected' : ''}}
+                      by {{dataItem.scrutiny?.CreatedBy}}
+                    </p>
+                    <p class="m-0" *ngIf="dataItem.scrutiny?.ReasonDetail"><span
+                        class="p-strong">Reason:</span>&nbsp;{{dataItem.scrutiny?.ReasonDetail}}
+                    </p>
+                    <p class="m-0" *ngIf="dataItem.scrutiny?.Remarks"><span
+                        class="p-strong">Remarks:</span>&nbsp;{{dataItem.scrutiny?.Remarks}}
+                    </p>
+                  </div>
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column field="References" [title]="''" [width]="30" [headerClass]="'grid-header-custom'"
+                [class]="{ 'grid-cell-custom': true }">
+                <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                  <div *ngIf="dataItem.scrutiny?.IsAccepted == true && dataItem.JobTitle !='House Job' &&
+                    dataItem.Organization !='HOUSE OFFICER' && dataItem.JobTitle !='HOUSE OFFICER' &&
+                    dataItem.Organization !='House Officer' && dataItem.JobTitle !='House Officer' &&
+                    dataItem.Organization !='House Officer' && dataItem.Organization !='House Job' && dataItem.JobTitle
+                    !='House Surgeon' && dataItem.JobTitle !='House Job' && dataItem.Organization !='house job' &&
+                    dataItem.JobTitle !='house job'">
+                    <div *ngIf=" !dataItem.verification">
+                      <button class="animated fadeIn" class="btn btn-sm" kendoButton primary="true"
+                        [ladda]="dataItem.saving" data-style="zoom-in"
+                        (click)="saveAdhocApplicationVerification(true, dataItem, true)"><i class="fa fa-check"></i>
+                        Verify</button>
+                      <button class="btn btn-sm btn-danger ml-2 animated fadeIn" [ladda]="dataItem.rejecting"
+                        data-style="zoom-in" (click)="saveAdhocApplicationVerification(false, dataItem, true)"><i
+                          class="fa fa-times"></i>
+                        Not Verified</button>
+                    </div>
+                    <div class="animated fadeIn" *ngIf="dataItem.verification">
+                      <p class="m-0 text-success p-strong"><i class="fa"
+                          [ngClass]="dataItem.verification?.Verified == true ? 'fa-check-circle-o text-success' : dataItem.verification?.Verified == false ? 'fa-times text-danger' : ''"></i>&nbsp;
+                        {{dataItem.verification?.Verified == true ? 'Verified' : dataItem.verification?.Verified == false ? 'Not Verified' : ''}}
+                      </p>
+                      <button kendoButton primary="true" class="btn-sm ml-2 animated fadeIn mt-1"
+                        *ngIf="!interviewBatchApplication.IsLocked" [ladda]="dataItem.undoing" data-style="zoom-in"
+                        (click)="saveAdhocApplicationVerification(false, dataItem, false)"><i class="fa fa-refresh"></i>
+                        Undo</button>
+                    </div>
+                  </div>
+                </ng-template>
+              </kendo-grid-column>
+            </kendo-grid>
+          </tab>
+          <tab heading="4- Preferences">
+            <p class="mb-2"><span class="p-strong">Preferences:</span> {{ applicant.Preferences?.length}}
+            </p>
+            <kendo-grid [data]="applicant.Preferences">
+              <kendo-grid-column [width]="7" field="asd" title="No." [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p class="m-0">{{(rowIndex + 1)}}.</p>
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column [width]="93" field="FullName" title="Preference" [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p class="m-0 cursor-p hover-success"
+                    (click)="openInNewTab('/health-facility/' + dataItem.HFMISCode)">
+                    {{dataItem.HFName}} <small
+                      class="pull-right">{{dataItem.CreatedDate | date: 'dd/MM/yyyy hh:mm a'}}</small></p>
+                  <p class="m-0"></p>
+                </ng-template>
+              </kendo-grid-column>
+            </kendo-grid>
+            <p class="m-0" *ngIf="applicant.Preferences?.length == 0">
+              No Preferences
+            </p>
+          </tab>
+        </tabset>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="page preview" id="formPrint" hidden>
+
+  <table border="0" cellspacing="0" style="border-color:transparent !important; width:100%">
+    <tbody>
+      <tr>
+        <td style="border-color:transparent !important; text-align:left"><img alt="Punjab Government Log"
+            src="../../../../assets/img/brand/govlogoUpdated.png" style="display:inline-block; width:134px" />
+
+        </td>
+        <td style="border-color:transparent !important; text-align:right">
+          <div style="display:inline-block;text-align:center;"><strong>GOVERNMENT OF THE PUNJAB<br />
+              DISTRICT HEALTH AUTHORITY </strong><br />
+            Dated {{dateNow}}
+            <!-- {{fMMRecieve?.DateTime | date: 'dd/MM/yyyy'}} -->
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="border-color:transparent !important; text-align:left; width:100%;">
+          &nbsp;</td>
+      </tr>
+      <tr>
+        <td colspan="2" style="border-color:transparent !important; text-align:left; width:100%;">
+          <strong> Proposal for Posting</strong> </td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="file-table" cellspacing="0" style="width:100%;">
+    <tbody>
+      <tr>
+        <td style="width: 34%;">
+          <strong>Applicant Name</strong> </td>
+        <td style="width: 23%;"> <strong>CNIC</strong></td>
+        <td style="width: 33%;">
+          <strong>Place Of Posting</strong> </td>
+      </tr>
+      <tr *ngFor="let applicant of jobApplicants">
+        <td>
+          <p class="m-0">
+            {{applicant.Name}}
+          </p>
+        </td>
+        <td>
+          <p class="m-0">
+            {{applicant.CNIC}}
+          </p>
+        </td>
+        <td>
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  <br>
+  <br>
+
+  <table border="0" cellspacing="0" style="border-color:transparent !important; width:100%;text-align:center;">
+    <tbody>
+      <tr>
+        <td style="width: 33%;">
+          <strong>Deputy Commissioner</strong> </td>
+        <td style="width: 34%;"> </td>
+        <td style="width: 33%;">
+          <strong>Chief Executive Officer</strong> </td>
+      </tr>
+      <tr>
+        <td style="width: 33%;">
+          <p style="margin-top: 10px;">
+            <!-- {{fMMRecieve.FromOfficerDesignationName}} -->
+          </p>
+          <p style="margin-top: 30px;">____________________________</p>
+        </td>
+        <td style="width: 34%;">
+          <!-- [src]="barcodeSrc()" -->
+          <img alt="IMAGE AREA" class="mb-2 mt-2" />
+          <p style="margin-top: 10px;">
+            <!-- {{fMMRecieve.MID_Number}} -->
+          </p>
+        </td>
+        <td style="width: 33%;">
+          <p style="margin-top: 10px;">
+            <!-- {{fMMRecieve.ToOfficerDesignationName}} -->
+          </p>
+          <p style="margin-top: 30px;">____________________________</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,162 @@
+<div class="app-body">
+  <main class="main d-flex align-items-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 mx-auto">
+          <div class="card mx-4 animated fadeIn"
+            style="background-color: transparent;border: none !important; margin-top: 0px !important;padding: 0px !important;">
+            <div class="card-body" style="padding: 0px !important;">
+              <div class="authentication-form-header">
+                <h3 class="mobile-brand-custom" style="font-family: 'Roboto-Light'">
+                  Sign in to HRMIS
+                </h3>
+              </div>
+              <div class="d-flex login-head">
+                <div class="dept-name">
+                  <div class="dept-second">
+                    Human Resource Management Information System
+                  </div>
+                  <div class="dept-first">
+                    Primary & Secondary Healthcare Department
+                  </div>
+                </div>
+              </div>
+              <div class="login-div">
+                <div class="animated fadeIn">
+                  <form name="registerform" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+                    <div class="row animated fadeIn" *ngIf="!loggedInUser.phonenumber">
+                      <div class="col-md-6 offset-md-3">
+                        <label class="k-form-field
+                            mt-2">
+                          <span>Username</span>
+                          <input style="    border: 1px solid #d1d5da;
+                                border-radius: 3px;
+                                box-shadow: inset 0 1px 2px rgba(27,31,35,.075);" kendoTextBox autofocus type="text"
+                            id="username" autocomplete="username" name="username" [(ngModel)]="user.username"
+                            #username="ngModel" [ngClass]="{ 'is-invalid': f.submitted && username.invalid }" required>
+                        </label>
+                      </div>
+                      <div class="col-md-6 offset-md-3">
+                        <label class="k-form-field mt-2">
+                          <span>Password</span>
+                          <input style="    border: 1px solid #d1d5da;
+                                    border-radius: 3px;
+                                    box-shadow: inset 0 1px 2px rgba(27,31,35,.075);" kendoTextBox type="password"
+                            name="password" [(ngModel)]="user.password" #password="ngModel"
+                            [ngClass]="{ 'is-invalid': f.submitted && password.invalid }" required>
+                        </label>
+                      </div>
+                      <div class="col-md-6 offset-md-3 mt-3 mb-4">
+                        <app-form-validation [show]="showError" [message]="'Incorrect username or password'">
+                        </app-form-validation>
+                        <app-form-validation [show]="showUpdateError" [message]="'Invalid user'">
+                        </app-form-validation>
+                        <app-form-validation [show]="phoneNumberError"
+                          [message]="'No mobile number is registered against ' + user.username">
+                        </app-form-validation>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <button class=" btn btn-so-primary btn-block" kendoButton [ladda]="sigingin"
+                              data-style="zoom-in" type="submit">Sign in</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <div class="row animated fadeIn" *ngIf="loggedInUser.phonenumber != null && phoneSelected == false">
+                    <div class="col-md-6 offset-md-3">
+                      <label class="k-form-field mt-2 mb-4">
+                        <span class="p-strong">Select phone number to receive verification code:
+                        </span>
+                      </label>
+                      <div class="row mt-2" style="box-shadow: 0px 0px 2px black;
+                      border-radius: 2px;
+                      padding: 10px;" *ngFor="let contact of contactListParsed">
+                        <div class="col-md-8">
+                          <p style="line-height: 1.7;" class="h5 mb-0">{{contact.PhoneNumber}}</p>
+                        </div>
+                        <div class="col-md-4">
+                          <button kendoButton primary="true" class="btn-block"
+                            (click)="sendSMSCode(user.username, contact.PhoneNumber, user.email)" type="button">
+                            Send Code
+                          </button>
+                        </div>
+                        <!-- <div class="col-md-3 mr-1"
+                          style="background: honeydew; border-radius: 9px; height: 80px; padding-top: 5px;">
+                          <span class="mt-2">03213677763</span>
+                          <div>
+                            <button class="btn-sm mt-2 col" kendoButton primary="true">
+                              send
+                            </button>
+                          </div>
+                        </div>
+                        <div class="col-md-3"
+                          style="background: honeydew; border-radius: 9px; height: 80px; padding-top: 5px;">
+                          <span class="mt-2">03214677763</span>
+                          <div>
+                            <button class="btn-sm mt-2 col" kendoButton primary="true">
+                              send
+                            </button>
+                          </div>
+                        </div> -->
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row animated fadeIn" *ngIf="phoneSelected == true">
+                    <div class="col-md-6 offset-md-3">
+                      <label class="k-form-field
+                      mt-2">
+                        <span class="p-strong">A verification code has been sent to:
+                        </span>
+                      </label>
+                      <label class="k-form-field mb-0">
+                        <i class="fa fa-mobile"></i>&nbsp;{{loggedInUser.codedPhone}}
+                      </label>
+                      <!--  <label class="k-form-field mb-0">
+                        <i class="fa fa-envelope"></i>&nbsp;{{loggedInUser.codedEmail}}
+                      </label> -->
+                     
+                      <hr>
+                      <label class="k-form-field
+                          mt-2">
+                        <span>Please enter verification code</span>
+                        <input style="border: 1px solid #d1d5da;
+                              border-radius: 3px;
+                              box-shadow: inset 0 1px 2px rgba(27,31,35,.075);" kendoTextBox autofocus type="password"
+                          [(ngModel)]="verificationCode" (keyup.enter)="verifyCode()">
+                      </label>
+                      <input type="checkbox" id="rembme" [(ngModel)]="loggedInUser.remember" class="k-checkbox" />
+                      <label class="k-checkbox-label" for="rembme">Remember Me</label>
+                    </div>
+                    <div class="col-md-6 offset-md-3 mt-3 mb-4">
+                      <app-form-validation [show]="verifyingError" [message]="'Invalid code'">
+                      </app-form-validation>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <button class=" btn btn-so-primary btn-block" kendoButton [ladda]="verifying"
+                            [disabled]="!verificationCode || verificationCode <= 999" data-style="zoom-in"
+                            (click)="verifyCode()" type="button">Verify Code</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<app-footer>
+  <span style="width: 100%;">
+    <h6 class="footer-text footer-screen mt-4">Government of The Punjab &copy; 2022 Health Information and Service
+      Delivery Unit.
+      All rights reserved.
+    </h6>
+    <h6 class="footer-text footer-mobile mt-4">Government of The Punjab.<br>
+      &copy; 2022 Health Information and Service Delivery Unit.<br>All rights reserved.
+    </h6>
+  </span>
+</app-footer>

@@ -1,0 +1,239 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3" *ngIf="officer.Id">
+        {{officer.Name}} - {{officer.DesignationName}}
+      </div>
+      <div class="top-h3" *ngIf="!officer.Id">
+        Add Office
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" routerLink="/user/officer" [look]="'outline'">Back to List</button>
+        <!--   <button kendoButton [primary]="true" (click)="mailOfficer()" class="mr-2">Send
+          Email</button> -->
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <tabset>
+        <tab heading="General Information">
+          <form name="officrForm" (ngSubmit)="f.form.valid && onSubmit(f.form.value)" #f="ngForm" novalidate>
+            <div class="row">
+              <div class="col-md-3 col-sm-6 pb-2 control-col-st">
+                <label class="k-form-field">
+                  <span>Officer Name</span>
+                  <input kendoTextBox type="text" name="Name" [(ngModel)]="officer.Name" #Name="ngModel"
+                    autocomplete="off">
+                </label>
+              </div>
+              <div class="col-md-3 col-sm-6 pb-2 control-col">
+                <label class="k-form-field">
+                  <span>Officer CNIC</span>
+                  <kendo-maskedtextbox [mask]="cnicMask" name="CNIC" [(ngModel)]="officer.CNIC" #CNIC="ngModel">
+                  </kendo-maskedtextbox>
+                </label>
+              </div>
+              <div class="col-md-3 col-sm-6 pb-2 control-col">
+                <label class="k-form-field">
+                  <span>Officer Mobile Number</span>
+                  <kendo-maskedtextbox [mask]="mobileMask" name="Contact" [(ngModel)]="officer.Contact"
+                    #Contact="ngModel"></kendo-maskedtextbox>
+                </label>
+              </div>
+              <div class="col-md-3 col-sm-6 pb-2 control-col-end">
+                <label class="k-form-field">
+                  <span>Code</span>
+                  <input kendoTextBox type="text" disabled name="Code" [(ngModel)]="officer.Code" #Code="ngModel"
+                    autocomplete="off">
+                </label>
+              </div>
+              <div class="col-md-4 col-sm-6 pb-2 control-col-st">
+                <label class="k-form-field">
+                  <span>Designation</span>
+                  <kendo-dropdownlist [data]="dropDowns.designationsData" name="Designation_Id" [textField]="'Name'"
+                    [valueField]="'Id'" (valueChange)="dropdownValueChanged($event, 'designation')"
+                    [value]="dropDowns.selectedFiltersModel.designation"
+                    [defaultItem]="dropDowns.defultFiltersModel.designation">
+                  </kendo-dropdownlist>
+                </label>
+              </div>
+              <div class="col-md-4 col-sm-6 pb-2 control-col">
+                <label class="k-form-field">
+                  <span>Office Name <span class="text-danger">*</span></span>
+                  <input kendoTextBox type="text" name="DesignationName" [(ngModel)]="officer.DesignationName"
+                    #DesignationName="ngModel" autocomplete="off"
+                    [ngClass]="{ 'is-invalid': f.submitted && Name.invalid, 'ng-touched': f.submitted && f.invalid }"
+                    required>
+                </label>
+              </div>
+              <div class="col-md-4 col-sm-6 pb-2 control-col-end">
+                <label class="k-form-field">
+                  <span>Program</span>
+                  <input kendoTextBox type="text" name="Program" [(ngModel)]="officer.Program" #Program="ngModel"
+                    autocomplete="off">
+                </label>
+              </div>
+
+              <div class="col-md-4 col-sm-6 pb-2 control-col-st">
+                <label class="k-form-field">
+                  <span>Assign User Account</span>
+                  <kendo-dropdownlist [data]="users" name="User_Id" [textField]="'UserName'" [valueField]="'Id'"
+                    (valueChange)="dropdownValueChanged($event, 'user')" [value]="dropDowns.selectedFiltersModel.user"
+                    (filterChange)="handleFilter($event, 'user')" [filterable]="true"
+                    [defaultItem]="dropDowns.defultFiltersModel.user">
+                  </kendo-dropdownlist>
+                </label>
+              </div>
+            </div>
+            <hr>
+            <div class="row mt-2">
+              <div class="col-md-2 control-col-st">
+                <button kendoButton class="btn-block" [disabled]="!f.form.valid" type="submit" [ladda]="savingOfficer"
+                  data-style="zoom-in" [primary]="true">Submit</button>
+              </div>
+              <div class="col-md-2 control-col">
+                <button kendoButton class="btn-block" ladda [look]="'outline'" [primary]="true"
+                  routerLink="/user/officer">Go
+                  Back</button>
+              </div>
+            </div>
+          </form>
+        </tab>
+        <!--   <tab heading="Biometric">
+          <div class="row" *ngIf="officerFingerPrints.length > 0">
+            <div class="col-md-2" *ngFor="let fp of officerFingerPrints">
+               <img *ngIf="fp" class="animated fadeIn" [src]="fp" height="300px" width="300px" alt="">
+            </div>
+          </div>
+        </tab> -->
+        <tab heading="Concerned Offices" *ngIf="officer.Id">
+          <div class="row">
+            <div class="col-md-9 control-col-st">
+              <label class="k-form-field">
+                <span>Select Officer</span>
+                <kendo-dropdownlist [data]="dropDowns.officersData" [textField]="'DesignationName'" [valueField]="'Id'"
+                  [(ngModel)]="pSOfficerFilters.concernedId" [valuePrimitive]="true"
+                  (filterChange)="handleFilter($event, 'officer')" [filterable]="true"
+                  [defaultItem]="dropDowns.defultFiltersModel.officer">
+                  <ng-template kendoDropDownListItemTemplate let-dataItem>
+                    <p class="m-0">{{dataItem.DesignationName}}<small><strong class="p-strong"><span
+                            *ngIf="dataItem.Name"> -
+                            ({{dataItem.Name}})
+                          </span></strong></small>
+                    </p>
+                  </ng-template>
+                </kendo-dropdownlist>
+              </label>
+            </div>
+            <div class="col-md-3 control-col-end">
+              <button kendoButton class="btn-block btn-sm btn-align-v animated fadeIn" [ladda]="addingOfficer"
+                data-style="zoom-in" [primary]="true" [disabled]="pSOfficerFilters.concernedId == 0"
+                (click)="addOfficerData(1, true)">Add</button>
+            </div>
+          </div>
+          <div class="row row-panel" *ngIf="relatedData.concernedOfficers.length > 0">
+            <div class="col-md-12">
+              <kendo-grid [data]="relatedData.concernedOfficers">
+                <kendo-grid-column [width]="5" field="asd" title="No." [headerClass]="'grid-header-custom'"
+                  [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    {{(rowIndex + 1)}}.
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="Name" [title]="'Name'" width="40" [headerClass]="'grid-header-text'"
+                  [style]="{'background-color': '#fff','color': '#000', 'padding': '10px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <div class="row" [routerLink]="'/user/officer/' + dataItem.User_Id + '/' + dataItem.Id + '/edit'">
+                      <div class="col-md-12">
+                        <div class="grid-list-item">
+                          <h5 class="m-0 mb-1"
+                            style="font-family: Roboto-Medium; color: darkslategray ; font-weight: 100;">
+                            {{dataItem.Name ? dataItem.Name : '-'}}</h5>
+                          <p class="m-0" style="font-family: Roboto-Regular; color: darkslategray ; font-weight: 100;">
+                            <span style="font-family: Roboto-Medium; "> CNIC:</span> {{dataItem.CNIC ?
+                            dashifyCNIC(dataItem.CNIC) : '-'}}</p>
+                          <p class="m-0" style="font-family: Roboto-Regular; color: darkslategray ; font-weight: 100;">
+                            <span style="font-family: Roboto-Medium; "> Contact:</span> {{dataItem.Contact ?
+                            dataItem.Contact : '-'}}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="Designation" title="Total" width="45" [headerClass]="'grid-header-text'"
+                  [style]="{'background-color': '#fff','color': '#000', 'padding': '10px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <div class="row" [routerLink]="'/user/officer/' + dataItem.User_Id + '/' + dataItem.Id + '/edit'">
+                      <div class="col-md-12">
+                        <div class="grid-list-item">
+                          <h5 class="m-0 mb-1"
+                            style="font-family: Roboto-Medium; color: darkslategray ; font-weight: 100;">{{dataItem.DesignationName
+                            ? dataItem.DesignationName : '-'}}
+                          </h5>
+                          <p class="m-0" style="font-family: Roboto-Regular; color: darkslategray ; font-weight: 100;">
+                            <span style="font-family: Roboto-Medium; ">Program:</span>&nbsp;<u>{{dataItem.Program ?
+                              dataItem.Program : '-'}}</u></p>
+                          <p class="m-0" style="font-family: Roboto-Regular; color: darkslategray ; font-weight: 100;">
+                            <span style="font-family: Roboto-Medium; ">Code:</span> {{dataItem.Code ? dataItem.Code :
+                            '-'}}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="10" field="asd" title="Actions" [headerClass]="'grid-header-custom'"
+                  [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                  <ng-template kendoGridCellTemplate let-dataItem>
+                    <button class="btn btn-danger" (click)="removeOfficer(dataItem.Id)"><i
+                        class="fa fa-times"></i></button>
+                  </ng-template>
+                </kendo-grid-column>
+              </kendo-grid>
+            </div>
+          </div>
+        </tab>
+        <tab heading="Concerned Cadres" *ngIf="officer.Id">
+          <div class="row">
+            <div class="col-md-9 control-col-st">
+              <label class="k-form-field">
+                <span>Select Cadre</span>
+                <kendo-dropdownlist [data]="dropDowns.cadres" [textField]="'Name'" [valueField]="'Id'"
+                  [(ngModel)]="selectedCadre_Id" [valuePrimitive]="true"
+                  [defaultItem]="dropDowns.defultFiltersModel.cadre">
+                </kendo-dropdownlist>
+              </label>
+            </div>
+            <div class="col-md-3 control-col-end">
+              <button kendoButton class="btn-block btn-sm btn-align-v animated fadeIn" [ladda]="addingOfficer"
+                data-style="zoom-in" [primary]="true" [disabled]="selectedCadre_Id == 0"
+                (click)="addOfficerData(2, true)">Add</button>
+            </div>
+          </div>
+        </tab>
+        <tab heading="Concerned Designations" *ngIf="officer.Id">
+          <div class="row">
+            <div class="col-md-9 control-col-st">
+              <label class="k-form-field">
+                <span>Select Designation</span>
+                <kendo-dropdownlist [data]="dropDowns.designations" [textField]="'Name'" [valueField]="'Id'"
+                  [(ngModel)]="selectedDesignation_Id" [valuePrimitive]="true"
+                  [defaultItem]="dropDowns.defultFiltersModel.designation">
+                </kendo-dropdownlist>
+              </label>
+            </div>
+            <div class="col-md-3 control-col-end">
+              <button kendoButton class="btn-block btn-sm btn-align-v animated fadeIn" [ladda]="addingOfficer"
+                data-style="zoom-in" [primary]="true" [disabled]="selectedDesignation_Id == 0"
+                (click)="addOfficerData(3, true)">Add</button>
+            </div>
+          </div>
+        </tab>
+      </tabset>
+    </div>
+  </div>
+
+</div>

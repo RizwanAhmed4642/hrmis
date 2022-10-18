@@ -1,0 +1,130 @@
+.grid-top-header-custom {
+  color: #656565;
+  background-color: #f6f6f6 !important;
+  margin: 0px;
+  padding: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.grid-header-text-center {
+  text-align: center !important;
+  font-family: "Roboto-Bold";
+  font-weight: 100;
+}
+.grid-header-custom{
+  font-family: "Roboto-Bold";
+  font-weight: 100;
+  color: black !important;
+}
+.grid-header-text {
+  font-family: "Roboto-Bold";
+  font-weight: 100;
+}
+
+.k-grid-footer {
+  padding: 0px 16px 0px 0px !important;
+}
+
+.k-grid-footer td {
+  padding: 0px !important;
+}
+
+.grid-top-header-none {
+  display: none !important;
+}
+
+@media only screen and (max-width: 600px) {
+  .grid-top-header-custom {
+    display: none;
+  }
+}
+
+.grid-header-actions-custom {
+  border-right: 1px solid #c8ced3 !important;
+}
+
+.grid-cell-custom {
+  background-color: #fff !important;
+  border-bottom: 1px solid #c8ced3 !important;
+  padding: 4px 12px !important;
+}
+
+.grid-cell-last-custom {
+  border-right: 1px solid #c8ced3 !important;
+}
+
+.grid-cell-min-custom-70 {
+  min-width: 70px !important;
+}
+
+.grid-cell-min-custom-100 {
+  min-width: 100px !important;
+}
+
+.grid-cell-min-custom-150 {
+  min-width: 150px !important;
+}
+
+.k-grid tbody tr strong {
+  font-weight: 100;
+  font-family: "Roboto-Bold" !important;
+  color: #212121 !important;
+}
+
+.k-grid tbody tr {
+  font-weight: 100;
+  font-family: "Roboto-Regular";
+  color: #212121 !important;
+}
+
+.k-grid tbody tr:hover,
+.k-grid tbody tr.k-state-hover {
+  background-color: #f3f3f3 !important;
+}
+
+.k-hierarchy-cell.k-header,
+.k-hierarchy-cell {
+  background: white !important;
+  color: #212121 !important;
+}
+
+.k-grid .k-hierarchy-cell {
+  border-bottom: 1px solid rgb(200, 206, 211);
+  border-right: 1px solid #c8ced3;
+  border-width: 0 0 1px 1px;
+}
+
+.k-grid table,
+.k-grid .k-grid-header-wrap {
+  background: white;
+}
+
+.k-grid-header .k-header>.k-link {
+  font-family: "Roboto-Bold" !important;
+  font-weight: 100 !important;
+  color: #212121 !important;
+}
+
+.k-grid .k-grid-filter,
+.k-grid .k-header-column-menu,
+.k-grid .k-hierarchy-cell .k-icon {
+  border-width: 0;
+  color: #656565;
+  margin-bottom: 7px;
+}
+
+.k-pager-numbers .k-link:hover,
+.k-pager-wrap .k-link:hover {
+  color: #46a23f;
+  background-color: #e6e6e6;
+}
+
+.k-grid-footer td {
+  font-weight: 100 !important;
+  font-size: 1rem !important;
+  color: black !important;
+  /* border-color: transparent !important; */
+
+}

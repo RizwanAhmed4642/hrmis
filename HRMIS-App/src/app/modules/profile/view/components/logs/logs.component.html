@@ -1,0 +1,21 @@
+<kendo-grid [data]="logs" *ngIf="!loading">
+  <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-custom'"
+    [class]="{ 'grid-cell-custom': true }">
+    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+      <p class="m-0">{{(rowIndex + 1)}}.
+      </p>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="Name" [title]="'User'" width="40" [headerClass]="'grid-header-custom'"
+    [class]="{ 'grid-cell-custom': true }">
+    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+      <p class="m-0">{{dataItem.Username}}</p>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="Datetime" [title]="'Date Time'" width="40" [headerClass]="'grid-header-custom'"
+    [class]="{ 'grid-cell-custom': true }">
+    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+      <p class="m-0">{{dataItem.Datetime | date:'dd/MM/yyyy hh:mm a'}}</p>
+    </ng-template>
+  </kendo-grid-column>
+</kendo-grid>

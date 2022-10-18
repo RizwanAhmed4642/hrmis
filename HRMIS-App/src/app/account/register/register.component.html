@@ -1,0 +1,96 @@
+<div class="app-body">
+  <main class="main d-flex align-items-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-5 mx-auto">
+          <div class="card mx-4 animated fadeIn" style="border-bottom: 6px solid #46a23f;margin-top: 1rem !important;">
+            <div class="card-body pt-4 pl-4 pr-4">
+              <form name="registerform" #f="ngForm" novalidate>
+                <h2 class="text-center signup-text">HRMIS REGISTRATION</h2>
+                <hr [ngClass]="loadingClass">
+                <hr>
+                <div class="clearfix mt-4"></div>
+                <fieldset>
+                  <div class="animated fadeIn mt-2" *ngIf="passwordGenerated != true">
+                    <div class="animated fadeIn mt-2" *ngIf="profileExist == null && codeGenerated != true">
+                      <div class="animated fadeIn">
+                        <h4>Profile Verification</h4>
+                      </div>
+                      <p><i>Your CNIC will be matched with regular employees record in our system</i></p>
+
+                    </div>
+                    <label class="k-form-field mt-2">
+                      <span class="p-strong">CNIC
+                        <span class="pull-right animated fadeIn lds-ellipsis" *ngIf="searching">
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                        </span></span>
+                      <kendo-maskedtextbox [mask]="cnicMask" name="username" [(ngModel)]="user.username"
+                        #username="ngModel" (ngModelChange)="searchEvent.next($event)" required>
+                      </kendo-maskedtextbox>
+                    </label>
+                    <div class="animated fadeIn text-danger mb-1" *ngIf="profileExist == false">No
+                      Record Found against CNIC: <span class="p-strong">{{user.username}}</span>
+                    </div>
+                    <div class="animated fadeIn mt-2" *ngIf="profileExist == true && codeGenerated != true">
+                      <div class="animated fadeIn">
+                        <h4>Get a Verification code</h4>
+                      </div>
+                      <p class="m-0">You will receive a 4 digit verification code on</p>
+                      <p class="m-0"><i>{{censorNumber(user.phoneNumber)}}</i></p>
+                      <p class="m-0"><i>{{censorEmail(user.email)}}</i></p>
+                      <div class="animated fadeIn" *ngIf="codeGenerated == null">
+                        <div class="register-wrapper">
+                          <button kendoButton class="register-btn btn-lg mt-4 mb-2" (click)="getVerificationCode()"
+                            [look]="'outline'" [primary]="true" type="button">SEND CODE
+                          </button>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                  <div class="animated fadeIn" *ngIf="codeGenerated == true">
+                    <div class="animated fadeIn">
+                      <h4>Verification code sent</h4>
+                    </div>
+                    <label class="k-form-field mt-2" *ngIf="!passwordGenerated">
+                      <span class="p-strong">Enter 4 digit code</span>
+                      <kendo-maskedtextbox [mask]="codeMask" name="Code" [(ngModel)]="userAuth.Code" #Code="ngModel"
+                        required>
+                      </kendo-maskedtextbox>
+                    </label>
+                    <div class="animated fadeIn text-danger mb-1" *ngIf="codeMatched == false">Failed.
+                    </div>
+                    <div class="animated fadeIn" *ngIf="passwordGenerated">A System generated password
+                      has been sent to your email and mobile number
+                    </div>
+                    <app-form-validation [show]="errors.length > 0" *ngFor="let err of errors" [message]="err">
+                    </app-form-validation>
+                    <div class="register-wrapper" *ngIf="!passwordGenerated">
+                      <button kendoButton [disabled]="!userAuth.Code" class="register-btn btn-lg mt-4 mb-2"
+                        (click)="verifyCode()" type="submit" [look]="'outline'" [primary]="true">VERIFY
+                        CODE &
+                        REGISTER
+                      </button>
+                    </div>
+                    <div class="register-wrapper" *ngIf="passwordGenerated">
+                      <button kendoButton [disabled]="!passwordGenerated" class="register-btn btn-lg mt-4 mb-2"
+                        routerLink="/account/login" type="button" [primary]="true">CLICK HERE TO LOGIN</button>
+                    </div>
+                  </div>
+                </fieldset>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<!-- <app-footer>
+  <span style="width: 100%;">
+    <h6 class="footer-text">&copy; HISDU 2018. Primary & Secondary Healthcare Department</h6>
+  </span>
+</app-footer> -->

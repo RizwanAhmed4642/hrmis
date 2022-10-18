@@ -1,0 +1,78 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-8 col-xs-12">
+            <div class="top-h3">
+                New Attached Facility
+            </div>
+        </div>
+        <div class="col-md-4 col-xs-12">
+            <div class="top-controls">
+                <button kendoButton [primary]="true" routerLink="/health-facility/facility-staff">Add Staff</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 control-col-st">
+            <div class="content-heading mb-2">
+                New
+            </div>
+            <label class="k-form-field">
+                <span>Health Facility <span class="text-danger">*</span></span>
+                <kendo-autocomplete [data]="hfsList" [valueField]="'FullName'"
+                    (valueChange)="searchClicked($event, 'hfs')" required [filterable]="true"
+                    (filterChange)="searchEvent.next({ event: $event, filter: 'hfs'})" [value]="healthFacilityFullName"
+                    placeholder="Search Health Facility" class="k-autocomplete-form">
+                    <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                        <div class="search-list-item">
+                            {{ dataItem.FullName }}</div>
+                    </ng-template>
+                </kendo-autocomplete>
+            </label>
+            <label class="k-form-field">
+                <span>Type <span class="text-danger">*</span></span>
+                <kendo-dropdownlist [data]="dropDowns.covidFacilityTypes"
+                    [defaultItem]="dropDowns.defultFiltersModel.covidFacility" [textField]="'Name'" [valueField]="'Id'"
+                    (valueChange)="dropdownValueChanged($event, 'type')"
+                    [value]="dropDowns.selectedFiltersModel.covidFacility">
+                </kendo-dropdownlist>
+            </label>
+            <label class="k-form-field">
+                <span>Name <span class="text-danger">*</span></span>
+                <input kendoTextBox type="text" [(ngModel)]="newFacility.Name">
+            </label>
+            <label class="k-form-field pt-1 border-top">
+                <button kendoButton primary="true" class="btn-block" (click)="submit()" [ladda]="saving"
+                    data-style="zoom-in"
+                    [disabled]="!newFacility.HF_Id || !newFacility.TypeId || !newFacility.Name">Submit</button>
+            </label>
+        </div>
+        <div class="col-md-8 control-col-end">
+            <div class="content-heading mb-2">
+                Facilities
+            </div>
+            <kendo-grid [data]="covidFacilities" [resizable]="true">
+                <kendo-grid-column field="asd" [title]="'Sr.'" width="7" [headerClass]="'grid-header-text'"
+                    [style]="{'padding': '4px 8px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{ (rowIndex + 1) }}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="Name" [title]="'Facility'" width="83" [headerClass]="'grid-header-text'"
+                    [style]="{'padding': '4px 8px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{ dataItem.Name }}</p>
+                        <p class="m-0"><i>{{ dataItem.HealthFacility }}</i></p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="asd" [title]="'Action'" width="10" [headerClass]="'grid-header-text'"
+                    [style]="{'padding': '4px 8px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <button class="btn btn-danger btn-sm" look="outline"
+                            [ladda]="dataItem.removing" data-style="zoom-in" (click)="removeCovidFacility(dataItem)"><i
+                                class="fa fa-times"></i></button>
+                    </ng-template>
+                </kendo-grid-column>
+            </kendo-grid>
+        </div>
+    </div>
+</div>

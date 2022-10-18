@@ -1,0 +1,127 @@
+<!-- <p>account works!</p> -->
+<!DOCTYPE HTML>
+<html>
+
+<body>
+	
+	<div class="main-bg">
+		<div>
+			<h2 style="color: white; background-color:#00ad45; text-align: center; margin-bottom: 0px"
+					>Primary & Secondary Healthcare Department</h2>
+		</div>
+		<!-- <h2 class="fixed-top" style="color: white; background-color: green; text-align: center;">Primary & Secondary Healthcare Department</h2> -->
+		<div class="sub-main-w3" style="margin-left: 300px;">
+			
+			<!-- vertical tabs -->
+			<div class="vertical-tab" style="height: 421px; margin-left: 110px; margin-top: 110px;">
+				<div id="section1" class="section-w3ls" style="height: 141px;">
+					<input type="radio" name="sections" id="option1" checked>
+					<label for="option1" class="icon-left-w3pvt" style="height: 141px;"><span class="fa fa-user-circle" aria-hidden="true"></span>Login</label>
+					<article>
+						<form action="#" method="post" style="height: 423px;" #loginForm>
+							<h3 class="legend">Login Here</h3>
+							<div class="formsInput">
+								<!-- <span class="fa fa-envelope-o" aria-hidden="true"></span>
+								<input type="email" placeholder="Email" name="email" required /> -->
+
+								<span class="fas fa fa-id-card" aria-hidden="true"></span>
+								<input type="number" min="0" placeholder="CNIC" name="cnic" [(ngModel)]="user.Cnic" required />
+							</div>
+							<div class="formsInput">
+								<span class="fa fa-key" aria-hidden="true"></span>
+								<input type="password" placeholder="Password" name="password" [(ngModel)]="user.password" required />
+							</div>
+							<div *ngIf="isError">
+								<small style="color: red">The username or password is incorrect</small>
+							</div>							
+							<button type="submit" [disabled]="!user.Cnic || !user.password" (click)="login()" class="btn submitBtn">Login</button>
+							<!-- <a href="#" class="bottom-text-w3ls">Forgot Password?</a> -->
+						</form>
+					</article>
+				</div>
+				<div id="section2" class="section-w3ls" style="height: 141px;">
+					<input type="radio" name="sections" id="option2">
+					<label for="option2" class="icon-left-w3pvt" style="height: 141px;"><span class="fa fa-pencil-square" aria-hidden="true"></span>Register</label>
+					<article>
+						<form action="#" method="post" style="height: 423px;" #registerForm>
+							<h3 class="legend">Register Here</h3>
+
+							<div class="formsInput">
+								<span class="fa fa-unlock-alt" aria-hidden="true"></span>
+								<input type="number" min="0" placeholder="Verfication Code" name="code" [(ngModel)]="user.ProfileId" required />
+							</div>
+
+							<div class="formsInput">
+								<span class="fas fa fa-id-card" aria-hidden="true"></span>
+								<input placeholder="CNIC" name="cnic" [(ngModel)]="user.Cnic" required />
+							</div>
+
+							<div class="formsInput">
+								<span class="fa fa-phone" aria-hidden="true"></span>
+								<input placeholder="Mobile No." name="mobile" [(ngModel)]="user.PhoneNumber" required />
+							</div>
+							
+							<div class="formsInput">
+								<span class="fa fa-envelope-o" aria-hidden="true"></span>
+								<input type="email" placeholder="Email" name="email" [(ngModel)]="user.Email" required 
+									pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"/>
+							</div>
+							
+							<span class="animated fadeIn" *ngIf="passwordGenerated">A System generated password has been sent to
+								above email and mobile
+								number</span>
+							<button *ngIf="!passwordGenerated" type="submit" class="btn submitBtn" [disabled]="!user.Cnic || !user.PhoneNumber || !user.Email" (click)="fetchProfileInfo()" >Register</button>
+
+						</form>
+					</article>
+				</div>
+				<div id="section3" class="section-w3ls" style="height: 141px;">
+					<input type="radio" name="sections" id="option3">
+					<label for="option3" class="icon-left-w3pvt" style="height: 141px;"><span class="fa fa-lock" aria-hidden="true"></span>Forgot Password?</label>
+					<article>
+						<form action="#" method="post" style="height: 423px;" #forgotPass>
+							<h3 class="legend last">Reset Password</h3>
+							<div class="formsInput">
+								<span class="fa fa-unlock-alt" aria-hidden="true"></span>
+								<input type="number" min="0" placeholder="Verfication Code Sent by HISDU" name="code" [(ngModel)]="user.ProfileId" required />
+							</div>
+
+							<div class="formsInput">
+								<span class="fas fa fa-id-card" aria-hidden="true"></span>
+								<input placeholder="CNIC" name="cnic" [(ngModel)]="user.Cnic" required />
+							</div>
+
+							<div class="formsInput">
+								<span class="fa fa-phone" aria-hidden="true"></span>
+								<input placeholder="Mobile No." name="mobile" [(ngModel)]="user.PhoneNumber" required />
+							</div>
+							
+							<div class="formsInput">
+								<span class="fa fa-envelope-o" aria-hidden="true"></span>
+								<input type="email" placeholder="Email" name="email" [(ngModel)]="user.Email" required 
+									pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"/>
+							</div>
+							
+							<span class="animated fadeIn" *ngIf="passwordGenerated">A System generated password has been sent to
+								above email and mobile
+								number</span>
+							<button *ngIf="!passwordGenerated" type="submit" class="btn submitBtn" [disabled]="!user.Cnic || !user.PhoneNumber || !user.Email" (click)="fetchProfileInfo()" >Reset</button>
+						</form>
+					</article>
+				</div>
+			</div>
+			<!-- //vertical tabs -->
+			<div class="clear"></div>
+		</div>
+		<!-- copyright -->
+		<div class="copyright">
+			<h2>
+                &copy; Government of The Punjab 2020 Health Information and Service Delivery Unit. All rights reserved.
+			</h2>
+		</div>
+		<!-- //copyright -->
+	</div>
+
+</body>
+
+</html>

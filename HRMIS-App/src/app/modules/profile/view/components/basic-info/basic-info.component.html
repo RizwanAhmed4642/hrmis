@@ -1,0 +1,114 @@
+<div *ngIf="!profile" class="k-i-loading"></div>
+<div class="animated fadeIn" *ngIf="profile">
+  <div class="row">
+    <div class="col-md-6 col-sm-12 control-col-st">
+      <table class="table table-50 view-table" style="background: transparent;">
+        <tbody>
+          <tr (mouseover)="onMouse(1, 'ProfilePhoto')" (mouseout)="onMouse(2, 'ProfilePhoto')">
+            <td><strong class="p-strong">Photo</strong></td>
+            <td>
+              <img class="pic-shadow" width="100" height="100" [src]="profile.psrc"
+                onError="this.src='../../../assets/img/notfound.png'" alt=""> <span
+                *ngIf="profileFields.ProfilePhoto"><button kendoButton primary="true" class="btn-sm pull-right"><i
+                    class="fa fa-pencil"></i></button></span>
+            </td>
+          </tr>
+          <tr (mouseover)="onMouse(1, 'EmployeeName')" (mouseout)="onMouse(2, 'EmployeeName')">
+            <td><strong class="p-strong">Name</strong></td>
+            <td>{{profile.EmployeeName}} <span *ngIf="profileFields.EmployeeName"><button kendoButton primary="true"
+                  class="btn-sm pull-right"><i class="fa fa-pencil"></i></button></span> </td>
+          </tr>
+          <tr (mouseover)="onMouse(1, 'FatherName')" (mouseout)="onMouse(2, 'FatherName')">
+            <td><strong class="p-strong">Father Name</strong></td>
+            <td>{{profile.FatherName}} <span *ngIf="profileFields.FatherName"><button kendoButton primary="true"
+                  class="btn-sm pull-right"><i class="fa fa-pencil"></i></button></span> </td>
+          </tr>
+          <tr (mouseover)="onMouse(1, 'CNIC')" (mouseout)="onMouse(2, 'CNIC')">
+            <td><strong class="p-strong">CNIC</strong></td>
+            <td>{{dashifyCNIC(profile.CNIC)}} <span *ngIf="profileFields.CNIC"><button kendoButton primary="true"
+                  class="btn-sm pull-right"><i class="fa fa-pencil"></i></button></span> </td>
+          </tr>
+          <tr (mouseover)="onMouse(1, 'DateOfBirth')" (mouseout)="onMouse(2, 'DateOfBirth')">
+            <td><strong class="p-strong">D.O.B</strong></td>
+            <td>{{profile.DateOfBirth | date:'dd-MM-yyyy'}} <span *ngIf="profileFields.DateOfBirth"><button kendoButton
+                  primary="true" class="btn-sm pull-right"><i class="fa fa-pencil"></i></button></span> </td>
+          </tr>
+          <tr (mouseover)="onMouse(1, 'Gender')" (mouseout)="onMouse(2, 'Gender')">
+            <td><strong class="p-strong">Gender</strong></td>
+            <td>{{profile.Gender}} <span *ngIf="profileFields.Gender"><button kendoButton primary="true"
+                  class="btn-sm pull-right"><i class="fa fa-pencil"></i></button></span> </td>
+          </tr>
+          <tr (mouseover)="onMouse(1, 'Domicile_Id')" (mouseout)="onMouse(2, 'Domicile_Id')">
+            <td><strong class="p-strong">Domicile</strong></td>
+            <td>{{profile.Domicile_Name}} <span *ngIf="profileFields.Domicile_Id"><button kendoButton primary="true"
+                  class="btn-sm pull-right"><i class="fa fa-pencil"></i></button></span> </td>
+          </tr>
+          <tr (mouseover)="onMouse(1, 'MaritalStatus')" (mouseout)="onMouse(2, 'MaritalStatus')">
+            <td><strong class="p-strong">Marital Status</strong></td>
+            <td>{{profile.MaritalStatus}} <span *ngIf="profileFields.MaritalStatus"><button kendoButton primary="true"
+                  class="btn-sm pull-right"><i class="fa fa-pencil"></i></button></span> </td>
+          </tr>
+          <tr (mouseover)="onMouse(1, 'BloodGroup')" (mouseout)="onMouse(2, 'BloodGroup')">
+            <td><strong class="p-strong">Bloodgroup</strong></td>
+            <td>{{profile.BloodGroup}} <span *ngIf="profileFields.BloodGroup"><button kendoButton primary="true"
+                  class="btn-sm pull-right"><i class="fa fa-pencil"></i></button></span> </td>
+          </tr>
+          <tr (mouseover)="onMouse(1, 'Religion_Id')" (mouseout)="onMouse(2, 'Religion_Id')">
+            <td><strong class="p-strong">Religion</strong></td>
+            <td>{{profile.Religion_Name}} <span *ngIf="profileFields.Religion_Id"><button kendoButton primary="true"
+                  class="btn-sm pull-right"><i class="fa fa-pencil"></i></button></span> </td>
+          </tr>
+          <tr (mouseover)="onMouse(1, 'Language_Id')" (mouseout)="onMouse(2, 'Language_Id')">
+            <td><strong class="p-strong">Mother Tongue</strong></td>
+            <td>{{profile.Language_Name}} <span *ngIf="profileFields.Language_Id"><button kendoButton primary="true"
+                  class="btn-sm pull-right"><i class="fa fa-pencil"></i></button></span> </td>
+          </tr>
+          <tr *ngIf="profile.Disability_Id">
+            <td><strong class="p-strong">Disability</strong></td>
+            <td>{{profile.DisablityType}}
+              <br>
+              <i>
+                <small><span class="p-strong"></span> Remarks:&nbsp;{{profile.Disability}}</small>
+              </i>
+            </td>
+          </tr>
+          <tr (mouseover)="onMouse(1, 'MobileNo')" (mouseout)="onMouse(2, 'MobileNo')">
+            <td><strong class="p-strong">Mobile Number</strong></td>
+            <td>{{profile.MobileNo}} <span *ngIf="profileFields.MobileNo"><button kendoButton primary="true"
+                  class="btn-sm pull-right"><i class="fa fa-pencil"></i></button></span> </td>
+          </tr>
+          <tr (mouseover)="onMouse(1, 'EMaiL')" (mouseout)="onMouse(2, 'EMaiL')">
+            <td><strong class="p-strong">E-mail</strong></td>
+            <td>{{profile.EMaiL}} <span *ngIf="profileFields.EMaiL"><button kendoButton primary="true"
+                  class="btn-sm pull-right"><i class="fa fa-pencil"></i></button></span> </td>
+          </tr>
+          <tr (mouseover)="onMouse(1, 'LandlineNo')" (mouseout)="onMouse(2, 'LandlineNo')">
+            <td><strong class="p-strong">Landline Number</strong></td>
+            <td>{{profile.LandlineNo}} <span *ngIf="profileFields.LandlineNo"><button kendoButton primary="true"
+                  class="btn-sm pull-right"><i class="fa fa-pencil"></i></button></span> </td>
+          </tr>
+          <tr (mouseover)="onMouse(1, 'Faxno')" (mouseout)="onMouse(2, 'Faxno')">
+            <td><strong class="p-strong">Fax Number</strong></td>
+            <td>{{profile.Faxno}} <span *ngIf="profileFields.Faxno"><button kendoButton primary="true"
+                  class="btn-sm pull-right"><i class="fa fa-pencil"></i></button></span> </td>
+          </tr>
+          <tr (mouseover)="onMouse(1, 'PermanentAddress')" (mouseout)="onMouse(2, 'PermanentAddress')">
+            <td><strong class="p-strong">Permanent Address</strong></td>
+            <td>{{profile.PermanentAddress}} <span *ngIf="profileFields.PermanentAddress"><button kendoButton
+                  primary="true" class="btn-sm pull-right"><i class="fa fa-pencil"></i></button></span> </td>
+          </tr>
+          <tr (mouseover)="onMouse(1, 'CorrespondenceAddress')" (mouseout)="onMouse(2, 'CorrespondenceAddress')">
+            <td><strong class="p-strong">Correspondence
+                Address</strong></td>
+            <td>{{profile.CorrespondenceAddress}} <span *ngIf="profileFields.CorrespondenceAddress"><button kendoButton
+                  primary="true" class="btn-sm pull-right"><i class="fa fa-pencil"></i></button></span> </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-6 col-sm-12 control-col-end">
+      <app-profile-departmental-info [profile]="profile"></app-profile-departmental-info>
+    </div>
+  </div>
+
+</div>

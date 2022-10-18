@@ -1,0 +1,529 @@
+<div *ngIf="!profile" class="k-i-loading"></div>
+<div class="animated fadeIn" *ngIf="profile">
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3">
+        E-Transfer Application
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12" *ngIf="currentUser.RoleName != 'HRView'">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" look="outline" routerLink="/e/application">Back</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="animated fadeIn" *ngIf="applicationSubType_Id == 0">
+  <div class="row" *ngIf="!showMessage">
+    <div class="col-md-4 control-col-st">
+      <div class="card card-accent-success">
+        <div class="card-body">
+          <div class="cursor-p" style="height: 77px;">
+            <h4 class="p-strong">1. Merit</h4>
+            <!--   <p class="mt-2">The goal behind this type of transfer is that anyone can apply for an open vacancy and be
+              selected
+              based merit. In case there is an objection against the score determined by the system, you will have the
+              option of registering a complaint. </p> -->
+          </div>
+          <button kendoButton routerLink="/e/apply/open-merit" class="pull-right btn-block btn-lg" primary="true"
+            look="outline">Apply</button>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-md-4 control-col">
+      <div class="card card-accent-success">
+        <div class="card-body">
+          <div class="cursor-p" style="height: 77px;">
+            <h4 class="p-strong">2. Compassionate Grounds</h4>
+            <!--  <p class="mt-2">This option is for exceptional cases that may need special consideration.
+              However, it can
+              only be used once in the lifetime of a doctor’s career. </p> -->
+          </div><!--  (click)="applicationSubtypeSelected(3)" -->
+          <button kendoButton routerLink="/e/apply/compassionate" class="pull-right btn-block btn-lg" primary="true"
+            look="outline">Apply</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 control-col">
+      <div class="card card-accent-secondary">
+        <div class="card-body">
+          <div class="cursor-p" style="height: 77px;">
+            <h4 class="p-strong">3. Mutual Transfer</h4>
+            <!--  <p class="mt-2">This option is available for applicants who have mutually decided to swap places of posting.
+              Hence, the two applicants do not have to go through the channels of a competitive process. </p> -->
+          </div><!-- (click)="applicationSubtypeSelected(2)"  -->
+          <button kendoButton routerLink="/e/apply/mutual" class="pull-right btn-block btn-lg" primary="true"
+            look="outline">Apply</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="row animated fadeIn mb-2" *ngIf="showMessage">
+  <div class="col-md-12">
+    <div class="pager-rows-number text-center">
+      <h2>{{showMessage}}</h2>
+    </div>
+  </div>
+</div>
+<div class="animated fadeIn mt-2" *ngIf="applicationSubType_Id == 1">
+  <div class="animated fadeIn mb-2 p-3" *ngIf="preferences.length > 0"
+    style="background: #e9e9e9;color: black;border-radius: 9px;">
+    <div class="content-heading mb-3">
+      Preferences {{preferences.length}} / 3
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <kendo-grid [data]="preferences" [resizable]="true">
+          <kendo-grid-column width="10" field="asd" title="Sr." [headerClass]="'grid-header-custom'"
+            [style]="{'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p class="m-0">
+                {{(rowIndex + 1)}}
+              </p>
+              <!--  <img class="pic-shadow" width="35" height="35"
+                [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/Files/HFPics/' + dataItem.ImagePath"
+                onError="this.src='../../../assets/img/notfound.png'" alt=""> -->
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column width="73" field="HFName" title="Name" [headerClass]="'grid-header-custom'"
+            [style]="{'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              {{dataItem.HFName}}
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column width="27" field="asd" title="Action" [headerClass]="'grid-header-custom'"
+            [style]="{'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div *ngIf="dataItem.saved">
+                <button class="btn-sm"
+                  [routerLink]="'/fts/application/' + dataItem.appId + '/' + dataItem.TrackingNumber" look="outline"
+                  kendoButton primary="true">
+                  View</button>
+              </div>
+              <button class="btn-sm" *ngIf="!dataItem.saved && !dataItem.saving" (click)="removeFromList(rowIndex)"
+                look="outline" kendoButton primary="true">
+                Remove</button>
+              <button *ngIf="dataItem.saving" class="btn-sm" [ladda]="dataItem.saving" data-style="zoom-in" kendoButton
+                primary="true">
+                Saving</button>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+    </div>
+    <div class="row" *ngIf="!showMessage">
+      <div class="col-md-12">
+        <div class="grid-top-header-custom animated fadeIn mt-2">
+          <div class="pager-rows-number">
+            <h5><i><strong class="p-strong">Please review your preferences before submit</strong></i> <button
+                kendoButton primary="true" (click)="applyAll()" class="pull-right mr-4">Submit</button></h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="!showMessage && preferences.length < 3">
+    <div [hidden]="selectedDistrict" [ngClass]="id != 0 ? 'col-md-12' : 'col-md-12'"
+      style="transition: 0.13s all ease-in-out;">
+      <div class="content-heading mb-3">
+        Punjab Districts
+      </div>
+      <div class="row mb-2">
+        <div class="col-md-12">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-search"></i></span>
+            </div>
+            <input type="text" class="form-control" [(ngModel)]="districtQuery" (keyup)="searchDistrict()" />
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="row" *ngIf="districts.length > 0">
+        <div *ngFor="let dist of districts;let i = index;" [hidden]="!dist.Name" (click)="onSelectDistrict(dist)"
+          style="transition: 0.13s all ease-in-out;"
+          [ngClass]="id != 0 ? 'col-md-3' : 'col-md-3 ' + (i % 4 === 0 ? 'control-col-st' : i % 4 === 1 ? 'control-col' : i % 4 === 2 ? 'control-col' : i % 4 === 3 ? 'control-col-end' : '')">
+          <div class="k-i-loading" *ngIf="districts.length == 0"></div>
+          <div class="staff-statement-box">
+            <span class="title">{{dist.Name ? dist.Name : ''}} <span class="text-muted">({{dist.Count}})</span>
+              <!-- <span class="text-muted">({{dist.Count}})</span> -->
+            </span>
+            <i class="view-icon fa fa-arrow-circle-o-right"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="selectedDistrict" [ngClass]="id != 0 ? 'col-md-12' : 'col-md-12'"
+      style="transition: 0.13s all ease-in-out;">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="content-wrap animated fadeIn">
+            <div class="content-heading mb-3">
+              <i class="fa fa-arrow-left cursor-p" (click)="backToDistricts()"></i> {{selectedDistrict.Name}}
+            </div>
+            <div class="row mb-2">
+              <div class="col-md-12">
+                <div class="input-group input-group-sm">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-search"></i></span>
+                  </div>
+                  <input type="text" class="form-control" [(ngModel)]="facilityQuery" (keyup)="searchFacility()" />
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="row animated fadeIn"
+              *ngIf="selectedDistrict.Name == 'Lahore' && !showLahore && !loadingHealthFacilities">
+              <div class="col-md-12">
+                <h2><i class="fa fa-info text-success"></i> Note</h2>
+                <h4 class="ml-2"> Lahore District will open after 3 year service as Regular Employee
+                </h4>
+              </div>
+            </div>
+            <div class="animated fadeIn" style="box-shadow: 0 0px 5px rgba(0, 0, 0, 0.5);"
+              *ngIf="!loadingHealthFacilities && healthFacilities.length > 0 && selectedDistrict.Name == 'Lahore' && showLahore">
+              <kendo-grid [data]="healthFacilities" [resizable]="true">
+                <kendo-grid-column width="7" field="asd" title="Sr." [headerClass]="'grid-header-custom'"
+                  [style]="{'border-bottom' : '1px solid #c8ced3'}">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <p class="m-0">
+                      {{(rowIndex + 1)}}
+                    </p>
+                    <!--  <img class="pic-shadow" width="35" height="35" [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/Files/HFPics/' + dataItem.ImagePath"
+                    onError="this.src='../../../assets/img/notfound.png'" alt=""> -->
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column width="60" field="HFName" title="Name" [headerClass]="'grid-header-custom'"
+                  [style]="{'border-bottom' : '1px solid #c8ced3'}">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <p class="m-0">
+                      {{dataItem.HFName}}
+                    </p>
+                    <!--        <h5 class="m-0" style="cursor: pointer;font-family: Roboto-Regular; color: darkslategray ; font-weight: 100;">
+                        {{dataItem.HFName}}</h5> -->
+                    <!--       <p class="m-0 p-strong" style="cursor: pointer;">
+                    {{dataItem.FullName}}
+                  </p> -->
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column width="33" field="asd" title="Action" [headerClass]="'grid-header-custom'"
+                  [style]="{'border-bottom' : '1px solid #c8ced3'}">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <div *ngIf="!dataItem.added">
+                      <button class="btn-sm" *ngIf="(dataItem.Vacant + dataItem.Adhoc) > 0"
+                        (click)="addToList(dataItem)" [ladda]="dataItem.saving" data-style="zoom-in" kendoButton
+                        primary="true">{{(dataItem.Vacant + dataItem.Adhoc)}}
+                        Vacant - Apply Now {{dataItem.Adhoc}}</button>
+                      <button class="btn-sm" [ladda]="dataItem.saving" data-style="zoom-in"
+                        (click)="subscribeAlert(dataItem)" *ngIf="(dataItem.Vacant + dataItem.Adhoc) <= 0" kendoButton
+                        primary="true" look="outline">No Seat Vacant - Subscribe Alerts <i
+                          class="fa fa-rss"></i></button>
+                    </div>
+                    <div *ngIf="dataItem.added">
+                      <i class="fa fa-check text-success"></i>
+                    </div>
+                  </ng-template>
+                </kendo-grid-column>
+              </kendo-grid>
+            </div>
+            <div class="animated fadeIn" style="box-shadow: 0 0px 5px rgba(0, 0, 0, 0.5);"
+              *ngIf="!loadingHealthFacilities && healthFacilities.length > 0 && selectedDistrict.Name != 'Lahore'">
+              <kendo-grid [data]="healthFacilities" [resizable]="true">
+                <kendo-grid-column width="7" field="asd" title="Sr." [headerClass]="'grid-header-custom'"
+                  [style]="{'border-bottom' : '1px solid #c8ced3'}">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <p class="m-0">
+                      {{(rowIndex + 1)}}
+                    </p>
+                    <!--  <img class="pic-shadow" width="35" height="35" [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/Files/HFPics/' + dataItem.ImagePath"
+                      onError="this.src='../../../assets/img/notfound.png'" alt=""> -->
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column width="60" field="HFName" title="Health Facility"
+                  [headerClass]="'grid-header-custom'" [style]="{'border-bottom' : '1px solid #c8ced3'}">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <p class="m-0">
+                      {{dataItem.HFName}}
+                    </p>
+                    <!--        <h5 class="m-0" style="cursor: pointer;font-family: Roboto-Regular; color: darkslategray ; font-weight: 100;">
+                          {{dataItem.HFName}}</h5> -->
+                    <!--       <p class="m-0 p-strong" style="cursor: pointer;">
+                      {{dataItem.FullName}}
+                    </p> -->
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column width="33" field="asd" title="Action" [headerClass]="'grid-header-custom'"
+                  [style]="{'border-bottom' : '1px solid #c8ced3'}">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <div *ngIf="!dataItem.added">
+                      <button class="btn-sm" *ngIf="(dataItem.Vacant + dataItem.Adhoc) > 0"
+                        (click)="addToList(dataItem)" [ladda]="dataItem.saving" data-style="zoom-in" kendoButton
+                        primary="true">{{(dataItem.Vacant + dataItem.Adhoc)}}
+                        Vacant - Apply Now</button>
+                      <button class="btn-sm" [ladda]="dataItem.saving" data-style="zoom-in"
+                        (click)="subscribeAlert(dataItem)" *ngIf="(dataItem.Vacant + dataItem.Adhoc) <= 0" kendoButton
+                        primary="true" look="outline">No Seat Vacant - Subscribe Alerts <i
+                          class="fa fa-rss"></i></button>
+                    </div>
+                    <div *ngIf="dataItem.added">
+                      <i class="fa fa-check text-success"></i>
+                    </div>
+                  </ng-template>
+                </kendo-grid-column>
+              </kendo-grid>
+            </div>
+
+            <div class="animated fadeIn" style="box-shadow: 0 0px 5px rgba(0, 0, 0, 0.5);"
+              *ngIf="loadingHealthFacilities">
+              <kendo-grid [data]="[{},{}, {}, {}, {}, {}, {}, {}, {}, {} ]">
+                <kendo-grid-column width="10" field="EmployeeName" title="Sr." [headerClass]="'grid-header-custom'"
+                  [style]="{'border-bottom' : '1px solid #c8ced3'}">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <div class="shine shim-controls p-1"></div>
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column width="90" field="EmployeeName" title="Name" [headerClass]="'grid-header-custom'"
+                  [style]="{'border-bottom' : '1px solid #c8ced3'}">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <div class="row employee-info-grid-box" style="cursor: pointer;">
+                      <div class="shine shim-controls p-1">
+                      </div>
+                    </div>
+                  </ng-template>
+                </kendo-grid-column>
+              </kendo-grid>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12 mt-2"><i class="text-success">adhoc is considered vacant</i></div>
+  </div>
+
+</div>
+<div class="animated fadeIn mt-2" *ngIf="applicationSubType_Id == 2">
+  <div class="row" *ngIf="!showMessage">
+    <div class="col-md-12">
+      <div class="content-heading mb-3">
+        Mutual Transfer
+      </div>
+      <div class="row">
+        <div class="col-md-10">
+
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-md-6 control-col-st animated fadeIn" *ngIf="mutualProfile.firstEmployee.CNIC">
+          <label class="k-form-field">
+            <span>CNIC 1 <span class="text-danger">*</span></span>
+            <kendo-maskedtextbox [mask]="cnicMask" disabled [(ngModel)]="mutualProfile.firstEmployee.CNIC" required>
+            </kendo-maskedtextbox>
+          </label>
+          <hr>
+          <div>
+            <p class="m-0">{{mutualProfile.firstEmployee.EmployeeName}}</p>
+            <p class="m-0">{{mutualProfile.firstEmployee.FatherName}}</p>
+            <p class="m-0">{{mutualProfile.firstEmployee.Designation_Name}},
+              {{mutualProfile.firstEmployee.HealthFacility}}</p>
+          </div>
+        </div>
+        <div class="col-md-6 control-col-end animated fadeIn" *ngIf="mutualProfile.secondEmployee">
+          <label class="k-form-field">
+            <span>CNIC 2 <span class="text-danger">*</span></span>
+            <kendo-maskedtextbox [mask]="cnicMask" (keyup)="searchProfile()"
+              [(ngModel)]="mutualProfile.secondEmployee.CNIC" required>
+            </kendo-maskedtextbox>
+          </label>
+          <hr>
+          <div *ngIf="eligibleCadidate == true">
+            <p class="m-0">{{mutualProfile.secondEmployee.EmployeeName}}</p>
+            <p class="m-0">{{mutualProfile.secondEmployee.FatherName}}</p>
+            <p class="m-0">{{mutualProfile.secondEmployee.Designation_Name}},
+              {{mutualProfile.secondEmployee.HealthFacility}}</p>
+          </div>
+          <div *ngIf="eligibleCadidate == false">
+            <p class="m-0 p-strong">Cadidate is not eligible for transfer</p>
+            <p class="m-0">{{notEligibleMessage}}</p>
+          </div>
+        </div>
+        <div class="col-md-12 animated fadeIn" *ngIf="!isMutualVerified">
+          <hr>
+          <div class="row">
+            <div class="col-md-5 control-col-st animated fadeIn"
+              *ngIf="!applicationMutualCode && mutualProfile.firstEmployee && mutualProfile.secondEmployee && mutualProfile.firstEmployee.Id && mutualProfile.secondEmployee.Profile_Id">
+              <label class="k-form-field">
+                <span>&nbsp;</span>
+                <button kendoButton primary="true" (click)="getApplicationMutualCode()"><i
+                    class="fa fa-send-o"></i>&nbsp;Send
+                  Verification Code</button>
+              </label>
+            </div>
+            <div class="col-md-4 control-col-st">
+              <label class="k-form-field animated fadeIn" *ngIf="applicationMutualCode && applicationMutualCode.Id > 0">
+                <span>Verification Code One <span class="text-danger">*</span></span>
+                <input kendoTextBox type="number" min="0" [(ngModel)]="application.MutualCodeOne">
+              </label>
+            </div>
+            <div class="col-md-4 control-col">
+              <label class="k-form-field animated fadeIn" *ngIf="applicationMutualCode && applicationMutualCode.Id > 0">
+                <span>Verification Code Two <span class="text-danger">*</span></span>
+                <input kendoTextBox type="number" min="0" [(ngModel)]="application.MutualCodeTwo">
+              </label>
+            </div>
+            <div class="col-md-4 control-col-end">
+              <label class="k-form-field animated fadeIn"
+                *ngIf="application.MutualCodeOne && application.MutualCodeTwo && application.MutualCodeOne.toString().length == 4 && application.MutualCodeTwo.toString().length == 4">
+                <span>&nbsp;</span>
+                <button kendoButton primary="true" class="btn-block" (click)="verifyMutualCode()"><i
+                    class="fa fa-envira"></i> Verify</button>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 animated fadeIn" *ngIf="isMutualVerified">
+          <hr>
+          <div class="col-md-4 control-col-end">
+            <label class="k-form-field animated fadeIn"
+              *ngIf="application.MutualCodeOne && application.MutualCodeTwo && application.MutualCodeOne.toString().length == 4 && application.MutualCodeTwo.toString().length == 4">
+              <span>&nbsp;</span>
+              <button kendoButton primary="true" class="btn-block" [ladda]="savingApplication" data-style="zoom-in"
+                (click)="onSubmit({})"><i class="fa fa-check"></i>
+                Submit Mutual Transfer Application</button>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="row animated fadeIn" *ngIf="showMessage">
+    <div class="col-md-8 offset-md-2">
+      <div class="jumbotron">
+        <h2>{{showMessage}}</h2>
+        <hr>
+        <button class="btn-sm" [routerLink]="'/fts/application/' + application.Id + '/' + application.TrackingNumber"
+          kendoButton look="outline" primary="true" *ngIf="showMessage != 'You are not eligible as per Policy.'">View
+          Application</button>
+        <button class="btn-sm" kendoButton primary="true" *ngIf="showMessage != 'You are not eligible as per Policy.'"
+          (click)="showMessage = null">Back</button>
+      </div>
+    </div>
+  </div> -->
+</div>
+<div class="animated fadeIn mt-2" *ngIf="applicationSubType_Id == 3">
+  <div class="row" *ngIf="!showMessage && compassionateType == 0">
+    <div class="col-md-12">
+      <div class="content-heading mb-3">
+        Compassionate
+      </div>
+      <div class="row" *ngIf="!showMessage">
+        <div class="col-md-3">
+          <div class="bg-gray-200 p-3 border cursor-p" (click)="applicationCompassionatetypeSelected(1)">
+            <h4 class="text-center">Disability</h4>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="bg-gray-200 p-3 border cursor-p" (click)="applicationCompassionatetypeSelected(2)">
+            <h4 class="text-center">Wedlock</h4>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="bg-gray-200 p-3 border cursor-p" (click)="applicationCompassionatetypeSelected(3)">
+            <h4 class="text-center">Divorced</h4>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="bg-gray-200 p-3 border cursor-p" (click)="applicationCompassionatetypeSelected(4)">
+            <h4 class="text-center">Widow</h4>
+          </div>
+        </div>
+        <!--   <div class="col-md-12 mt-2">
+          <i>wedlock is not a compassion</i>
+        </div> -->
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="!showMessage && compassionateType > 0">
+    <div class="col-md-12" *ngIf="compassionateType == 1">
+      <div class="row" *ngIf="!showMessage">
+        <div class="col-md-4">
+          <div class="bg-gray-200 p-3 border cursor-p">
+            <h4 class="text-center">Major Disability</h4>
+            <label class="k-form-field">
+              <span><strong class="p-strong">Disability Certificate</strong></span>
+              <input type="file" style="width: 100%;">
+            </label>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="bg-gray-200 p-3 border cursor-p">
+            <h4 class="text-center">Minor Disability</h4>
+            <label class="k-form-field">
+              <span><strong class="p-strong">Disability Certificate</strong></span>
+              <input type="file" style="width: 100%;">
+            </label>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="row" *ngIf="!showMessage">
+        <div class="col-md-4 mt-1">
+          <button kendoButton class="btn-lg btn-block" primary="true" (click)="applicationSubtypeSelected(1)">Proceed
+            for Transfer Application</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12" *ngIf="compassionateType == 2">
+      <div class="row" *ngIf="!showMessage">
+        <div class="col-md-4">
+          <label class="k-form-field">
+            <span><strong class="p-strong">Spouse Employement Letter</strong></span>
+            <input type="file" style="width: 100%;">
+          </label>
+        </div>
+        <div class="col-md-4">
+          <div class="bg-gray-200 p-3 border cursor-p">
+            <label class="k-form-field">
+              <span><strong class="p-strong">Last Pay Slip</strong></span>
+              <input type="file" style="width: 100%;">
+            </label>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="row" *ngIf="!showMessage">
+        <div class="col-md-4 mt-1">
+          <button kendoButton class="btn-lg btn-block" primary="true" (click)="applicationSubtypeSelected(1)">Proceed
+            for Transfer Application</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3" *ngIf="compassionateType == 3">
+      applicationSubtypeSelected
+    </div>
+
+    <div class="col-md-3" *ngIf="compassionateType == 4">
+      applicationSubtypeSelected
+    </div>
+  </div>
+  <div class="row animated fadeIn" *ngIf="showMessage">
+    <div class="col-md-8 offset-md-2">
+      <div class="jumbotron">
+        <h2>{{showMessage}}</h2>
+        <hr>
+        <button class="btn-sm" [routerLink]="'/fts/application/' + application.Id + '/' + application.TrackingNumber"
+          kendoButton look="outline" primary="true" *ngIf="showMessage != 'You are not eligible as per Policy.'">View
+          Application</button>
+        <button class="btn-sm" kendoButton primary="true" *ngIf="showMessage != 'You are not eligible as per Policy.'"
+          (click)="showMessage = null">Back</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

@@ -1,0 +1,475 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-6 col-xs-12">
+      <div class="top-h3">
+        Inbox
+      </div>
+    </div>
+  <!--   <div class="col-md-6 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" [ladda]="savingFileMovement" data-style="zoom-in"
+          class="ml-2" (click)="moveFilesFromJan22()">Move</button>
+      </div>
+    </div> -->
+  </div>
+
+  <!--  <div style="margin-left: 33%;margin-top: 80px;" *ngIf="!kGrid.totalRecords && !kGrid.loading">
+      <h1 class="text-muted"><i class="fa fa-inbox"></i> Inbox Empty</h1>
+      <p class="text-muted" *ngIf="!kGrid.totalRecords">The applications you recieve will appear here.</p>
+    </div> -->
+  <div class="animated fadeIn">
+    <div class="row">
+      <div class="col-sm-12 control-col-st">
+        <div class="table-wrap" *ngFor="let item of dropDowns.inboxOfficers"
+          [ngClass]="office_Id == item.Id ? 'active' : ''" (click)="dropdownValueChanged(item, 'office')">
+          <div class="table-name">
+            <!-- [ngClass]="office_Id == item.Id ? 'badge-warning' : 'badge-danger'" -->
+            {{item.Name}} - <span class="badge" style="padding: 0px !important;
+                font-size: 13px;
+                font-weight: 100;
+                font-family: 'Roboto-Bold';">{{item.Count}}</span>
+            <!--     <br>
+              <small class="text-center"> DateTime</small> -->
+          </div>
+        </div>
+        <!--
+                <label class="k-form-field">
+                <span>Office</span>
+                <kendo-dropdownlist [data]="dropDowns.inboxOfficers" [textField]="'Name'" [valueField]="'Id'"
+                  (valueChange)="dropdownValueChanged($event, 'office')" [value]="dropDowns.selectedFiltersModel.inboxOfficers"
+                  [defaultItem]="dropDowns.defultFiltersModel.inboxOfficers">
+                </kendo-dropdownlist>
+                </label>
+            </div>
+            <div class="col-md-4 col-sm-12 control-col">
+              <label class="k-form-field">
+                <span>Search by Tracking Number / Name / CNIC</span>
+                <input type="text" #searchRef (input)="inputChange.next(searchRef.value)" placeholder="Tracking Number, Name, CNIC"
+                  kendoTextBox>
+              </label> -->
+      </div>
+    </div>
+    <div class="row row-panel">
+      <div class="col-md-12">
+        <div class="grid-top-header-custom animated fadeIn">
+          <div class="pager-rows-number" *ngIf="kGrid.loading">
+            <div class="shine shim-controls"></div>
+          </div>
+          <div class="pager-rows-number" *ngIf="!kGrid.loading">
+            <span *ngIf="kGrid.totalRecords > 0">
+              {{(kGrid.skip + 1) + ' - ' + (kGrid.pageSize <= kGrid.totalRecords ? (kGrid.pageSize + kGrid.skip) :
+                  kGrid.totalRecords) + ' of ' + numberWithCommas(kGrid.totalRecords) + ' items ' }} </span>
+            <button *ngIf="selectedApplicationsIds.length > 0 && recieveFiles" kendoButton (click)="generateSlip()"
+              [primary]="true" [ladda]="generatingSlip" data-style="zoom-in" class="ml-2 animated fadeIn btn-sm">Recieve
+              {{selectedApplicationsIds.length + ' file' + (selectedApplicationsIds.length == 1 ? '' :
+                  's')}}
+              <!-- {{office_Id != 0 ? ' From ' + officeName : ''}} --></button>
+
+            <span class="pull-right">
+              <input type="checkbox" id="liverep" [(ngModel)]="shouldPrint" class="k-checkbox" />
+              <label class="k-checkbox-label mr-2" for="liverep">Print Recieving</label>
+              <select #select (change)="changePagesize(select.value)">
+                <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}</option>
+                <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+                  [selected]="page === kGrid.pageSize ? true : undefined">
+                  {{page}}
+                </option>
+              </select>
+              &nbsp; items per page
+            </span>
+
+          </div>
+        </div>
+        <div class="grid-top-header-custom animated fadeIn" style="border-bottom:1px solid rgba(0, 0, 0, 0.08);">
+          <div class="pager-rows-number">
+            <label class="k-form-field">
+              <span>Search File by Tracking Id / Name / CNIC</span>
+              <input type="text" [(ngModel)]="searchQuery" (input)="searchEvent.next(searchQuery)"
+                placeholder="Enter Tracking Id / Name / CNIC" kendoTextBox>
+            </label>
+          </div>
+        </div>
+        <div class="grid-wrapper">
+          <kendo-grid [data]="kGrid.gridView" *ngIf="!kGrid.loading" (selectedKeysChange)="selectedKeysChange($event)"
+            [selectable]="true" [kendoGridSelectBy]="'Id'" [selectedKeys]="selectedApplicationsIds"
+            [(pageSize)]="kGrid.pageSize" [skip]="kGrid.skip" [pageable]="true" (pageChange)="pageChange($event)"
+            [scrollable]="false">
+            <kendo-grid-checkbox-column [width]="20" showSelectAll="true"></kendo-grid-checkbox-column>
+            <!-- <kendo-grid-column *ngIf="!recieveFiles" [width]="20" field="asd" title="No.">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  {{(rowIndex + 1)}}.
+                </ng-template>
+              </kendo-grid-column> -->
+            <kendo-grid-column [width]="80" field="EmployeeName" title="Applicant">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <div class="employee-info" *ngIf="dataItem.ApplicationSource_Id == 5 || dataItem.ApplicationSource_Id == 8">
+                  <p class="m-0"><strong class="p-strong">From:
+                    </strong>{{dataItem.DispatchFrom}}</p>
+                  <p class="m-0"><strong class="p-strong">Subject:
+                    </strong>{{dataItem.DispatchSubject}}</p>
+                  <p class="m-0" *ngIf="dataItem.CNIC"><strong class="p-strong">CNIC:
+                    </strong>{{dashifyCNIC(dataItem.CNIC)}}</p>
+                  <p class="m-0"><strong class="p-strong">Dated:
+                    </strong>{{dataItem.DispatchDated | date:'dd/MM/yyyy'}}</p>
+                  <p class="m-0">{{dataItem.Created_Date | date:'d/M/yy, h:mm a'}} <small class="pull-right"
+                      [ngClass]="dataItem.Limit == 6 ? 'text-warning' : dataItem.Limit == 7 ? 'text-red' : ''">
+                      <span>{{dataItem.DateDiff | durationMoment}}</span></small></p>
+                </div>
+                <div class="employee-info" *ngIf="dataItem.ApplicationSource_Id == 10">
+                  <p class="m-0"><strong class="p-strong">FileNumber:
+                    </strong>{{dataItem.DispatchNumber}}</p>
+                  <p class="m-0"><strong class="p-strong">Subject / Title:
+                    </strong>{{dataItem.DispatchSubject}}</p>
+                  <p class="m-0" *ngIf="dataItem.CNIC"><strong class="p-strong">CNIC:
+                    </strong>{{dashifyCNIC(dataItem.CNIC)}}</p>
+                </div>
+                <div class="employee-info"
+                  *ngIf="dataItem.ApplicationType_Id != 11 && dataItem.ApplicationSource_Id != 10 && dataItem.ApplicationType_Id != 14 && dataItem.ApplicationSource_Id != 5 && dataItem.ApplicationSource_Id != 8">
+                  <div></div>
+                  <p class="m-0"><strong class="p-strong"> Name: </strong>
+                    {{dataItem.EmployeeName ? dataItem.EmployeeName : ''}}</p>
+                  <p class="m-0"><strong class="p-strong"> CNIC: </strong> {{dashifyCNIC(dataItem.CNIC)}}</p>
+                  <p class="m-0" *ngIf="!dataItem.FileNumber">
+                    {{dataItem.designationName}}</p>
+                  <p class="m-0" *ngIf="dataItem.FileNumber"><strong class="p-strong"> File Number: </strong>
+                    {{dataItem.FileNumber}}</p>
+                  <p class="m-0">{{dataItem.Created_Date | date:'d/M/yy, h:mm a'}} <small class="pull-right"
+                      [ngClass]="dataItem.Limit == 6 ? 'text-warning' : dataItem.Limit == 7 ? 'text-red' : ''">
+                      <span>{{dataItem.DateDiff | durationMoment}}</span></small></p>
+                </div>
+                <div class="employee-info"
+                  *ngIf="dataItem.ApplicationType_Id == 11 && dataItem.ApplicationSource_Id != 5 && dataItem.ApplicationSource_Id != 8">
+                  <p class="m-0"> Developement Application</p>
+                  <p class="m-0" *ngIf="dataItem.FileNumber">{{dataItem.FileNumber}}</p>
+                  <p class="m-0">{{dataItem.Created_Date | date:'d/M/yy, h:mm a'}} <small class="pull-right"
+                      [ngClass]="dataItem.Limit == 6 ? 'text-warning' : dataItem.Limit == 7 ? 'text-red' : ''">
+                      <span>{{dataItem.DateDiff | durationMoment}}</span></small></p>
+                </div>
+                <div class="employee-info"
+                  *ngIf="dataItem.ApplicationType_Id == 14 && dataItem.ApplicationSource_Id != 5 && dataItem.ApplicationSource_Id != 8">
+                  <p class="m-0"> Citizen Portal Complaint</p>
+                  <p class="m-0" *ngIf="dataItem.DispatchNumber"><strong class="p-strong"> Code: </strong>
+                    {{dataItem.DispatchNumber}}</p>
+                  <p class="m-0">{{dataItem.Created_Date | date:'d/M/yy, h:mm a'}} <small class="pull-right"
+                      [ngClass]="dataItem.Limit == 6 ? 'text-warning' : dataItem.Limit == 7 ? 'text-red' : ''">
+                      <span>{{dataItem.DateDiff | durationMoment}}</span></small></p>
+                </div>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="80" field="TrackingNumber" title="Application">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <div class="application-info">
+                  <p class="m-0" *ngIf="dataItem.ApplicationTypeName"><strong class="p-strong"> Type: </strong>
+                    {{dataItem.ApplicationTypeName}}</p>
+                  <p class="m-0"><strong class="p-strong"> Tracking # </strong> <span
+                      [ngClass]="dataItem.Limit >= 3 && dataItem.Limit <= 6  ? 'text-gold' : dataItem.Limit >= 7 ? 'text-red' : ''">{{dataItem.TrackingNumber}}</span>
+                    &nbsp;<i class="fa fa-barcode"></i></p>
+                  <p class="m-0"><u> {{dataItem.ApplicationSourceName}}</u><small class="pull-right"
+                    *ngIf="dataItem.Purpose"><i class="animated fadeIn">({{dataItem.Purpose}})</i></small></p>
+                </div>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="80" field="TrackingNumber" title="Office">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <div class="application-info">
+                  <p class="m-0"><strong class="p-strong">{{dataItem.PandSOfficerName}}</strong> </p>
+                  <p class="m-0"><strong class="p-strong"> Status: </strong> <u
+                      [ngClass]="dataItem.Limit == 6  ? 'text-gold' : dataItem.Limit == 7 ? 'text-red' : ''">{{dataItem.StatusName}}</u>
+                  </p>
+                  <p class="m-0" *ngIf="dataItem.ForwardTime"><strong class="p-strong">Forward Time:</strong>
+                    {{dataItem.ForwardTime | date:'d/M/yy, h:mm a'}}</p>
+                </div>
+              </ng-template>
+            </kendo-grid-column>
+            <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+              <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+              <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+              <kendo-pager-next-buttons></kendo-pager-next-buttons>
+              <div class="pager-rows-number">
+                <select #select (change)="changePagesize(select.value)">
+                  <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}</option>
+                  <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+                    [selected]="page === kGrid.pageSize ? true : undefined">
+                    {{page}}
+                  </option>
+                </select>
+                &nbsp; items per page
+              </div>
+              <kendo-pager-info></kendo-pager-info>
+            </ng-template>
+          </kendo-grid>
+          <kendo-grid [data]="[{},{},{},{},{},{},{}]" *ngIf="kGrid.loading">
+            <kendo-grid-column [width]="20" field="asd" title="No." [headerClass]="'grid-header-custom'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <div class="shine shim-controls"></div>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="80" field="EmployeeName" title="Applicant" [headerClass]="'grid-header-custom'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <div class="shine shim-controls"></div>
+                <div class="shine shim-controls"></div>
+                <div class="shine shim-controls"></div>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="80" field="TrackingNumber" title="Application"
+              [headerClass]="'grid-header-custom'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <div class="shine shim-controls"></div>
+                <div class="shine shim-controls"></div>
+                <div class="shine shim-controls"></div>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="80" field="PandSOfficerName" title="Office" [headerClass]="'grid-header-custom'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <div class="shine shim-controls"></div>
+                <div class="shine shim-controls"></div>
+                <div class="shine shim-controls"></div>
+              </ng-template>
+            </kendo-grid-column>
+
+            <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+              <div class="shine shim-controls"></div>
+            </ng-template>
+          </kendo-grid>
+          <div id="container-floating" *ngIf="selectedApplicationsIds.length > 0 && recieveFiles">
+            <div id="floating-button" data-toggle="tooltip" data-placement="left" data-original-title="Create"
+              (click)="openWindow()">
+              <p class="plus" style="font-size: 26px !important;animation: none !important;">
+                {{selectedApplicationsIds.length}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page preview" id="formPrint" *ngIf="selectedApplications.length > 0" hidden>
+    <div style="text-align:center;position:absolute;left:0;width:100%;opacity: 0.25;"><img alt="HISDU"
+        src="../../../assets/img/brand/Watermark.png" style="display:inline-block" /></div>
+    <table border="0" cellspacing="0" style="border-color:transparent !important; width:100%">
+      <tbody>
+        <tr>
+          <td style="border-color:transparent !important; text-align:left"><img alt="Punjab Government Log"
+              src="../../../assets/img/brand/govlogoUpdated.png" style="display:inline-block; width:134px" />
+          </td>
+          <td style="border-color:transparent !important; text-align:right">
+            <div style="display:inline-block;text-align:center;"><strong class="p-strong">GOVERNMENT OF THE PUNJAB<br />
+                PRIMARY &amp; SECONDARY HEALTHCARE<br />
+                DEPARTMENT </strong><br />
+              Dated Lahore, {{dateNow}}</div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="border-color:transparent !important; text-align:left; width:100%;">
+            &nbsp;</td>
+        </tr>
+        <tr>
+          <td colspan="2" style="border-color:transparent !important; text-align:left; width:100%;">
+            <p> <strong class="p-strong">File Recieving Form # {{fileMoveMaster?.MID_Number}}</strong></p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table border="0" cellspacing="0" style="border-color:transparent !important; width:100%;">
+      <tbody>
+        <tr>
+          <td style="width: 8%;border: 1px solid #dcdcdc;padding: 0.75rem;">
+            <strong class="p-strong">Sr.</strong>
+          </td>
+          <td style="width: 25%;border: 1px solid #dcdcdc;text-align: center;padding: 0.75rem;">
+            <strong class="p-strong">Tracking Number</strong>
+          </td>
+          <td style="width: 47%;border: 1px solid #dcdcdc;padding: 0.75rem;">
+            <strong class="p-strong">Applicant Name</strong>
+          </td>
+          <td style="width: 20%;border: 1px solid #dcdcdc;text-align: center;padding: 0.75rem;">
+            <strong class="p-strong">Acknowledged</strong>
+          </td>
+        </tr>
+        <tr *ngFor="let app of selectedApplications;let i = index;">
+          <td style="width: 8%;border: 1px solid #dcdcdc;padding: 0.75rem;">
+            {{(i + 1)}}.
+          </td>
+          <td style="width: 25%;border: 1px solid #dcdcdc;text-align: center;padding: 0.75rem;">
+            {{app.TrackingNumber}}
+          </td>
+          <td style="width: 47%;border: 1px solid #dcdcdc;padding: 0.75rem;">
+            {{app.EmployeeName}}
+          </td>
+          <td style="width: 20%;border: 1px solid #dcdcdc;text-align: center;padding: 0.75rem;">
+            Yes
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <br>
+    <br>
+    <!-- <table border="0" cellspacing="0" style="border-color:transparent !important; width:100%">
+      <tbody>
+        <tr>
+          <td colspan="3" style="text-align:center;border: 1px solid black;">
+            <strong class="p-strong">Tracking ID : {{application.TrackingNumber ? application.TrackingNumber : '0000'}}</strong>
+          </td>
+        </tr>
+        <tr>
+          <td style="border-left: 1px solid black;">
+            <p class="ml-1 mb-0 mt-2"><small><i>Track this application through Department's official Website or
+                  Mobile App</i></small></p>
+            <p class="ml-1 mb-0"><small><i>Website link: <strong class="p-strong">pshealth.punjab.gov.pk</strong></i></small></p>
+            <p class="ml-1"><small><i>Mobile App: <strong class="p-strong">HRMIS</strong> - Human Resource Management Information
+                  System</i></small></p>
+          </td>
+          <td style="text-align:center;border-right: 1px solid black;border-left: 1px solid black;">
+            <img *ngIf="application.barcode" alt="IMAGE AREA" class="mb-2 mt-2" [src]="barcodeSrc()" style="border-width:0px" />
+          </td>
+        </tr>
+      </tbody>
+    </table> -->
+    <table border="0" cellspacing="0" style="border-color:transparent !important; width:100%;text-align:center;">
+      <tbody>
+        <tr>
+          <td style="width: 33%;">
+            <strong class="p-strong">Sent From</strong> </td>
+          <td style="width: 34%;"> </td>
+          <td style="width: 33%;">
+            <strong class="p-strong">Recieved By</strong> </td>
+        </tr>
+        <tr>
+          <td style="width: 33%;">
+            <p style="margin-top: 10px;">{{selectedApplications[0].FromOfficerName}}</p>
+            <p style="margin-top: 30px;">____________________________</p>
+          </td>
+          <td style="width: 34%;">
+            <img alt="IMAGE AREA" class="mb-2 mt-2" [src]="barcodeSrc()" />
+          </td>
+          <td style="width: 33%;">
+            <p style="margin-top: 10px;">{{selectedApplications[0].ToOfficerName}}</p>
+            <p style="margin-top: 30px;">____________________________</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<kendo-dialog [title]="'Files Recieved'" *ngIf="successDialogOpened && fileMoveMaster.Id != 0"
+  (close)="closeSuccessDialog()" [minWidth]="450" [width]="'550'">
+  <table class="table animated fadeIn">
+    <tbody>
+      <tr>
+        <td>Barcode</td>
+        <td>
+          <div>
+            <img [src]="barcodeSrc()" *ngIf="barcodeImgSrc" alt="">
+            <label style="display: block;margin-top:4px;width:77px;text-align: center;">* {{fileMoveMaster?.MID_Number}}
+              *</label>
+          </div>
+        </td>
+        <td>
+          <!-- (click)="printBarcode()" -->
+          <button kendoButton primary="true" [look]="'outline'" class="btn-block btn-lg"><i class="fa fa-print"></i>
+            Print</button>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <strong class="p-strong">Sr.</strong>
+        </td>
+        <td>
+          <strong class="p-strong">Tracking Number</strong>
+        </td>
+        <td>
+          <strong class="p-strong">Applicant Name</strong>
+        </td>
+        <td>
+          <strong class="p-strong">Acknowledged</strong>
+        </td>
+      </tr>
+      <tr *ngFor="let app of selectedApplications;let i = index;">
+        <td>
+          {{(i + 1)}}.
+        </td>
+        <td>
+          {{app.TrackingNumber}}
+        </td>
+        <td>
+          {{app.EmployeeName}}
+        </td>
+        <td>
+          Yes
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <kendo-dialog-actions *ngIf="successDialogOpened" class="animated fadeIn">
+    <kendo-buttongroup [width]="'100%'">
+      <!-- <button kendoButton primary="true" (click)="dialogAction('yes')"
+          style="height: 100% !important;background: #46a23f !important;color: white !important;" class="animated fadeIn">
+          <i class="fa fa-plus"></i> Add {{dds.F_FileType_Id == 0 ? 'New File' : 'New ACR'}}
+        </button> -->
+      <button kendoButton (click)="closeSuccessDialog()"><i class="fa fa-times"></i> Close</button>
+    </kendo-buttongroup>
+  </kendo-dialog-actions>
+</kendo-dialog>
+
+<kendo-dialog [title]="'Acknowledge Files'" *ngIf="acknowledgeDialogOpened && selectedApplications.length > 0"
+  (close)="closeWindow()" [minWidth]="450" height="440" [width]="650">
+  <table class="table table-50 animated fadeIn">
+    <tbody>
+      <tr *ngIf="shouldPrint && barcodeImgSrc">
+        <td>Barcode</td>
+        <td>
+          <div>
+            <img [src]="barcodeSrc()" *ngIf="barcodeImgSrc" alt="">
+            <label style="display: block;margin-top:4px;width:77px;text-align: center;">* {{fileMoveMaster?.MID_Number}}
+              *</label>
+          </div>
+        </td>
+        <td>
+          <!-- (click)="printApplication()" -->
+          <button kendoButton primary="true" [look]="'outline'" class="btn-lg" (click)="printApplication()"><i
+              class="fa fa-print"></i>
+            Print</button>
+        </td>
+      </tr>
+      <tr *ngIf="!barcodeImgSrc">
+        <td>
+          <strong class="p-strong">Sr.</strong>
+        </td>
+        <td style="text-align: center;">
+          <strong class="p-strong">Tracking Number</strong>
+        </td>
+        <td>
+          <strong class="p-strong">Name / Subject / Title</strong>
+        </td>
+      </tr>
+      <tr *ngFor="let app of selectedApplications;let i = index;" [hidden]="barcodeImgSrc">
+        <td style="width: 8%;">
+          {{(i + 1)}}.
+        </td>
+        <td style="width: 25%;text-align: center;">
+          {{app.TrackingNumber}}
+        </td>
+        <td>
+          {{app.ApplicationSource_Id == 5 || app.ApplicationSource_Id == 10 ? app.DispatchSubject : app.EmployeeName}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <kendo-dialog-actions *ngIf="acknowledgeDialogOpened" class="animated fadeIn">
+    <kendo-buttongroup [width]="'100%'">
+      <button kendoButton (click)="dialogAction('yes')" *ngIf="!barcodeImgSrc" [ladda]="savingFileMovement"
+        data-style="zoom-in" primary="true"
+        style="height: 100% !important;background: #46a23f !important;color: white !important;"
+        class="animated fadeIn"><i class="fa fa-check"></i> Acknowledge</button>
+      <button kendoButton (click)="dialogAction('no')" *ngIf="!barcodeImgSrc">Cancel</button>
+      <button kendoButton (click)="closeWindow()" *ngIf="barcodeImgSrc">Close</button>
+    </kendo-buttongroup>
+
+  </kendo-dialog-actions>
+</kendo-dialog>

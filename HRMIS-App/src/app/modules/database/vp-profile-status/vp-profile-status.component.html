@@ -1,0 +1,37 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-6 col-xs-12">
+      <div class="top-h3">
+        Vacancy Profile Status
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" [look]="'outline'" (click)="getVpProfileStatus()"><i
+            class="fa fa-refresh"></i>&nbsp;Refresh</button>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="hrProfileStatus.length > 0">
+    <div class="col-md-12">
+      <div class="grid-wrapper">
+        <kendo-grid [data]="hrProfileStatus">
+          <kendo-grid-column [width]="8" field="asd" title="Action" [headerClass]="'grid-header-custom'"
+            [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <kendo-switch (valueChange)="switchValChange(dataItem)" [(ngModel)]="dataItem.IsActive" [onLabel]="'ON'"
+                [offLabel]="'OFF'"></kendo-switch>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="92" field="Name" title="Employee Status">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <p class="m-0 p-strong">{{dataItem.Name}}</p>
+            </ng-template>
+          </kendo-grid-column>
+
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="kGrid.loading" class="k-i-loading"></div>
+</div>

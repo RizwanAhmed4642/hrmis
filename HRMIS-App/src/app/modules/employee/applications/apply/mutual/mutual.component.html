@@ -1,0 +1,141 @@
+<div class="animated fadeIn mt-2" *ngIf="applicationSubType_Id == 2">
+  <div class="row" *ngIf="!showMessage">
+    <div class="col-md-12">
+      <div class="content-heading mb-3">
+        Mutual Transfer
+      </div>
+      <div class="row">
+        <div class="col-md-10">
+
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <ul>
+            <li>Applicant A will submit request for mutual transfer against the same post with Applicant B</li>
+            <li>On submission of request by Applicant A, Applicant B will receive a confirmation code on his/her
+              registered mobile number</li>
+            <li>Applicant B will then open the portal and acknowledge the application of mutual
+              transfer by entering the confirmation code within 24 hours. In case of not acknowledging within 24 hours,
+              Applicant A will have to regenerate and resend the confirmation code to Applicant B</li>
+            <li>MOs/WMOs shall not be eligible for mutual transfer if any of the two applicants has served for less than
+              one year (as of the last date of application submission) in the current health facility</li>
+            <li>MO can only apply for mutual transfer with MO and WMO can only apply for WMO when both health facilities
+              are either DHQ, THQ or RHC</li>
+            <li>When applying in BHU, MO can only apply for mutual transfer if the post is filled by MO and WMO can only
+              apply for mutual transfer if the post is filled by WMO</li>
+            <li>If a MO/WMO is applying for mutual transfer, he/she cannot apply at the same time based on open merit or
+              compassionate grounds</li>
+            <li>Mutual transfer will only be actualized once both MOs/WMOs complete the relieving/joining process. If
+              any one of the two MOs/WMOs fails to join within the required timeframe, the transfer order shall stand
+              cancelled
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 control-col-st animated fadeIn" *ngIf="mutualProfile.firstEmployee.CNIC">
+          <label class="k-form-field">
+            <span>CNIC 1 <span class="text-danger">*</span></span>
+            <kendo-maskedtextbox [mask]="cnicMask" disabled [(ngModel)]="mutualProfile.firstEmployee.CNIC" required>
+            </kendo-maskedtextbox>
+          </label>
+          <hr>
+          <div>
+            <p class="m-0">{{mutualProfile.firstEmployee.EmployeeName}}</p>
+            <p class="m-0">{{mutualProfile.firstEmployee.FatherName}}</p>
+            <p class="m-0">{{mutualProfile.firstEmployee.Designation_Name}},
+              {{mutualProfile.firstEmployee.HealthFacility}}</p>
+          </div>
+        </div>
+        <div class="col-md-6 control-col-end animated fadeIn" *ngIf="mutualProfile.secondEmployee">
+          <label class="k-form-field">
+            <span>CNIC 2 <span class="text-danger">*</span></span>
+            <kendo-maskedtextbox [mask]="cnicMask" (keyup)="searchProfile()"
+              [(ngModel)]="mutualProfile.secondEmployee.CNIC" required>
+            </kendo-maskedtextbox>
+          </label>
+          <hr>
+          <div *ngIf="eligibleCadidate == true">
+            <p class="m-0">{{mutualProfile.secondEmployee.EmployeeName}}</p>
+            <p class="m-0">{{mutualProfile.secondEmployee.FatherName}}</p>
+            <p class="m-0">{{mutualProfile.secondEmployee.Designation_Name}},
+              {{mutualProfile.secondEmployee.HealthFacility}}</p>
+          </div>
+          <div *ngIf="eligibleCadidate == false">
+            <p class="m-0 p-strong">Cadidate is not eligible for transfer</p>
+            <p class="m-0">{{notEligibleMessage}}</p>
+          </div>
+        </div>
+        <div class="col-md-12 animated fadeIn" *ngIf="!isMutualVerified">
+          <hr>
+          <div class="row">
+            <div class="col-md-5 control-col-st animated fadeIn"
+              *ngIf="!applicationMutualCode && mutualProfile.firstEmployee && mutualProfile.secondEmployee && mutualProfile.firstEmployee.Id && mutualProfile.secondEmployee.Profile_Id">
+              <label class="k-form-field">
+                <span>&nbsp;</span>
+                <button kendoButton primary="true" (click)="getApplicationMutualCode()"><i
+                    class="fa fa-send-o"></i>&nbsp;Send
+                  Verification Code</button>
+              </label>
+            </div>
+            <div class="col-md-4 control-col-st">
+              <label class="k-form-field animated fadeIn" *ngIf="applicationMutualCode && applicationMutualCode.Id > 0">
+                <span>Verification Code <span class="text-danger">*</span></span>
+                <input kendoTextBox type="number" min="0" [(ngModel)]="application.MutualCodeOne">
+              </label>
+            </div>
+            <!--  <div class="col-md-4 control-col">
+              <label class="k-form-field animated fadeIn" *ngIf="applicationMutualCode && applicationMutualCode.Id > 0">
+                <span>Verification Code Two <span class="text-danger">*</span></span>
+                <input kendoTextBox type="number" min="0" [(ngModel)]="application.MutualCodeTwo">
+              </label>
+            </div> -->
+            <div class="col-md-4 control-col-end">
+              <label class="k-form-field animated fadeIn"
+                *ngIf="application.MutualCodeOne && application.MutualCodeOne.toString().length == 4">
+                <span>&nbsp;</span>
+                <button kendoButton primary=" true" class="btn-block" (click)="verifyMutualCode()"><i
+                    class="fa fa-envira"></i> Verify</button>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 animated fadeIn" *ngIf="isMutualVerified">
+          <hr>
+          <div class="row mt-3">
+            <div class="col-md-4 control-col-end">
+              <label class="k-form-field animated fadeIn"
+                *ngIf="application.MutualCodeOne && application.MutualCodeOne.toString().length == 4">
+                <p class="text-success font-2xl"><i class="fa fa-check"></i>
+                  Code Verified</p>
+              </label>
+            </div>
+            <div class="col-md-8 control-col-end">
+              <label class="k-form-field animated fadeIn font-2xl"
+                *ngIf="application.MutualCodeOne && application.MutualCodeOne.toString().length == 4">
+                <span>{{mutualProfile.secondEmployee.EmployeeName}}, mutual transfer applicant verification pending!
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="row animated fadeIn" *ngIf="showMessage">
+    <div class="col-md-8 offset-md-2">
+      <div class="jumbotron">
+        <h2>{{showMessage}}</h2>
+        <hr>
+        <button class="btn-sm" [routerLink]="'/fts/application/' + application.Id + '/' + application.TrackingNumber"
+          kendoButton look="outline" primary="true" *ngIf="showMessage != 'You are not eligible as per Policy.'">View
+          Application</button>
+        <button class="btn-sm" kendoButton primary="true" *ngIf="showMessage != 'You are not eligible as per Policy.'"
+          (click)="showMessage = null">Back</button>
+      </div>
+    </div>
+  </div> -->
+</div>

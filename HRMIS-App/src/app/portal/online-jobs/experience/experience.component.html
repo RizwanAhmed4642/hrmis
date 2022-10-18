@@ -1,0 +1,124 @@
+<div class="animated fadein">
+    <div class="animated fadeIn" *ngIf="applicant.Status_Id && applicant.Status_Id > 1">
+        <div class="row mb-2">
+            <div class="col-md-4">
+                <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/job/profile"><i
+                        class="fa fa-user"></i>
+                    Profile</button>
+            </div>
+            <div class="col-md-4">
+                <button kendoButton *ngIf="applicant.Status_Id > 2" primary="true" look="outline" class="btn-block"
+                    routerLink="/job/document"><i class="fa fa-file"></i>
+                    Documents</button>
+            </div>
+            <div class="col-md-4">
+                <button kendoButton *ngIf="applicant.Status_Id > 3" primary="true" look="outline" class="btn-block"
+                    routerLink="/job/experience"><i class="fa fa-file"></i>
+                    Experience</button>
+            </div>
+            <!-- <div class="col-md-3">
+                <button kendoButton *ngIf="applicant.Status_Id && applicant.Status_Id > 4" primary="true" look="outline"
+                    class="btn-block" routerLink="/job/applications"><i class="fa fa-newspaper-o"></i>
+                    Applications</button>
+            </div> -->
+        </div>
+        <hr>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <h3 class="text-primary p-strong">EMPLOYMENT RECORD</h3>
+            <hr>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 control-col-st">
+            <label class="k-form-field">
+                <span>Organization / Employee Name <span class="text-danger">*</span></span>
+                <input kendoTextBox type="text" [(ngModel)]="experience.Organization" />
+            </label>
+        </div>
+
+        <div class="col-md-4 control-col">
+            <label class="k-form-field">
+                <span>Job Title <span class="text-danger">*</span></span>
+                <input kendoTextBox type="text" [(ngModel)]="experience.JobTitle" />
+            </label>
+        </div>
+        <div class="col-md-2 control-col">
+            <label class="k-form-field">
+                <span>Duration (from)</span>
+                <kendo-datepicker [format]="'dd/MM/yyyy'" [(ngModel)]="fromDate"></kendo-datepicker>
+            </label>
+        </div>
+        <div class="col-md-2 control-col-end">
+            <label class="k-form-field">
+                <span>Duration (to)</span>
+                <kendo-datepicker [format]="'dd/MM/yyyy'" [(ngModel)]="toDate"></kendo-datepicker>
+            </label>
+        </div>
+        <div class="col-md-4 control-col-st">
+            <label class="k-form-field">
+                <span>{{photoFile.length == 0 ? 'Experience Ceritificate' : photoFile[0].name}}</span>
+                <input type="file" accept="image/jpg, image/jpeg, image/png, application/pdf"
+                    (change)="readUrl($event, 'pic')">
+                <!--   <button kendoButton type="button" [primary]="true" (click)="uploadBtn('pic')" class="btn-sm btn-block"
+                  [ngClass]="photoFile.length == 0 ? 'mt-0' : 'mt-2'" style="cursor:pointer;" [ladda]="uploadingFile"
+                  data-style="expand-right"> <i class="fa fa-paperclip"></i> Choose
+                  {{photoFile.length == 0 ? 'File' : 'Another File'}}</button> -->
+            </label>
+        </div>
+        <div class="col-md-2 control-col-st">
+            <label class="k-form-field">
+                <button kendoButton primary="true" [ladda]="addingExperience" data-style="zoom-in"
+                    [disabled]="!experience.Organization || !experience.JobTitle || photoFile.length == 0 || !fromDate || !toDate"
+                    (click)="addExperience(experience)" class="btn-align-v btn-block">Save</button>
+            </label>
+        </div>
+
+    </div>
+    <hr>
+    <kendo-grid [data]="experiences" *ngIf="!loading">
+        <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-custom'"
+            [class]="{ 'grid-cell-custom': true }">
+            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0">{{(rowIndex + 1)}}.
+                </p>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="Organization" [title]="'Organization'" width="40" [headerClass]="'grid-header-custom'"
+            [class]="{ 'grid-cell-custom': true }">
+            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0 p-strong">{{dataItem.Organization}}</p>
+                <p class="m-0">{{dataItem.JobTitle}}</p>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="JobTitle" [title]="'Job Title'" width="40" [headerClass]="'grid-header-custom'"
+            [class]="{ 'grid-cell-custom': true }">
+            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0"><strong class="p-strong">From</strong> {{dataItem.FromDate | date:'dd/MM/yyyy'}} -
+                    <strong class="p-strong">To</strong> {{dataItem.ToDate | date:'dd/MM/yyyy'}}</p>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="Job Title" [title]="'Action'" width="15" [headerClass]="'grid-header-custom'"
+            [class]="{ 'grid-cell-custom': true }">
+            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <button class="btn btn-sm btn-danger" (click)="removeExperience(dataItem)" [ladda]="dataItem.removing"
+                    data-style="zoom-in">remove</button>
+            </ng-template>
+        </kendo-grid-column>
+
+    </kendo-grid>
+    <div class="animated fadeIn">
+        <hr>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <button style="margin: 0 auto;" (click)="proceed()" [disabled]="experiences.length == 0"
+                    class="btn-block btn-lg" kendoButton primary="true" look="outline">Proceed</button>
+            </div>
+            <div class="col-md-3 control-col-end">
+                <button type="button" class="btn btn-secondary btn-block btn-lg"
+                    routerLink="/job/account">Logout</button>
+            </div>
+        </div>
+    </div>
+</div>

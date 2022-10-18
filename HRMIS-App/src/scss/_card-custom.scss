@@ -1,0 +1,24 @@
+.card {
+  margin-top: 37px !important;
+  border-radius: 1px !important;
+  padding: 10px 20px;
+}
+
+.card-header {
+  background: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  font-size: 20px;
+  color: #46a23f;
+  font-family: "Roboto-Medium";
+}
+
+.card-body {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.card-header .border-bottom {
+  border-bottom: 1px solid #c8ced3;
+}
+

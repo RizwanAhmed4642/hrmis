@@ -1,0 +1,168 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12 col-xs-12">
+      <div class="top-h3">
+        {{pandSOfficer?.DesignationName ? pandSOfficer?.DesignationName : 'PUCs'}}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="grid-top-header-custom animated fadeIn" *ngIf="kGrid.totalRecords > 0">
+      <div class="pager-rows-number">
+        <span>
+          {{(kGrid.skip + 1) + ' - ' + (kGrid.pageSize <= kGrid.totalRecords ? (kGrid.pageSize + kGrid.skip) :
+              kGrid.totalRecords) + ' of ' + kGrid.numberWithCommas(kGrid.totalRecords) + ' items ' }} </span>
+        <!--
+              <button kendoButton [primary]="true" [look]="'outline'" class="ml-2 animated fadeIn btn-sm">Before 3 Days</button>
+              <button kendoButton [primary]="true" [look]="'outline'" class="ml-2 animated fadeIn btn-sm">Before 1 Week</button>
+              <button kendoButton [primary]="true" [look]="'outline'" class="ml-2 animated fadeIn btn-sm">Before 2
+                Weeks</button>
+              <button kendoButton [primary]="true" [look]="'outline'" class="ml-2 animated fadeIn btn-sm">Before 3
+                Weeks</button>
+              <button kendoButton [primary]="true" [look]="'outline'" class="ml-2 animated fadeIn btn-sm">Before 1
+                month</button> -->
+        <span class="pull-right">
+          Show &nbsp; <select #select (change)="changePagesize(select.value)">
+            <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}</option>
+            <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+              [selected]="page === kGrid.pageSize ? true : undefined">
+              {{page}}
+            </option>
+          </select>
+          &nbsp; items per page
+        </span>
+      </div>
+    </div>
+    <div class="grid-wrapper">
+      <kendo-grid [data]="kGrid.gridView" [sortable]="{
+            allowUnsort: kGrid.allowUnsort,
+            mode: kGrid.multiple ? 'multiple' : 'single'
+            }" [scrollable]="true" [sort]="kGrid.sort" (sortChange)="sortChange($event)" [(pageSize)]="kGrid.pageSize"
+        [skip]="kGrid.skip" [pageable]="true" (pageChange)="pageChange($event)" [scrollable]="false">
+        <kendo-grid-column [width]="20" field="asd" title="No." [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            {{(rowIndex + 1)}}.
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="80" field="EmployeeName" title="Applicant" [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="employee-info" *ngIf="dataItem.ApplicationSource_Id == 5 || dataItem.ApplicationSource_Id == 8">
+              <p class="m-0"><strong class="p-strong">From:
+                </strong>{{dataItem.DispatchFrom}}</p>
+              <p class="m-0"><strong class="p-strong">Subject:
+                </strong>{{dataItem.DispatchSubject}}</p>
+              <p class="m-0" *ngIf="dataItem.CNIC"><strong class="p-strong">CNIC:
+                </strong>{{dashifyCNIC(dataItem.CNIC)}}</p>
+              <p class="m-0"><strong class="p-strong">Dated:
+                </strong>{{dataItem.DispatchDated | date:'dd/MM/yyyy'}}</p>
+            </div>
+            <div class="employee-info" *ngIf="dataItem.ApplicationType_Id != 11 && dataItem.ApplicationSource_Id != 5 && dataItem.ApplicationSource_Id != 8">
+              <p class="m-0"><strong> Name: </strong> {{dataItem.EmployeeName ? dataItem.EmployeeName : ''}}</p>
+              <p class="m-0"><strong> CNIC: </strong> {{dashifyCNIC(dataItem.CNIC)}}</p>
+              <p class="m-0" *ngIf="!dataItem.FileNumber"><strong> Designation: </strong>
+                {{dataItem.designationName}}</p>
+              <p class="m-0" *ngIf="dataItem.FileNumber"><strong> File Number: </strong>
+                {{dataItem.FileNumber}}</p>
+              <p class="m-0">{{dataItem.Created_Date | date:'d/M/yy, h:mm a'}}</p>
+            </div>
+            <div class="employee-info" *ngIf="dataItem.ApplicationType_Id == 11 && dataItem.ApplicationSource_Id != 5 && dataItem.ApplicationSource_Id != 8">
+              <p class="m-0"> Developement Application</p>
+              <p class="m-0" *ngIf="dataItem.FileNumber">{{dataItem.FileNumber}}</p>
+              <p class="m-0">{{dataItem.Created_Date | date:'d/M/yy, h:mm a'}}</p>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="80" field="TrackingNumber" title="Application" [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="application-info">
+              <p class="m-0" *ngIf="dataItem.ApplicationTypeName"><strong> Type: </strong>
+                {{dataItem.ApplicationTypeName}}</p>
+              <p class="m-0"><strong> Tracking # </strong> {{dataItem.TrackingNumber}} <i class="fa fa-barcode"></i></p>
+              <p class="m-0"><u> {{dataItem.ApplicationSourceName}}</u></p>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="80" field="PandSOfficerName" title="Office" [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="application-info">
+              <p class="m-0"><strong>{{dataItem.PandSOfficerName ? dataItem.PandSOfficerName :
+                    dataItem.ForwardingOfficerName ? dataItem.ForwardingOfficerName : ''}}</strong> </p>
+              <p class="m-0" *ngIf="dataItem.StatusName != 'Initiated'"><strong> Status: </strong>
+                <u>{{dataItem.StatusName}}</u>
+              </p>
+              <!--  <p class="m-0" *ngIf="!dataItem.IsSigned"><i class="text-danger">Signed
+                    Copy Missing</i> </p> -->
+              <p class="m-0" *ngIf="dataItem.StatusName == 'Initiated'"> <i class="text-danger">Not
+                  Forwarded</i> </p>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <!--   <kendo-grid-column [width]="80" field="Created_Date" title="Date Time" [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="application-info">
+              </div>
+              <div class="employee-info">
+  
+              </div>
+            </ng-template>
+          </kendo-grid-column> -->
+        <kendo-grid-column [width]="50" field="asd" title="Action" [headerClass]="'grid-header-custom'"
+          [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <button style="width: 88%;
+                height: 57px;
+                padding: 6px;"
+              (click)="openInNewTab('application/view/' + dataItem.Id + '/' + dataItem.TrackingNumber)" kendoButton
+              [primary]="true" [look]="'outline'" class="ml-2 animated fadeIn btn-sm">View</button>
+          </ng-template>
+        </kendo-grid-column>
+        <!--  <kendo-grid-column [width]="80" field="Designation_Name" title="Applicantion" [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="employee-info sub-info">
+                {{dataItem.Designation_Name}} - {{dataItem.DsgScale}}
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="80" field="Designation_Name" title="Detail" [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="employee-info sub-info">
+                {{dataItem.working_Designation_Name}} - {{dataItem.WDsgScale}}
+              </div>
+            </ng-template>
+          </kendo-grid-column> -->
+        <!--  <kendo-grid-column [width]="30" field="asd" title="Actions" [headerClass]="'grid-header-custom'" [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem>
+           
+            </ng-template>
+          </kendo-grid-column> -->
+        <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+          <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+          <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+          <kendo-pager-next-buttons></kendo-pager-next-buttons>
+          <div class="pager-rows-number">
+            <select #select (change)="changePagesize(select.value)">
+              <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}</option>
+              <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+                [selected]="page === kGrid.pageSize ? true : undefined">
+                {{page}}
+              </option>
+            </select>
+            &nbsp; items per page
+          </div>
+          <kendo-pager-info></kendo-pager-info>
+        </ng-template>
+      </kendo-grid>
+      <div *ngIf="kGrid.loading" class="k-i-loading"></div>
+    </div>
+  </div>
+</div>

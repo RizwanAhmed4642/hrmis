@@ -1,0 +1,31 @@
+// If you want to override variables do it here
+@import "variables";
+@import "variables123";
+
+// Import styles
+@import "~@coreui/coreui/scss/coreui";
+// If you want to add something do it here
+
+//ag - grid
+@import "~ag-grid-community/dist/styles/ag-grid.css";
+@import "~ag-grid-community/dist/styles/ag-theme-balham.css";
+
+@import "custom";
+@import "card-custom";
+
+@import "custom/sidebar-custom";
+@import "custom/notification-custom";
+@import "custom/grid-custom";
+@import "custom/page-custom";
+@import "custom/view-custom";
+@import "custom/fancy-scrolls";
+@import "custom/article-toc";
+@import "custom/database-module";
+@import "custom/table-custom";
+@import "custom/shimit";
+@import "custom/order-custom";
+@import "custom/reporting-custom";
+@import "custom/dcoument-page";
+@import "custom/application-preview";
+@import "custom/prime-ng-custom";
+@import "custom/animation-custom";

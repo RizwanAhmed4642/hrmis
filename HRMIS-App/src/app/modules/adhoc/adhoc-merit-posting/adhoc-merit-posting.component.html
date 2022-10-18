@@ -1,0 +1,444 @@
+<div class="animated fadeIn p-4 p-4" [ngClass]="adhocInterview.Status_Id != 5 ? 'print' : ''">
+  <div class="animated fadeIn print">
+    <div class="row">
+      <div class="col-md-3 col-sm-12 animated fadeIn">
+        <label class="k-form-field">
+          <span class="p-strong animated fadeIn">Designations</span>
+          <kendo-dropdownlist [data]="dropDowns.adhocJobsData" [textField]="'DesignationName'"
+            [valueField]="'Designation_Id'" (valueChange)="dropdownValueChanged($event, 'designation')"
+            [value]="dropDowns.selectedFiltersModel.adhocJob" [defaultItem]="dropDowns.defultFiltersModel.adhocJob">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-3 col-sm-12 animated fadeIn">
+        <label class="k-form-field">
+          <span class="p-strong animated fadeIn">District</span>
+          <kendo-dropdownlist [data]="dropDowns.districts" [textField]="'Name'" [valueField]="'Code'"
+            (valueChange)="dropdownValueChanged($event, 'district')" [disabled]="dropDowns.districts.length == 1"
+            [value]="dropDowns.selectedFiltersModel.district" [defaultItem]="dropDowns.defultFiltersModel.district">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-3 col-sm-12 animated fadeIn">
+        <label class="k-form-field">
+          <span>&nbsp;</span>
+          <button kendoButton primary="true" [ladda]="runningPP" class="btn-block animated fadeIn" data-style="zoom-in"
+            (click)="activePosting()"><i class="fa fa-calculator"></i> Start Posting Plan</button>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- <pre>{{adhocInterview | json}}</pre> -->
+  <hr class="print">
+  <div class="animated fadeIn" *ngIf="messageLoading == 'Merit List Loaded'">
+    <div class="animated fadeIn" id="listt">
+      <div class="row animated fadeIn">
+        <div class="col-md-3">
+          <img alt="Punjab Government Log" src="https://hrmis.pshealthpunjab.gov.pk/assets/img/brand/govlogoUpdated.png"
+            style="display:inline-block; width:134px" />
+        </div>
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+          <div style="display:inline-block;text-align:center;">
+            <p style="font-size: 18px;margin-right: 165px !important;"><strong class=" p-strong">DISTRICT HEALTH
+                AUTHORITY {{adhocInterview.DistrictName ? adhocInterview.DistrictName.toUpperCase() : ''}}<br />PRIMARY
+                &amp; SECONDARY HEALTHCARE DEPARTMENT </strong></p>
+          </div>
+        </div>
+      </div>
+      <p>
+        <span style="margin-left: 65px;text-align:justify;" class="uppercase"></span>
+      </p>
+      <br *ngIf="isAdmin">
+      <div class="row animated fadeIn" *ngIf="isAdmin">
+        <div class="col-md-8">
+          <table class="doc my-2 print">
+            <thead>
+              <tr>
+                <th colspan="4">
+                  <p class="p-strong h5">Vacancy Status</p>
+                </th>
+              </tr>
+              <tr>
+                <th>
+                  <p class="p-strong">Sr.</p>
+                </th>
+                <th>
+                  <p class="p-strong">District</p>
+                </th>
+                <th>
+                  <p class="p-strong">Designation</p>
+                </th>
+                <th>
+                  <p class="p-strong">Vacant</p>
+                </th>
+              </tr>
+            </thead>
+            <tr *ngFor="let vp of vpDetail;let i = index;">
+              <td>
+                <p>{{(i + 1)}}.</p>
+              </td>
+              <td>
+                <p>{{vp.Name}}</p>
+              </td>
+              <td>
+                <p>{{vp.DesignationName}}</p>
+              </td>
+              <td>
+                <p *ngIf="vp.DesignationId != 2404">{{vp.Vacant}}</p>
+                <p *ngIf="vp.DesignationId == 2404">
+                  <span
+                    class="p-strong">{{(vp.Vacant % 2) == 1 ? ((vp.Vacant - 1) / 2) : (vp.Vacant / 2)}}</span>/{{vp.Vacant}}
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                <p>Total</p>
+              </td>
+              <td>
+              </td>
+              <td>
+                <p class="p-strong">{{vpDetailTotal}}</p>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="col-md-4">
+          <table class="table-merits my-2 print">
+            <thead>
+              <tr>
+                <th>
+                  <p class="p-strong h5">No. of Candidates</p>
+                </th>
+                <th>
+                  <p class="p-strong h5">{{kGrid.data.length}}</p>
+                </th>
+              </tr>
+              <tr>
+                <th>
+                  <p class="p-strong h5">Candidates Posted</p>
+                </th>
+                <th>
+                  <p class="p-strong h5">{{postingDetails.TotalPosted}}</p>
+                </th>
+              </tr>
+              <tr>
+                <th>
+                  <p class="p-strong h5">Highest Marks</p>
+                </th>
+                <th>
+                  <p class="p-strong h5">{{kGrid.data[0] ? kGrid.data[0].Total : '-'}}</p>
+                </th>
+              </tr>
+              <tr>
+                <th>
+                  <p class="p-strong h5">Lowest Marks</p>
+                </th>
+                <th>
+                  <p class="p-strong h5">
+                    {{kGrid.data[(kGrid.data.length - 1)] ? kGrid.data[(kGrid.data.length - 1)].Total : '-'}}</p>
+                </th>
+              </tr>
+              <!--   <tr>
+                <th>
+                  <p class="p-strong h5">Experiences</p>
+                </th>
+                <th>
+                  <p class="p-strong h5">
+                    {{this.meritList.values.stats.oneYearExpCounts + this.meritList.values.stats.twoYearExpCounts + this.meritList.values.stats.threeYearExpCounts + 
+                      this.meritList.values.stats.fourYearExpCounts + this.meritList.values.stats.fivePlusYearExpCounts}}
+                  </p>
+                </th>
+              </tr> -->
+              <!--  <tr>
+                <th>
+                  <p class="p-strong h5">Hafiz-e-Quran</p>
+                </th>
+                <th>
+                  <p class="p-strong h5">
+                    {{this.meritList.values.stats.hufazCounts}}</p>
+                </th>
+              </tr> -->
+            </thead>
+          </table>
+        </div>
+      </div>
+      <br>
+      <table border="0" *ngIf="!kGrid.loading" style="width:100% !important;" cellpadding="0" cellspacing="0"
+        id="sheet0" class="animated fadeIn sheet0 table-striped gridlines mt-2"
+        [ngClass]="fontSize == 8 ? 'f8' : fontSize == 10 ? 'f10' : fontSize == 11 ? 'f11' : fontSize == 12 ? 'f12' : ''">
+        <thead>
+          <tr class="row0">
+            <td class="p-strong" rowspan="3">SR.</td>
+            <td class="p-strong" rowspan="3">MERIT NO.</td>
+            <td class="p-strong" rowspan="3">APPLICATION NO.</td>
+            <td class="p-strong" rowspan="3">NAME WITH PARENTAGE</td>
+            <!--   <td class="p-strong verticalText" rowspan="3">DOMICILE</td>
+          <td class="p-strong verticalText" rowspan="3">CNIC</td> -->
+            <td class="p-strong" colspan="4">DATE OF BIRTH</td>
+            <td class="p-strong" rowspan="3">TOTAL</td>
+            <td class="p-strong" rowspan="3">DISTRICT</td>
+            <td class="p-strong" rowspan="3">POSTING STATION</td>
+            <td class="p-strong" rowspan="3">REMARKS</td>
+          </tr>
+          <tr class="row1" (click)="printEnable = !printEnable">
+            <td class="p-medium" rowspan="2">Y<span class="print">EARS</span></td>
+            <td class="p-medium" rowspan="2">M<span class="print">ONTHS</span></td>
+            <td class="p-medium" rowspan="2">D<span class="print">AYS</span></td>
+            <td class="p-medium" rowspan="2">D.O.B</td>
+          </tr>
+
+        </thead>
+        <tfoot style="display: table-footer-group !important;border:none !important;">
+          <tr style="border:none !important;">
+            <td colspan="8" style="border:none !important;">
+              <div class="row">
+                <div style="margin-top: 30px !important;margin-bottom: 30px !important;" class="col-md-4 text-center"
+                  *ngFor="let c of adhocInterview.AdhocInterviewBatchCommittees">
+                  <p class="m-0 text-center">
+                    ({{c.Name}})</p>
+                  <p class="m-0 text-center">{{c.Designation}}</p>
+                  <p class="m-0 text-center">{{c.Role}}</p>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tfoot>
+        <tr class="row3 cursor-p r" *ngFor="let dataItem of kGrid.data;let i=index;"
+          [ngClass]="dataItem.posting && dataItem.posting.coloring ? 'text-success' : ''" (click)="viewApplicantMerit(dataItem)">
+          <td>{{i + 1}}</td>
+          <td>{{dataItem.MeritNumber}}</td>
+          <!-- <td class=""><i
+                  [ngClass]="dataItem.IsValid == true ? 'text-success fa fa-check-circle-o' : 'text-danger fa fa-exclamation-circle'"></i>
+                {{dataItem.Application_Id}}</td> -->
+          <td class=""><i *ngIf="i < vpDetailTotal && !printEnable && isAdmin"
+              class="text-success fa fa-check"></i>&nbsp;{{dataItem.Application_Id}}
+          </td>
+          <td class="">
+            {{dataItem.Name}}<br>S/D/W of {{dataItem.FatherName}}
+            <!-- <br>R/O
+                {{dataItem.Address}} -->
+          </td>
+          <!--    <td class=" verticalText">{{dataItem.DomicileName}}</td>
+              <td class=" verticalText">{{dashifyCNIC(dataItem.CNIC)}}</td> -->
+          <td class="">{{dataItem.yyy}}</td>
+          <td class="">{{dataItem.mmm}}</td>
+          <td class="">{{dataItem.ddd}}</td>
+          <td>{{dataItem.DOB | date:'d/M/yy'}}</td>
+
+          <td class="">
+            {{dataItem.Total ? dataItem.Total : '-'}}</td>
+          <td class="" [ngClass]="adhocInterview.DistrictName == dataItem.posting?.PostingDistrict ? '' : ''">
+            {{dataItem.posting ? dataItem.posting.PostingDistrict : '-'}}</td>
+          <td class="" [ngClass]="adhocInterview.DistrictName == dataItem.posting?.PostingDistrict ? '' : ''">
+            {{dataItem.posting ? dataItem.posting.PostingHF : '-'}}</td>
+          <td class="">
+            {{dataItem.posting ? dataItem.posting.Remarks : '-'}}</td>
+          <!--    <td class="column30 style33 s">SELECTED AS MEDICAL OFFICER AT DHQ HOSPITAL AGAINST THE VACANT POST OF
+                SENIOR MEDICAL OFFICER</td> -->
+        </tr>
+      </table>
+      <div class="divFooter" style="position: fixed;
+    bottom: 0px;
+    width: 84%;
+    text-align: center;
+    color: rgb(227, 227, 227);
+    user-select: auto;
+    margin: 0 auto;">
+        <p class="m-0 text-center">Powered by Health Information and
+          Service Delivery Unit</p>
+      </div>
+    </div>
+
+  </div>
+  <div *ngIf="kGrid.loading" style="width: 100%;font-size: 24px;" class="shine p-1 mt-4 text-center text-muted">
+    {{messageLoading}}</div>
+
+</div>
+
+<kendo-dialog [title]="selectedBatchApplication.Name + ' - ' + selectedBatchApplication.Application_Id" [height]="'550'"
+  *ngIf="meritVerificationDialog && selectedBatchApplication" (close)="closeMeritDialog()" [width]="'1200'">
+
+
+  <div class="row">
+    <div class="col-md-10 offset-md-1">
+      <h4>
+
+      </h4>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+      <p class="m-0">
+        <span class="p-strong">Name: </span>{{selectedBatchApplication.Name}}
+      </p>
+    </div>
+    <div class="col-md-3">
+      <p class="m-0">
+        <span class="p-strong">S/D/W of: </span>{{selectedBatchApplication.FatherName}}
+      </p>
+    </div>
+    <div class="col-md-3">
+      <p class="m-0">
+        <span class="p-strong">CNIC: </span>{{dashifyCNIC(selectedBatchApplication.CNIC)}}
+      </p>
+    </div>
+    <div class="col-md-3">
+      <p class="m-0">
+        <span class="p-strong">Domicile: </span>{{selectedBatchApplication.DomicileName}}
+      </p>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div [ngClass]="selectedBatchApplication.Hafiz ? 'col-md-6' : 'col-md-12'">
+      <table class="table-merits">
+        <tr>
+          <td colspan="5" class="p-strong text-center">Date of Birth</td>
+        </tr>
+        <tr>
+          <td rowspan="3"> <img width="50px" class="d-block cursor-p zoom animated fadeIn"
+              [src]="selectedBatchApplication.CNICDoc && selectedBatchApplication.CNICDoc.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + selectedBatchApplication.CNICDoc"
+              (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + selectedBatchApplication.CNICDoc)"
+              draggable="false" alt=""></td>
+          <td class="p-strong">D.O.B</td>
+          <td class="p-strong">Years</td>
+          <td class="p-strong">Months</td>
+          <td class="p-strong">Days</td>
+        </tr>
+        <tr>
+          <td>{{selectedBatchApplication.DOB | date:'dd.MM.yyyy'}}</td>
+          <td>{{selectedBatchApplication.yyy}}</td>
+          <td>{{selectedBatchApplication.mmm}}</td>
+          <td>{{selectedBatchApplication.ddd}}</td>
+        </tr>
+        <tr>
+          <td colspan="4" class="text-center">
+            <p class="m-0 animated fadeIn"
+              *ngIf="selectedBatchApplication.ageDone && selectedBatchApplication.ageDone.IsVerified == true"><i
+                class="fa fa-check text-success"></i> Verified by {{selectedBatchApplication.ageDone.VerifiedBy}}</p>
+            <!--   <button (click)="saveMeritVerification(null, 1, true)" class="animated fadeIn"
+              *ngIf="!selectedBatchApplication.ageDone" [ladda]="selectedBatchApplication.verifyingC"
+              data-style="zoom-in" kendoButton primary="true">Verify</button> -->
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="col-md-6" *ngIf="selectedBatchApplication.Hafiz">
+      <table class="table-merits">
+        <tr>
+          <td colspan="5" class="p-strong text-center">Hafiz-e-Quran</td>
+        </tr>
+        <tr>
+          <td> <img width="50px" class="d-block cursor-p zoom animated fadeIn"
+              [src]="selectedBatchApplication.HifzDocument && selectedBatchApplication.HifzDocument.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + selectedBatchApplication.HifzDocument"
+              (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + selectedBatchApplication.HifzDocument)"
+              draggable="false" alt=""></td>
+        </tr>
+        <tr>
+          <td colspan="4" class="text-center">
+            <p class="m-0 animated fadeIn"
+              *ngIf="selectedBatchApplication.hifzDone && selectedBatchApplication.hifzDone.IsVerified == true"><i
+                class="fa fa-check text-success"></i> Verified by {{selectedBatchApplication.hifzDone.VerifiedBy}}</p>
+            <p class="m-0 animated fadeIn"
+              *ngIf="selectedBatchApplication.hifzDone && selectedBatchApplication.hifzDone.IsVerified == false"><i
+                class="fa fa-times text-danger"></i> Not Verified by {{selectedBatchApplication.hifzDone.VerifiedBy}}
+            </p>
+            <!--  <button (click)="saveMeritVerification(null, 4, true)" class="animated fadeIn"
+              *ngIf="!selectedBatchApplication.hifzDone" [ladda]="selectedBatchApplication.verifyingH"
+              data-style="zoom-in" kendoButton primary="true">Verify</button>
+            <button kendoButton primary="true" [look]="'outline'" class="mx-2 animated fadeIn"
+              *ngIf="!selectedBatchApplication.hifzDone" [ladda]="selectedBatchApplication.verifyingHN"
+              data-style="zoom-in" (click)="saveMeritVerification(null, 4, false)">Not Verify</button> -->
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="col-md-12">
+      <table class="table-merits mt-1">
+        <tr>
+          <td colspan="3" class="p-strong text-center">PMC: {{selectedBatchApplication.PMDCNumber}}
+            <button kendoButton primary="true" look="outline" class="btn-sm"
+              (click)="selectedBatchApplication.viewPMC = selectedBatchApplication.viewPMC ? false : true">View PMC
+              Status</button>
+          </td>
+        </tr>
+        <tr class="animated fadeIn" *ngIf="selectedBatchApplication.viewPMC">
+          <td> <img width="50px" class="d-block cursor-p zoom animated fadeIn"
+              [src]="selectedBatchApplication.PMDCDoc && selectedBatchApplication.PMDCDoc.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + selectedBatchApplication.PMDCDoc"
+              (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + selectedBatchApplication.PMDCDoc)"
+              draggable="false" alt=""></td>
+          <td class="text-center">
+            <div class="employee-info" *ngIf="selectedBatchApplication && selectedBatchApplication.pmcVerification">
+              <p class="m-0" *ngIf="selectedBatchApplication.pmcVerification"><strong class="p-strong"> Status:
+                </strong>
+                <span>{{selectedBatchApplication.pmcVerification.Status}}</span>
+              </p>
+              <!--  <p class="m-0" *ngIf="selectedBatchApplication.pmcVerification"><strong class="p-strong"> Valid Upto:
+                </strong>
+                <span>{{selectedBatchApplication.pmcVerification.ValidUpto | date:'dd/MM/yyyy'}}</span>
+              </p> -->
+            </div>
+          </td>
+          <td class="text-center">
+            <div class="employee-info" *ngIf="selectedBatchApplication && selectedBatchApplication.pmcVerification">
+              <p class="m-0" *ngIf="selectedBatchApplication.pmcQualification">
+                <strong class="p-strong"> Qualification: </strong><span
+                  *ngFor="let data of selectedBatchApplication.pmcQualification;let i = index;">
+                  {{data.Degree}}, {{data.Speciality}}</span></p>
+            </div>
+          </td>
+        </tr>
+
+      </table>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="k-i-loading" *ngIf="selectedBatchApplication.loadingPrefs"></div>
+      <div class="row" *ngIf="!selectedBatchApplication.loadingPrefs">
+        <div class="col-md-12">
+          <p class="mb-2"><span class="p-strong">Preferences:</span> {{ selectedBatchApplication.Preferences?.length}}
+          </p>
+          <kendo-grid [data]="selectedBatchApplication.Preferences">
+            <kendo-grid-column [width]="7" field="asd" title="No." [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0">{{(rowIndex + 1)}}.</p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="93" field="FullName" title="Preference" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0" (click)="openInNewTab('/health-facility/' + dataItem.HFMISCode)">
+                  {{dataItem.HFName}} <small
+                    class="pull-right">{{dataItem.CreatedDate | date: 'dd/MM/yyyy hh:mm a'}}</small></p>
+                <p class="m-0"></p>
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+          <!--  <p class="m-0" *ngIf="selectedApplicant.applications?.length == 0">
+          No Preferences
+        </p> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--  <kendo-dialog-actions class="animated fadeIn" *ngIf="selectedBatchApplication.verificationsCompleted == true">
+    <kendo-buttongroup [width]="'100%'" style="padding: 10px 15px !important;">
+      <button kendoButton primary="true" *ngIf="selectedBatchApplication.verificationsCompleted == true"
+        class="animated fadeIn" [ladda]="savingAdhocMerit" data-style="zoom-in"
+        (click)="saveAdhocMerit(selectedBatchApplication)"><i class="fa fa-check"></i> I, being
+        the technical focal
+        person of district, have
+        verified the documents. The information provided is 100% correct. In case of any discrepency I shall be held
+        responsible</button>
+    </kendo-buttongroup>
+  </kendo-dialog-actions> -->
+</kendo-dialog>

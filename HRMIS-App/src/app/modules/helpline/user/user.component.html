@@ -1,0 +1,69 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-8 col-xs-12">
+            <div class="top-h3">
+                Adhoc users
+            </div>
+        </div>
+        <div class="col-md-4 col-xs-12">
+        </div>
+    </div>
+    <hr>
+    <div class="row row-panel">
+        <div class="col-md-12">
+            <div *ngIf="!userExists" class="wrap-input100 validate-input col-md-3">
+                <label class="k-form-field
+    mt-2">
+                    <span class="p-strong">CNIC</span>
+                    <kendo-maskedtextbox [mask]="CnicMask" (input)="checkUSer()" required #Cnic="ngModel" name="Cnic"
+                        [(ngModel)]="user.Cnic" required>
+                    </kendo-maskedtextbox>
+                </label>
+            </div>
+            <div class="animated-fadeIn mt-4" *ngIf="userExists && searchedUser.Id != null">
+                <div class="row">
+                    <div class="col-md-3">
+                        <p><strong>Username: </strong>{{searchedUser.UserName}}</p>
+                    </div>
+                </div>
+                <div class="row" *ngIf="applicant">
+                    <div class="col-md-3">
+                        <p><strong>Date of Birth: </strong><span>
+                                {{applicant.DOB | date:'dd/MM/yyyy'}}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="row" *ngIf="applicant">
+                    <div class="col-md-3">
+                        <p><strong>Address: </strong>{{applicant.Address}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <span class="p-strong">Mobile No.</span>
+                        <kendo-maskedtextbox [mask]="phonenumberMask" #phonenumber="ngModel" name="phonenumber"
+                            [(ngModel)]="searchedUser.PhoneNumber" required>
+                        </kendo-maskedtextbox>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 mt-2">
+                        <span class="p-strong">Email</span>
+                        <input kendoTextBox type="email" [(ngModel)]="searchedUser.Email" required />
+                    </div>
+                </div>
+                <hr>
+                <div class="row mt-1">
+                    <div class="col-md-3">
+                        <button class="btn btn-so-primary btn-block mt-2" [ladda]="saving" data-style="zoom-in"
+                            kendoButton (click)="updateUser()">
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

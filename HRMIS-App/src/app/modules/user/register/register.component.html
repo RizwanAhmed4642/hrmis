@@ -1,0 +1,141 @@
+<div *ngIf="!user" class="k-i-loading"></div>
+<div class="animated fadeIn" *ngIf="user">
+  <h3 class="top-h3">{{editUserMode ? 'Edit User' : 'Register New User'}} <button kendoButton [primary]="true"
+      routerLink="/user" class="pull-right">Back</button></h3>
+  <div class="row">
+    <div class="col-md-4 col-xs-12 control-col-st offset-md-2">
+      <div class="content-heading mb-2">
+        Account
+      </div>
+      <label class="k-form-field">
+        <span>Username <span class="text-danger">*</span></span>
+        <input kendoTextBox [disabled]="editUserMode" type="text" [(ngModel)]="user.UserName">
+      </label>
+      <label class="k-form-field">
+        <span>CNIC <span class="text-danger">*</span></span>
+        <kendo-maskedtextbox [mask]="cnicMask" (input)="inputChange.next(user.Cnic)" [(ngModel)]="user.Cnic">
+        </kendo-maskedtextbox>
+      </label>
+      <label class="k-form-field">
+        <span>Mobile Number <span class="text-danger">*</span></span>
+        <kendo-maskedtextbox [mask]="mobileMask" [(ngModel)]="user.PhoneNumber"></kendo-maskedtextbox>
+      </label>
+      <label class="k-form-field">
+        <span>Email <span class="text-danger">*</span></span>
+        <input kendoTextBox type="text" [(ngModel)]="user.Email"
+          pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?">
+      </label>
+      <hr>
+      <label class="k-form-field animated fadeIn">
+        <span>Role <span class="text-danger">*</span></span>
+        <kendo-dropdownlist name="role" [data]="rolesData" [valuePrimitive]="true" [(ngModel)]="user.RoleName"
+          [defaultItem]="'Select User Role'">
+        </kendo-dropdownlist>
+      </label>
+      <label class="k-form-field"
+        *ngIf="user.RoleName == 'Primary' || user.RoleName == 'Secondary' || user.RoleName == 'Office Institutes'">
+        <span>Division</span>
+        <kendo-dropdownlist [data]="dropDowns.divisionsData" [defaultItem]="{Name: 'Select Division', Code: '000'}"
+          [textField]="'Name'" [valueField]="'Code'" [valuePrimitive]="true" [(ngModel)]="user.DivisionID">
+        </kendo-dropdownlist>
+      </label>
+      <label class="k-form-field"
+        *ngIf="user.RoleName == 'Primary' || user.RoleName == 'Secondary' || user.RoleName == 'Office Institutes' || user.RoleName == 'PHFMC' || user.RoleName == 'District Computer Operator' || user.RoleName == 'Chief Executive Officer' || user.RoleName == 'Districts' || user.RoleName == 'AdhocScrutiny'">
+        <span>District</span>
+        <kendo-dropdownlist [data]="dropDowns.districtsData" [defaultItem]="{Name: 'Select District', Code: '000'}"
+          [textField]="'Name'" [valueField]="'Code'" [valuePrimitive]="true"
+          (valueChange)="dropdownValueChanged($event, 'district')" [(ngModel)]="user.DistrictID"
+          [disabled]="dropDowns.districtsData.length == 1">
+        </kendo-dropdownlist>
+      </label>
+      <label class="k-form-field"
+        *ngIf="user.RoleName == 'Primary' || user.RoleName == 'Secondary' || user.RoleName == 'Office Institutes'">
+        <span>Tehsil</span>
+        <kendo-dropdownlist [data]="dropDowns.tehsilsData" [disabled]="dropDowns.tehsilsData.length == 1"
+          [defaultItem]="{Name: 'Select Tehsil', Code: '000'}" [textField]="'Name'" [valueField]="'Code'"
+          [valuePrimitive]="true" (valueChange)="dropdownValueChanged($event, 'tehsil')" [(ngModel)]="user.TehsilID">
+        </kendo-dropdownlist>
+      </label>
+      <label class="k-form-field" *ngIf="user.RoleName == 'Health Facility'">
+        <span>Health Facility</span>
+        <kendo-autocomplete [data]="hfsList" [valueField]="'FullName'" (valueChange)="searchClicked($event, 'hfs')"
+          required [filterable]="true" (filterChange)="searchEvent.next({ event: $event, filter: 'hfs'})" [value]=""
+          placeholder="Search Health Facility" class="k-autocomplete-form">
+          <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+            <div class="search-list-item">
+              {{ dataItem.FullName }}</div>
+          </ng-template>
+        </kendo-autocomplete>
+      </label>
+
+      <div class="animated fadeIn" *ngIf="user.RoleName">
+        <label class="k-form-field">
+          <span>User Detail <span class="text-danger">*</span></span>
+          <textarea kendoTextArea [(ngModel)]="user.UserDetail">
+              </textarea>
+        </label>
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12 control-col-end animated fadeIn">
+      <div *ngIf="loadingCNIC" class="k-i-loading"></div>
+      <div *ngIf="profile">
+        <div class="content-heading mb-2 animated fadeIn">
+          Profile
+        </div>
+        <label class="k-form-field">
+          <span>Employee Name</span>
+          <input kendoTextBox disabled type="text" [(ngModel)]="profile.EmployeeName">
+        </label>
+        <label class="k-form-field">
+          <span>Father Name</span>
+          <input kendoTextBox disabled type="text" [(ngModel)]="profile.FatherName">
+        </label>
+        <label class="k-form-field">
+          <span>Designation</span>
+          <input kendoTextBox disabled type="text" [(ngModel)]="profile.Designation_Name">
+        </label>
+        <label class="k-form-field">
+          <span>Place of Posting / Health Facility</span>
+          <input kendoTextBox disabled type="text" [(ngModel)]="profile.HealthFacility">
+        </label>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="animated fadeIn" *ngIf="errors.length > 0">
+    <div class="row">
+      <div class="col-md-4 col-sm-6 col-xs-6 control-col-st offset-md-2">
+        <div style="margin-top: -6px;" *ngFor="let err of errors; let i = index;" class="animated fadeIn text-danger">
+          <p>* - {{err}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-2 col-sm-6 col-xs-6 control-col-st offset-md-2">
+      <button kendoButton class="btn-block" [disabled]="!user.RoleName || !user.UserName || !user.UserDetail"
+        (click)="onSubmit()" [ladda]="saving" data-style="zoom-in" [primary]="true">{{editUserMode
+        ? 'Update' : 'Register'}}</button>
+    </div>
+    <div class="col-md-2 col-sm-6 col-xs-6 control-col">
+      <button kendoButton [primary]="true" ladda routerLink="/user" class="btn-block" [look]="'outline'">Back</button>
+    </div>
+  </div>
+
+  <hr *ngIf="user.RoleName == 'Office Diary' && user.Id">
+  <div class="row animated fadeIn" *ngIf="user.RoleName == 'Office Diary' && user.Id">
+    <div class="col-md-4 offset-md-2">
+      <div class="content-heading mb-2">
+        Current Office
+      </div>
+      <label class="k-form-field">
+        <span class="p-strong">Office <span class="text-danger">*</span></span>
+        <kendo-dropdownlist [data]="dropDowns.officersData" [defaultItem]="dropDowns.defultFiltersModel.officer"
+          [textField]="'DesignationName'" [valueField]="'Id'" [value]="dropDowns.selectedFiltersModel.officer"
+          (filterChange)="handleFilter($event, 'officer')" [filterable]="true"
+          (valueChange)="dropdownValueChanged($event, 'officer')">
+        </kendo-dropdownlist>
+      </label>
+    </div>
+  </div>
+</div>

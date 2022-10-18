@@ -1,0 +1,87 @@
+<div *ngIf="!profileData" class="k-i-loading"></div>
+<div class="animated fadeIn" *ngIf="profileData">
+
+  <div class="card card-accent-success animated fadeIn">
+    <div class="card-header animated fadeIn">
+      <h5 class="m-0">PERSONAL INFORMATION</h5>
+    </div>
+    <div class="card-body animated fadeIn">
+      <div class="row">
+        <div class="col-md-4">
+          <label class="k-form-field mb-0 p-strong">Name</label>
+          <label class="k-form-field">{{profileData.Name}}</label>
+          <label class="k-form-field mb-0 p-strong">Date of Birth</label>
+          <label class="k-form-field">{{profileData.DateOfBirth | date:'dd-MM-yyyy'}}</label>
+          
+          <label class="k-form-field mb-0 p-strong">Address</label>
+          <label class="k-form-field">{{profileData.Address}}</label>
+          
+        </div>
+        <div class="col-md-4">
+          <label class="k-form-field mb-0 p-strong">Father Name</label>
+          <label class="k-form-field">{{profileData.FatherName}}</label>
+          <label class="k-form-field mb-0 p-strong">Gender</label>
+          <label class="k-form-field">{{profileData.Gender}}</label>
+          <label class="k-form-field mb-0 p-strong">MobileNumber</label>
+          <label class="k-form-field">{{profileData.MobileNumber}}</label>
+          
+        </div>
+        <div class="col-md-4">
+          <div class="row">
+            <div class="col-md-5 animated fadeIn">
+
+              <label class="k-form-field mb-0 p-strong">CNIC</label>
+              <label class="k-form-field">{{profileData.CNIC}}</label>
+              <label class="k-form-field mb-0 p-strong">Designation</label>
+              <label class="k-form-field">{{profileData.Designation}}</label>
+            </div>
+            <div class="col-md-7 animated fadeIn">
+              <img class="pic-shadow pull-right zoom position-absolute cursor-p" style="margin-left: 48%;" width="90"
+                height="90" [src]="profileData.psrc" onError="this.src='../../../assets/img/notfound.png'" alt="">
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card card-accent-success animated fadeIn">
+    <div class="card-header animated fadeIn">
+      <h5 class="m-0">Area Details </h5>
+    </div>
+    <div class="card-body animated fadeIn">
+      <div class="row">
+        <div class="col-md-4">
+          
+          <label class="k-form-field mb-0 p-strong">Division</label>
+          <label class="k-form-field">{{profileData.Division}}</label>
+          
+          <label class="k-form-field mb-0 p-strong">Category</label>
+          <label class="k-form-field">{{profileData.Category}}</label>
+          <label class="k-form-field mb-0 p-strong">Contract Id</label>
+          <label class="k-form-field">{{profileData.ContractId}}</label>
+          
+          
+        </div>
+        <div class="col-md-4">
+          <label class="k-form-field mb-0 p-strong">District</label>
+          <label class="k-form-field">{{profileData.District}}</label>
+          
+          <label class="k-form-field mb-0 p-strong">Contract Start Date</label>
+          <label class="k-form-field">{{profileData.ContractStartDate  | date:'dd-MM-yyyy'}}</label>
+          <label class="k-form-field mb-0 p-strong">Contract End Date</label>
+          <label class="k-form-field">{{profileData.ContractEndDate | date:'dd-MM-yyyy'}}</label>
+        </div>
+        <div class="col-md-4">
+          <label class="k-form-field mb-0 p-strong">Tehsil</label>
+          <label class="k-form-field">{{profileData.Tehsil}}</label>
+          <label class="k-form-field mb-0 p-strong">UcCode</label>
+          <label class="k-form-field">{{profileData.UcCode}}</label>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+  
+</div>

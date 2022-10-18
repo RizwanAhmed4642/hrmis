@@ -1,0 +1,353 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3">
+        Health Facility
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" *ngIf="hfmisCodeParam" routerLink="/dashboard">Back</button>
+        <button kendoButton [primary]="true" *ngIf="currentUser.UserName.startsWith('sdp')" class="pull-right mr-2 ml-2"
+          [look]="'outline'" routerLink="/health-facility/new">Add
+          New</button>
+        <button kendoButton [primary]="true" class="pull-right mr-2 ml-2 animated fadeIn"
+          *ngIf="healthFacilitiesAll.length > 0" [look]="'outline'" (click)="excelexport.save()">Export to
+          Excel</button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3 col-sm-12 control-col-st">
+      <label class="k-form-field">
+        <span>Division</span>
+        <kendo-dropdownlist [data]="divisionsData" [valuePrimitive]="false"
+          [defaultItem]="{Name: 'Select Division', Code: currentUser?.HfmisCode}" [textField]="'Name'"
+          [valueField]="'Code'" (filterChange)="handleFilter($event, 'division')"
+          (valueChange)="dropdownValueChanged($event, 'division')" [disabled]="divisionsData.length == 1"
+          [value]="selectedFiltersModel.division">
+        </kendo-dropdownlist>
+      </label>
+    </div>
+    <div class="col-md-3 col-sm-12 control-col">
+      <label class="k-form-field">
+        <span>District</span>
+        <kendo-dropdownlist [data]="districtsData"
+          [defaultItem]="{Name: 'Select District', Code: currentUser?.HfmisCode}" [textField]="'Name'"
+          [valueField]="'Code'" (filterChange)="handleFilter($event, 'district')"
+          (valueChange)="dropdownValueChanged($event, 'district')" [value]="selectedFiltersModel.district"
+          [disabled]="districtsData.length == 1">
+        </kendo-dropdownlist>
+      </label>
+    </div>
+    <div class="col-md-3 col-sm-12 control-col">
+      <label class="k-form-field">
+        <span>Tehsil</span>
+        <kendo-dropdownlist [data]="tehsilsData" [disabled]="tehsilsData.length == 1"
+          [defaultItem]="{Name: 'Select Tehsil', Code: currentUser?.HfmisCode}" [textField]="'Name'"
+          [valueField]="'Code'" (filterChange)="handleFilter($event, 'tehsil')"
+          (valueChange)="dropdownValueChanged($event, 'tehsil')" [value]="selectedFiltersModel.tehsil">
+        </kendo-dropdownlist>
+      </label>
+    </div>
+    <div class="col-md-3 col-sm-12 control-col-end">
+      <label class="k-form-field">
+        <span>Type</span>
+        <kendo-multiselect #hfTypeList [data]="hfTypesData" [valuePrimitive]="true" [(ngModel)]="hfTypeCodes"
+          [filterable]="true" [textField]="'Name'" [valueField]="'Code'" placeholder="Select Type of Health Facility"
+          (filterChange)="handleFilter($event, 'hftype')" (valueChange)="onSearch()">
+        </kendo-multiselect>
+      </label>
+    </div>
+    <!--    <div class="col-md-4 col-sm-12 control-col-st">
+      <label class="k-form-field">
+        <span>Category</span>
+        <kendo-multiselect #hfCategoryList [data]="hfCategoriesData" [valuePrimitive]="true"
+          [(ngModel)]="hfCategoryCodes" [filterable]="true" [textField]="'Name'" [valueField]="'Code'"
+          placeholder="Select Category" (filterChange)="handleFilter($event, 'hfcat')">
+        </kendo-multiselect>
+      </label>
+    </div> -->
+    <div class="col-md-5 col-sm-12 control-col-st">
+      <label class="k-form-field">
+        <span>Administrative Control</span>
+        <kendo-multiselect #hfacList [data]="hfacsData" [valuePrimitive]="true" [(ngModel)]="hfACs" [filterable]="true"
+          [textField]="'Name'" [valueField]="'Id'" placeholder="Select Administrative Control"
+          (filterChange)="handleFilter($event, 'hfac')" (valueChange)="onSearch()">
+        </kendo-multiselect>
+      </label>
+    </div>
+    <div class="col-md-5 col-sm-12 control-col">
+      <label class="k-form-field">
+        <span>Status</span>
+        <kendo-dropdownlist [data]="['Functional', 'Non-Functional']" [defaultItem]="'Select Status'"
+          [(ngModel)]="hfStatus" (valueChange)="onSearch()">
+        </kendo-dropdownlist>
+      </label>
+    </div>
+    <div class="col-md-2 col-sm-12 mt-1 control-col-end">
+      <label class="k-form-field">
+        <button kendoButton class="btn-block btn-align-v" (click)="onSearch()" [primary]="true">SEARCH</button>
+      </label>
+    </div>
+  </div>
+  <hr>
+  <!-- <div class="row row-panel">
+    <div class="col-md-12">
+      <div class="grid-wrapper" kendoTooltip filter="span">
+        <div *ngIf="loading" class="k-i-loading"></div>
+        <app-hf-advance-table *ngIf="!loading" [loading]="loading" [lock]="'FullName'" [gridView]="gridView" [sort]="sort" [(pageSize)]="pageSize" [skip]="skip" (sortChangeEmitter)="sortChange($event)" (pageChangeEmitter)="pageChange($event)"></app-hf-advance-table>
+
+      </div>
+    </div>
+  </div> -->
+  <div class="row row-panel">
+    <div class="col-md-12">
+      <div class="grid-top-header-custom animated fadeIn" *ngIf="totalRecords">
+        <div class="pager-rows-number">
+          <span>
+            {{(skip + 1) + ' - ' + (pageSize <= totalRecords ? (pageSize + skip) : totalRecords) + ' of ' +
+              numberWithCommas(totalRecords) + ' items ' }} </span>
+          <!-- <button kendoButton [primary]="true" [look]="'outline'"
+              class="ml-2 animated fadeIn btn-sm">DHQ</button>
+              <button kendoButton [primary]="true" [look]="'outline'" class="ml-2 animated fadeIn btn-sm">THQ</button>
+              <button kendoButton [primary]="true" [look]="'outline'" class="ml-2 animated fadeIn btn-sm">RHC</button>
+              <button kendoButton [primary]="true" [look]="'outline'" class="ml-2 animated fadeIn btn-sm">BHU</button>
+              <button kendoButton [primary]="true" [look]="'outline'" class="ml-2 animated fadeIn btn-sm">Dispensary</button>
+              <button kendoButton [primary]="true" [look]="'outline'" class="ml-2 animated fadeIn btn-sm">MCH Center</button>
+              <button kendoButton class="btn-secondary" class="ml-2 animated fadeIn btn-sm"><i class="fa fa-table"></i></button>
+              <button kendoButton class="btn-secondary" class="ml-2 animated fadeIn btn-sm"><i class="fa fa-list"></i></button>
+
+              View &nbsp; <select #selectView (change)="changeView(selectView.value)">
+                <option *ngFor="let viewType of viewTypes" [value]="viewType" [selected]="viewType === userViewType ? true : undefined">
+                  {{viewType}}
+                </option>
+              </select> -->
+          <span class="pull-right">
+            Show &nbsp; <select #select (change)="changePagesize(select.value)">
+              <option *ngIf="showInitialPageSize" [value]="pageSize">{{pageSize}}</option>
+              <option *ngFor="let page of pageSizes" [value]="page" [selected]="page === pageSize ? true : undefined">
+                {{page}}
+              </option>
+            </select>
+            &nbsp; items per page
+          </span>
+
+        </div>
+      </div>
+      <div class="grid-wrapper" kendoTooltip filter="span">
+        <kendo-grid [data]="gridView" [sortable]="{
+          allowUnsort: allowUnsort,
+          mode: multiple ? 'multiple' : 'single'
+          }" [selectable]="true" [sort]="sort" (sortChange)="sortChange($event)" [(pageSize)]="pageSize" [skip]="skip"
+          [pageable]="true" (pageChange)="pageChange($event)" [scrollable]="false">
+          <!--    <kendo-grid-column [width]="6" field="asd" title="No." [headerClass]="'grid-header-custom'" [style]="{'background-color': '#f5f5f5 ','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              {{(rowIndex + 1)}}.
+            </ng-template>
+          </kendo-grid-column> -->
+          <kendo-grid-column [width]="84" field="FullName" title="Health Facility"
+            [headerClass]="'grid-top-header-none'"
+            [style]="{'background-color': '#f5f5f5','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="row p-1">
+                <div class="col-md-2" [routerLink]="'/health-facility/' + dataItem.HFMISCode">
+                  <img style="width: 120px !important; 
+                  height: 90px !important;" class="pic-shadow img-responsive"
+                    [src]="dataItem.ImagePath ? 'https://hrmis.pshealthpunjab.gov.pk/Uploads/Files/HFPics/' + dataItem.ImagePath : '../../../assets/img/notfound.png'"
+                    onError="this.src='../../../assets/img/notfound.png'">
+                </div>
+                <div class="col-md-10">
+                  <div class="grid-list-item">
+                    <h4 class="m-0 mb-1" [routerLink]="'/health-facility/' + dataItem.HFMISCode"
+                      style="font-family: Roboto-Regular; color: darkslategray ; font-weight: 100;">
+                      {{dataItem.FullName}}</h4>
+                    <p class="m-0" [routerLink]="'/health-facility/' + dataItem.HFMISCode"
+                      style="font-family: Roboto-Light; color: darkslategray ; font-weight: 100;">
+                      <strong style="color: #2f4f4fed !important;"> Category </strong> {{dataItem.HFCategoryName}} |
+                      <strong style="color: #2f4f4fed !important;"> Type </strong>
+                      {{dataItem.HFTypeName}} | <strong style="color: #2f4f4fed !important;"> Administrative Control
+
+                      </strong> {{dataItem.HFAC == 1 ?
+                      'P&SHD' :
+                      dataItem.HFAC == 2 ? 'PHFMC' : dataItem.HFAC == 3 ? 'IRMNCH'
+                      : dataItem.HFAC == 4 ? 'SHD' : ''}} |
+                      <strong style="color: #2f4f4fed !important;"> Phone </strong> {{dataItem.PhoneNo}}
+
+                    </p>
+                    <!--  <button kendoButton [primary]="true" [ladda]="dataItem.loading" data-style="zoom-in"
+                    class="animated fadeIn btn-sm" [look]="!dataItem.loading ? 'outline' : ''" (click)="getVacancy(dataItem)"><i
+                      class="fa fa-file-excel-o"></i> export vacancy</button> -->
+                  </div>
+                </div>
+              </div>
+
+
+              <!--   <div *ngIf="userViewType == 1">{{dataItem.FullName}}</div>
+              <div *ngIf="userViewType == 2">
+
+                <div class="row">
+                  <div class="col-md-12">
+                    {{dataItem.FullName}} </div>
+                </div>
+                <div class="row ml-2 mr-2">
+                  <div class="col-md-6">
+                    <p style="margin: 0px;">
+                      Category <span class="text-muted">{{dataItem.HFCategoryName}}</span>
+                    </p>
+                    <p style="margin: 0px;">
+                      Type: <span class="text-muted">{{dataItem.HFTypeName}}</span>
+                    </p>
+                    <p style="margin: 0px;">
+                      Longitude <span class="text-muted">{{dataItem.Longitude}}</span>
+                    </p>
+                  </div>
+                  <div class="col-md-6">
+                    <p style="margin: 0px;">
+                      Administrative Control <span class="text-muted">{{dataItem.HFAC == 1 ? 'P&SHD' : dataItem.HFAC ==
+                        2 ? 'PHFMC' : dataItem.HFAC == 3 ? 'IRMNCH'
+                        : dataItem.HFAC == 4 ? 'SHD' : ''}}</span>
+                    </p>
+                    <p style="margin: 0px;">
+                      Phone <span class="text-muted">{{dataItem.PhoneNo}}</span>
+                    </p>
+                    <p style="margin: 0px;">
+                      Latitude <span class="text-muted">{{dataItem.Latitude}}</span>
+                    </p>
+                  </div>
+
+                </div>
+              </div>
+              <div *ngIf="userViewType == 3">
+
+                <div class="row">
+                  <div class="col-md-2">
+                    <img width="100%" [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/Files/HFPics/' + dataItem.ImagePath">
+                  </div>
+                  <div class="col-md-9">
+                    {{dataItem.FullName}}
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p style="margin: 0px;">
+                          Category <span class="text-muted">{{dataItem.HFCategoryName}}</span>
+                        </p>
+                        <p style="margin: 0px;">
+                          Type <span class="text-muted">{{dataItem.HFTypeName}}</span>
+                        </p>
+                        <p style="margin: 0px;">
+                          Longitude <span class="text-muted">{{dataItem.Longitude}}</span>
+                        </p>
+                      </div>
+                      <div class="col-md-6">
+                        <p style="margin: 0px;">
+                          Administrative Control <span class="text-muted">{{dataItem.HFAC == 1 ? 'P&SHD' :
+                            dataItem.HFAC == 2 ? 'PHFMC' : dataItem.HFAC == 3 ? 'IRMNCH'
+                            : dataItem.HFAC == 4 ? 'SHD' : ''}}</span>
+                        </p>
+                        <p style="margin: 0px;">
+                          Phone <span class="text-muted">{{dataItem.PhoneNo}}</span>
+                        </p>
+                        <p style="margin: 0px;">
+                          Latitude <span class="text-muted">{{dataItem.Latitude}}</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="10" field="asd" *ngIf="!currentUser.UserName.toLowerCase().startsWith('ceo.')"
+            title="Actions" [headerClass]="'grid-top-header-none'"
+            [style]="{'background-color': '#f5f5f5 ','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <a *ngIf="currentUser.RoleName != 'Deputy Secretary' && currentUser.RoleName != 'Section Officer' && currentUser.RoleName != 'HRView'"
+                [routerLink]="'/health-facility/' + dataItem.HFMISCode + '/edit'" target="_blank"> <img class="icon-svg"
+                  src="../../../assets/img/icons/edit2.svg" alt=""></a>
+
+              <a [routerLink]="'/health-facility/' + dataItem.HFMISCode" target="_blank"> <img class="icon-svg"
+                  src="../../../assets/img/icons/eye-details.svg" alt=""></a>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column [width]="10" field="asd" *ngIf="currentUser.UserName.toLowerCase().startsWith('ceo.')"
+            title="Actions" [headerClass]="'grid-top-header-none'"
+            [style]="{'background-color': '#f5f5f5 ','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <a *ngIf="dataItem.HFTypeCode != '011' && dataItem.HFTypeCode != '012'"
+                [routerLink]="'/health-facility/' + dataItem.HFMISCode + '/edit'" target="_blank">
+                <img class="icon-svg" src="../../../assets/img/icons/edit2.svg" alt=""></a>
+
+              <a [routerLink]="'/health-facility/' + dataItem.HFMISCode" target="_blank"> <img class="icon-svg"
+                  src="../../../assets/img/icons/eye-details.svg" alt=""></a>
+            </ng-template>
+          </kendo-grid-column>
+          <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+            <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+            <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+            <kendo-pager-next-buttons></kendo-pager-next-buttons>
+            <div class="pager-rows-number">
+              <select #select (change)="changePagesize(select.value)">
+                <option *ngIf="showInitialPageSize" [value]="pageSize">{{pageSize}}</option>
+                <option *ngFor="let page of pageSizes" [value]="page" [selected]="page === pageSize ? true : undefined">
+                  {{page}}
+                </option>
+              </select>
+              &nbsp; items per page
+            </div>
+            <kendo-pager-info></kendo-pager-info>
+          </ng-template>
+        </kendo-grid>
+        <div *ngIf="loading" class="k-i-loading"></div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <kendo-excelexport [data]="healthFacilitiesAll" fileName="HealthFacilities.xlsx" #excelexport>
+    <kendo-excelexport-column field="HFMISCode" title="HFMIS Code"></kendo-excelexport-column>
+    <kendo-excelexport-column field="DistrictName" title="District"></kendo-excelexport-column>
+    <kendo-excelexport-column field="TehsilName" title="Tehsil"></kendo-excelexport-column>
+    <kendo-excelexport-column field="HFTypeName" title="HFType"></kendo-excelexport-column>
+    <kendo-excelexport-column field="FullName" title="Health Facility"></kendo-excelexport-column>
+    <kendo-excelexport-column field="PhoneNo" title="Phone Number"></kendo-excelexport-column>
+    <kendo-excelexport-column field="FaxNo" title="Fax Number"></kendo-excelexport-column>
+    <kendo-excelexport-column field="Email" title="Email"></kendo-excelexport-column>
+    <kendo-excelexport-column field="Address" title="Address"></kendo-excelexport-column>
+    <kendo-excelexport-column field="Status" title="Status"></kendo-excelexport-column>
+    <kendo-excelexport-column field="CoveredArea" title="Covered Area"></kendo-excelexport-column>
+    <kendo-excelexport-column field="UnCoveredArea" title="Uncovered Area"></kendo-excelexport-column>
+    <kendo-excelexport-column field="ResidentialArea" title="Residential Area"></kendo-excelexport-column>
+    <kendo-excelexport-column field="NonResidentialArea" title="Non Residential Area"></kendo-excelexport-column>
+    <kendo-excelexport-column field="NA" title="National Assembly"></kendo-excelexport-column>
+    <kendo-excelexport-column field="PP" title="PP"></kendo-excelexport-column>
+    <kendo-excelexport-column field="Mauza" title="Mauza"></kendo-excelexport-column>
+    <kendo-excelexport-column field="UcName" title="Union Council"></kendo-excelexport-column>
+    <kendo-excelexport-column field="UcNo" title="Union Council Number"></kendo-excelexport-column>
+    <kendo-excelexport-column field="Latitude" title="Latitude"></kendo-excelexport-column>
+    <kendo-excelexport-column field="Longitude" title="Longitude"></kendo-excelexport-column>
+  </kendo-excelexport>
+
+
+
+
+  <kendo-excelexport [data]="selectedVacancy?.vacancy" [fileName]="'Vacancy_' + selectedVacancy?.FullName + '.xlsx'"
+    #excelexportVacancy>
+    <kendo-excelexport-column field="DsgName" title="Designation"></kendo-excelexport-column>
+    <kendo-excelexport-column field="TotalSanctioned" title="Sanctioned"></kendo-excelexport-column>
+    <kendo-excelexport-column field="TotalWorking" title="Filled"></kendo-excelexport-column>
+    <kendo-excelexport-column field="Regular" title="Regular"></kendo-excelexport-column>
+    <kendo-excelexport-column field="Adhoc" title="Adhoc"></kendo-excelexport-column>
+    <kendo-excelexport-column field="Contract" title="Contract"></kendo-excelexport-column>
+    <kendo-excelexport-column field="PHFMC" title="PHFMC"></kendo-excelexport-column>
+    <kendo-excelexport-column field="Vacant" title="Vacant"></kendo-excelexport-column>
+    <kendo-excelexport-column field="WorkingProfiles" title="Profile"></kendo-excelexport-column>
+    <kendo-excelexport-column field="CadreName" title="Cadre"></kendo-excelexport-column>
+    <kendo-excelexport-column field="BPSWorking" title="BPS"></kendo-excelexport-column>
+    <kendo-excelexport-column field="PostTypeName" title="Post Type"></kendo-excelexport-column>
+    <kendo-excelexport-column field="Created_By" title="Created By"></kendo-excelexport-column>
+    <kendo-excelexport-column field="Created_Date" title="Created Date"></kendo-excelexport-column>
+    <kendo-excelexport-column field="Last_Modified_By" title="Last Modified By"></kendo-excelexport-column>
+    <kendo-excelexport-column field="Modified_Date" title="Modified Date"></kendo-excelexport-column>
+  </kendo-excelexport>
+</div>

@@ -1,0 +1,164 @@
+<div class="content-heading mb-2" id="deptInfo">
+  Leave Record <button *ngIf="currentUser.RoleName != 'Section Officer' && currentUser.RoleName != 'Deputy Secretary'" kendoButton primary="true" class="pull-right" (click)="addNew = !addNew">Add New</button>
+</div>
+<hr>
+<div class="row section-slider" [ngClass]="addNew ? 'p-2' : 'closed'"
+  style="background: #e9e9e9;color: black;border-radius: 9px;">
+  <div class="col-md-3 control-col-st">
+    <label class="k-form-field">
+      <span>Order Number <span class="text-danger">*</span></span>
+      <input kendoTextBox type="text" [(ngModel)]="leaveRecordTemp.OrderNumber" />
+    </label>
+  </div>
+  <div class="col-md-2 control-col">
+    <label class="k-form-field">
+      <span>Order Date</span>
+      <kendo-datepicker [format]="'dd/MM/yyyy'" [(ngModel)]="leaveRecordTemp.OrderDate"></kendo-datepicker>
+    </label>
+  </div>
+  <div class="col-md-3 control-col-end">
+    <label class="k-form-field">
+      <span>{{photoFile.length == 0 ? 'Attachment' : photoFile[0].name}}</span>
+      <input type="file" accept="image/jpg, image/jpeg, image/png, application/pdf" (change)="readUrl($event, 'pic')">
+      <!--   <button kendoButton type="button" [primary]="true" (click)="uploadBtn('pic')" class="btn-sm btn-block"
+            [ngClass]="photoFile.length == 0 ? 'mt-0' : 'mt-2'" style="cursor:pointer;" [ladda]="uploadingFile"
+            data-style="expand-right"> <i class="fa fa-paperclip"></i> Choose
+            {{photoFile.length == 0 ? 'File' : 'Another File'}}</button> -->
+    </label>
+  </div>
+  <div class="col-md-4 control-col-end">
+    <label class="k-form-field">
+      <span>Leave Type</span>
+      <kendo-dropdownlist [data]="dropDowns.leaveTypes" [textField]="'LeaveType1'" [valueField]="'Id'"
+        (valueChange)="leaveTypeChanged($event)" [value]="dropDowns.selectedFiltersModel.leaveType"
+        [defaultItem]="dropDowns.defultFiltersModel.leaveType">
+      </kendo-dropdownlist>
+    </label>
+  </div>
+  <div class="col-md-3 control-col-st">
+    <label class="k-form-field">
+      <span>Duration From <span class="text-danger">*</span></span>
+      <kendo-datepicker (valueChange)="onChangeToDate($event)" [format]="'dd/MM/yyyy'"
+        [(ngModel)]="leaveRecordTemp.FromDate"></kendo-datepicker>
+    </label>
+  </div>
+  <div class="col-md-3 control-col">
+    <label class="k-form-field">
+      <span>Duration To <span class="text-danger">*</span></span>
+      <kendo-datepicker (valueChange)="onChangeToDate($event)" [format]="'dd/MM/yyyy'"
+        [(ngModel)]="leaveRecordTemp.ToDate"></kendo-datepicker>
+    </label>
+  </div>
+  <div class="col-md-3 control-col">
+    <label class="k-form-field">
+      <span>Total Days <span class="text-danger">*</span></span>
+      <input kendoTextBox type="number" disabled name="TotalDays" [value]="leaveRecordTemp.TotalDays" readonly />
+    </label>
+  </div>
+  <div class="col-md-3 control-col-end">
+    <label class="k-form-field mt-1">
+      <button kendoButton primary="true" [ladda]="savingLeave" data-style="zoom-in"
+        [disabled]="!leaveRecordTemp.FromDate || !leaveRecordTemp.ToDate || !leaveRecordTemp.LeaveType_Id || !leaveRecordTemp.OrderNumber"
+        (click)="SaveProfileLeaves()" class="btn-align-v btn-block">Save</button>
+    </label>
+  </div>
+</div>
+<hr *ngIf="addNew">
+<kendo-grid [data]="leaveRecord" *ngIf="!loading">
+  <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-custom'"
+    [class]="{ 'grid-cell-custom': true }">
+    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+      <p class="m-0">{{(rowIndex + 1)}}.
+      </p>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="Name" [title]="'Leave Information'" width="40" [headerClass]="'grid-header-custom'"
+    [class]="{ 'grid-cell-custom': true }">
+    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+      <div class="row">
+        <div class="col-md-4" [ngClass]="dataItem.OrderFilePath ? 'cursor-p' : ''"
+          (click)="dataItem.OrderFilePath && openInNewTab('/' + dataItem.OrderFilePath)">
+          <button kendoButton primary="true" *ngIf="dataItem.uploadingFile" [ladda]="dataItem.uploadingFile"
+            data-style="zoom-in">Uploading...</button>
+          <input *ngIf="!dataItem.OrderFilePath && !dataItem.uploadingFile" type="file"
+            accept="image/jpg, image/jpeg, image/png, application/pdf" (change)="readUrlAndUpload($event, dataItem)">
+          <img *ngIf="dataItem.OrderFilePath && !dataItem.uploadingFile" width="50px"
+            [src]="dataItem.OrderFilePath?.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : '/' + dataItem.OrderFilePath"
+            draggable="false" alt="">
+        </div>
+        <div class="col-md-8">
+          <p class="m-0">{{dataItem.FullName}}
+          </p>
+          <p class="m-0">{{dataItem.LeaveType}}</p>
+          <p class="m-0"><strong class="p-strong">Order Number:</strong> {{dataItem.OrderNumber}}</p>
+        </div>
+      </div>
+
+
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="FromDate" [title]="'Period'" width="40" [headerClass]="'grid-header-custom'"
+    [class]="{ 'grid-cell-custom': true }">
+    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+      <p class="m-0"><strong class="p-strong">From</strong> {{dataItem.FromDate | date:'dd/MM/yyyy'}} - <strong
+          class="p-strong">To</strong> {{dataItem.ToDate | date:'dd/MM/yyyy'}}</p>
+      <p class="m-0">{{dataItem.TotalDays}} Day<span *ngIf="dataItem.TotalDays && dataItem.TotalDays > 1">s</span></p>
+
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column *ngIf="2 + 2 == 4" field="References" [title]="'Action'" width="15"
+    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+      <button class="btn btn-sm btn-danger" (click)="removeLeaveRecord(dataItem)" [ladda]="dataItem.removing"
+        data-style="zoom-in">remove</button>
+    </ng-template>
+  </kendo-grid-column>
+
+</kendo-grid>
+<hr>
+<kendo-grid [data]="leaveOrders" [resizable]="true"
+  *ngIf="currentUser.UserName == 'dpd' || currentUser.UserName == 'ordercell'">
+  <kendo-grid-column field="DateTime" [title]="'Date'" width="15" [headerClass]="'grid-header-custom'"
+    [class]="{ 'grid-cell-custom': true }">
+    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+      <p class="m-0 text-center">{{ dataItem.DateTime | date:'dd/MM/yyyy' }}</p>
+    </ng-template>
+  </kendo-grid-column>
+  <!--   <kendo-grid-column field="DateTime" [title]="'Time'" width="10" [headerClass]="'grid-header-custom'"
+    [class]="{ 'grid-cell-custom': true }">
+    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+      <p class="m-0 text-center">{{ dataItem.Created_Date | date:'h:mm a' }}</p>
+    </ng-template>
+  </kendo-grid-column> -->
+  <kendo-grid-column field="ActionName" [title]="'Leave Type'" width="25" [headerClass]="'grid-header-custom'"
+    [class]="{ 'grid-cell-custom': true }">
+    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+      <div class="d-flex flex-column width-full" style="font-weight: 100 !important;">
+        {{dataItem.LeaveTypeName}}
+      </div>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="ToStatus" width="40" title="Duration" [headerClass]="'grid-header-custom'"
+    [class]="{ 'grid-cell-custom': true }">
+    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+      <div><strong style="font-family: Roboto-Bold !important;"
+          class="no-underline text-bold wb-break-all d-inline-block"
+          href="">{{ dataItem.FromDate | date:'dd/MM/yyyy' }}</strong> - <strong
+          style="font-family: Roboto-Bold !important;" class="no-underline text-bold wb-break-all d-inline-block"
+          href="">{{ dataItem.ToDate | date:'dd/MM/yyyy' }}</strong> - <u>{{dataItem.TotalDays}}
+          day{{dataItem.TotalDays > 1 ? 's' : ''}}</u></div>
+    </ng-template>
+  </kendo-grid-column>
+   <kendo-grid-column field="ToStatus" width="20" title="Order" [headerClass]="'grid-header-custom'"
+    [class]="{ 'grid-cell-custom': true }">
+    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+      <p class="m-0 cursor-p" (click)="viewOrder(dataItem)"><u>view order</u>
+      </p>
+    </ng-template>
+  </kendo-grid-column>
+</kendo-grid>
+
+<kendo-dialog [title]="selectedOrder.EmployeeName" *ngIf="selectedOrder && viewOrderWindow && (currentUser.UserName == 'dpd' || currentUser.UserName == 'ordercell')" [minWidth]="'450'"
+  [height]="'585'" [width]="'830'" (close)="closeViewOrderWindow()">
+  <div class="order-view-div" [innerHTML]="transform(selectedOrder.OrderHTML)"></div>
+</kendo-dialog>

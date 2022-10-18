@@ -1,0 +1,319 @@
+<div class="animated fadein">
+    <div class="animated fadeIn">
+        <div class="row mb-2">
+            <div class="col-md-2 control-col-st">
+                <button kendoButton primary="true" class="btn-block" routerLink="/adhoc/home"><i
+                        class="fa fa-envelope"></i>
+                    Inbox&nbsp;<span class="badge badge-danger">{{applications.length}}</span></button>
+            </div>
+            <div class="col-md-2 control-col" *ngIf="!showMeritList">
+                <button kendoButton primary="true" look="outline" [disabled]="2 + 2 == 4" class="btn-block"><i
+                        class="fa fa-plus-circle"></i>
+                    New Application</button>
+            </div>
+            <div class="col-md-2 control-col">
+                <button kendoButton primary="true" look="outline" [disabled]="2 + 2 == 4" class="btn-block"><i
+                        class="fa fa-user"></i>
+                    My Profile</button>
+            </div>
+            <div class="col-md-2 control-col">
+                <button kendoButton primary="true" look="outline" [disabled]="2 + 2 == 4" class="btn-block"><i
+                        class="fa fa-institution"></i>
+                    My Qualification</button>
+            </div>
+            <div class="col-md-2 control-col">
+                <button kendoButton primary="true" look="outline" [disabled]="2 + 2 == 4" class="btn-block"><i
+                        class="fa fa-medkit"></i>
+                    My Experience</button>
+            </div>
+            <div class="col-md-2 control-col" *ngIf="showMeritList">
+                <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/adhoc/interviews"><i
+                        class="fa fa-calendar"></i>
+                    Interview</button>
+            </div>
+            <div class="col-md-2 control-col-end" *ngIf="showMeritList">
+                <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/adhoc/merits"><i
+                        class="fa fa-calendar-check-o"></i>
+                    Merit List</button>
+            </div>
+            <div class="col-md-2 control-col-end" *ngIf="!showMeritList">
+                <button kendoButton primary="true" look="outline" class="btn-block" [disabled]="!rejectedApplication"
+                    routerLink="/adhoc/grievance"><i class="fa fa-resistance"></i>
+                    Grievance</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="animated fadeIn">
+        <hr>
+        Welcome Back, {{applicant.Name}}
+        <hr>
+        <div class="content-heading">
+            Recent Applications
+        </div>
+        <hr>
+        <div class="animated fadeIn" *ngIf="!application.Id">
+            <kendo-grid [data]="applications" *ngIf="!loading">
+                <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-custom'"
+                    [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{(rowIndex + 1)}}.
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="DesignationName" [title]="'Designation'" width="25"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0 p-strong">{{dataItem.DesignationName}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="Status" [title]="'Status'" width="17" [headerClass]="'grid-header-custom'"
+                    [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{dataItem.Status}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="CreatedDate" [title]="'Date Time'" width="18"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{dataItem.CreatedDate | date:'dd/MM/yyyy hh:mm a'}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="Id" [title]="'Action'" width="40" [headerClass]="'grid-header-custom'"
+                    [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <button kendoButton primary="true" (click)="viewApplication(dataItem)" look="outline"
+                            class="btn-sm"><i class="fa fa-print"></i>&nbsp;View / Print</button>
+                        <!--   <button kendoButton primary="true" look="outline"
+                            *ngIf="dataItem.Status_Id == 3 && disableGrievance == true"
+                            (click)="selectApplication(dataItem)" class="btn-sm ml-1"><i
+                                class="fa fa-resistance"></i>&nbsp;Submit
+                            Grievance</button> -->
+                        <button kendoButton primary="true" look="outline" (click)="viewPreference(dataItem)"
+                            class="btn-sm ml-1"><i class="fa fa-building-o"></i>&nbsp;Preferences</button>
+                    </ng-template>
+                </kendo-grid-column>
+
+            </kendo-grid>
+        </div>
+        <hr>
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <ul>
+                    <li>
+                        <p class="animated fadeIn">
+                            <span class="urdu-text font-3xl p-strong pull-right">
+                                {{urdu.info3}}
+                            </span>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <hr>
+        <div class="content-heading">
+            {{application.Id ? 'Grievance' : 'Interviews'}}
+        </div>
+        <hr>
+        <div class="animated fadeIn" *ngIf="!application.Id">
+            <kendo-grid [data]="interviewApplications" *ngIf="!loading">
+                <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-custom'"
+                    [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{(rowIndex + 1)}}.
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="DesignationName" [title]="'Designation'" width="20"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0">{{dataItem.DesignationName}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="DistrictName" [title]="'District'" width="15"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0 p-strong">{{dataItem.DistrictName}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="Venue" [title]="'Venue'" width="30" [headerClass]="'grid-header-custom'"
+                    [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0"><i class="fa fa-building-o"></i> {{dataItem.Venue}}</p>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="Datetime" [title]="'Date Time'" width="30"
+                    [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                        <p class="m-0"><i class="fa fa-clock-o"></i>
+                            {{dataItem.Datetime | date:'EEEE, MMMM d, y hh:mm a'}}
+                        </p>
+                    </ng-template>
+                </kendo-grid-column>
+
+
+            </kendo-grid>
+        </div>
+        <!--<div class="animated fadeIn" *ngIf="application.Id && application.Grievance">
+            <div class="row" *ngIf="application.Id && application.Grievance">
+                <div class="col-md-12">
+                    <h4>Your application is rejected on the basis of following reasons:
+                    </h4>
+                    <kendo-grid [data]="application.AdhocScrutinies" *ngIf="!loading">
+                        <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-custom'"
+                            [class]="{ 'grid-cell-custom': true }">
+                            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                                <p class="m-0">{{(rowIndex + 1)}}.
+                                </p>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column field="Name" [title]="'Document'" width="15"
+                            [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                                <img width="50px" onError="this.src='../../../assets/img/notfound.png'"
+                                    (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + dataItem.UploadPath)"
+                                    class="d-block cursor-p zoom animated fadeIn"
+                                    [src]="dataItem.UploadPath && dataItem.UploadPath.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + dataItem.UploadPath"
+                                    draggable="false" alt="">
+                                <p class="m-0">{{dataItem.Qualification?.Institute}}
+                                </p>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column *ngIf="2 + 2 == 4" field="References" [title]="'Rejection'" width="20"
+                            [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                                <p class="m-0"><span class="p-strong"><small>{{dataItem.DocName}}:</small></span>
+                                </p>
+                                <p class="m-0">
+                                    <small>{{dataItem.ReasonDetail ? dataItem.ReasonDetail : dataItem.Remarks}}</small>
+                                </p>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column field="Qualification" [title]="'Qualification'" width="50"
+                            [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                                <div
+                                    *ngIf="!dataItem.Experience_Id && dataItem.DocName != 'Domicile' && dataItem.DocName != 'Hafiz-e-Quran' && dataItem.DocName != 'PMC' && dataItem.Qualification">
+                                    <p class="m-0 p-strong"><small>{{dataItem.Qualification?.DegreeName}}</small></p>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label class="k-form-field">
+                                                <small>Total Marks<span class="animated fadeIn">/CGPA</span>&nbsp;<span
+                                                        class="text-danger">*</span></small>
+                                                <input kendoTextBox type="text"
+                                                    [(ngModel)]="dataItem.Qualification.TotalMarks" />
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="k-form-field">
+                                                <small>Obtained Marks<span
+                                                        class="animated fadeIn">/CGPA</span>&nbsp;<span
+                                                        class="text-danger">*</span></small>
+                                                <input kendoTextBox type="text"
+                                                    [(ngModel)]="dataItem.Qualification.ObtainedMarks" />
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="k-form-field">
+                                                <small>Passing Year&nbsp;<span class="text-danger">*</span></small>
+                                                <kendo-datepicker [format]="'yyyy'" [bottomView]="'year'"
+                                                    [(ngModel)]="dataItem.Qualification.PassingYear">
+                                                </kendo-datepicker>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <label class="k-form-field">
+                                                <span><small>{{'Add new Document'}}</small></span>&nbsp;<small
+                                                    class="text-muted">(only
+                                                    .jpg, .pdf of maximum 5mb)</small>
+                                                <input type="file"
+                                                    accept="image/jpg, image/jpeg, image/png, application/pdf"
+                                                    (change)="readScrutinyUrl($event, dataItem)">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                    *ngIf="dataItem.DocName == 'Domicile' || dataItem.DocName == 'Hafiz-e-Quran' || dataItem.DocName == 'PMC'">
+                                    <label class="k-form-field">
+                                        <span><small>{{'Add new Document'}}</small></span>&nbsp;<small
+                                            class="text-muted">(only
+                                            .jpg, .pdf of maximum 5mb)</small>
+                                        <input *ngIf="!dataItem.saving" type="file"
+                                            accept="image/jpg, image/jpeg, image/png, application/pdf"
+                                            (change)="readScrutinyUrl($event, dataItem)">
+                                    </label>
+                                </div>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column field="'Action'" [title]="'Action'" width="20"
+                            [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+                            <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                                <button kendoButton primary="true" [disabled]="!dataItem.photoFile"
+                                    *ngIf="dataItem.Qualification_Id != null" [ladda]="dataItem.saving"
+                                    data-style="zoom-in" (click)="uploadApplicantQualification(dataItem)"><i
+                                        class="fa fa-upload"></i>&nbsp;Upload</button>
+
+                                <button kendoButton primary="true" [disabled]="!dataItem.photoFile"
+                                    *ngIf="dataItem.DocName == 'Domicile'" [ladda]="dataItem.saving"
+                                    data-style="zoom-in" (click)="reUploadApplicantDomicile(dataItem)"><i
+                                        class="fa fa-upload"></i>&nbsp;Upload</button>
+
+                                <button kendoButton primary="true" [disabled]="!dataItem.photoFile"
+                                    *ngIf="dataItem.DocName == 'PMC'" [ladda]="dataItem.saving" data-style="zoom-in"
+                                    (click)="reUploadApplicantPMDC(dataItem)"><i
+                                        class="fa fa-upload"></i>&nbsp;Upload</button>
+
+                                <button kendoButton primary="true" [disabled]="!dataItem.photoFile"
+                                    *ngIf="dataItem.DocName == 'Hafiz-e-Quran'" [ladda]="dataItem.saving"
+                                    data-style="zoom-in" (click)="reUploadApplicantHifz(dataItem)"><i
+                                        class="fa fa-upload"></i>&nbsp;Upload</button>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                    </kendo-grid>
+
+               
+                </div>
+                <div class="col-md-9">
+                    <label class="k-form-field
+                    mt-2" *ngIf="!application.Grievance?.IsActive">
+                        <span class="p-strong">Type Grievance <span class="text-muted">(minimum 50
+                                characters)</span></span>
+                        <textarea name="" placeholder="please enter your remarks and submit"
+                            [(ngModel)]="application.Grievance.Remarks" kendoTextArea id="" rows="3"></textarea>
+                    </label>
+                    <label class="k-form-field
+                    mt-2" *ngIf="application.Grievance?.IsActive">
+                        <h4>Grievance already submitted</h4>
+                        <p class="m-0"><span class="p-strong">Remarks:</span>&nbsp;{{application.Grievance.Remarks}}</p>
+                        <p class="m-0"><span
+                                class="p-strong">Status:</span>&nbsp;{{application.Grievance.StatusId == 1 ? 'Under Review' : ''}}
+                        </p>
+                        <p><span class="p-strong">Date &
+                                Time:</span>&nbsp;{{application.Grievance.CreatedDate | date:'dd/MM/yyyy hh:mm a'}}
+                        </p>
+                    </label>
+                </div>
+                <div class="col-md-3">
+                    <button kendoButton primary="true" *ngIf="!application.Grievance.IsActive"
+                        [disabled]="!application.Grievance.Remarks || application.Grievance.Remarks.length < 50"
+                        (click)="saveApplicationGrievance()" style="margin-top: 36px;
+                        height: 61% !important;" class="p-1 btn-block"><i class="fa fa-institution"></i>
+                        Submit</button>
+                </div>
+            </div>
+        </div> -->
+        <hr>
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class=" offset-md-9 col-md-3 control-col-end">
+                    <button type="button" class="btn btn-secondary btn-block btn-lg"
+                        routerLink="/adhoc/account">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

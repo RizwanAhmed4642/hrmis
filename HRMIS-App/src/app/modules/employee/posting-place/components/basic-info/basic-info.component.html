@@ -1,0 +1,163 @@
+<div *ngIf="!healthFacility" class="k-i-loading"></div>
+<div class="animated fadeIn" *ngIf="healthFacility">
+  <div class="row">
+    <div class="col-md-7 col-sm-12 control-col-st">
+      <table class="table table-50" style="background: #f7f8fa;">
+        <tbody>
+          <tr *ngIf="dashboardView">
+            <td colspan="2">
+              <img class="pic-shadow" width="468px" [src]="hfPhoto" alt="">
+
+            </td>
+          </tr>
+          <tr>
+            <td><strong class="p-strong">Type</strong></td>
+            <td>{{healthFacility.HFTypeName}}</td>
+          </tr>
+          <tr>
+            <td><strong class="p-strong">Category</strong></td>
+
+            <td>{{healthFacility.HFCategoryName}}</td>
+          </tr>
+          <tr>
+            <td><strong class="p-strong">Administrative Control</strong></td>
+            <td>{{healthFacility.HFAC == 1 ? 'P&SHD' : healthFacility.HFAC == 2 ? 'PHFMC' : healthFacility.HFAC == 3 ?
+              'IRMNCH' : healthFacility.HFAC == 4 ? 'SHD' : ''}}</td>
+          </tr>
+          <tr>
+            <td><strong class="p-strong">Contact No.</strong></td>
+            <td>{{healthFacility.PhoneNo}}</td>
+          </tr>
+          <tr>
+            <td><strong class="p-strong">E-Mail</strong></td>
+            <td>{{healthFacility.Email}}</td>
+          </tr>
+          <tr>
+            <td><strong class="p-strong">Address</strong></td>
+            <td>{{healthFacility.Address}}</td>
+          </tr>
+          <!--   <tr>
+            <td><strong class="p-strong">Latitude</strong></td>
+            <td>{{healthFacility.Latitude}}</td>
+          </tr>
+          <tr>
+            <td><strong class="p-strong">Longitude</strong></td>
+            <td>{{healthFacility.Longitude}}</td>
+          </tr> -->
+
+
+          <tr>
+            <td><strong class="p-strong">Covered Area (marla)</strong></td>
+            <td>{{healthFacility.CoveredArea ? (healthFacility.CoveredArea + ' marla') : '-'}}</td>
+          </tr>
+          <tr>
+            <td><strong class="p-strong">Uncovered Area (marla)</strong></td>
+            <td>{{healthFacility.UnCoveredArea ? (healthFacility.UnCoveredArea + ' marla') : '-'}}</td>
+          </tr>
+          <tr>
+            <td><strong class="p-strong">Residential Area (marla)</strong></td>
+            <td>{{healthFacility.ResidentialArea ? (healthFacility.ResidentialArea + ' marla') : '-'}}</td>
+          </tr>
+          <tr>
+            <td><strong class="p-strong">Non Residential Area (marla)</strong></td>
+            <td>{{healthFacility.NonResidentialArea ? (healthFacility.NonResidentialArea + ' marla') : '-'}}</td>
+          </tr>
+          <tr>
+            <td><strong class="p-strong">Total Area (marla)</strong></td>
+            <td>{{(healthFacility.CoveredArea + healthFacility.UnCoveredArea + healthFacility.ResidentialArea +
+                healthFacility.NonResidentialArea) != 0 ? (healthFacility.CoveredArea + healthFacility.UnCoveredArea + healthFacility.ResidentialArea +
+                healthFacility.NonResidentialArea) + ' marla' : '-'}}</td>
+          </tr>
+
+          <tr>
+            <td><strong class="p-strong">Union Council Name</strong></td>
+            <td>{{healthFacility.UcName ? healthFacility.UcName : '-'}}</td>
+          </tr>
+          <tr>
+            <td><strong class="p-strong">Union Council Number</strong></td>
+            <td>{{healthFacility.UcNo ? healthFacility.UcNo : '-'}}</td>
+          </tr>
+          <tr>
+            <td><strong class="p-strong">NA</strong></td>
+            <td>{{healthFacility.NA ? healthFacility.NA : '-'}}</td>
+          </tr>
+          <tr>
+            <td><strong class="p-strong">PP</strong></td>
+            <td>{{healthFacility.PP ? healthFacility.PP : '-'}}</td>
+          </tr>
+          <tr>
+            <td><strong class="p-strong">Mauza</strong></td>
+            <td>{{healthFacility.Mauza ? healthFacility.Mauza : '-'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-5 col-sm-12 control-col-end">
+      <img class="pic-shadow" width="100%" height="310px" [src]="hfPhoto" alt="">
+      <hr>
+      <!-- <div class="content-wrap mt-4" *ngIf="healthFacility.HeadOfDepartment && 
+      (
+        (healthFacility.HeadOfDepartment.Designation_Id == 812 || healthFacility.HeadOfDepartment.WDesignation_Id == 812) && (healthFacility.HFTypeCode == '011' || healthFacility.HFTypeCode == '012')
+        || (healthFacility.HeadOfDepartment.Designation_Id == 21 || healthFacility.HeadOfDepartment.WDesignation_Id == 21 || healthFacility.HeadOfDepartment.Designation_Id == 22 || healthFacility.HeadOfDepartment.WDesignation_Id == 22) && (healthFacility.HFTypeCode == '013')
+        || (healthFacility.HeadOfDepartment.Designation_Id == 802 || healthFacility.HeadOfDepartment.WDesignation_Id == 802 || healthFacility.HeadOfDepartment.Designation_Id == 805 || healthFacility.HeadOfDepartment.WDesignation_Id == 805 || healthFacility.HeadOfDepartment.Designation_Id == 1320 || healthFacility.HeadOfDepartment.WDesignation_Id == 1320) && (healthFacility.HFTypeCode == '014')
+      )">
+
+        <div class="content-heading mb-3">
+          {{healthFacility.HeadOfDepartment.WDesignation_Name}}
+        </div>
+        <div class="general-info d-flex">
+
+          <div class="employee-wrapper">
+            <div class="employee-pic">
+              <img
+                [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + healthFacility.HeadOfDepartment.CNIC + '_23.jpg'"
+                onError="this.src='../../../assets/img/notfound.png'" alt="">
+            </div>
+          </div>
+          <div class="employee-wrapper">
+            <div class="employee-info">
+              {{healthFacility.HeadOfDepartment.EmployeeName}}
+            </div>
+            <div class="employee-info sub-info">
+              {{healthFacility.HeadOfDepartment.MobileNo}}
+            </div>
+            <div class="employee-info sub-info">
+              {{healthFacility.HeadOfDepartment.EMaiL}}
+            </div>
+            <div class="employee-info sub-info">
+              <a [routerLink]="'/profile/' + healthFacility.HeadOfDepartment.CNIC">View Profile</a>
+            </div>
+          </div>
+        </div>
+
+
+      </div> -->
+      <!-- <div *ngIf="heads.length > 0">
+        <div class="general-info d-flex">
+
+          <div class="employee-wrapper">
+            <div class="employee-pic">
+              <img [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + heads[0].CNIC + '_23.jpg'"
+                onError="this.src='../../../assets/img/notfound.png'" alt="">
+            </div>
+          </div>
+          <div class="employee-wrapper">
+            <div class="employee-info">
+              {{heads[0].EmployeeName}}
+            </div>
+            <div class="employee-info sub-info">
+              {{heads[0].WDesignation_Name}}
+            </div>
+            <div class="employee-info sub-info">
+              {{heads[0].MobileNo}}
+            </div>
+            <div class="employee-info sub-info">
+              <a [routerLink]="'/profile/' + heads[0].CNIC" target="_blank">View Profile</a>
+            </div>
+          </div>
+        </div>
+      </div> -->
+
+    </div>
+  </div>
+</div>

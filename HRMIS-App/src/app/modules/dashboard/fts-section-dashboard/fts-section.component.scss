@@ -1,0 +1,32 @@
+p.hoverable-table {
+  margin: 0px !important;
+  width: 100% !important;
+  /* font-size: 12px !important; */
+  padding: 0.25em 0.5em 0.25em 0.8em !important;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.1s ease-in-out;
+}
+
+p.hoverable-table:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.k-grid td {
+  border-color: transparent !important;
+}
+
+table.sheet0 td,
+table.sheet0 th {
+  border: 1px solid black;
+  padding: 8px;
+}
+
+table.sheet0 tr {
+  color: black;
+}
+
+table.sheet0 tr:hover {
+  background: #46a23f !important;
+  color: white !important;
+}

@@ -1,0 +1,104 @@
+<!-- <pre *ngFor="let order of orders; let i = index;">{{order | json}}</pre>
+<hr> -->
+
+<div *ngIf="!profile" class="k-i-loading"></div>
+<div class="animated fadeIn" *ngIf="profile">
+  <div class="row">
+    <div class="col-md-12 col-xs-12">
+      <div class="top-h3">
+        {{profile.EmployeeName ? profile.EmployeeName : 'Employee Profile'}}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="animated fadeIn" *ngIf="profile && orders.length > 0">
+  <div class="row">
+    <div class="col-md-12">
+      <kendo-grid [data]="orders" [resizable]="true">
+        <kendo-grid-column field="DateTime" [title]="'Date'" width="10" [headerClass]="'grid-header-text-center'"
+          [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="m-0 text-center">{{ dataItem.Created_Date | date:'dd/MM/yyyy' }}</p>
+          </ng-template>
+        </kendo-grid-column>
+        <!--   <kendo-grid-column field="DateTime" [title]="'Time'" width="10" [headerClass]="'grid-header-text-center'"
+    [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+      <p class="m-0 text-center">{{ dataItem.Created_Date | date:'h:mm a' }}</p>
+    </ng-template>
+  </kendo-grid-column> -->
+        <kendo-grid-column field="ActionName" [title]="'Description'" width="60" [headerClass]="'grid-header-text'"
+          [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <div class="d-flex flex-column width-full" style="font-weight: 100 !important;">
+              <!-- General Transfer -->
+              <div *ngIf="dataItem.TransferTypeID == 4">
+                {{dataItem.TransferTypeName}} at
+                <!--       <strong style="font-family: Roboto-Bold !important;"
+            class="no-underline text-bold wb-break-all d-inline-block" href="">{{dataItem.HF_From}}</strong>
+          <div>{{dataItem.DesigFrom}}</div>
+          <div>to</div> -->
+                <strong style="font-family: Roboto-Bold !important;"
+                  class="no-underline text-bold wb-break-all d-inline-block" href="">{{dataItem.HF_TO}}</strong>
+                <div>as <u>{{dataItem.DesigTo}}</u></div>
+              </div>
+              <!-- Adhoc Appointment -->
+              <div *ngIf="dataItem.TransferTypeID == 8">
+                <div>{{dataItem.TransferTypeName}}</div>
+                <strong style="font-family: Roboto-Bold !important;"
+                  class="no-underline text-bold wb-break-all d-inline-block" href="">{{dataItem.HF_TO}}</strong>
+              </div>
+              <!-- Disposal -->
+              <div *ngIf="dataItem.TransferTypeID == 2">
+                {{dataItem.TransferTypeName}}
+                <strong style="font-family: Roboto-Bold !important;"
+                  class="no-underline text-bold wb-break-all d-inline-block"
+                  href="">{{dataItem.HF_TO ? dataItem.HF_TO : '(missing)' }}</strong>
+              </div>
+              <!-- Suspend -->
+              <div *ngIf="dataItem.TransferTypeID == 3">
+                <strong style="font-family: Roboto-Bold !important;"
+                  class="no-underline text-bold wb-break-all d-inline-block" href="">
+                  {{dataItem.TransferTypeName}}</strong>
+              </div>
+              <!-- Awaiting Posting -->
+              <div *ngIf="dataItem.TransferTypeID == 6">
+                {{dataItem.TransferTypeName}} at
+                <strong style="font-family: Roboto-Bold !important;"
+                  class="no-underline text-bold wb-break-all d-inline-block"
+                  href="">{{dataItem.HF_TO ? dataItem.HF_TO : '(missing)' }}</strong>
+                <div>as <u>{{dataItem.DesigTo}}</u></div>
+              </div>
+              <!-- Notification -->
+              <div *ngIf="dataItem.TransferTypeID == 7">
+                {{dataItem.TransferTypeName}}
+                <!--  <strong style="font-family: Roboto-Bold !important;"
+            class="no-underline text-bold wb-break-all d-inline-block"
+            href="">{{dataItem.HF_TO ? dataItem.HF_TO : '(missing)' }}</strong> -->
+              </div>
+              <!-- Termination -->
+              <div *ngIf="dataItem.TransferTypeID == 10">
+                <strong style="font-family: Roboto-Bold !important;"
+                  class="no-underline text-bold wb-break-all d-inline-block" href="">
+                  {{dataItem.TransferTypeName}}</strong>
+              </div>
+
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="ToStatus" width="20" title="Status" [headerClass]="'grid-header-text'"
+          [style]="{'padding': '8px 12px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="m-0 cursor-p" (click)="viewOrder(dataItem)"><u>view order</u>
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+      </kendo-grid>
+    </div>
+  </div>
+</div>
+
+<kendo-dialog [title]="selectedOrder.EmployeeName" *ngIf="selectedOrder && viewOrderWindow" [minWidth]="'450'"
+  [height]="'585'" [width]="'830'" (close)="closeViewOrderWindow()">
+  <div class="order-view-div" [innerHTML]="transform(selectedOrder.OrderHTML)"></div>
+</kendo-dialog>

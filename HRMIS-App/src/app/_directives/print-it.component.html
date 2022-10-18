@@ -1,0 +1,35 @@
+<div style="margin: 0 auto;">
+
+  <img style="width: 600px; height: 342px;margin:0 auto;" src="../../../../assets/img/brand/hisducheckrotate1.jpg"
+    alt="">
+  <span [ngStyle]="{'margin' : cheque.payeesac.x + 'px ' + cheque.payeesac.y + 'px'}" class="cheque payeesac"
+    *ngIf="cheque.payeesac">Payee's A/C
+  </span>
+  <span class="cheque"
+    [ngStyle]="{'margin' : cheque.designation.x + 'px ' + cheque.designation.y + 'px', 'font-size': cheque.designation.fontSize + 'px'}">
+    {{cheque.designation.name}}
+  </span>
+  <span class="cheque"
+    [ngStyle]="{'margin' : cheque.program.x + 'px ' + cheque.program.y + 'px', 'font-size': cheque.program.fontSize + 'px'}">{{cheque.program.name}}</span>
+  <span class="cheque"
+    [ngStyle]="{'margin' : cheque.government.x + 'px ' + cheque.government.y + 'px', 'font-size': cheque.government.fontSize + 'px'}">{{cheque.government.name}}</span>
+  <span class="cheque"
+    [ngStyle]="{'margin' : cheque.payTo.x + 'px ' + cheque.payTo.y + 'px', 'font-size': cheque.payTo.fontSize + 'px'}">{{cheque.payTo.to.toUpperCase()}}</span>
+  <span class="cheque"
+    [ngStyle]="{'margin' : cheque.amountWords.x + 'px ' + cheque.amountWords.y + 'px', 'font-size': cheque.amountWords.fontSize + 'px'}">**{{toWords(cheque.amount.amount)}}
+    Only**</span>
+  <span class="cheque"
+    [ngStyle]="{'margin' : cheque.amount.x + 'px ' + cheque.amount.y + 'px', 'font-size': cheque.amount.fontSize + 'px'}">={{cheque.amount.amount | number}}/-</span>
+  <span class="cheque"
+    [ngStyle]="{'margin' : cheque.accountTitle.x + 'px ' + cheque.accountTitle.y + 'px', 'font-size': cheque.accountTitle.fontSize + 'px'}">{{cheque.accountTitle.title}}</span>
+  <span class="cheque"
+    [ngStyle]="{'margin' : cheque.dated.x + 'px ' + cheque.dated.y + 'px', 'font-size': cheque.dated.fontSize + 'px'}">{{cheque.dated.date | date: 'dd.MM.yyyy'}}</span>
+  <span class="cheque"
+    [ngStyle]="{'margin' : cheque.projectCode.x + 'px ' + cheque.projectCode.y + 'px', 'font-size': cheque.projectCode.fontSize + 'px'}">{{cheque.projectCode.name}}</span>
+  <span class="cheque"
+    [ngStyle]="{'margin' : cheque.ddoCode.x + 'px ' + cheque.ddoCode.y + 'px', 'font-size': cheque.ddoCode.fontSize + 'px'}">{{cheque.ddoCode.code}}</span>
+  <span class="cheque"
+    [ngStyle]="{'margin' : cheque.costcenter.x + 'px ' + cheque.costcenter.y + 'px', 'font-size': cheque.costcenter.fontSize + 'px'}">{{cheque.costcenter.name}}</span>
+</div>
+<hr>
+<button (click)="printFunc()" class="print">Print</button>

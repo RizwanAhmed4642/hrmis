@@ -1,0 +1,588 @@
+<div class="text-center p-2" style="background: #46a23f;color:white;">
+  <h2 class="m-0 p-strong">MO / WMO (BS-17) Posting</h2>
+</div>
+<div class="d-flex" style="height: 93vh;overflow-y: auto;">
+  <div style="width: 30%;">
+    <div class="row">
+      <div class="col-md-12">
+        <label class="k-form-field ml-1">
+          <span class="p-strong">Search Name / CNIC</span>
+          <input type="text" #searchRef (input)="inputChange.next(searchRef.value)"
+            placeholder="Merit Number, Name, CNIC" kendoTextBox>
+        </label>
+      </div>
+
+     <!--  <div class="col-md-2 control-col-end">
+        <label class="k-form-field">
+          <span class="p-strong">&nbsp;</span>
+          <button [ngClass]="designationId == 802 ? 'btn btn-primary' : 'btn btn-danger'" class="btn-block mb-1"
+            (click)="getMoWmo()"><i class="fa" [ngClass]="designationId == 802 ? 'fa-male' : 'fa-female'"></i></button>
+        </label>
+      </div>
+ -->
+    </div>
+
+    <div style="height: 82vh;overflow-y: auto;">
+      <div *ngIf="kGrid.loading" class="k-i-loading"></div>
+      <div class="mx-1 my-2" *ngFor="let dataItem of kGrid.data;let i = index;">
+        <div class="order-thumb" (click)="selectMerit(dataItem)"
+          [ngClass]="dataItem.Id == selectedMerit?.Id ? 'active' : ''">
+
+          <div class="order-thumb-employee mt-1 p-2">
+            <h5>{{dataItem.Name ? dataItem.Name : ''}} <span class="pull-right"> Merit #
+              {{dataItem.MeritNumber}}</span>
+            </h5>
+            <p class="m-0"><strong class="p-strong"> Father Name: </strong>
+              {{dataItem.FatherName ? dataItem.FatherName : ''}} </p>
+            <p class="m-0"><strong class="p-strong"> CNIC: </strong> {{dashifyCNIC(dataItem.CNIC)}}</p>
+            <!--  <p class="m-0"><strong class="p-strong"> PNC # </strong> {{dataItem.PMDCNumber}}</p>
+              <p class="m-0"><strong class="p-strong"> Application # </strong> {{dataItem.ApplicationNumber}}</p> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="width: 70%;height: 92vh;overflow-y: auto;">
+    <div class="animated fadeIn pl-3 pb-3 pt-2" *ngIf="selectedMerit">
+      <div class="row animated fadeIn m-0">
+        <div class="col-md-12">
+          <h2 class="m-0"><strong class="p-strong"> Merit # </strong> {{selectedMerit.MeritNumber}}&nbsp;<span
+              class="badge badge-success" *ngIf="selectedMerit.pg?.isPG">PG</span>
+          </h2>
+          <h4 *ngIf="meritPosting.PostingHFName && meritPosting.ESR_Id == 1" class="animated fadeIn cursor-p"
+            (click)="openInNewTab('/health-facility/' + meritPosting.PostingHFMISCode, 1)">Posted
+            at
+            <u><strong class="text-success p-strong">{{meritPosting.PostingHFName}}
+              </strong></u> - {{meritPosting.DateTime | date : ' dd/MM/yyyy hh:mm a'}}
+          </h4>
+
+         <!--   <h4 *ngIf="selectedMerit.MeritNumber <= 1800 && meritPosting.PostingHFName" class="animated fadeIn cursor-p"
+            (click)="openInNewTab('/health-facility/' + meritPosting.PostingHFMISCode, 1)"><i><strong
+                class="text-success p-strong">{{meritPosting.PostingHFName}}
+              </strong></i> - <small><u><i>{{meritPosting.DateTime | date : ' dd/MM/yyyy hh:mm a'}}</i></u></small>
+          </h4> -->
+          <hr>
+        </div>
+      </div>
+      <div class="row animated fadeIn m-0">
+        <!--  <div class="col-md-2">
+          <img class="animated fadeIn" style="width:100px;height:100px;border:1px solid;"
+        [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/MeritPhotos/' + selectedMerit.CNIC + '_23.jpg'"
+        onError="this.src='../../../assets/img/notfound.png'" alt=""> 
+         
+        </div>-->
+        <div class="col-md-9">
+          <div class="row">
+            <div class="col-md-4">
+              <img class="pic-shadow" width="100" height="100"
+                [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + selectedMerit.CNIC + '_23.jpg'"
+                onError="this.src='../../../assets/img/notfound.png'" alt="">
+            </div>
+            <div class="col-md-4">
+              <p class="m-0"><strong class="p-strong"> Name: </strong> {{selectedMerit.Name ? selectedMerit.Name : ''}}
+              </p>
+              <p class="m-0"><strong class="p-strong"> Father Name: </strong>
+                {{selectedMerit.FatherName ? selectedMerit.FatherName : ''}}</p>
+              <p class="m-0"><strong class="p-strong"> CNIC: </strong> {{dashifyCNIC(selectedMerit.CNIC)}}</p>
+
+            </div>
+            <div class="col-md-4">
+               <p class="m-0"><strong class="p-strong"> Application # </strong> {{selectedMerit.ApplicationNumber}}</p>
+              <p class="m-0"><strong class="p-strong"> PMDC # </strong> {{selectedMerit.PMDCNumber}}</p>
+              <p class="m-0"><strong class="p-strong" *ngIf="user.UserName == 'dpd' || user.UserName == 'ordercell'">
+                  Domicile
+                </strong> <u>{{selectedMerit.DomicileName}}</u>
+              </p>
+            </div>
+            <div class="col-md-12">
+              <p class="m-0" *ngIf="user.UserName == 'dpd' || user.UserName == 'ordercell'"><strong class="p-strong">
+                  Address
+                </strong> <i><u>{{selectedMerit.Address}}</u></i>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <!--  <button class="btn-block" kendoButton primary="true" [ladda]="downloadingAcceptanceLetter"
+            data-style="zoom-in" (click)="getAcceptanceLetterLink()">Download
+            Acceptance
+            Letter</button>
+          <button class="btn-block" kendoButton primary="true" [ladda]="downloadingOfferLetter" data-style="zoom-in"
+            (click)="getOfferLetterLink(selectedMerit.Id)">Download Offer
+            Letter</button>
+          <button class="btn-block" kendoButton primary="true" look="outline"
+            (click)="openInNewTab('acceptance', selectedMerit)"><i class="fa fa-eye"></i>&nbsp;Acceptance</button> -->
+          <!--  <img class="animated fadeIn" style="width:100px;height:100px;border:1px solid;"
+            [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/Acceptances/' + selectedMerit.Id + '_OfferLetter.jpg'"
+            onError="this.src='../../../assets/img/notfound.png'" alt=""> -->
+        </div>
+      </div>
+      <hr>
+      <div class="k-i-loading" *ngIf="loadingPreferences"></div>
+      <!--   <div class="row mb-1 animated fadeIn" *ngIf="selectedMerit.pg?.isPG">
+        <div class="col-md-6">
+          <p class="m-0"><strong class="p-strong"> From: </strong> {{selectedMerit.pg?.PGFrom | date: 'dd/MM/yyyy'}}
+            <p class="m-0"><strong class="p-strong"> Specialization: </strong> {{selectedMerit.pg?.SpecializationName}}
+          </p>
+        </div>
+        <div class="col-md-6">
+          <p class="m-0"><strong class="p-strong"> Health Facility </strong> {{selectedMerit.pg?.HealthFacilityName}}</p>
+        </div>
+      </div> -->
+      <div class="row m-0">
+        <div class="col-md-12">
+          <h4 class="mb-2"><span class="p-strong">Health Facilities&nbsp; <span class="animated fadeIn lds-ellipsis"
+                *ngIf="searchingHfs">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </span></span> <!-- {{ selectedMeritPreferences.length}} -->
+            <span *ngIf="meritPosting.Id && (user.UserName == 'dpd'  || user.UserName == 'ordercell')" class="animated
+      fadeIn pull-right"><!-- Preference
+              No.
+              {{meritPosting.PreferencesNumber}} -->
+              <!-- , Seats {{meritPosting.PostingHFTotalSeats}} -->
+              <!--   <button *ngIf="selectedMerit.MeritNumber < 300" kendoButton primary="true" class="btn-sm mb-1"
+            (click)="lockOrder()"><i class="fa fa-lock"></i>&nbsp;Lock</button> -->
+            </span>
+          </h4>
+
+          <label class="k-form-field">
+            <input kendoTextBox type="text" #search (input)="searchEvent.next({ event: search.value, filter: 'hfs'})">
+            <!-- <kendo-autocomplete [data]="hfOpened" [valueField]="'FullName'" (valueChange)="searchClicked($event, 'hfs')"
+              [filterable]="true" (filterChange)="searchEvent.next({ event: $event, filter: 'hfs'})" [value]=""
+              placeholder="Search Health Facility" class="k-autocomplete-form">
+              <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                <div class="search-list-item">
+                  {{ dataItem.FullName }}</div>
+              </ng-template>
+            </kendo-autocomplete> -->
+          </label>
+
+          <kendo-grid [data]="hfOpened" *ngIf="!searchingHfs">
+            <kendo-grid-column [width]="7" field="asd" title="No." [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <h5 *ngIf="!dataItem.noPref" class="m-0 cursor-p"
+                  (click)="openInNewTab('/health-facility/' + dataItem.HFMISCode, 1)"><span
+                    *ngIf="!dataItem.custom">{{(rowIndex + 1)}}.</span>
+                </h5>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="93" field="FullName" title="Health Facility" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <h5 class="m-0" [ngClass]="(dataItem.Vacant + dataItem.Adhoc) == 0 ? 'text-danger' : ''"
+                  (click)="getPostedMerits(dataItem)"> {{dataItem.HFName}}
+                  <!-- <small class="text-muted">{{dataItem.Vacant}} Vacant Seat{{dataItem.Vacant > 1 ? 's' : ''}}</small>
+                  <small class="text-muted" *ngIf="dataItem.Vacant == 0">, {{dataItem.Adhoc}}
+                    Adhoc Seat{{dataItem.Adhoc > 1 ? 's' : ''}}</small> -->
+                  <button kendoButton
+                    *ngIf="(dataItem.mPosting?.PostingHFName) != dataItem.HFName && user.UserName == 'dpd'"
+                    [ladda]="dataItem.posting" class="btn-sm pull-right" data-style="zoom-in"
+                    (click)="postCandidate(dataItem)" [primary]="true">
+                    {{'POST'}}</button>
+
+                  <button *ngIf="(dataItem.mPosting?.PostingHFName) == dataItem.HFName && user.UserName == 'dpd'"
+                    [ladda]="dataItem.locking" data-style="zoom-in"
+                    [look]="dataItem.mPosting?.ESR_Id == 1 ? 'outline' : ''" kendoButton primary="true"
+                    class="btn-sm mb-1" (click)="lockAwaitingPostingOrder(dataItem)"><i
+                      class="fa fa-lock"></i>&nbsp;Lock{{dataItem.mPosting?.ESR_Id == 1 ? 'ed' : ''}}</button>
+                </h5>
+
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+        </div>
+      </div>
+
+      <div class="row m-0" *ngIf="selectedMeritPreferences.length > 0 && 2 + 2 == 5">
+        <div class="col-md-12">
+          <h4 class="mb-2"><span class="p-strong">Preferences&nbsp; <span class="animated fadeIn lds-ellipsis"
+                *ngIf="checkingVacancy">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </span></span> <!-- {{ selectedMeritPreferences.length}} -->
+            <span *ngIf="meritPosting.Id && (user.UserName == 'dpd'  || user.UserName == 'ordercell')" class="animated
+          fadeIn pull-right">Preference
+              No.
+              {{meritPosting.PreferencesNumber}}
+              <!-- , Seats {{meritPosting.PostingHFTotalSeats}} -->
+              <!--   <button *ngIf="selectedMerit.MeritNumber < 300" kendoButton primary="true" class="btn-sm mb-1"
+                (click)="lockOrder()"><i class="fa fa-lock"></i>&nbsp;Lock</button> -->
+            </span>
+          </h4>
+
+          <div class="animated fadeIn" *ngIf="!checkingVacancy">
+            <kendo-grid [data]="selectedMeritPreferences">
+              <kendo-grid-column [width]="7" field="asd" title="No." [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <h5 *ngIf="!dataItem.noPref" class="m-0 cursor-p"
+                    (click)="openInNewTab('/health-facility/' + dataItem.HFMISCode, 1)"><span
+                      *ngIf="!dataItem.custom">{{(rowIndex + 1)}}.</span>
+                  </h5>
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column [width]="93" field="FullName" title="Health Facility"
+                [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <div *ngIf="dataItem">
+                    <div *ngIf="!dataItem.custom">
+                      <h5 class="m-0" (click)="getPostedMerits(dataItem)"
+                        [ngStyle]="{'color': (dataItem.mPosting?.PostingHF_Id) != dataItem.Id && (user.UserName == 'dpd'  || user.UserName == 'ordercell') ? dataItem.color : ''}"
+                        [ngClass]="((dataItem.mPosting?.PostingHF_Id) == dataItem.Id || (dataItem.mPosting?.DistrictCode) == dataItem.HFMISCode) && dataItem.mPosting?.ESR_Id > 0 && (user.UserName == 'dpd'  || user.UserName == 'ordercell') ? 'text-success p-strong' : ''">
+                        {{dataItem.FullName}}
+                        <button
+                          *ngIf="(dataItem.mPosting?.PostingHF_Id) != dataItem.Id && user.UserName == 'dpd' && dataItem.color != '#dc3545'"
+                          kendoButton class="btn-sm pull-right" [disabled]="dataItem.noVacancy"
+                          [ladda]="dataItem.searchingHfs" data-style="zoom-in" (click)="postMeritPreference(dataItem)"
+                          [primary]="true">{{dataItem.noVacancy ? 'NO VACANCY' : dataItem.HFMISCode.length == 6 ? 'At Disposal' : 'POST'}}</button>
+
+                        <button
+                          *ngIf="!dataItem.noPref && (dataItem.mPosting?.PostingHF_Id) == dataItem.Id && user.UserName == 'dpd'"
+                          [ladda]="dataItem.locking" data-style="zoom-in"
+                          [look]="dataItem.mPosting?.ESR_Id == 1 ? 'outline' : ''" kendoButton primary="true"
+                          class="btn-sm mb-1" (click)="lockMeritOrderSingle(dataItem)"><i
+                            class="fa fa-lock"></i>&nbsp;Lock{{dataItem.mPosting?.ESR_Id == 1 ? 'ed' : ''}}</button>
+
+                        <button (click)="openInNewTab('/health-facility/' + dataItem.HFMISCode, 1)"
+                          *ngIf="(dataItem.mPosting?.PostingHF_Id) != dataItem.Id && user.UserName == 'dpd' && dataItem.color == '#dc3545'"
+                          class="btn btn-outline-danger btn-sm mb-1"><i class="fa fa-times"></i>&nbsp;{{dataItem.HFAC == 2 ? 'PHFMC' : dataItem.HFAC == 3 ? 'IRMNCH' :
+              'No Seat Vacant'}}</button>
+
+                        <button (click)="openInNewTab('/health-facility/' + dataItem.HFMISCode, 1)"
+                          *ngIf="(dataItem.mPosting?.PostingHF_Id) != dataItem.Id && user.UserName == 'dpd' && dataItem.color == '#ffc107'"
+                          class="btn btn-warning btn-sm mb-1"><i class="fa fa-exclamation"></i>&nbsp;Adhoc Seat</button>
+                      </h5>
+                      <h5 class="cursor-p mb-1"
+                        (click)="openInNewTab('/health-facility/' + meritPosting.PostingHFMISCode, 1)"
+                        *ngIf="dataItem.noVacancy" class="text-danger pull-right ml-2"> <i
+                          class="fa fa-times"></i>&nbsp;No
+                        Seat
+                        Vacant at {{meritPosting.PostingHFName}}</h5>
+                      <!--   <h5 class="cursor-p" (click)="openInNewTab('/health-facility/' + meritPosting.PostingHFMISCode, 1)"
+              *ngIf="imgSrc" class="text-success pull-right ml-2"> <i class="fa fa-check"></i>&nbsp;Posted at
+              {{meritPosting.PostingHFName}}</h5> -->
+                      <div *ngIf="dataItem.loading" class="shine shim-controls"></div>
+                      <div class="animated fadeIn" *ngIf="!dataItem.loading">
+                        <hr class="animated fadeIn"
+                          *ngIf="dataItem.vpMaster && (user.UserName == 'dpd'  || user.UserName == 'ordercell')">
+                        <div class="animated fadeIn"
+                          *ngIf="dataItem.vpMaster && (user.UserName == 'dpd'  || user.UserName == 'ordercell')">
+                          <div class="row">
+                            <div class="col-md-2">
+                              <h5 class="m-0 font-italic">
+                                <span>Sanctioned</span>&nbsp; {{dataItem.vpMaster.TotalSanctioned}}
+                              </h5>
+                            </div>
+                            <div class="col-md-2">
+                              <h5 class="m-0 font-italic">
+                                <span>Filled</span>&nbsp; {{dataItem.vpMaster.TotalWorking}}
+                              </h5>
+                            </div>
+                            <div class="col-md-2">
+                              <h5 class="m-0 font-italic">
+                                <span>Vacant</span>&nbsp; {{dataItem.vpMaster.Vacant}}
+                              </h5>
+                            </div>
+                            <div class="col-md-4 offset-md-2">
+                              <h5 class="m-0 font-italic">
+                                <span>Regular</span>&nbsp;{{dataItem.vpMaster.Regular}}, <span>Adhoc</span>&nbsp;
+                                {{dataItem.vpMaster.Adhoc}}
+                              </h5>
+                            </div>
+
+                          </div>
+                        </div>
+                        <hr class="animated fadeIn"
+                          *ngIf="dataItem.RemarksP && (user.UserName == 'dpd'  || user.UserName == 'ordercell')">
+                        <div class="animated fadeIn"
+                          *ngIf="dataItem.RemarksP && (user.UserName == 'dpd'  || user.UserName == 'ordercell')">
+                          <p class="m-0" *ngFor="let rem of dataItem.RemarksP;let j = index;"
+                            [ngClass]="meritPosting.Id == rem.Id ? 'text-success' : ''">
+                            ({{(j+1)}}). {{rem.Remarks.substring(0, (rem.Remarks.indexOf('Pref') - 2))}}</p>
+                        </div>
+
+                        <!--  <p class="m-0"
+              *ngIf="(dataItem.mPosting?.PostingHF_Id) == dataItem.Id && (user.UserName == 'dpd'  || user.UserName == 'ordercell')">
+              {{meritPosting.Remarks}}</p> -->
+                        <div *ngIf="dataItem.vpMaster && (user.UserName == 'dpd'  || user.UserName == 'ordercell')">
+                          <!--  <table class="animated fadeIn cstmTablez mt-1">
+                                <tr>
+                                    <td class="p-strong">Sanctioned</td>
+                                    <td class="p-strong">Filled</td>
+                                    <td class="p-strong">Vacant</td>
+                                </tr>
+                                <tr>
+                                    <td>{{dataItem.vpMaster.TotalSanctioned}}</td>
+                                    <td>{{dataItem.vpMaster.TotalWorking}}</td>
+                                    <td>{{dataItem.vpMaster.Vacant}}</td>
+                                </tr>
+                            </table> -->
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="dataItem.noPref">
+                      <h5 class="m-0">
+                        No Preferences
+                      </h5>
+                    </div>
+                    <div *ngIf="dataItem.custom && user.UserName == 'dpd'">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <h5 class="cursor-p"
+                            (click)="openInNewTab('/health-facility/' + meritPosting.PostingHFMISCode, 1)"
+                            *ngIf="noVacancy" class="text-danger pull-right ml-2"> <i class="fa fa-times"></i>&nbsp;No
+                            Seat
+                            Vacant</h5>
+                        </div>
+                        <div class="col-md-10 control-col-st">
+
+                          <h5 class="mb-2"><span class="p-strong">Post Candidate</span>
+                          </h5>
+                          <label class="k-form-field">
+                            <span>Health Facility <span class="text-danger">*</span></span>
+                            <kendo-autocomplete [data]="hfOpened" [valueField]="'FullName'"
+                              (valueChange)="searchClicked($event, 'hfs')" [filterable]="true"
+                              (filterChange)="searchEvent.next({ event: $event, filter: 'hfs'})" [value]=""
+                              placeholder="Search Health Facility" class="k-autocomplete-form">
+                              <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                                <div class="search-list-item">
+                                  {{ dataItem.FullName }}</div>
+                              </ng-template>
+                            </kendo-autocomplete>
+                          </label>
+                        </div>
+                        <div class="col-md-2 control-col-end mt-2">
+                          <label class="k-form-field">
+                            <span>&nbsp;</span>
+                            <button kendoButton class="btn-block btn-align-v"
+                              [disabled]="!actualPostingHF_Id || actualPostingHF_Id == 0" [ladda]="searchingHfs"
+                              data-style="zoom-in" (click)="postMeritManually()" [primary]="true">POST</button>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </kendo-grid-column>
+            </kendo-grid>
+          </div>
+        </div>
+        <div class="col-md-12 mt-3 animated fadeIn"
+          *ngIf="showOrder && (user.UserName == 'dpd'  || user.UserName == 'ordercell') && 2 + 2 == 5">
+          <hr>
+          <div class="h4 text-success p-strong">
+            Order
+            <!--  <button kendoButton primary="true" class="pull-right ml-2" (click)="genOrder()" [ladda]="savingOrder"
+              data-style="zoom-in">Finalize Order</button>
+            <h5 class="cursor-p" (click)="openInNewTab('/health-facility/' + meritPosting.PostingHFMISCode, 1)"
+              *ngIf="noVacancy" class="text-danger pull-right ml-2"> <i class="fa fa-times"></i>&nbsp;No Seat
+              Vacant at {{meritPosting.PostingHFName}}</h5>
+            <button kendoButton primary="true" look="outline" class="pull-right ml-2" *ngIf="esr && esr.Id"
+              (click)="printApplication()"><i class="fa fa-print"></i>&nbsp;Print</button> -->
+            <h5 class="cursor-p" (click)="openInNewTab('/health-facility/' + meritPosting.PostingHFMISCode, 1)"
+              class="text-success pull-right ml-2"> <i class="fa fa-check"></i>&nbsp;Posted at
+              {{meritPosting.PostingHFName}}</h5>
+
+            <!--  <button kendoButton primary="true" look="outline" *ngIf="esr && esr.Id" class="pull-right"
+          (click)="printApplication()"><i class="fa fa-pencil"></i>&nbsp;Edit</button> -->
+          </div>
+          <div class="row mt-3">
+            <div class="col-md-10 mx-auto animated fadeIn">
+              <!--  <ckeditor [editor]="Editor" data="<p>Hello, world!</p>"></ckeditor> -->
+              <!-- <quill-editor *ngIf="application.RawText" [(ngModel)]="application.RawText"> </quill-editor> -->
+              <div class="page page.preview-order-demo pb-3" id="applicationPrintOld">
+                <div class="table-order" style="padding: 30px 50px 0 50px;">
+                  <div style="text-align:center;position:absolute;left:0;width:100%;z-index:-1;font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+              font-weight: normal;
+              line-height: 1.5;">
+                    <img alt="HISDU"
+                      src="https://www.awamiweb.com/wp-content/uploads/2018/01/Primary-Secondary-Healthcare-600x300.jpg"
+                      style="display:inline-block; margin-top: 255px; opacity: 0.4;" />
+                  </div>
+                  <div style="text-align:center;position:absolute;left:0;width:100%;z-index:-1;    top: -62px;
+                      opacity: 0.2;">
+                    <img alt="HISDU" src="https://hrmis.pshealthpunjab.gov.pk/assets/img/brand/Watermark.png"
+                      style="display:inline-block; " />
+                  </div>
+                  <table border="0" cellspacing="0" style="border-color:transparent !important; width:100%;font-family: sans-serif, Arial, Verdana, 'Trebuchet MS' !important;
+                      font-size: 13px !important;
+                      font-style: normal !important;
+                      font-variant: normal !important;
+                      font-weight: 400 !important;
+                      line-height: 1.6 !important;
+                      color: #383e4b !important;
+                      background-color: #fff !important;">
+                    <tbody>
+                      <!--    <tr>
+                    <td colspan="2" style="border-color:transparent !important; text-align:center">
+                      <div style="display:inline-block;text-align:center;">
+                        <p><u><strong>TO BE SUBSTITUTED THE ORDER BEARING SAME NO. DATED: 21-11-2019</strong></u></p>
+                      </div>
+                    </td>
+                  </tr> -->
+                      <tr>
+                        <td style="border-color:transparent !important; text-align:left">
+                          <img alt="Punjab Government Log"
+                            src="https://hrmis.pshealthpunjab.gov.pk/assets/img/brand/govlogoUpdated.png"
+                            style="display:inline-block; width:134px" />
+                        </td>
+                        <td style="border-color:transparent !important; text-align:right">
+                          <div style="display:inline-block;text-align:center;">
+                            <p><strong>GOVERNMENT
+                                OF THE PUNJAB<br /> PRIMARY
+                                &amp; SECONDARY HEALTHCARE<br /> DEPARTMENT </strong><br /> Dated Lahore, <span
+                                [innerHTML]="dateNow"></span></p>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" style="border-color:transparent !important; text-align:left">
+                          <p style="margin-top: 50px;margin-bottom: 15px;"><strong><u>O R D E R</u> </strong></p>
+                        </td>
+                      </tr>
+                      <tr style="font-size: 13px !important;">
+                        <td colspan="2"
+                          style="border-color:transparent !important; text-align:justify;line-height: 1.6;">
+                          <p style="text-align: justify;">
+                            <strong>
+                              No.<em><u>SO(SC){{selectedMerit.MeritNumber}}-{{selectedMerit.DesignationName.replace('Consultant ', '')}}/2019(PPSC)</u></em>,</strong>
+                            Consequent upon the recommendation of Punjab
+                            Public Service Commission (PPSC) and in response to the offer of appointment dated
+                            {{offerDate}}<sup>th</sup> {{offerMonth}}, 2019,
+                            <strong>{{selectedMerit.Name ? selectedMerit.Name : '-'}} (CNIC:
+                            </strong>{{selectedMerit.CNIC ? dashifyCNIC(selectedMerit.CNIC) : '-'}}<strong>),</strong>
+                            is
+                            hereby selected as
+                            <strong>{{selectedMerit.DesignationName ? selectedMerit.DesignationName : ''}}
+                              (BS-18),</strong>
+                            and posted at <strong>{{meritPosting.PostingHFName}},</strong> against a vacant post, with
+                            immediate effect,
+                            on usual terms and condition as mentioned in the Civil Servant Act, 1974 and the rules made
+                            thereunder.
+                          </p>
+
+
+                          <p style="text-align: justify;">
+                            2.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The above mentioned doctor is directed to submit his/her
+                            joining
+                            till <span [innerHTML]="joiningDate"></span>, failing which the appointment offer shall be
+                            treated as cancelled
+                            / withdrawn. He/She will not claim transfer for a period of 01 year. However after 01 year
+                            transfer shall be made as per the transfer policy of Primary & Secondary Healthcare
+                            Department.
+                          </p>
+
+                          <p style="text-align: justify;">3.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;During first year of service,
+                            no
+                            Extra Ordinary Leave (EOL) applications from the newly appointed Consultants shall be
+                            entertained.
+                          </p>
+
+                        </td>
+                      </tr>
+                      <!-- <tr style="font-size: 13px !important;" *ngIf="application.Remarks">
+                          <td colspan="2" style="border-color:transparent !important; text-align:justify;line-height: 1.6;">
+                            <p style="text-align: justify;margin-top: 7px;word-break: break-all;">
+                              <strong><i>2</i></strong>. <span style="margin-left: 49px;"> {{application.Remarks}}</span>
+                            </p>
+                          </td>
+                        </tr> -->
+                      <tr>
+                        <td colspan="2" style="border-color:transparent !important; text-align:right">
+                          <div style="text-align:center; display:inline-block;">
+                            <p style="line-height: 1.5 !important;">
+                              <strong>SECRETARY<br /> PRIMARY &amp;
+                                SECONDARY HEALTHCARE<br /> DEPARTMENT </strong></p>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr *ngIf="imgSrc">
+                        <td colspan="2" style="border-color:transparent !important; text-align:center">
+                          <p><img alt="IMAGE AREA" [src]="barcodeSrc()" style="border-width:0px" /><br />
+                            <strong>ESR-{{esr.Id}}</strong>
+                          </p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" style="border-color:transparent !important; text-align:left">
+                          <p><strong><u>Number &amp;
+                                Date Even</u></strong></p>
+                          <p>A copy is forwarded for information and necessary action to the:</p>
+                          <ol>
+                            <li>Accountant General Punjab, Lahore</li>
+                            <li>Director General Health Service Punjab, Lahore</li>
+                            <li>Chief Executive Officer (DHA) Concerned, with the directions to send a Charge Assumption
+                              Report to this department for record</li>
+                            <li>Medical Superintendents/Incharge, concerned</li>
+                            <li>District Account Officers, concerned</li>
+                            <li>HR & Legal officer/ concerned officer at district concerned with the directions to
+                              update
+                              profile of above mentioned Doctor in Human Resource Management Information System (HRMIS)
+                            </li>
+                            <li>Project Director, (HISDU), P&S Healthcare Department</li>
+                            <li>PSO to Minister Health, Government of the Punjab</li>
+                            <li>PSO to Secretary, Primary & Secondary Healthcare Department</li>
+                            <li>PA to Additional Secretary (Admn), P&S Healthcare Department</li>
+                            <li>PA to Deputy Secretary (Admn), P&S Healthcare Department</li>
+                            <li>Doctor concerned</li>
+                            <li>Master File</li>
+
+                          </ol>
+                        </td>
+                      </tr>
+                      <tr>
+
+                        <td colspan="2" style="border-color:transparent !important; text-align:right">
+                          <div style="text-align:center;display: inline-block;">
+                            <strong>SECTION OFFICER (NURSING)
+                            </strong>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<kendo-excelexport [data]="postings"
+  [fileName]="'MeritNumber' + (+kGrid.skip + 1) + '-' + ((+kGrid.skip) + kGrid.pageSize) + '.xlsx'" #excelexport>
+  <kendo-excelexport-column field="Sr" title="Sr."
+    [cellOptions]="{textAlign: 'center', borderLeft:1, borderRight:1, borderTop:1, borderBottom:1}">
+    <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+      {{(rowIndex + 1)}}
+    </ng-template>
+
+  </kendo-excelexport-column>
+  <kendo-excelexport-column field="MeritNumber" title="MeritNumber"
+    [cellOptions]="{textAlign: 'center', borderLeft:1, borderRight:1, borderTop:1, borderBottom:1}">
+  </kendo-excelexport-column>
+  <kendo-excelexport-column field="Name" title="Name"
+    [cellOptions]="{borderLeft:1, borderRight:1, borderTop:1, borderBottom:1}"></kendo-excelexport-column>
+  <kendo-excelexport-column field="FatherName" title="FatherName"
+    [cellOptions]="{borderLeft:1, borderRight:1, borderTop:1, borderBottom:1}"></kendo-excelexport-column>
+  <kendo-excelexport-column field="CNIC" title="CNIC"
+    [cellOptions]="{borderLeft:1, borderRight:1, borderTop:1, borderBottom:1}"></kendo-excelexport-column>
+  <kendo-excelexport-column field="PostingHFName" title="PostingHFName"
+    [cellOptions]="{wrap: true, borderLeft:1, borderRight:1, borderTop:1, borderBottom:1}">
+  </kendo-excelexport-column>
+</kendo-excelexport>
+
+<kendo-dialog [title]="selectedMerit.Name + ' - ' + selectedMerit.MeritNumber"
+  *ngIf="preferencesWindow && selectedMerit" (close)="closePreferencesWindow()" [minWidth]="'450'" [height]="'485'"
+  [width]="'950'">
+  <h1 class="text-center">Congratulations {{selectedMerit.Name}}</h1>
+</kendo-dialog>

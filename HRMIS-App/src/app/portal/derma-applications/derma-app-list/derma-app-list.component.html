@@ -1,0 +1,25 @@
+<div class="animated">
+    <div class="row">
+        <div class="col-md-6 col-xs-12">
+            <div class="top-h3">
+                Applications for Post Graduate Program (Thailand)
+            </div>
+        </div>
+        <div class="uk-column-medium-1-6 col-sm-12 control-col-st">
+            <label class="k-form-field">
+                <span>Search by Name / CNIC</span>
+                <input type="text" (keyup)="inputChange.next(true)" [(ngModel)]="searchTerm"
+                    placeholder="Type Name or CNIC" kendoTextBox>
+            </label>
+        </div>
+        <div class="col-md-6 col-sm-12 col-xs-12 mt-2 control-col">
+            <label class="k-form-field">
+                <span>Designation</span>&nbsp;<span class="text-danger">*</span>
+                <kendo-dropdownlist [data]="designations" [textField]="'Name'" [valueField]="'Name'"
+                    (valueChange)="dropdownValueChanged($event, 'designation')" [(ngModel)]="dermaApp.Designation"
+                    [defaultItem]="{Id: 0, Name: 'Select'}" [filterable]="true" (filterChange)="handleFilter($event)">
+                </kendo-dropdownlist>
+            </label>
+        </div>
+    </div>
+</div>

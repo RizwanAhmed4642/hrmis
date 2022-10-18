@@ -1,0 +1,13 @@
+.db-list-item {
+  cursor: pointer;
+  font-family: "Roboto-Regular";
+  font-size: 1rem;
+}
+.db-list-item.active,
+.db-list-item:hover {
+  font-family: "Roboto-Bold";
+}
+.filter-heading {
+  font-family: "Roboto-MediumItalic";
+  color: #46a23f;
+}

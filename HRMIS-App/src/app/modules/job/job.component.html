@@ -1,0 +1,24 @@
+<div class="animated fadeIn">
+  <h3 class="top-h3">Database
+  </h3>
+  <!-- <div class="row mt-3">
+    <div class="col-md-12">
+      <label class="k-form-field">
+        <span>Search Entity</span>
+        <input kendoTextBox type="text">
+      </label>
+    </div>
+  </div> -->
+  <div class="row">
+
+    <div *ngFor="let item of tablesData;let i = index;" (click)="dropdownValueChanged({Id: item.Id, Name: item.Name})"
+      style="transition: 0.13s all ease-in-out;"
+      [ngClass]="'col-md-3 ' + (i % 4 === 0 ? 'control-col-st' : i % 4 === 1 ? 'control-col' : i % 4 === 2 ? 'control-col' : i % 4 === 3 ? 'control-col-end' : '')">
+      <div class="staff-statement-box">
+        <span class="title">{{item.Name}}
+        </span>
+        <i class="view-icon fa fa-arrow-circle-o-right"></i>
+      </div>
+    </div>
+  </div>
+</div>

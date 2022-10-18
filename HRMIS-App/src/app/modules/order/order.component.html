@@ -1,0 +1,319 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3">
+        Order / Notification
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton *ngIf="currentUser.UserName == 'ordercell' || currentUser.UserName == 'dpd'"
+          [primary]="true" [look]="'outline'" routerLink="/order/search">Advance Search</button>
+        <button kendoButton *ngIf="currentUser.UserName == 'ordercell' || currentUser.UserName == 'dpd'" class="mx-2"
+          [primary]="true" [look]="'outline'" routerLink="/order/combine/4">Combine Order</button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <!-- <div class="col-md-2 col-sm-6 pb-2 control-col-st">
+        <label class="k-form-field">
+          <span>From Date</span>
+          <kendo-datepicker [format]="'dd/MM/yyyy'" [(value)]="value"></kendo-datepicker>
+        </label>
+      </div>
+      <div class="col-md-2 col-sm-6 pb-2 control-col">
+        <label class="k-form-field">
+          <span>To Date</span>
+          <kendo-datepicker [format]="'dd/MM/yyyy'" [(value)]="value"></kendo-datepicker>
+        </label>
+      </div> -->
+    <div class="col-md-2 col-sm-6 pb-2 control-col-st">
+      <label class="k-form-field">
+        <span>Name</span>
+        <input type="text" #searchNameRef (input)="inputChange.next({query: searchNameRef.value, filter: 'name'})"
+          placeholder="Search by Name" kendoTextBox>
+      </label>
+    </div>
+    <div class="col-md-2 col-sm-6 pb-2 control-col">
+      <label class="k-form-field">
+        <span>CNIC</span>
+        <kendo-maskedtextbox [mask]="cnicMask" #searchCNICRef
+          (input)="inputChange.next({query: searchCNICRef.value, filter: 'cnic'})">
+        </kendo-maskedtextbox>
+      </label>
+    </div>
+    <div class=" col-md-3 col-sm-6 pb-2 control-col">
+      <label class="k-form-field">
+        <span>Order Text / Barcode</span>
+        <input type="text" #searchTextRef
+          (input)="inputChange.next({query: searchTextRef.value, filter: 'barcodeText'})"
+          placeholder="Search by Order Text or Barcode" kendoTextBox>
+      </label>
+    </div>
+    <div class="col-md-3 col-sm-6 pb-2 control-col">
+      <label class="k-form-field">
+        <span>Type</span>
+        <kendo-dropdownlist [data]="dropDowns.orderTypesData" [defaultItem]="{Name: 'Select Order Type', Id: 0}"
+          [valuePrimitive]="false" [textField]="'Name'" [valueField]="'Id'"
+          [(ngModel)]="dropDowns.selectedFiltersModel.orderType">
+        </kendo-dropdownlist>
+      </label>
+    </div>
+    <div class="col-md-2 col-sm-12 mt-1 control-col-end">
+      <label class="k-form-field">
+        <button kendoButton class="btn-block btn-align-v" (click)="onSearch()" [primary]="true">SEARCH</button>
+      </label>
+    </div>
+  </div>
+
+</div>
+<div hidden class="row row-panel">
+  <div class="col-md-12">
+    <div class="grid-top-header-custom animated fadeIn" *ngIf="kGrid.totalRecords > 0">
+      <div class="pager-rows-number">
+        <span>
+          {{(kGrid.skip + 1) + ' - ' + (kGrid.pageSize <= kGrid.totalRecords ? (kGrid.pageSize + kGrid.skip) :
+              kGrid.totalRecords) + ' of ' + numberWithCommas(kGrid.totalRecords) + ' items ' }} </span>
+        <span class="pull-right">
+          <select #select (change)="changePagesize(select.value)">
+            <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}</option>
+            <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+              [selected]="page === kGrid.pageSize ? true : undefined">
+              {{page}}
+            </option>
+          </select>
+          &nbsp; items per page
+        </span>
+      </div>
+    </div>
+    <div class="grid-wrapper">
+      <kendo-grid [data]="kGrid.gridView" [sortable]="{
+                allowUnsort: kGrid.allowUnsort,
+                mode: kGrid.multiple ? 'multiple' : 'single'
+                }" [(pageSize)]="kGrid.pageSize" [skip]="kGrid.skip" [pageable]="true"
+        (pageChange)="pageChange($event)" [scrollable]="true">
+        <kendo-grid-column [width]="7" field="asd" title="No." [headerClass]="'grid-header-custom'"
+          [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            {{(rowIndex + 1)}}
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="40" field="EmployeeName" title="Employee" [headerClass]="'grid-header-custom'"
+          [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="employee-info">
+              <p class="m-0"><strong> Name: </strong> {{dataItem.EmployeeName ? dataItem.EmployeeName : ''}}</p>
+              <p class="m-0"><strong> CNIC: </strong> {{dashifyCNIC(dataItem.CNIC)}}</p>
+              <p class="m-0" *ngIf="!dataItem.FileNumber"><strong> Designation: </strong>
+                {{dataItem.Designation}}</p>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="40" field="TrackingNumber" title="Order" [headerClass]="'grid-header-custom'"
+          [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="application-info">
+              <p class="m-0"><strong>{{dataItem.OrderType}}</strong></p>
+              <p class="m-0">
+                <i class="fa fa-barcode"></i>
+                {{dataItem.TransferTypeID == 5 ? 'ELR-' + (dataItem.ESRId + 1003) : 'ESR-' + dataItem.ESRId}}
+              </p>
+              <p class="m-0"><i class="fa fa-calendar"></i> {{dataItem.DateTime | date:'dd/MM/yyyy, h:mm a'}}</p>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [width]="13" field="asd" title="Action" [headerClass]="'grid-header-custom'"
+          [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <button style="width: 88%;
+              height: 57px;
+              padding: 6px;" (click)="viewOrder(dataItem)" kendoButton [primary]="true" [look]="'outline'"
+              class="ml-2 animated fadeIn btn-sm">View</button>
+          </ng-template>
+        </kendo-grid-column>
+        <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+          <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+          <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+          <kendo-pager-next-buttons></kendo-pager-next-buttons>
+          <div class="pager-rows-number">
+            <select #select (change)="changePagesize(select.value)">
+              <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}</option>
+              <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+                [selected]="page === kGrid.pageSize ? true : undefined">
+                {{page}}
+              </option>
+            </select>
+            &nbsp; items per page
+          </div>
+          <kendo-pager-info></kendo-pager-info>
+        </ng-template>
+      </kendo-grid>
+      <div *ngIf="kGrid.loading" class="k-i-loading"></div>
+    </div>
+  </div>
+</div>
+<div class="animated fadeIn row row-panel" *ngIf="!loadedContent">
+  <div class="col-md-12">
+    <div class="k-i-loading">
+    </div>
+  </div>
+</div>
+<div class="animated fadeIn row row-panel" *ngIf="loadedContent">
+  <div class="col-md-4 mb-3" *ngFor="let order of orders;let i = index;"
+    [ngClass]="i % 3 === 0 ? 'control-col-st' : i % 3 === 1 ? 'control-col' : i % 3 === 2 ? 'control-col-end' : ''">
+    <div class="order-thumb" (click)="viewOrder(order)">
+      <div class="order-thumb-wrap">
+        <div class="order-thumb-type">
+          {{order.OrderType}}
+          <span class="pull-right"><i class="fa fa-barcode"></i>
+            &nbsp;<span>{{order.TransferTypeID == 5 ? 'ELR-' + (order.ESRId + 1003) : 'ESR-' + order.ESRId}}</span></span>
+        </div>
+        <div class="order-thumb-employee mt-1">
+          {{order.EmployeeName}}
+        </div>
+        <div class="order-thumb-employee">
+          {{dashifyCNIC(order.CNIC)}}
+        </div>
+        <div class="order-thumb-employee">
+          {{order.Designation}}
+        </div>
+      </div>
+      <div class="order-thumb-log-wrap">
+        <div class="order-thumb-log">
+          <i class="fa fa-user"></i> {{order.UserName}} <span class="pull-right">
+            {{order.DateTime | date:'dd/MM/yyyy h:mm a'}}</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="col-md-6 offset-md-3" *ngIf="showLoadingMoreOrdersButton">
+    <button kendoButton primary="true" class="btn-block btn-lg" [ladda]="loadingMoreOrders" data-style="zoom-out"
+      (click)="loadMoreOrders()">Load More</button>
+  </div>
+</div>
+<!-- 
+
+<div class="animated fadeIn" *ngIf="!loaded">
+  <div class="row">
+    <div class="col-md-8 col-xs-12 control-col-st">
+      <div class="shine shim-controls top-h3"></div>
+    </div>
+    <div class="col-md-1 offset-md-3 col-xs-12 control-col-end">
+      <div class="top-controls">
+        <div class="shine shim-controls"></div>
+      </div>
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="col-md-2 control-col-st">
+      <div class="shine shim-controls btn-align-v"></div>
+    </div>
+    <div class="col-md-2 control-col">
+      <div class="shine shim-controls btn-align-v"></div>
+    </div>
+    <div class="col-md-4 control-col">
+      <div class="shine shim-controls btn-align-v"></div>
+    </div>
+    <div class="col-md-2 control-col">
+      <div class="shine shim-controls btn-align-v"></div>
+    </div>
+    <div class="col-md-2 control-col-end">
+      <div class="shine shim-controls btn-align-v"></div>
+    </div>
+  </div>
+</div>
+<div class="animated fadeIn" *ngIf="!loadedContent">
+  <div class="row row-panel" *ngFor="let pl of thumbPlaceHolders">
+    <div class="col-md-4 control-col-st">
+      <div class="shine shim-thumb"></div>
+    </div>
+    <div class="col-md-4 control-col">
+      <div class="shine shim-thumb"></div>
+    </div>
+    <div class="col-md-4 control-col-end">
+      <div class="shine shim-thumb"></div>
+    </div>
+  </div>
+</div>
+-->
+
+<kendo-dialog [title]="'Search Profile & Select Order Type'" *ngIf="applicationTypeWindow.dialogOpened"
+  (close)="closeWindow()" [minWidth]="'450'" [width]="'650'">
+  <div class="row">
+    <div class="col-md-8 control-col-st">
+      <label class="k-form-field">
+        <span>CNIC</span>
+        <kendo-maskedtextbox [mask]="cnicMask" (input)="cnicValueChange()" (keyup.enter)="getProfileByCNIC()"
+          [(ngModel)]="cnic"></kendo-maskedtextbox>
+      </label>
+    </div>
+    <div class="col-md-4 control-col-end">
+      <label class="k-form-field mt-1">
+        <button kendoButton primary="true" [ladda]="searchingProfile" data-style="zoom-in" class="btn-align-v btn-block"
+          (click)="getProfileByCNIC()">Search
+          Profile</button>
+      </label>
+    </div>
+  </div>
+  <hr class="animated fadeIn">
+  <div class="row animated fadeIn" *ngIf="!profileExist && searchStarted">
+    <div class="col-md-12">
+      <h5 class="text-center">
+        No Profile Exist.</h5>
+    </div>
+  </div>
+  <div class="row animated fadeIn" *ngIf="profileExist && outRangeProfile">
+    <div class="col-md-12">
+      <h5 class="text-center">
+        Profile does not exist in your district.</h5>
+    </div>
+  </div>
+  <div class="row animated fadeIn" *ngIf="profileExist && !outRangeProfile">
+    <div class="col-md-12">
+      <strong>Employee Name</strong> {{profile.EmployeeName}}
+      <br>
+      <strong>Father Name</strong> {{profile.FatherName}}
+      <br>
+      <strong>Designation</strong> {{profile.Designation_Name ? profile.Designation_Name : ''}}
+      <br>
+      <strong>Health Facility</strong> {{profile.HealthFacility ? profile.HealthFacility : ''}}, {{profile.Tehsil ?
+      profile.Tehsil : ''}}, {{profile.District ? profile.District : ''}}
+      <br>
+      <strong>Status</strong> {{profile.StatusName ? profile.StatusName : ''}}
+    </div>
+  </div>
+  <hr *ngIf="profileExist">
+
+</kendo-dialog>
+
+<kendo-dialog [title]="selectedOrder.EmployeeName + ' - ' + selectedOrder.OrderType"
+  *ngIf="selectedOrder && viewOrderWindow" [minWidth]="'450'" [height]="'585'" [width]="'830'"
+  (close)="closeViewOrderWindow()">
+  <div class="order-view-div" [innerHTML]="transform(selectedOrder.OrderHTML)"></div>
+  <!-- <ckeditor [editor]="Editor" [(ngModel)]="selectedOrder.OrderHTML"></ckeditor> -->
+  <kendo-dialog-actions *ngIf="viewOrderWindow && !currentUser.UserName.startsWith('sdp')" class="animated fadeIn">
+    <kendo-buttongroup [width]="'100%'">
+      <button kendoButton class="btn btn-primary"
+        [routerLink]="'/order/editor-view/' + selectedOrder.ESRId + '/' + (selectedOrder.TransferTypeID == 5 ? '2' : '1')"><i
+          class="fa fa-pencil"></i>
+        Edit</button>
+      <button kendoButton class="btn btn-primary"
+        (click)="pdf.saveAs(selectedOrder.EmployeeName + ' - ' + selectedOrder.OrderType + '.pdf')"><i
+          class="fa fa-download"></i>
+        Download</button>
+      <button kendoButton class="btn btn-danger" style="height: 40px !important;" [ladda]="removingOrder"
+        data-style="zoom-in" (click)="removeOrder(selectedOrder.ESRId, selectedOrder.TransferTypeID)"
+        class="btn btn-danger btn-block"><i class="fa fa-trash"></i>
+        Remove</button>
+      <button kendoButton (click)="closeViewOrderWindow()" class="btn btn-secondary"><i class="fa fa-times"></i>
+        Close</button>
+    </kendo-buttongroup>
+  </kendo-dialog-actions>
+</kendo-dialog>
+
+
+<kendo-pdf-export #pdf paperSize="Letter" margin="0cm">
+  <div class="order-view-div" [innerHTML]="transform(selectedOrder?.OrderHTML)"></div>
+</kendo-pdf-export>

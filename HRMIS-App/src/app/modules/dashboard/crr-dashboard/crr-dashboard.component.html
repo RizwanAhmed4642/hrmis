@@ -1,0 +1,148 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-4 col-xs-12">
+      <div class="top-h3">
+        Dashboard
+      </div>
+    </div>
+    <!--  <div class="col-md-8 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" [look]="'outline'" (click)="openWindow(2)">Recieve Files</button>
+        <button kendoButton [primary]="true" class="pull-right mr-2 ml-2" routerLink="/fts/file-dispatch" [look]="'outline'">Dispatch
+          Files</button>
+        <button kendoButton [primary]="true" class="pull-right ml-2" routerLink="/fts/file-requisition-new" [look]="'outline'">Request
+          File</button>
+      </div>
+    </div> -->
+  </div>
+</div>
+<div class="row">
+  <div class="animated fadeIn">
+    <h6 class="p-3 animated fadeIn dashboard-table-heading-custom">
+      <span class="mr-2">Central Record Room - File Requisitions</span>
+    </h6>
+    <kendo-grid [data]="crrSectionReport" *ngIf="!loading && crrSectionReport.length > 0 ">
+      <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-text'"
+        [style]="{'color': '#000', 'padding': '5px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+          <p class="m-0" *ngIf="dataItem.SectionName">{{(rowIndex + 1)}}.
+          </p>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="SectionName" [title]="'Section'" width="25" [headerClass]="'grid-header-text'"
+        [style]="{'color': '#000', 'padding': '5px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+          <p class="m-0" *ngIf="dataItem.SectionName">{{dataItem.SectionName}}
+          </p>
+          <p class="m-0" *ngIf="!dataItem.SectionName"><strong> Total</strong>
+          </p>
+        </ng-template>
+
+      </kendo-grid-column>
+      <!--   <kendo-grid-column field="Total" title="Total" width="10" [headerClass]="'grid-header-text-center'"
+        [style]="{'color': '#000', 'padding': '5px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+          <p class="m-0" style="text-align: center;">{{dataItem.Total
+                  ?
+                  dataItem.Total : 0}}
+          </p>
+        </ng-template>
+
+      </kendo-grid-column> -->
+      <kendo-grid-column field="File_Available" width="10" title="Available Files"
+        [headerClass]="'grid-header-text-center'"
+        [style]="{'color': '#000', 'padding': '5px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+          <p class="m-0" style="text-align: center;">{{dataItem.File_Available
+              ?
+              dataItem.File_Available : 0}}
+          </p>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="Pending" width="10" title="Pending" [headerClass]="'grid-header-text-center'"
+        [style]="{'color': '#000', 'padding': '5px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+          <p class="m-0" style="text-align: center;">{{dataItem.Pending
+                  ?
+                  dataItem.Pending : 0}}
+          </p>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="Issued" width="10" title="Issued" [headerClass]="'grid-header-text-center'"
+        [style]="{'color': '#000', 'padding': '5px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+          <p class="m-0" style="text-align: center;">{{dataItem.Issued
+                  ?
+                  dataItem.Issued : 0}}
+          </p>
+        </ng-template>
+
+      </kendo-grid-column>
+
+      <kendo-grid-column field="Returned" width="10" title="Returned" [headerClass]="'grid-header-text-center'"
+        [style]="{'color': '#000', 'padding': '5px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+          <p class="m-0" style="text-align: center;">{{dataItem.Returned
+                ?
+                dataItem.Returned : 0}}
+          </p>
+        </ng-template>
+
+      </kendo-grid-column>
+      <kendo-grid-column field="Not_Scanned" width="10" title="Not Scanned" [headerClass]="'grid-header-text-center'"
+        [style]="{'color': '#000', 'padding': '5px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+          <p class="m-0" style="text-align: center;">{{dataItem.Not_Scanned
+              ?
+              dataItem.Not_Scanned : 0}}
+          </p>
+        </ng-template>
+
+      </kendo-grid-column>
+      <kendo-grid-column field="Already_Issued" width="10" title="Already Issued"
+        [headerClass]="'grid-header-text-center'"
+        [style]="{'color': '#000', 'padding': '5px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+          <p class="m-0" style="text-align: center;">{{dataItem.Already_Issued
+            ?
+            dataItem.Already_Issued : 0}}
+          </p>
+        </ng-template>
+
+      </kendo-grid-column>
+      <kendo-grid-column field="File_Not_Found" width="10" title="File Not Found"
+        [headerClass]="'grid-header-text-center'"
+        [style]="{'color': '#000', 'padding': '5px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+          <p class="m-0" style="text-align: center;">{{dataItem.File_Not_Found
+          ?
+          dataItem.File_Not_Found : 0}}
+          </p>
+        </ng-template>
+
+      </kendo-grid-column>
+      <kendo-grid-column field="Incorrect_File_Number" width="10" title="Incorrect File Number"
+        [headerClass]="'grid-header-text-center'"
+        [style]="{'color': '#000', 'padding': '5px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+          <p class="m-0" style="text-align: center;">{{dataItem.Incorrect_File_Number
+        ?
+        dataItem.Incorrect_File_Number : 0}}
+          </p>
+        </ng-template>
+
+      </kendo-grid-column>
+      <kendo-grid-column field="Expired" width="10" title="Expired" [headerClass]="'grid-header-text-center'"
+        [style]="{'color': '#000', 'padding': '5px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+        <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+          <p class="m-0" style="text-align: center;">{{dataItem.Expired
+                  ?
+                  dataItem.Expired : 0}}
+          </p>
+        </ng-template>
+      </kendo-grid-column>
+
+
+    </kendo-grid>
+    <div class="k-i-loading" *ngIf="loading"></div>
+  </div>

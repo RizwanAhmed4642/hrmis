@@ -1,0 +1,378 @@
+<div *ngIf="loading" class="k-i-loading"></div>
+<div class="animated fadeIn" *ngIf="!loading">
+  <div class="row">
+    <div class="col-md-10 col-xs-12">
+      <div class="top-h3">
+        <span *ngIf="!healthFacility?.Id">
+          New Health Facility
+        </span>
+        <span *ngIf="healthFacility.Id">
+          <u>Edit</u> {{' ' + healthFacility.FullName}}
+        </span>
+      </div>
+    </div>
+    <div class="col-md-2 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" routerLink="../">Back</button>
+      </div>
+    </div>
+  </div>
+  <tabset>
+    <tab heading="General Information">
+      <form name="profileform" (ngSubmit)="f.form.valid && onSubmit(f.form.value)" #f="ngForm" novalidate>
+        <div class="row">
+          <div class="col-md-4 col-sm-6 pb-2 control-col-st">
+            <label class="k-form-field">
+              <span>Name <span class="text-danger">*</span></span>
+              <input kendoTextBox type="text" name="Name" [(ngModel)]="healthFacility.Name" #Name="ngModel"
+                autocomplete="off"
+                [ngClass]="{ 'is-invalid': f.submitted && Name.invalid, 'ng-touched': f.submitted && f.invalid }"
+                required>
+            </label>
+          </div>
+
+          <div class="col-md-4 col-sm-6 pb-2 control-col">
+            <label class="k-form-field">
+              <span>Type of Facility <span class="text-danger">*</span></span>
+              <kendo-dropdownlist [data]="dropDowns.hfTypesData"
+                [defaultItem]="{Name: 'Select Type of Health Facility', Code: '0'}" [textField]="'Name'"
+                [valueField]="'Code'" (valueChange)="dropdownValueChanged($event, 'hfType')"
+                [value]="dropDowns.selectedFiltersModel.hfType">
+              </kendo-dropdownlist>
+            </label>
+          </div>
+          <div class="col-md-4 col-sm-6 pb-2 control-col-end">
+            <label class="k-form-field">
+              <span>Category <span class="text-danger">*</span></span>
+              <input type="text" kendoTextBox disabled name="HFCategoryName" [(ngModel)]="healthFacility.HFCategoryName"
+                #HFCategoryName="ngModel">
+            </label>
+          </div>
+          <div class="col-md-4 col-sm-6 pb-2 control-col-st">
+            <label class="k-form-field">
+              <span>Division <span class="text-danger">*</span></span>
+              <input type="text" kendoTextBox disabled name="DivisionName" [(ngModel)]="healthFacility.DivisionName"
+                #DivisionName="ngModel">
+            </label>
+          </div>
+          <div class="col-md-4 col-sm-6 pb-2 control-col">
+            <label class="k-form-field">
+              <span>District <span class="text-danger">*</span></span>
+              <input type="text" kendoTextBox disabled name="DistrictName" [(ngModel)]="healthFacility.DistrictName"
+                #DistrictName="ngModel">
+            </label>
+          </div>
+          <div class="col-md-4 col-sm-6 pb-2 control-col-end">
+            <label class="k-form-field">
+              <span>Tehsil <span class="text-danger">*</span></span>
+              <kendo-dropdownlist [data]="dropDowns.tehsilsData" [defaultItem]="{Name: 'Select Tehsil', Code: '0'}"
+                [textField]="'Name'" [valueField]="'Code'" (valueChange)="dropdownValueChanged($event, 'tehsil')"
+                [value]="dropDowns.selectedFiltersModel.tehsil" [disabled]="dropDowns.tehsilsData?.length == 1">
+              </kendo-dropdownlist>
+            </label>
+          </div>
+
+
+
+          <div class="col-md-4 col-sm-6 pb-2 control-col-st">
+            <label class="k-form-field">
+              <span>HFMIS Code <span class="text-danger">*</span></span>
+              <input type="text" kendoTextBox disabled name="HFMISCode" [value]="healthFacility.HFMISCode">
+            </label>
+          </div>
+          <div class="col-md-4 col-sm-6 pb-2 control-col">
+            <label class="k-form-field">
+              <span>Administrative Control <span class="text-danger">*</span></span>
+              <kendo-dropdownlist [data]="dropDowns.hfacData"
+                [defaultItem]="{Name: 'Select Administrative Control', Id: '0'}" [textField]="'Name'"
+                [valueField]="'Id'" (valueChange)="dropdownValueChanged($event, 'hfac')"
+                [value]="dropDowns.selectedFiltersModel.hfac">
+              </kendo-dropdownlist>
+            </label>
+          </div>
+
+          <div class="col-md-4 col-sm-4 pb-2 control-col-end"
+            *ngIf="healthFacility.HFTypeCode == '013' || hfTypeCode == '013' || healthFacility.HFTypeCode == '014' || hfTypeCode == '014'">
+            <label class="k-form-field">
+              <span>Mode <span class="text-danger">*</span></span>
+              <kendo-dropdownlist [data]="dropDowns.modesData" [defaultItem]="{Name: 'Select Mode', Id: null}"
+                [textField]="'Name'" [valueField]="'Id'" (valueChange)="dropdownValueChanged($event, 'mode')"
+                [value]="dropDowns.selectedFiltersModel.mode">
+              </kendo-dropdownlist>
+            </label>
+          </div>
+          <div class="col-md-4 col-sm-6 pb-2"
+            [ngClass]="healthFacility.HFTypeCode == '013' || healthFacility.HFTypeCode == '014' ? 'control-col-st' : 'control-col-end'">
+            <label class="k-form-field">
+              <span>Latitude <span class="text-danger">*</span></span>
+              <input type="number" kendoTextBox name="Latitude" [(ngModel)]="healthFacility.Latitude"
+                #Latitude="ngModel" [ngClass]="{ 'is-invalid': f.submitted && Latitude.invalid }">
+            </label>
+          </div>
+          <div class="col-md-4 col-sm-6 pb-2"
+            [ngClass]="healthFacility.HFTypeCode == '013' || healthFacility.HFTypeCode == '014' ? 'control-col' : 'control-col-st'">
+            <label class="k-form-field">
+              <span>Longitude <span class="text-danger">*</span></span>
+              <input type="number" kendoTextBox name="Longitude" [(ngModel)]="healthFacility.Longitude"
+                #Longitude="ngModel" [ngClass]="{ 'is-invalid': f.submitted && Longitude.invalid }">
+            </label>
+          </div>
+
+          <div class="col-md-4 col-sm-6 pb-2"
+            [ngClass]="healthFacility.HFTypeCode == '013' || healthFacility.HFTypeCode == '014' ? 'control-col-end' : 'control-col'">
+            <label class="k-form-field">
+              <span>Status <span class="text-danger">*</span></span>
+              <kendo-dropdownlist [data]="dropDowns.statusData"
+                [defaultItem]="{Name: 'Select Health Facility Status', Id: '0'}" [textField]="'Name'"
+                [valueField]="'Id'" (valueChange)="dropdownValueChanged($event, 'status')"
+                [value]="dropDowns.selectedFiltersModel.status">
+              </kendo-dropdownlist>
+            </label>
+          </div>
+        </div>
+        <hr>
+        <div class="content-heading mb-2">
+          Contact Information
+        </div>
+        <div class="row">
+          <div class="col-md-4 col-sm-6 pb-2 control-col-st">
+            <label class="k-form-field">
+              <span>Contact No. </span>
+              <kendo-maskedtextbox [mask]="landlineMask" name="PhoneNo" [(ngModel)]="healthFacility.PhoneNo"
+                #PhoneNo="ngModel" [ngClass]="{ 'is-invalid': PhoneNo.invalid }"></kendo-maskedtextbox>
+
+            </label>
+          </div>
+          <div class="col-md-4 col-sm-6 pb-2 control-col">
+            <label class="k-form-field">
+              <span>Fax Number</span>
+              <input type="text" kendoTextBox name="FaxNo" [(ngModel)]="healthFacility.FaxNo" #FaxNo="ngModel"
+                [ngClass]="{ 'is-invalid': f.submitted && FaxNo.invalid }">
+            </label>
+          </div>
+          <div class="col-md-4 col-sm-6 pb-2 control-col-end">
+            <label class="k-form-field">
+              <span>Email</span>
+              <input type="email" kendoTextBox name="Email" [(ngModel)]="healthFacility.Email" #Email="ngModel"
+                [ngClass]="{ 'is-invalid': f.submitted && Email.invalid }"
+                pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?">
+            </label>
+          </div>
+          <div class="col-md-8 col-sm-6 pb-2 control-col-st">
+            <label class="k-form-field">
+              <span>Address </span>
+              <input type="text" kendoTextBox name="Address" [(ngModel)]="healthFacility.Address" #Address="ngModel"
+                [ngClass]="{ 'is-invalid': f.submitted && Address.invalid }">
+            </label>
+          </div>
+        </div>
+        <hr>
+        <div class="content-heading mb-2">
+          Area Information
+        </div>
+        <div class="row">
+          <div class="col-md-4 col-sm-6 pb-2 control-col-st">
+            <label class="k-form-field">
+              <span>Covered Area <small class="text-muted">(marla)</small></span>
+              <input kendoTextBox type="number" name="CoveredArea" min="0" (input)="calcArea()"
+                [(ngModel)]="healthFacility.CoveredArea" #CoveredArea="ngModel"
+                [ngClass]="{ 'is-invalid': f.submitted && CoveredArea.invalid }">
+            </label>
+          </div>
+          <div class="col-md-4 col-sm-6 pb-2 control-col">
+            <label class="k-form-field">
+              <span>Uncovered Area <small class="text-muted">(marla)</small></span>
+              <input type="number" kendoTextBox name="UnCoveredArea" min="0" (input)="calcArea()"
+                [(ngModel)]="healthFacility.UnCoveredArea" #UnCoveredArea="ngModel"
+                [ngClass]="{ 'is-invalid': f.submitted && UnCoveredArea.invalid }">
+            </label>
+          </div>
+          <div class="col-md-4 col-sm-6 pb-2 control-col-end">
+            <label class="k-form-field">
+              <span>Residential Area <small class="text-muted">(marla)</small></span>
+              <input type="number" kendoTextBox name="ResidentialArea" min="0" (input)="calcArea()"
+                [(ngModel)]="healthFacility.ResidentialArea" #ResidentialArea="ngModel"
+                [ngClass]="{ 'is-invalid': f.submitted && ResidentialArea.invalid }">
+            </label>
+          </div>
+          <div class="col-md-4 col-sm-6 pb-2 control-col-st">
+            <label class="k-form-field">
+              <span>Non Residential Area <small class="text-muted">(marla)</small> </span>
+              <input type="number" kendoTextBox name="NonResidentialArea" min="0" (input)="calcArea()"
+                [(ngModel)]="healthFacility.NonResidentialArea" #NonResidentialArea="ngModel"
+                [ngClass]="{ 'is-invalid': f.submitted && NonResidentialArea.invalid }">
+            </label>
+          </div>
+          <div class="col-md-4 col-sm-6 pb-2 control-col">
+            <label class="k-form-field">
+              <span>Total Area <small class="text-muted">(marla)</small></span>
+              <input type="number" kendoTextBox disabled min="0" name="TotalArea" [value]="totalArea">
+            </label>
+          </div>
+        </div>
+        <hr>
+        <div class="content-heading mb-2">
+          Union Council
+        </div>
+        <div class="row">
+          <!-- <div class="col-md-4 col-sm-6 pb-2 control-col-st">
+            <label class="k-form-field">
+              <span>Union Council Name</span>
+              <input kendoTextBox type="text" name="UcName" [(ngModel)]="healthFacility.UcName" #UcName="ngModel"
+                [ngClass]="{ 'is-invalid': f.submitted && UcName.invalid }">
+            </label>
+          </div>
+          <div class="col-md-4 col-sm-6 pb-2 control-col">
+            <label class="k-form-field">
+              <span>Union Council Number</span>
+              <input type="text" kendoTextBox name="UcNo" [(ngModel)]="healthFacility.UcNo" #UcNo="ngModel"
+                [ngClass]="{ 'is-invalid': f.submitted && UcNo.invalid }">
+            </label>
+          </div> -->
+          <div class="col-md-8 col-sm-6 pb-2 control-col-st">
+            <label class="k-form-field">
+              <span>Union Council <span class="text-danger">*</span></span>
+              <kendo-dropdownlist [data]="dropDowns.ucsData" [defaultItem]="dropDowns.defultFiltersModel.ucDrp"
+                [textField]="'UC'" [valueField]="'Id'" (valueChange)="dropdownValueChanged($event, 'uc')"
+                [value]="dropDowns.selectedFiltersModel.ucDrp">
+              </kendo-dropdownlist>
+            </label>
+          </div>
+
+          <div class="col-md-4 col-sm-6 pb-2 control-col-end">
+            <label class="k-form-field">
+              <span>National Assembly</span>
+              <input type="text" kendoTextBox name="NA" [(ngModel)]="healthFacility.NA" #NA="ngModel"
+                [ngClass]="{ 'is-invalid': f.submitted && NA.invalid }">
+            </label>
+          </div>
+          <div class="col-md-4 col-sm-6 pb-2 control-col-st">
+            <label class="k-form-field">
+              <span>PP</span>
+              <input type="text" kendoTextBox name="PP" [(ngModel)]="healthFacility.PP" #PP="ngModel"
+                [ngClass]="{ 'is-invalid': f.submitted && PP.invalid }">
+            </label>
+          </div>
+          <div class="col-md-4 col-sm-6 pb-2 control-col">
+            <label class="k-form-field">
+              <span>Mauza</span>
+              <input type="text" kendoTextBox name="Mauza" [(ngModel)]="healthFacility.Mauza" #Mauza="ngModel"
+                [ngClass]="{ 'is-invalid': f.submitted && Mauza.invalid }">
+            </label>
+          </div>
+          <div class="col-md-4 col-sm-6 pb-2 control-col-end">
+            <label class="k-form-field">
+              <span>EPI Code</span>
+              <input type="number" kendoTextBox name="EPICode" [(ngModel)]="healthFacility.EPICode" #EPICode="ngModel"
+                [ngClass]="{ 'is-invalid': f.submitted && EPICode.invalid }">
+            </label>
+          </div>
+        </div>
+
+        <hr>
+        <div class="row mt-3">
+          <div class="col-md-2 col-sm-6 col-xs-6 control-col-st">
+            <button kendoButton class="btn-block" [ladda]="savingHF" data-style="zoom-in"
+              [disabled]="f.invalid || !healthFacility.HFMISCode || !healthFacility.HFAC || !healthFacility.HFCategoryName"
+              type="submit" [primary]="true">Save</button>
+          </div>
+          <div class="col-md-2 col-sm-6 col-xs-6 control-col">
+            <button kendoButton [primary]="true" ladda routerLink="../" class="btn-block"
+              [look]="'outline'">Back</button>
+          </div>
+        </div>
+      </form>
+    </tab>
+    <tab heading="Wards" *ngIf="wardsBedsInfo && healthFacility.Id">
+      <div class="content-heading mb-2">
+        Add New
+      </div>
+      <div class="row">
+        <div class="col-md-4 col-sm-6 pb-2 control-col-st">
+          <label class="k-form-field">
+            <span>Ward Name</span>
+            <input kendoTextBox type="text" name="WardName" [(ngModel)]="newWard.Name" #WardName="ngModel"
+              [ngClass]="{ 'is-invalid': f.submitted && CoveredArea.invalid }">
+          </label>
+        </div>
+        <div class="col-md-2 col-sm-6 pb-2 control-col">
+          <label class="k-form-field">
+            <span>Beds</span>
+            <input type="number" kendoTextBox name="NoB" [(ngModel)]="newWard.NoB" #NoB="ngModel" min="0"
+              [ngClass]="{ 'is-invalid': f.submitted && UnCoveredArea.invalid }">
+          </label>
+        </div>
+        <div class="col-md-2 col-sm-6 pb-2 control-col">
+          <label class="k-form-field">
+            <span>General Beds</span>
+            <input type="number" kendoTextBox name="NoGB" [(ngModel)]="newWard.NoGB" #NoGB="ngModel" min="0"
+              [ngClass]="{ 'is-invalid': f.submitted && ResidentialArea.invalid }">
+          </label>
+        </div>
+        <div class="col-md-2 col-sm-6 pb-2 control-col">
+          <label class="k-form-field">
+            <span>Special Beds</span>
+            <input type="number" kendoTextBox name="NoSB" [(ngModel)]="newWard.NoSB" #NoSB="ngModel" min="0"
+              [ngClass]="{ 'is-invalid': f.submitted && NonResidentialArea.invalid }">
+          </label>
+        </div>
+        <div class="col-md-2 col-sm-6 pb-2 control-col-end">
+          <label class="k-form-field mt-1">
+            <button kendoButton (click)="addHFWard()" [ladda]="addingWard"
+              [disabled]="!newWard.Name || !newWard.NoB || newWard.NoB == 0" data-style="zoom-in"
+              class="btn-block btn-align-v" type="button" [primary]="true">Add Ward</button>
+          </label>
+        </div>
+      </div>
+      <div class="content-heading mb-2">
+        List
+      </div>
+      <app-hf-wards [hfmisCode]="hfmisCode"></app-hf-wards>
+    </tab>
+    <tab heading="Services" *ngIf="healthFacility.Id">
+      <div class="content-heading mb-2">
+        Add New
+      </div>
+      <div class="row">
+        <div class="col-md-10 col-sm-6 pb-2 control-col-st">
+          <label class="k-form-field">
+            <span>Select Service</span>
+            <kendo-dropdownlist [data]="services" [textField]="'Name'" [valueField]="'Id'"
+              [defaultItem]="{Id: 0, Name: 'Select Service'}" [valuePrimitive]="true" [(ngModel)]="serviceId">
+            </kendo-dropdownlist>
+          </label>
+        </div>
+        <div class="col-md-2 col-sm-6 pb-2 control-col-end">
+          <label class="k-form-field mt-1">
+            <button kendoButton (click)="addHFService()" [ladda]="addingService" [disabled]="serviceId == 0"
+              data-style="zoom-in" class="btn-block btn-align-v" type="button" [primary]="true">Add Service</button>
+          </label>
+        </div>
+      </div>
+      <div class="content-heading mb-2">
+        List
+      </div>
+      <app-hf-services *ngIf="!addingService" [hfmisCode]="hfmisCode">
+      </app-hf-services>
+    </tab>
+    <tab heading="Photo" *ngIf="healthFacility.Id">
+      <div class="row">
+        <div class="col-md-5">
+          <label class="k-form-field">
+            <span>Choose Image</span>
+            <input type="file" (change)="photoChoosen($event)" class="form-control">
+          </label>
+          <label class="k-form-field" *ngIf="photoAttached">
+            <button kendoButton class="mt-2" [ladda]="uploadingPhoto" data-style="zoom-in" [primary]="true"
+              (click)="uploadPhoto()">Upload</button>
+          </label>
+        </div>
+        <div class="col-md-7">
+          <img *ngIf="hfPhotoLoaded" style="width:100%;" [src]="hfPhoto.src"
+            onError="this.src='../../../assets/img/notfound.png'" alt="">
+        </div>
+      </div>
+
+    </tab>
+  </tabset>
+</div>

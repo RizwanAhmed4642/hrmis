@@ -1,0 +1,130 @@
+<div class="animated fadeIn">
+    <h3 class="top-h3">Active Merit Designations<button kendoButton [primary]="true" routerLink="../"
+            class="pull-right ml-2">Back</button>
+        <!-- <button kendoButton [primary]="true" routerLink="/profile/add"
+          class="pull-right" look="outline">New Profile Form</button> -->
+    </h3>
+
+    <div class="row row-panel">
+        <div class="offset-2 col-md-8">
+            <div class="p-4" style="background: #e9e9e9;color: black;">
+
+
+                        <div class="col-md-12 col-sm-12 col-xs-12 mt-2 control-col">
+                            <label class="k-form-field">
+                                <span>Designation</span>&nbsp;<span class="text-danger">*</span>
+                                <kendo-dropdownlist [data]="dropDowns.designationsData" [textField]="'value'"
+                                    [valueField]="'Id'" [(ngModel)]="meritdesigform.Desg_Id" 
+                                    [defaultItem]="dropDowns.defultFiltersModel.designation"  [valuePrimitive]="true">
+                                </kendo-dropdownlist>
+                            </label>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 col-xs-12 mt-2 control-col">
+                            <label class="k-form-field">
+                                <span>Name</span>&nbsp;<span class="text-danger">*</span>
+                                <input kendoTextBox type="text"  [(ngModel)]="meritdesigform.Name"
+                                     required />
+                            </label>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 col-xs-12 mt-2 control-col">
+                            <label class="k-form-field">
+                                <span>Start Date</span>&nbsp;<span class="text-danger">*</span>
+                                <kendo-datepicker   [format]="'dd/MM/yyyy'"
+                                    [(ngModel)]="meritdesigform.DateStart"  required></kendo-datepicker>
+                            </label>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 col-xs-12 mt-2 control-col">
+                            <label class="k-form-field">
+                                <span>End Date</span>&nbsp;<span class="text-danger">*</span>
+                                <kendo-datepicker   [format]="'dd/MM/yyyy'"
+                                    [(ngModel)]="meritdesigform.DateEnd"  required></kendo-datepicker>
+                            </label>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 col-xs-12 mt-2 control-col">
+                            <label class="k-form-field">
+                                <span>Application Count</span>&nbsp;<span class="text-danger">*</span>
+                                <input kendoTextBox type="text"  [(ngModel)]="meritdesigform.ApplicantsCount"
+                                     required />
+                            </label>
+                        </div>
+
+
+                        <div class="col-md-12 col-sm-12 col-xs-12 mt-2 control-col">
+                            <label>
+                                Preference Only
+                                   <kendo-switch class="ml-3"
+                                    [(ngModel)]="meritdesigform.PreferencesOnly"
+                                  >
+                                  </kendo-switch>
+                                </label>
+                        </div>
+
+
+                        <div class="col-md-12 col-sm-12 col-xs-12 mt-2 control-col">
+                            <label class="k-form-field">
+                                <span>Offer Letter File Name</span>&nbsp;<span class="text-danger">*</span>
+                                <input kendoTextBox type="text"  [(ngModel)]="meritdesigform.OfferLetterFileName"
+                                     required  />
+                            </label>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 col-xs-12 mt-2 control-col">
+                            <label class="k-form-field">
+                                <span>Acceptance Letter File Name</span>&nbsp;<span class="text-danger">*</span>
+                                <input kendoTextBox type="text"  [(ngModel)]="meritdesigform.AcceptanceLetterFileName"
+                                     required />
+                            </label>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 col-xs-12 mt-2 control-col">
+                            <label>
+                                IsEnable
+                                   <kendo-switch class="ml-3"
+                                    [(ngModel)]="meritdesigform.IsEnable"
+                                  >
+                                  </kendo-switch>
+                                </label>
+                        </div>
+
+
+                        <div class="col-md-12 col-sm-12 col-xs-12 mt-2 control-col">
+                            <label class="k-form-field">
+                              <span>Excluded District</span>
+                              <kendo-dropdownlist [data]="districtsData"
+                                [defaultItem]="{Name: 'Select District', Code: '0'}" [textField]="'Name'"
+                                [valueField]="'Code'"  [(ngModel)]="meritdesigform.ExcludedDistrictCode"   [valuePrimitive]="true">
+                              </kendo-dropdownlist>
+                            </label>
+                          </div>
+
+                        <div class="col-md-12 col-sm-12 col-xs-12 mt-2 control-col">
+                            <label>
+                                IsGrievance Only
+                                   <kendo-switch class="ml-3"
+                                    [(ngModel)]="meritdesigform.IsGrievanceOnly"
+                                  >
+                                  </kendo-switch>
+                                </label>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 col-xs-12 mt-2 control-col">
+                            <label class="k-form-field">
+                                <span>Grievance Letter File Name</span>&nbsp;<span class="text-danger">*</span>
+                                <input kendoTextBox type="text"  [(ngModel)]="meritdesigform.GrievanceLetterFileName"
+                                     required />
+                            </label>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 col-xs-12 mt-2 control-col">
+                            <button kendoButton class="btn-block" type="submit"  data-style="zoom-in"
+                              [primary]="true">Save</button>
+                          </div>
+
+            </div>
+        </div>
+    </div>
+</div>

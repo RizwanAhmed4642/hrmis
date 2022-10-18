@@ -1,0 +1,116 @@
+<div class="animated fadeIn">
+    <div class="row">
+      <div class="col-md-6 col-xs-12">
+        <div class="top-h3">
+          Services
+        </div>
+      </div>
+     
+    </div>
+    <div class="content-heading mb-2">
+      Add New
+    </div>
+    <div class="row">
+      <div class="col-md-4 col-sm-6 pb-2 control-col-st">
+        <label class="k-form-field">
+          <span> Name</span>
+          <input kendoTextBox type="text"  name="ServiceName" [(ngModel)]="newService.Name" #ServiceName="ngModel">
+        </label>
+      </div>
+     
+     <div class="col-md-3 col-sm-5 pb-2 control-col">
+        <label class="k-form-field">
+          <span>Status</span>
+          <kendo-dropdownlist name="IsActive" [data]="dropDowns.Activestatus" [(ngModel)]="newService.IsActive"
+          #IsActive="ngModel" [textField]="'Name'" [valueField]="'Id'" [valuePrimitive]="true"
+          [defaultItem]="{Name: 'Select Service Status', Id: '2'}" (valueChange)="dropdownValueChanged($event, 'Activestatus')" [value]="dropDowns.selectedFiltersModel.Activestatus">
+        </kendo-dropdownlist>
+      </label>
+      </div> 
+      <div class="col-md-2 col-sm-6 pb-2 control-col">
+          <button kendoButton (click)="addService()" data-style="zoom-in" [ladda]="addingService" class="ml-2 btn-align-v" type="button" [primary]="true">Add Service</button>     
+        </div>
+        </div>
+<div class="row row-panel">
+    <div class="col-md-12">
+     
+<div class="grid-wrapper" kendoTooltip filter="span">
+    <kendo-grid [data]="gridView" [sortable]="{
+      allowUnsort: allowUnsort,
+      mode: multiple ? 'multiple' : 'single'
+      }"
+      [selectable]="true" [sort]="sort" (sortChange)="sortChange($event)" [(pageSize)]="pageSize" [skip]="skip"
+      [pageable]="true" (pageChange)="pageChange($event)" [scrollable]="false">
+
+      <kendo-grid-column [width]="6" field="asd" title="No." [headerClass]="'grid-header-custom'" [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+      <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          {{(rowIndex + 1)}}
+      </ng-template> 
+      </kendo-grid-column>
+      <kendo-grid-column [width]="84" field="Name" Title="Services" [headerClass]="'grid-header-custom'"  [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+      <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          {{dataItem.Name}}
+      </ng-template>
+      </kendo-grid-column>
+      
+    <kendo-grid-column field="asd" title="Action" [width]="10" *ngIf="!currentUser.UserName.toLowerCase().startsWith('ceo.')"
+    [headerClass]="'grid-header-custom'" [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <a (click)="openServiceWindow(dataItem)"> <img class=" icon-svg" src="../../../assets/img/icons/edit2.svg" alt=""></a>
+    </ng-template>
+  </kendo-grid-column>
+      <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+          <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+          <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+          <kendo-pager-next-buttons></kendo-pager-next-buttons>
+          <div class="pager-rows-number">
+            <select #select (change)="changePagesize(select.value)">
+              <option *ngIf="showInitialPageSize" [value]="pageSize">{{pageSize}}</option>
+              <option *ngFor="let page of pageSizes" [value]="page" [selected]="page === pageSize ? true : undefined">
+                {{page}}
+              </option>
+            </select>
+            &nbsp; items per page
+          </div>
+          <kendo-pager-info></kendo-pager-info>
+        </ng-template>
+    </kendo-grid>
+
+</div>
+</div>
+</div>
+
+
+<kendo-dialog [title]="'Edit Service'" *ngIf="serviceDialogOpened && selectedService" (close)="closeServiceWindow()"
+  [minWidth]="450" [width]="550">
+  <div class="row p-3">
+    <div class="col-md-12">
+      <label class="k-form-field">
+        <span><strong>Name</strong></span>
+        <input kendoTextBox type="text" [(ngModel)]="selectedService.Name">
+      </label>
+    </div>
+  </div>
+  <kendo-dialog-actions *ngIf="serviceDialogOpened && selectedService" class="animated fadeIn">
+    <button kendoButton  data-style="zoom-in" (click)="editService()" primary="true">Save</button>
+    <button kendoButton class="btn-danger" (click)="closeServiceWindow()"  primary="true">Remove</button>
+    <button kendoButton (click)="closeServiceWindow()">Cancel</button>
+  </kendo-dialog-actions>
+</kendo-dialog>
+
+
+<!-- <kendo-dialog [title]="'Add Service'" *ngIf="serviceDialogOpened" (close)="closeServiceWindow()"
+  [minWidth]="450" [width]="550">
+  <div class="row p-3">
+    <div class="col-md-12">
+      <label class="k-form-field">
+        <span><strong>Name</strong></span>
+        <input kendoTextBox type="text"  name="ServiceName" [(ngModel)]="newService.Name" #ServiceName="ngModel">
+      </label>
+    </div>
+  </div>
+  <kendo-dialog-actions *ngIf="serviceDialogOpened" class="animated fadeIn">
+    <button kendoButton  data-style="zoom-in" (click)="addService()" primary="true" [disabled]="!newService.Name">Save</button>
+    <button kendoButton (click)="closeServiceWindow()">Cancel</button>
+  </kendo-dialog-actions>
+</kendo-dialog> -->

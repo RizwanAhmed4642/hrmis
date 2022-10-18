@@ -1,0 +1,409 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-6 col-xs-12">
+      <div class="top-h3">
+        Dispatch Files
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" [look]="'outline'" class="ml-2" routerLink="/dashboard">Back</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-8 control-col-st">
+            <label class="k-form-field">
+              <span>Scan Barcode <span class="text-success animated fadeIn" *ngIf="alreadyAdded"><i>(file already
+                    added)</i></span><span class="text-danger animated fadeIn" *ngIf="fileNoteFound"><i>(file not
+                    found)</i></span></span>
+              <input type="text" [(ngModel)]="barcodeSearch" #searchRef
+                (input)="searchEvent.next({ event: searchRef.value, filter: 'ddsfiles'})"
+                placeholder="Scan Barcode Here" kendoTextBox>
+            </label>
+          </div>
+          <div class="col-md-4 mt-1 control-end">
+            <button kendoButton class="btn-block btn-align-v mt-1 animated fadeIn" [ladda]="searchingDDSFiles"
+              data-style="zoom-in" [primary]="true" [disabled]="ddsFilesList.length == 0"
+              (click)="generateSlip()">Dispatch Files</button>
+          </div>
+          <div class="col-md-12" *ngIf="ddsFilesList.length > 0">
+            <table class="table table-50 table-hover table-striped animated fadeIn">
+              <thead>
+                <tr>
+                  <th>
+                    <strong class="p-strong">Sr.</strong>
+                  </th>
+                  <!--   <th>
+                    <strong>Type</strong>
+                  </th> -->
+                  <th>
+                    <strong class="p-strong">Subject / Title</strong>
+                  </th>
+                  <th>
+                    <strong class="p-strong">Tracking Number</strong>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let file of ddsFilesList;let i = index;">
+                  <td>
+                    {{(i + 1)}}.
+                  </td>
+                  <!--  <td>
+                    {{file.F_FileType_Id == 1 ? 'ACR' : 'File'}}
+                  </td> -->
+                  <td>
+                    {{file.DispatchSubject ? file.DispatchSubject : '-'}}
+                  </td>
+                  <td>
+                    {{file.TrackingNumber ? file.TrackingNumber : ''}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12" *ngIf="currentOfficer && 2 + 2 == 3">
+        <div class="animated fadeIn">
+          <h6 class="p-3 animated fadeIn dashboard-table-heading-custom">
+            <span class="mr-2">Diary - {{currentOfficer?.DesignationName}} </span>
+            <kendo-daterange>
+              <label hidden>
+                <span class="label">Start</span>
+                <kendo-dateinput kendoDateRangeStartInput [(value)]="range.start"></kendo-dateinput>
+              </label>
+              <label hidden>
+                <span class="label">End</span>
+                <kendo-dateinput kendoDateRangeEndInput [(value)]="range.end"></kendo-dateinput>
+              </label>
+              <button #anchor [look]="'outline'" (click)="popup.toggle()" kendoButton [primary]="true" class="ml-2">
+                <i class="fa fa-calendar"></i>&nbsp;Date Range&nbsp;<span *ngIf="range.start">Start
+                  Date:&nbsp;{{range.start
+                  |
+                  date:'d, MMMM - yyyy'}}&nbsp;</span>
+                <span *ngIf="range.end">&nbsp;End Date:&nbsp;{{range.end | date:'d, MMMM - yyyy'}}</span>
+              </button>
+              <kendo-daterange-popup id="popupcal" #popup [anchor]="anchor">
+                <ng-template kendoDateRangePopupTemplate>
+                  <div class="pt-2 pb-2 pl-4 pr-4">
+                    <span *ngIf="range.start"><strong>Start
+                        Date:</strong>&nbsp;<u>{{range.start | date:'d, MMMM - yyyy'}}</u>&nbsp;</span>
+                    <span *ngIf="range.end">&nbsp;<strong>End
+                        Date:</strong>&nbsp;<u>{{range.end | date:'d, MMMM - yyyy'}}</u></span>
+
+                    &nbsp; <button kendoButton class="animated fadeIn" *ngIf="range.start" [ladda]="loadingMovements"
+                      data-style="zoom-in" (click)="getFileMovements()" [primary]="true">APPLY
+                      RANGE</button>
+                  </div>
+                  <kendo-multiviewcalendar kendoDateRangeSelection>
+                  </kendo-multiviewcalendar>
+                </ng-template>
+              </kendo-daterange-popup>
+            </kendo-daterange>
+          </h6>
+          <kendo-grid [data]="fileMovements" [resizable]="true">
+            <kendo-grid-column field="asd" [title]="'Sr. No.'" width="20" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <p class="simple-table">{{(rowIndex + 1)}}.
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="MID_Number" [title]="'Date Time'" width="80" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <p class="simple-table">
+                  {{dataItem.DateTime | date: 'd/M/yy, h:mm a'}}</p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="MID_Number" [title]="'Office'" width="80" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '0px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <p class="simple-table"
+                  *ngIf="dataItem.FromOfficer_Id != currentOfficer?.Id && dataItem.ToOfficer_Id == currentOfficer?.Id">
+                  <strong>From:</strong> {{dataItem.FromOfficerDesignationName}} - <i class="fa"
+                    [ngClass]="dataItem.IsRecieved ? 'fa-check text-success' : 'fa-exclamation text-warning'"></i></p>
+                <p class="simple-table"
+                  *ngIf="dataItem.ToOfficer_Id != currentOfficer?.Id && dataItem.FromOfficer_Id == currentOfficer?.Id">
+                  <strong>To:</strong> {{dataItem.ToOfficerDesignationName}} - <i class="fa"
+                    [ngClass]="dataItem.IsRecieved ? 'fa-check text-success' : 'fa-exclamation text-warning'"></i></p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="MID_Number" [title]="'Action'" width="80" [headerClass]="'grid-header-text'"
+              [style]="{'background-color': '#fff','color': '#000', 'padding': '5px 10px', 'border-bottom' : '1px solid rgba(0, 0, 0, 0.08)'}">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <button kendoButton primary="true" class="btn-sm"
+                  *ngIf="!dataItem.IsRecieved && dataItem.ToOfficer_Id == currentOfficer?.Id"
+                  (click)="getFileMoveMasterDetails(dataItem.MID_Number)">Recieve</button>
+                <button kendoButton primary="true" class="btn-sm" [look]="'outline'"
+                  (click)="getFileMoveMasterDetails(dataItem.MID_Number)">View</button>
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+          <div class="k-i-loading" *ngIf="loadingMovements"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+<kendo-dialog [title]="'Send File Confirmation'" *ngIf="fileIssueDialogOpened && ddsFilesList.length > 0"
+  (close)="closeWindow()" [minWidth]="'450'" [width]="'750'">
+  <label class="k-form-field p-1">
+    <span>Select Office</span>
+    <kendo-dropdownlist [data]="sectionOfficers" [defaultItem]="dropDowns.defultFiltersModel.officer"
+      [textField]="'DesignationName'" [valueField]="'Id'" [value]="dropDowns.selectedFiltersModel.officer"
+      (valueChange)="dropdownValueChanged($event, 'officer')">
+    </kendo-dropdownlist>
+  </label>
+  <hr>
+  <table class="table table-50 table-hover table-striped animated fadeIn">
+    <thead>
+      <tr>
+        <th>
+          <strong class="p-strong">Sr.</strong>
+        </th>
+        <!--  <th>
+          <strong>Type</strong>
+        </th> -->
+        <th>
+          <strong class="p-strong">Subject / Title</strong>
+        </th>
+        <th>
+          <strong class="p-strong">Tracking Number</strong>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let file of ddsFilesList;let i = index;">
+        <td>
+          {{(i + 1)}}.
+        </td>
+        <!--  <td>
+          {{file.F_FileType_Id == 1 ? 'ACR' : 'File'}}
+        </td> -->
+        <td>
+          {{file.DispatchSubject ? file.DispatchSubject : '-'}}
+        </td>
+        <td>
+          {{file.TrackingNumber ? file.TrackingNumber : '-'}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <kendo-dialog-actions *ngIf="fileIssueDialogOpened" class="animated fadeIn">
+    <kendo-buttongroup [width]="'100%'">
+      <button kendoButton primary="true" [ladda]="savingFileMovement"
+        [disabled]="!fileMoveMaster.ToOfficer_Id || fileMoveMaster.ToOfficer_Id == 0" data-style="zoom-in"
+        (click)="dialogAction('yes')"
+        style="height: 100% !important;background: #46a23f !important;color: white !important;"
+        class="animated fadeIn">Dispatch
+        and Generate Slip
+      </button>
+      <button kendoButton (click)="dialogAction('no')">Cancel</button>
+    </kendo-buttongroup>
+  </kendo-dialog-actions>
+</kendo-dialog>
+
+
+<div class="page preview" id="formPrint" hidden>
+
+  <table border="0" cellspacing="0" style="border-color:transparent !important; width:100%">
+    <tbody>
+      <tr>
+        <td style="border-color:transparent !important; text-align:left"><img alt="Punjab Government Log"
+            src="../../../../assets/img/brand/govlogoUpdated.png" style="display:inline-block; width:134px" />
+
+        </td>
+        <td style="border-color:transparent !important; text-align:right">
+          <div style="display:inline-block;text-align:center;"><strong>GOVERNMENT OF THE PUNJAB<br />
+              PRIMARY &amp; SECONDARY HEALTHCARE<br />
+              DEPARTMENT </strong><br />
+            Dated Lahore, {{dateNow}}</div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="border-color:transparent !important; text-align:left; width:100%;">
+          &nbsp;</td>
+      </tr>
+      <tr>
+        <td colspan="2" style="border-color:transparent !important; text-align:left; width:100%;">
+          <p> <strong>File Movement # {{fileMoveMaster?.MID_Number}}</strong></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="file-table" cellspacing="0" style="width:100%;">
+    <tbody>
+      <tr>
+        <td>
+          <strong>Sr.</strong>
+        </td>
+        <!--    <td>
+          <strong>Type</strong>
+        </td> -->
+        <td>
+          <strong>Subject / Title</strong>
+        </td>
+        <td>
+          <strong>Tracking Number</strong>
+        </td>
+      </tr>
+      <tr *ngFor="let file of ddsFilesList;let i = index;">
+        <td>
+          {{(i + 1)}}.
+        </td>
+        <!--     <td>
+          {{file.F_FileType_Id == 1 ? 'ACR' : 'File'}}
+        </td> -->
+        <td>
+          {{file.DispatchSubject}}
+        </td>
+        <td>
+          {{file.TrackingNumber ? file.TrackingNumber : ''}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  <br>
+  <br>
+  <table border="0" cellspacing="0" style="border-color:transparent !important; width:100%;text-align:center;">
+    <tbody>
+      <tr>
+        <td style="width: 33%;">
+          <strong>Sent From</strong> </td>
+        <td style="width: 34%;"> </td>
+        <td style="width: 33%;">
+          <strong>Recieved By</strong> </td>
+      </tr>
+      <tr>
+        <td style="width: 33%;">
+          <p style="margin-top: 10px;">{{fromOfficerName}}</p>
+          <p style="margin-top: 30px;">____________________________</p>
+        </td>
+        <td style="width: 34%;">
+          <img alt="IMAGE AREA" class="mb-2 mt-2" [src]="barcodeSrc()" />
+          <p style="margin-top: 10px;">{{fileMoveMaster?.MID_Number}}</p>
+        </td>
+        <td style="width: 33%;">
+          <p style="margin-top: 10px;">{{toOfficerName}}</p>
+          <p style="margin-top: 30px;">____________________________</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+
+<!-- 
+<kendo-dialog [title]="'Enter MID Number and Recieve Files'" *ngIf="fileRecieveDialogOpened"
+  (close)="closeRecieveWindow()" [minWidth]="'450'" [width]="'750'">
+  <table class="table table-50 table-hover table-striped animated fadeIn" *ngIf="fMDRecieve.length > 0">
+    <thead>
+      <tr>
+        <th>
+          <strong>Sr.</strong>
+        </th>
+        <th>
+          <strong>File Number</strong>
+        </th>
+        <th>
+          <strong>Name</strong>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let file of fMDRecieve;let i = index;">
+        <td>
+          {{(i + 1)}}.
+        </td>
+        <td>
+          {{file.F_FileNumber ? file.F_FileNumber : '-'}}
+        </td>
+        <td>
+          {{file.F_Name ? file.F_Name : '-'}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <kendo-dialog-actions *ngIf="fileRecieveDialogOpened && !fMMRecieve.IsRecieved" class="animated fadeIn">
+    <kendo-buttongroup [width]="'100%'">
+      <button kendoButton primary="true" [ladda]="savingFileMovement" data-style="zoom-in"
+        (click)="dialogRecieveAction('yes')"
+        style="height: 100% !important;background: #46a23f !important;color: white !important;"
+        class="animated fadeIn">Acknowledge
+      </button>
+      <button kendoButton (click)="dialogRecieveAction('no')">Cancel</button>
+    </kendo-buttongroup>
+  </kendo-dialog-actions>
+</kendo-dialog> -->
+
+
+<!-- <div class="animated fadeIn" *ngIf="!healthFacility">
+        <div class="row">
+          <div class="col-md-7 col-xs-12">
+            <div class="shine shim-controls top-h3"></div>
+          </div>
+          <div class="col-md-2 col-xs-12 control-col-st">
+            <div class="top-controls">
+              <div class="shine shim-controls"></div>
+            </div>
+          </div>
+          <div class="col-md-1 col-xs-12 control-col">
+            <div class="top-controls">
+              <div class="shine shim-controls"></div>
+            </div>
+          </div>
+          <div class="col-md-2 col-xs-12 control-col-end">
+            <div class="top-controls">
+              <div class="shine shim-controls"></div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2 control-col-st">
+            <div class="shine shim-controls btn-align-v"></div>
+          </div>
+          <div class="col-md-2 control-col">
+            <div class="shine shim-controls btn-align-v"></div>
+          </div>
+          <div class="col-md-2 control-col">
+            <div class="shine shim-controls btn-align-v"></div>
+          </div>
+          <div class="col-md-2 control-col">
+            <div class="shine shim-controls btn-align-v"></div>
+          </div>
+          <div class="col-md-2 control-col">
+            <div class="shine shim-controls btn-align-v"></div>
+          </div>
+          <div class="col-md-1 control-col">
+            <div class="shine shim-controls btn-align-v"></div>
+          </div>
+          <div class="col-md-1 control-col-end">
+            <div class="shine shim-controls btn-align-v"></div>
+          </div>
+        </div>
+      </div>
+      <div class="animated fadeIn" *ngIf="!healthFacility">
+        <div class="row row-panel">
+          <div class="col-md-7 control-col-st">
+            <div class="shine shim-thumb-lg"></div>
+          </div>
+          <div class="col-md-5 control-col-end">
+            <div class="shine shim-thumb"></div>
+            <div class="shine shim-thumb mt-4"></div>
+          </div>
+        </div>
+      </div> -->

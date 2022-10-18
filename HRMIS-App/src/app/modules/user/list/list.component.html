@@ -1,0 +1,99 @@
+<div class="animated fadeIn">
+  <h3 class="top-h3">Users
+    <button *ngIf="currenUser.RoleName != 'PHFMC Admin'" kendoButton [primary]="true" routerLink="/user/registration"
+      [look]="'outline'" class="pull-right">New
+      User</button>
+    <button kendoButton [primary]="true" *ngIf="currenUser.UserName == 'dpd'" routerLink="/user/roles"
+      [look]="'outline'" class="pull-right mr-1">Roles</button>
+      <button kendoButton [primary]="true" *ngIf="currenUser.UserName == 'dpd' || currenUser.RoleName == 'SDP'" routerLink="/user/officer"
+        [look]="'outline'" class="pull-right mr-1">Officers</button>
+  </h3>
+  <div class="row">
+    <div class="col-md-3 col-sm-12 control-col-st">
+      <label class="k-form-field">
+        <span>Username</span>
+        <input type="text" #userName (input)="inputChange.next(userName.value)" kendoTextBox>
+      </label>
+    </div>
+    <div class="col-md-3 col-sm-12 mt-1 control-col-end">
+      <label class="k-form-field">
+        <button kendoButton class="btn-block btn-align-v" (click)="onSearch()" [primary]="true">SEARCH</button>
+      </label>
+    </div>
+  </div>
+  <div class="row row-panel">
+    <div class="col-md-12">
+      <div class="grid-wrapper">
+        <kendo-grid [data]="gridView" [sortable]="{
+            allowUnsort: allowUnsort,
+            mode: multiple ? 'multiple' : 'single'
+            }" [selectable]="true" [sort]="sort" (sortChange)="sortChange($event)" [(pageSize)]="pageSize"
+          [skip]="skip" [pageable]="true" (pageChange)="pageChange($event)" [scrollable]="false">
+          <kendo-grid-column width="12" field="asd" title="No." [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              {{(rowIndex + 1)}}.
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column width="33" field="UserName" title="User" [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="employee-info" *ngIf="dataItem.ApplicationType_Id != 11">
+                <p class="m-0"> {{dataItem.UserName}} <i style="cursor: pointer;"
+                    *ngIf="currenUser.UserName.startsWith('sdp') || currenUser.UserName == 'dpd' || currenUser.UserName == 'phfmcadmin'"
+                    class="fa fa-eye pull-right" (mousedown)="dataItem.showPass = true"
+                    (mouseup)="dataItem.showPass = false"></i>
+                </p>
+                <p class="m-0 animated fadeIn text-success" *ngIf="dataItem.showPass"><i>{{dataItem.hashynoty}}</i></p>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column width="40" field="PhoneNumber" title="Contact" [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="employee-info" *ngIf="dataItem.ApplicationType_Id != 11">
+                <!-- <p class="m-0" *ngIf="dataItem.PhoneNumber"> <i class="fa fa-mobile-phone"></i>
+                  {{dataItem.PhoneNumber}}</p> -->
+                <p class="m-0" *ngIf="dataItem.Email">
+                  <!-- <i class="fa fa-envelope"></i> --> {{dataItem.Email}}</p>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column width="25" field="Role_Name" title="Role" [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <div class="badge badge-primary" *ngIf="dataItem.Role_Name">{{dataItem.Role_Name}}</div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column width="20" field="asd" title="Actions" [headerClass]="'grid-header-custom'"
+            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <button kendoButton [primary]="true" *ngIf="currenUser.RoleName != 'PHFMC Admin'" [look]="'outline'"
+                class="btn-sm mr-2" [routerLink]="['/user/' + dataItem.Id + '/edit']">Edit</button>
+
+              <kendo-switch *ngIf="dataItem.isUpdated && currenUser.RoleName == 'PHFMC Admin'"
+                (valueChange)="switchValChange(dataItem)" [(ngModel)]="dataItem.Vacancy" [onLabel]="'ON'"
+                [offLabel]="'OFF'"></kendo-switch>
+            </ng-template>
+          </kendo-grid-column>
+          <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+            <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+            <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+            <kendo-pager-next-buttons></kendo-pager-next-buttons>
+            <div class="pager-rows-number">
+              <select #select (change)="changePagesize(select.value)">
+                <option *ngIf="showInitialPageSize" [value]="pageSize">{{pageSize}}</option>
+                <option *ngFor="let page of pageSizes" [value]="page" [selected]="page === pageSize ? true : undefined">
+                  {{page}}
+                </option>
+              </select>
+              &nbsp; items per page
+            </div>
+            <kendo-pager-info></kendo-pager-info>
+          </ng-template>
+        </kendo-grid>
+        <div *ngIf="loading" class="k-i-loading"></div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,542 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-3 col-xs-12">
+      <div class="top-h3">
+        Adhoc Verification
+      </div>
+    </div>
+    <div class="col-md-9 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" [look]="'outline'" class="ml-1" (click)="changeData(4)"><i
+            class="fa fa-calendar-check-o"></i>&nbsp;Experiences</button>
+        <button kendoButton [primary]="true" [look]="'outline'" class="ml-1" (click)="changeData(5)"><i
+            class="fa fa-plus"></i>&nbsp;Higher Qualifications (Consultants)</button>
+        <button kendoButton [primary]="true" [look]="'outline'" class="ml-1" (click)="changeData(3)"><i
+            class="fa fa-plus"></i>&nbsp;Higher Qualifications (MO/WMO)</button>
+        <button kendoButton [primary]="true" [look]="'outline'" class="ml-1" (click)="changeData(2)"><i
+            class="fa fa-graduation-cap"></i>&nbsp;Position
+          Holders</button>
+        <button kendoButton [primary]="true" [look]="'outline'" class="ml-1" (click)="changeData(1)"><i
+            class="fa fa-bookmark-o"></i>&nbsp;Hafiz-e-Quran</button>
+      </div>
+    </div>
+  </div>
+  <div class="animated fadeIn">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="grid-top-header-custom animated fadeIn">
+          <div class="pager-rows-number">
+            <span>
+              {{(kGrid.skip + 1) + ' - ' + (kGrid.pageSize <= kGrid.totalRecords ? (kGrid.pageSize + kGrid.skip) : kGrid.totalRecords) + ' of ' +
+                numberWithCommas(kGrid.totalRecords) + ' items ' }} </span>
+
+            <span class="mx-3" *ngIf="filters.Status_Id == 3 || filters.Status_Id == 5"><span (click)="filterQualifications(1)">MBBS:
+                {{degrees.One}}</span> | <span (click)="filterQualifications(2)">One
+                Stage Higher: {{degrees.Two}}</span> | <span (click)="filterQualifications(3)">Two Stage Higher:
+                {{degrees.Three}}</span></span>
+            <span class="pull-right">
+              Show &nbsp; <select #select (change)="changePagesize(select.value)">
+                <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}</option>
+                <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+                  [selected]="page === kGrid.pageSize ? true : undefined">
+                  {{page}}
+                </option>
+              </select>
+              &nbsp; items per page
+            </span>
+          </div>
+        </div>
+        <div class="grid-wrapper">
+          <kendo-grid [data]="kGrid.gridView" *ngIf="!kGrid.loading" [sortable]="{
+          allowUnsort: kGrid.allowUnsort,
+          mode: kGrid.multiple ? 'multiple' : 'single'
+          }" [scrollable]="true" [sort]="kGrid.sort" (sortChange)="sortChange($event)" [(pageSize)]="kGrid.pageSize"
+            [skip]="kGrid.skip" [pageable]="true" (pageChange)="pageChange($event)" [scrollable]="false">
+            <kendo-grid-column field="asd" [title]="'Sr.'" width="10" [headerClass]="'grid-header-text'">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <p class="m-0">{{(rowIndex + 1)}}.
+                </p>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="asd" [title]="'Document'" *ngIf="filters.Status_Id == 1 || filters.Status_Id == 2"
+              width="25" [headerClass]="'grid-header-text'">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <img width="100px" *ngIf="filters.Status_Id == 1" class="d-block cursor-p zoom animated fadeIn"
+                  [src]="dataItem.HifzDocument && dataItem.HifzDocument.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + dataItem.HifzDocument"
+                  (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + dataItem.HifzDocument)"
+                  draggable="false" alt="">
+                <img width="100px" *ngIf="filters.Status_Id == 2" class="d-block cursor-p zoom animated fadeIn"
+                  [src]="dataItem.PositionDoc && dataItem.PositionDoc.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : 'https://hrmis.pshealthpunjab.gov.pk/' + dataItem.PositionDoc"
+                  (click)="openInNewTab('https://hrmis.pshealthpunjab.gov.pk/' + dataItem.PositionDoc)"
+                  draggable="false" alt="">
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="asd" [title]="'Applicant'" width="35" [headerClass]="'grid-header-text'">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <div class="employee-info">
+                  <p class="m-0"><strong class="p-strong"> Name: </strong>
+                    {{dataItem.Name ? dataItem.Name : ''}}
+                    <!-- <small class="pull-right m-0 text-muted"><strong
+                        class="p-strong"> CNIC: </strong> {{dashifyCNIC(dataItem.CNIC)}}</small> -->
+                  </p>
+                  <p class="m-0"><strong class="p-strong"> S/D/W of: </strong>
+                    {{dataItem.FatherName ? dataItem.FatherName : ''}}</p>
+
+                  <p class="m-0"><strong class="p-strong"> CNIC: </strong> {{dashifyCNIC(dataItem.CNIC)}}</p>
+                </div>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column *ngIf="filters.Status_Id == 3 || filters.Status_Id == 5" field="asd"
+              [title]="'PMC Status'" width="35" [headerClass]="'grid-header-text'">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <div class="employee-info">
+                  <p class="m-0"><strong class="p-strong"> PMC: </strong> {{dataItem.PMDCNumber}}</p>
+                  <p class="m-0" *ngIf="dataItem.pmcVerification"><strong class="p-strong"> Status: </strong>
+                    <span>{{dataItem.pmcVerification.Status}}</span>
+                  </p>
+                  <p class="m-0" *ngIf="dataItem.pmcQualification"
+                    [ngClass]="dataItem.pmcQualification.length == 1 ? 'text-danger' : ''">
+                    <strong class="p-strong"> Qualification: </strong><span
+                      *ngFor="let data of dataItem.pmcQualification;let i = index;">
+                      {{data.Degree}}, {{data.Speciality}}</span></p>
+
+                </div>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="asd" [title]="'Action'" width="30" [headerClass]="'grid-header-text'">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <!--   <button (click)="openPreferencesWindow(dataItem)" kendoButton [primary]="true" [look]="'outline'"
+                  class="ml-2 animated fadeIn">View</button> -->
+                <button *ngIf="filters.Status_Id == 3 || filters.Status_Id == 4 || filters.Status_Id == 5"
+                  (click)="openInNewTab('adhoc-applications/applicant/' + dataItem.Id)" kendoButton [primary]="true"
+                  [look]="'outline'" class="ml-2 animated fadeIn">View</button>
+
+                <button *ngIf="filters.Status_Id == 1 && dataItem.HifzVerified == null" class="animated fadeIn"
+                  class="btn btn-sm" kendoButton primary="true" [ladda]="dataItem.saving" data-style="zoom-in"
+                  (click)="verifyHifzPosition(dataItem, filters.Status_Id, 1)"><i class="fa fa-check"></i>
+                  Accept</button>
+                <button *ngIf="filters.Status_Id == 1 && dataItem.HifzVerified == null"
+                  class="btn btn-sm btn-danger ml-2 animated fadeIn" [ladda]="dataItem.saving" data-style="zoom-in"
+                  (click)="verifyHifzPosition(dataItem, filters.Status_Id, 2)"><i class="fa fa-times"></i>
+                  Reject</button>
+                <button *ngIf="filters.Status_Id == 2 && dataItem.PositionVerified == null" class="animated fadeIn"
+                  class="btn btn-sm" kendoButton primary="true" [ladda]="dataItem.saving" data-style="zoom-in"
+                  (click)="verifyHifzPosition(dataItem, filters.Status_Id, 1)"><i class="fa fa-check"></i>
+                  Accept</button>
+                <button *ngIf="filters.Status_Id == 2 && dataItem.PositionVerified == null"
+                  class="btn btn-sm btn-danger ml-2 animated fadeIn" [ladda]="dataItem.saving" data-style="zoom-in"
+                  (click)="verifyHifzPosition(dataItem, filters.Status_Id, 2)"><i class="fa fa-times"></i>
+                  Reject</button>
+
+                <p class="m-0" *ngIf="filters.Status_Id == 1 && dataItem.HifzVerified == true"><i
+                    class="fa fa-check text-success"></i> Verified</p>
+                <p class="m-0" *ngIf="filters.Status_Id == 1 && dataItem.HifzVerified == false"><i
+                    class="fa fa-times text-danger"></i> Not Verified</p>
+
+
+                <p class="m-0" *ngIf="filters.Status_Id == 2 && dataItem.PositionVerified == true"><i
+                    class="fa fa-check text-success"></i> Verified</p>
+                <p class="m-0" *ngIf="filters.Status_Id == 2 && dataItem.PositionVerified == false"><i
+                    class="fa fa-times text-danger"></i> Not Verified</p>
+              </ng-template>
+            </kendo-grid-column>
+            <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+              <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+              <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+              <kendo-pager-next-buttons></kendo-pager-next-buttons>
+              <div class="pager-rows-number">
+                <select #select (change)="changePagesize(select.value)">
+                  <option *ngIf="kGrid.showInitialPageSize" [value]="kGrid.pageSize">{{kGrid.pageSize}}
+                  </option>
+                  <option *ngFor="let page of kGrid.pageSizes" [value]="page"
+                    [selected]="page === kGrid.pageSize ? true : undefined">
+                    {{page}}
+                  </option>
+                </select> &nbsp; items per page
+              </div>
+              <kendo-pager-info></kendo-pager-info>
+            </ng-template>
+          </kendo-grid>
+          <kendo-grid [data]="{data:[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}], total: 10}"
+            *ngIf="kGrid.loading">
+            <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-text'">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <div class="shine shim-controls p-2"></div>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="asd" [title]="'Applicant'" width="45" [headerClass]="'grid-header-text'">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <div class="employee-info">
+                  <div class="shine shim-controls p-2"></div>
+                  <div class="shine shim-controls p-2"></div>
+                  <div class="shine shim-controls p-2"></div>
+                </div>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="asd" [title]="'Application'" width="35" [headerClass]="'grid-header-text'">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <div class="employee-info">
+                  <div class="shine shim-controls p-2"></div>
+                  <div class="shine shim-controls p-2"></div>
+                  <div class="shine shim-controls p-2"></div>
+                </div>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="asd" [title]="'Action'" width="10" [headerClass]="'grid-header-text'">
+              <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+                <div class="shine shim-controls p-2"></div>
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+        </div>
+      </div>
+    </div>
+    <hr>
+  </div>
+
+</div>
+
+<kendo-dialog [title]="selectedApplicant.Name" *ngIf="preferencesWindow && selectedApplicant"
+  (close)="closePreferencesWindow()" [minWidth]="'450'" [height]="'675'" [width]="'1150'">
+  <div class="animated fadeIn" *ngIf="!decision">
+    <div class="row">
+      <div class="col-md-12">
+        <table class="info">
+          <tr>
+            <td style="width: 40%;">
+              <p class="normalPara"><span class="pr-2"><strong class="p-strong">Name: </strong>
+                  <u>{{selectedApplicant.Name}}</u></span>
+                <span class="pl-2"><strong class="p-strong">S/D/W of: </strong> <u>{{selectedApplicant.FatherName}}</u>
+                </span>
+                <span class="pl-2"><strong class="p-strong">CNIC: </strong>
+                  <u>{{dashifyCNIC(selectedApplicant.CNIC)}}</u>
+                </span></p>
+
+              <p class="normalPara">
+                <span><strong class="p-strong">Email: </strong> <u>{{selectedApplicant.Email}}</u> </span> </p>
+
+              <p class="normalPara"><span class="pr-2"><strong class="p-strong">Address: </strong>
+                  <u>{{selectedApplicant.Address}}</u></span></p>
+            </td>
+
+            <td style="width: 40%;">
+
+              <p class="normalPara">
+                <span class=""><strong class="p-strong">D.O.B: </strong>
+                  <u>{{selectedApplicant.DOB | date:'dd/MM/yyyy'}}</u>
+                </span>
+                <span class="pl-2"><strong class="p-strong">Age: </strong> <u>{{selectedApplicant.Age}} years</u>
+                </span>
+              </p>
+
+              <p class="normalPara"><span class="pr-2"><strong class="p-strong">Cell No: </strong>
+                  <u>{{selectedApplicant.MobileNumber}}</u></span>
+                <span class="pl-2"><strong class="p-strong">Domicile: </strong>
+                  <u>{{selectedApplicant.DomicileName}}</u>
+                </span>
+                <!--  <span class="pl-2">Hafiz-e-Quran: <u>No</u> </span> </p> -->
+
+            </td>
+            <td style="width: 20%;vertical-align: top;">
+              <div class="candidate-photo">
+                <img onError="this.src='../../../assets/img/notfound.png'"
+                  [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/AdhocApplicants/Photo/' + selectedApplicant.CNIC + '_23.jpg'"
+                  alt="">
+              </div>
+            </td>
+          </tr>
+        </table>
+
+      </div>
+    </div>
+    <hr>
+    <!--  <div class="k-i-loading" *ngIf="loadingPreferences"></div> -->
+    <tabset>
+      <tab heading="Academic Documents">
+        <div class="row" *ngIf="selectedApplicant.ApplicantDocuments?.length > 0">
+          <div class="col-md-12">
+            <!--  <p class="mb-2"><span class="p-strong">Preferences:</span> {{ selectedApplicant.ApplicantDocuments?.length}}
+            </p> -->
+            <kendo-grid [data]="selectedApplicant.ApplicantDocuments">
+              <kendo-grid-column [width]="10" field="asd" title="No." [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p class="m-0">{{(rowIndex + 1)}}.</p>
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column [width]="50" field="DocumentName" title="Documents" [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <img width="50px" [src]="'../../../../../../assets/img/icons/pdf-icon.png'"
+                    (click)="openInNewTab('http://localhost:8913/' + dataItem.UploadPath)" draggable="false" alt="">
+                  <p class="m-0">{{dataItem.Institute}}
+                  </p>
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column [width]="40" field="DocumentName" title="Documents" [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p class="m-0">{{dataItem.DegreeName}}</p>
+                  <p class="m-0" *ngIf="dataItem.Required_Degree_Id != 121">Marks:
+                    {{dataItem.ObtainedMarks}}/{{dataItem.TotalMarks}}</p>
+                  <p class="m-0">Passing Year: {{dataItem.PassingYear | date:'yyyy'}}</p>
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column [width]="30" field="ObtainedMarks" title="Marks" [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p class="m-0" *ngIf="dataItem.Required_Degree_Id != 121">{{dataItem.ObtainedMarks}} /
+                    {{dataItem.TotalMarks}}</p>
+                </ng-template>
+              </kendo-grid-column>
+            </kendo-grid>
+            <p class="m-0" *ngIf="selectedApplicant.ApplicantDocuments?.length == 0">
+              No Documents
+            </p>
+          </div>
+        </div>
+      </tab>
+      <tab heading="Experience">
+        <div class="row" *ngIf="selectedApplicant.ApplicantExperiences?.length > 0">
+          <div class="col-md-12">
+            <!--  <p class="mb-2"><span class="p-strong">Preferences:</span>
+              {{ selectedApplicant.ApplicantExperiences?.length}}
+            </p> -->
+            <kendo-grid [data]="selectedApplicant.ApplicantExperiences">
+              <kendo-grid-column [width]="5" field="asd" title="No." [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p class="m-0">{{(rowIndex + 1)}}.</p>
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column [width]="40" field="DocumentName" title="Documents" [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <img width="50px" [src]="'../../../../../../assets/img/icons/pdf-icon.png'" draggable="false" alt="">
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column [width]="25" field="DocumentName" title="Documents" [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p class="m-0">{{dataItem.Organization}}</p>
+                  <p class="m-0">Designation: {{dataItem.JobTitle}}</p>
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column [width]="25" field="ObtainedMarks" title="Marks" [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p class="m-0">From: {{dataItem.FromDate | date: 'dd/MM/yyyy'}}</p>
+                  <p class="m-0">To: {{dataItem.ToDate | date: 'dd/MM/yyyy'}}</p>
+                </ng-template>
+              </kendo-grid-column>
+            </kendo-grid>
+            <p class="m-0" *ngIf="selectedApplicant.ApplicantExperiences?.length == 0">
+              No Experience
+            </p>
+          </div>
+        </div>
+      </tab>
+      <tab heading="Preferences">
+        <div class="row" *ngIf="selectedApplicant.Preferences?.length > 0">
+          <div class="col-md-12">
+            <p class="mb-2"><span class="p-strong">Preferences:</span> {{ selectedApplicant.Preferences?.length}}
+            </p>
+            <kendo-grid [data]="selectedApplicant.Preferences">
+              <kendo-grid-column [width]="7" field="asd" title="No." [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p class="m-0">{{(rowIndex + 1)}}.</p>
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column [width]="93" field="FullName" title="Preference" [headerClass]="'grid-header-text'"
+                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p class="m-0">{{dataItem.HFName}} <small
+                      class="pull-right">{{dataItem.CreatedDate | date: 'dd/MM/yyyy hh:mm a'}}</small></p>
+                  <p class="m-0"></p>
+                </ng-template>
+              </kendo-grid-column>
+            </kendo-grid>
+            <!--  <p class="m-0" *ngIf="selectedApplicant.applications?.length == 0">
+            No Preferences
+          </p> -->
+          </div>
+        </div>
+      </tab>
+
+    </tabset>
+
+  </div>
+  <div style="margin-top: 19%;margin-right: auto;">
+    <div class="animated fadeIn" *ngIf="decision == 'Accepted'">
+      <div class="p-5 text-center">
+        <h3 class="text-success mb-1">Please confirm your action</h3>
+        <button kendoButton primary="true" class="btn-lg" (click)="changeApplicationStatus(2)"><i
+            class="fa fa-check"></i>
+          Confirm Accept Application</button>
+        <button kendoButton class="btn-lg ml-2" (click)="decision = ''">
+          Cancel</button>
+      </div>
+    </div>
+    <div class="animated fadeIn" *ngIf="decision == 'Rejected'">
+      <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <label class="k-form-field">Select Reason For Rejection&nbsp;<span class="text-danger">*</span>
+            <kendo-dropdownlist [data]="rejectReasons" [textField]="'Reason'" [valueField]="'Id'"
+              (valueChange)="dropValueChanged('reason', $event)" [defaultItem]="{ Id: 0, Reason: 'Select...' }">
+            </kendo-dropdownlist>
+          </label>
+        </div>
+      </div>
+      <div class="row animated fadeIn" *ngIf="applicantLog.ReasonId == 3 || applicantLog.ReasonId == 4">
+        <div class="col-md-6 offset-md-3">
+          <label class="k-form-field">Select Record&nbsp;<span class="text-danger">*</span>
+            <kendo-dropdownlist
+              [data]="applicantLog.ReasonId == 3 ? selectedApplicant.ApplicantDocuments : applicantLog.ReasonId == 4 ? selectedApplicant.ApplicantExperiences : []"
+              (valueChange)="dropValueChanged('reasonSpecific', $event)"
+              [textField]="applicantLog.ReasonId == 3 ? 'DegreeName' : 'JobTitle'" [valueField]="'Id'">
+              <ng-template kendoDropDownListItemTemplate let-dataItem>
+                <span class="" *ngIf="applicantLog.ReasonId == 3">{{ dataItem.DegreeName }}</span>
+                <span class="" *ngIf="applicantLog.ReasonId == 4">{{ dataItem.JobTitle }}</span>
+              </ng-template>
+            </kendo-dropdownlist>
+          </label>
+        </div>
+      </div>
+      <div class="row animated fadeIn mb-2">
+        <div class="col-md-6 offset-md-3">
+          <label class="k-form-field">Comments&nbsp;<span class="text-danger">*</span>
+            <textarea type="text" [(ngModel)]="applicantLog.Remarks"
+              style="width: 100%;border: 1px solid #f2f2f2;"></textarea>
+          </label>
+        </div>
+      </div>
+      <div class="row animated fadeIn" *ngIf="applicantLog.ReasonId > 0">
+        <div class="col-md-6 offset-md-3">
+          <!--  <p class="text-danger">Please confirm your action</p> -->
+          <button class="btn btn-danger" [disabled]="!applicantLog.Remarks" (click)="changeApplicationStatus(3)"><i
+              class="fa fa-times"></i>
+            Confirm Reject</button>
+          <button kendoButton class="btn-lg ml-2" (click)="decision = ''">
+            Cancel</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <kendo-dialog-actions
+    *ngIf="preferencesWindow && selectedApplicant && !decision && selectedApplicant.Status_Id != 3 && selectedApplicant.Status_Id != 2"
+    class="animated fadeIn">
+    <kendo-buttongroup [width]="'100%'" style="padding: 10px 15px !important;">
+      <!--   <button kendoButton ladda style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;"
+        class="action-btn-success" primary="true" (click)="changeApplicationStatus('Accept', selectedApplicant.Id)"><i class="fa fa-check"></i>
+        Accept Application</button>
+      <button kendoButton ladda style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;"
+        class="action-btn-danger" (click)="changeApplicationStatus('Reject', selectedApplicant.Id)"><i class="fa fa-times"></i> Reject Application</button> -->
+      <button kendoButton ladda style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;"
+        class="action-btn-success" primary="true" (click)="changeStatus('Accepted')"><i class="fa fa-check"></i>
+        Accept Application</button>
+      <button kendoButton ladda style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;"
+        class="action-btn-danger" (click)="changeStatus('Rejected')"><i class="fa fa-times"></i> Reject
+        Application</button>
+      <button kendoButton style="height: 40px !important;margin: 0px 15px !important;border-radius: 2px;"
+        class="action-btn-secondary" ladda (click)="closePreferencesWindow()"><i class="fa fa-times"></i>
+        Close</button>
+    </kendo-buttongroup>
+  </kendo-dialog-actions>
+</kendo-dialog>
+
+
+<div class="page preview" id="formPrint" hidden>
+
+  <table border="0" cellspacing="0" style="border-color:transparent !important; width:100%">
+    <tbody>
+      <tr>
+        <td style="border-color:transparent !important; text-align:left"><img alt="Punjab Government Log"
+            src="../../../../assets/img/brand/govlogoUpdated.png" style="display:inline-block; width:134px" />
+
+        </td>
+        <td style="border-color:transparent !important; text-align:right">
+          <div style="display:inline-block;text-align:center;"><strong>GOVERNMENT OF THE PUNJAB<br />
+              DISTRICT HEALTH AUTHORITY </strong><br />
+            Dated {{dateNow}}
+            <!-- {{fMMRecieve?.DateTime | date: 'dd/MM/yyyy'}} -->
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="border-color:transparent !important; text-align:left; width:100%;">
+          &nbsp;</td>
+      </tr>
+      <tr>
+        <td colspan="2" style="border-color:transparent !important; text-align:left; width:100%;">
+          <strong>Scrutiny for Adhoc Posting </strong></td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="file-table" cellspacing="0" style="width:100%;">
+    <tbody>
+      <tr>
+        <td style="width: 34%;">
+          <strong>Applicant Name</strong> </td>
+        <td style="width: 23%;"> <strong>CNIC</strong></td>
+        <td style="width: 33%;">
+          <strong>Status</strong> </td>
+      </tr>
+      <tr *ngFor="let applicant of jobApplicants">
+        <td>
+          <p class="m-0">
+            {{applicant.Name}}
+          </p>
+        </td>
+        <td>
+          <p class="m-0">
+            {{applicant.CNIC}}
+          </p>
+        </td>
+        <td>
+          <p class="m-0">
+            {{applicant.StatusName}}
+          </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  <br>
+  <br>
+
+  <table border="0" cellspacing="0" style="border-color:transparent !important; width:100%;text-align:center;">
+    <tbody>
+      <tr>
+        <td style="width: 33%;">
+          <strong>DHO (HRM & MIS)</strong> </td>
+        <td style="width: 34%;"> </td>
+        <td style="width: 33%;">
+          <strong>MS Concerned</strong> </td>
+      </tr>
+      <tr>
+        <td style="width: 33%;">
+          <p style="margin-top: 10px;">
+            <!-- {{fMMRecieve.FromOfficerDesignationName}} -->
+          </p>
+          <p style="margin-top: 30px;">____________________________</p>
+        </td>
+        <td style="width: 34%;">
+          <!-- [src]="barcodeSrc()" -->
+          <img alt="IMAGE AREA" class="mb-2 mt-2" />
+          <p style="margin-top: 10px;">
+            <!-- {{fMMRecieve.MID_Number}} -->
+          </p>
+        </td>
+        <td style="width: 33%;">
+          <p style="margin-top: 10px;">
+            <!-- {{fMMRecieve.ToOfficerDesignationName}} -->
+          </p>
+          <p style="margin-top: 30px;">____________________________</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

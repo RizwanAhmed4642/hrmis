@@ -1,0 +1,476 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-6 col-xs-12">
+      <div class="top-h3">
+        Attendance Report
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-12">
+      <div class="top-controls">
+
+      </div>
+    </div>
+
+    <div class="col-md-2 col-sm-12 control-col-st">
+      <label class="k-form-field"> <span><b>From Date</b></span></label>
+      <kendo-datepicker name="From" placeholder="Starting from" [format]="'dd/MM/yyyy'" [(ngModel)]="rptAttandance.From"
+        #From="ngModel"></kendo-datepicker>
+    </div>
+    <div class="col-md-2 col-sm-12 control-col-st">
+      <label class="k-form-field"> <span><b>To Date</b></span></label>
+      <kendo-datepicker name="To" placeholder="End date" [format]="'dd/MM/yyyy'" [(ngModel)]="rptAttandance.To"
+        #To="ngModel">
+      </kendo-datepicker>
+    </div>
+    <div class="col-md-3 col-sm-12 control-col-st">
+      <label class="k-form-field">
+        <span><b>Search by Name</b></span> </label>
+      <input type="text" name="EmployeeName" [(ngModel)]="rptAttandance.EmployeeName" placeholder="Type Name"
+        #EmployeeName="ngModel" kendoTextBox>
+
+    </div>
+    <div class="col-md-2 col-sm-12 control-col-st">
+      <label class="k-form-field">
+        <button kendoButton class="btn-block btn-align-v" style="margin-top:35px !important" [ladda]="loading"
+          data-style="zoom-in" (click)="onSearch()" [primary]="true">SEARCH</button>
+      </label>
+    </div>
+    <div class="col-md-2 col-sm-12 control-col-st">
+      <label class="k-form-field">
+        <button kendoButton primary="true" class="animated fadeIn btn-block" style="margin-top:35px !important"
+          (click)="loadAttandanceRpt()" [ladda]="printing" data-style="zoom-in"><i class="fa fa-print"></i>
+          Print</button>
+      </label>
+    </div>
+
+    <div class="row">
+      <div *ngFor="let dpt of HISDUdepartments;let i = index;" style="transition: 0.13s all ease-in-out;"></div>
+    </div>
+    <div class="row row-panel">
+      <div class="col-md-12">
+        <div class="grid-wrapper">
+          <kendo-grid [data]="gridView" [sortable]="{
+            allowUnsort: allowUnsort,
+            mode: multiple ? 'multiple' : 'single'
+          }" [selectable]="true" [sort]="sort" (sortChange)="sortChange($event)" [(pageSize)]="pageSize" [skip]="skip"
+            [pageable]="true" (pageChange)="pageChange($event)" [scrollable]="false">
+
+            <kendo-grid-column [width]="7" field="asd" title="No." [headerClass]="'grid-header-custom'" [style]="{
+              'background-color': '#fff',
+              color: '#000',
+              'border-bottom': '1px solid #c8ced3'
+            }">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                {{ rowIndex + 1 }}
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column [width]="'18'" field="Employee Name" Title="Employee Name"
+              [headerClass]="'grid-header-custom'" [style]="{
+              'background-color': '#fff',
+              color: '#000',
+              'border-bottom': '1px solid #c8ced3'
+            }">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+
+                {{ dataItem.EmployeeName }}
+                <br>
+                <span style="color:gray;size:6px;">{{  dataItem.DName}}</span>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column [width]="'15'" field="Designation" Title="Designation"
+              [headerClass]="'grid-header-custom'" [style]="{
+            'background-color': '#fff',
+            color: '#000',
+            'border-bottom': '1px solid #c8ced3'
+          }">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                {{  dataItem.Designation_Name}}
+
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column [width]="'12'" field="Date" Title="Date" [headerClass]="'grid-header-custom'" [style]="{
+            'background-color': '#fff',
+            color: '#000',
+            'border-bottom': '1px solid #c8ced3'
+          }">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                {{ dataItem.LogDate | date : 'dd/MM/yyyy' }}
+                <!-- {{ dataItem.LogDate }} -->
+
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column [width]="10" field="Time In" Title="Time In" [headerClass]="'grid-header-custom'"
+              [style]="{
+            'background-color': '#fff',
+            color: '#000',
+            'border-bottom': '1px solid #c8ced3'
+          }">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                {{ dataItem.TImeIn }}
+                <span style="color:red;">{{dataItem.IsLate == 1 ? "(Late)" : ""}}</span>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column [width]="10" field="Leaves" Title="Leaves" [headerClass]="'grid-header-custom'" [style]="{
+          'background-color': '#fff',
+          color: '#000',
+          'border-bottom': '1px solid #c8ced3'
+        }">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                {{ dataItem.TotalLeaves }}
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column [width]="10" field="Absent" Title="Absent" [headerClass]="'grid-header-custom'" [style]="{
+          'background-color': '#fff',
+          color: '#000',
+          'border-bottom': '1px solid #c8ced3'
+        }">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                {{ dataItem.AbsentCount }}
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column [width]="'10'" field="Late" Title="Late" [headerClass]="'grid-header-custom'" [style]="{
+        'background-color': '#fff',
+        color: '#000',
+        'border-bottom': '1px solid #c8ced3'
+      }">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <b> {{ dataItem.AvailedLate*4 }} &nbsp;></b>&nbsp;
+                {{ dataItem.AvailedLate }}
+
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="10" field="BAL" title="Balance" [headerClass]="'grid-header-custom'" [style]="{
+      'background-color': '#fff',
+      color: '#000',
+      'border-bottom': '1px solid #c8ced3'
+    }">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+
+                {{dataItem.BAL}}
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="12" field="Status" Title="Status" [headerClass]="'grid-header-custom'" [style]="{
+      'background-color': '#fff',
+      color: '#000',
+      'border-bottom': '1px solid #c8ced3'
+    }">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <span
+                  style="font-weight:bold"><b>{{dataItem.LeaveStatus ? dataItem.LeaveStatus :  dataItem.LogStatus}}</b></span>
+
+                <!--  <span style="font-weight:bold"><b> {{dataItem.IsLate == 1 ? "Late" : dataItem.LogStatus == 'Absent' ? "": dataItem.LogStatus}}</b></span>
+   <span *ngIf="dataItem.IsLate == 1" style="font-weight:bold">
+    {{ dataItem.IsLate ? "Late":"" }}
+  </span>
+  <span *ngIf="dataItem.IsLate == 1" style="font-weight:bold">
+    {{ dataItem.LogStatus == 'Absent' ? "Absent" : dataItem.LogStatus }}
+  </span> -->
+                <!-- <span style="font-weight:bold"><b> {{dataItem.LogStatus ? dataItem.LogStatus :  dataItem.LogStatus == 'Absent' ? "Absent" : ""}}</b></span> -->
+                <!-- <span style="font-weight:bold"><b> {{dataItem.IsLate == 1 ? "Late" : dataItem.LogStatus == 'Absent' ? "": dataItem.LogStatus}}</b></span> -->
+              </ng-template>
+            </kendo-grid-column>
+
+
+            <kendo-grid-column field="asd" title="Action" [width]="8" [headerClass]="'grid-header-custom'" [style]="{
+      'background-color': '#fff',
+      color: '#000',
+      'border-bottom': '1px solid #c8ced3'
+    }">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <a (click)="openEditWindow(dataItem)">
+                  <img class=" icon-svg" src="../../../assets/img/icons/edit2.svg" alt="" /></a>
+              </ng-template>
+            </kendo-grid-column>
+
+            <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+              <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+              <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+              <kendo-pager-next-buttons></kendo-pager-next-buttons>
+              <div class="pager-rows-number">
+                <select #select (change)="changePagesize(select.value)">
+                  <option *ngIf="showInitialPageSize" [value]="pageSize">{{
+                  pageSize
+                }}</option>
+                  <option *ngFor="let page of pageSizes" [value]="page"
+                    [selected]="page === pageSize ? true : undefined">
+                    {{ page }}
+                  </option>
+                </select>
+                &nbsp; items per page
+              </div>
+              <kendo-pager-info></kendo-pager-info>
+            </ng-template>
+          </kendo-grid>
+        </div>
+      </div>
+    </div>
+    <!-- *ngIf="at.length > 0"  -->
+    <div class="page preview" id="formPrint" hidden>
+
+      <table border="0" cellspacing="1" style="font-size:12px; border-color:transparent !important; width:100%">
+        <tbody>
+          <tr>
+            <td width="10%" style="border-color:transparent !important; text-align:left"><img
+                alt="Punjab Government Logo" src="../../../../assets/img/brand/govlogoUpdated.png"
+                style="display:inline-block; width:100px" />
+
+            </td>
+            <td width="80%" style="border-color:transparent !important; text-align:center">
+              <div style="display:inline-block;text-align:center;"><strong>Attendance Report <br />
+                  Health Information & Service Delivery Unit (HISDU)</strong><br />
+                <b>From:</b> {{ rptAttandance.From | date : 'dd/MM/yyyy' }} &nbsp;&nbsp; <b>To: </b>
+                {{ rptAttandance.To | date : 'dd/MM/yyyy' }} &nbsp; <b>{{ this.dayn }}</b>
+                <b>{{ this.EmpName }}</b> {{ rptAttandance.EmployeeName }}
+              </div>
+            </td>
+            <td width="10%" style="border-color:transparent !important; text-align:right">
+              <!-- <img alt="HISDU" src="../HISDU.png" style="display:inline-block; width:124px" /> -->
+              <img alt="HISDU" src="../../../../assets/img/brand/HISDU.png" style="display:inline-block; width:80px" />
+
+            </td>
+          </tr>
+
+          <!--   <tr>
+          <td colspan="2" style="border-color:transparent !important; text-align:center">
+            <div style="display:inline-block;text-align:center;"><strong>Attendance Report <br />
+                Health Information & Service Delivery Unit (HISDU)</strong><br />
+                <b>Date From:</b> {{ rptAttandance.From | date : 'dd/MM/yyyy' }} &nbsp;&nbsp; <b>Date To: </b> {{ rptAttandance.To | date : 'dd/MM/yyyy' }} 
+                <b>{{ this.EmpName }}</b> {{ rptAttandance.EmployeeName }}<br /><br />
+              </div>
+          </td>
+        </tr> -->
+
+        </tbody>
+      </table>
+      <table border="0" cellspacing="0" style="border-color:transparent !important; width:100%;font-size: 12px;">
+        <tbody>
+          <tr>
+            <td style="width: 5%;border: 1px solid #dcdcdc;padding: 0.25rem;">
+              <strong>No.</strong>
+            </td>
+            <td style="width: 25%;border: 1px solid #dcdcdc;padding: 0.25rem;">
+              <strong>Employee</strong>
+            </td>
+           <!--  <td style="width: 15%;border: 1px solid #dcdcdc;padding: 0.25rem;">
+              <strong>Designation</strong>
+            </td> -->
+            <td style="width: 10%;border: 1px solid #dcdcdc;padding: 0.25rem;">
+              <strong>Date</strong>
+            </td>
+            <td style="width: 10%;border: 1px solid #dcdcdc;text-align: center;padding: 0.25rem;">
+              <strong>Time In</strong>
+            </td>
+            <td style="width: 10%;border: 1px solid #dcdcdc;text-align: center;padding: 0.25rem;">
+              <strong>Leaves</strong> ({{ this.mon}})
+            </td>
+            <td style="width: 10%;border: 1px solid #dcdcdc;text-align: center;padding: 0.25rem;">
+              <strong>Absent</strong> ({{ this.mon}})
+            </td>
+            <td style="width: 10%;border: 1px solid #dcdcdc;text-align: center;padding: 0.25rem;">
+              <strong>Late</strong> ({{ this.mon}})
+            </td>
+            <td style="width: 15%;border: 1px solid #dcdcdc;text-align: center;padding: 0.25rem;">
+              <strong>Balance</strong>
+            </td>
+            <td style="width: 15%;border: 1px solid #dcdcdc;text-align: center;padding: 0.25rem;">
+              <strong>Status</strong>
+            </td>
+
+            <!-- 
+          <td style="width: 10%;border: 1px solid #dcdcdc;text-align: center;padding: 0.25rem;">
+            <strong>Time Out</strong>
+          </td>
+          <td style="width: 15%;border: 1px solid #dcdcdc;text-align: center;padding: 0.25rem;">
+            <strong>Working Hour</strong>
+          </td>
+        <td style="width: 15%;border: 1px solid #dcdcdc;text-align: center;padding: 0.25rem;">
+            <strong>Remarks</strong>
+          </td> -->
+          </tr>
+
+          <tr *ngFor="let at of rptlistPrintWithDept;let i = index;">
+            <td *ngIf="at.rpt.col" colspan="11" style="border: 1px solid #dcdcdc;padding: 0.25rem;">
+              <h5>{{at.rpt.EmployeeName}}</h5>
+            </td>
+            <td *ngIf="!at.rpt.col" style="border: 1px solid #dcdcdc;padding: 0.25rem;">
+              {{at.sr}}.
+            </td>
+            <td *ngIf="!at.rpt.col" style="border: 1px solid #dcdcdc;padding: 0.25rem;">
+              <b>{{at.rpt.EmployeeName}}</b> <br>
+              {{at.rpt.Designation_Name}}
+              <!-- <span style="color:gray;size:6px;">{{at.rpt.DName}}</span> -->
+            </td>
+          <!--   <td *ngIf="!at.rpt.col" style="border: 1px solid #dcdcdc;padding: 0.25rem;">
+              {{at.rpt.Designation_Name}}
+            </td> -->
+            <td *ngIf="!at.rpt.col" style="border: 1px solid #dcdcdc;padding: 0.25rem;">
+              {{ at.rpt.LogDate | date : 'dd/MM/yyyy' }}
+            </td>
+            <td *ngIf="!at.rpt.col" style="border: 1px solid #dcdcdc;text-align: center;padding: 0.25rem;">
+              {{ at.rpt.TImeIn }}
+              <span style="color:red;">{{at.rpt.IsLate == 1 ? "(Late)" : ""}}</span>
+            </td>
+            <!--   <td *ngIf="!at.rpt.col" style="border: 1px solid #dcdcdc;text-align: center;padding: 0.25rem;">
+            {{at.rpt.TImeOut}}
+          </td>-->
+            <td *ngIf="!at.rpt.col" style="border: 1px solid #dcdcdc;text-align: center;padding: 0.25rem;">
+              {{at.rpt.TotalLeaves}}
+            </td>
+            <td *ngIf="!at.rpt.col" style="border: 1px solid #dcdcdc;text-align: center;padding: 0.25rem;">
+              {{at.rpt.AbsentCount}}
+            </td>
+            <td *ngIf="!at.rpt.col" style="border: 1px solid #dcdcdc;text-align: center;padding: 0.25rem;">
+              {{at.rpt.AvailedLate*4}}&nbsp;<b>></b>&nbsp;{{at.rpt.AvailedLate}}
+            </td>
+            <td *ngIf="!at.rpt.col" style="border: 1px solid #dcdcdc;text-align: center;padding: 0.25rem;">
+              {{at.rpt.BAL}}
+            </td>
+            <td *ngIf="!at.rpt.col" style="border: 1px solid #dcdcdc;text-align: center;padding: 0.25rem;">
+              <span style="font-weight:bold"><b> {{at.rpt.LeaveStatus ? at.rpt.LeaveStatus :  at.rpt.LogStatus}}</b></span>
+              <!-- {{ at.LogStatus}}
+           <span style="color:red;font-weight:bold"><b> {{at.IsLate == 1 ? "Late" : at.LogStatus}}</b></span> 
+            <span style="font-weight:bold"><b> {{at.IsLate == 1 ? "Late" : at.LogStatus == 'Absent' ? "": at.LogStatus}}</b></span>-->
+            </td>
+            <!--  <td style="border: 1px solid #dcdcdc;text-align: center;padding: 0.25rem;">
+            <span style="font-weight:bold"><b> {{at.LeaveStatus}}</b></span>
+            {{at.Remarks}}
+          </td> -->
+
+
+          </tr>
+        </tbody>
+      </table>
+      <br>
+      <br>
+      <br>
+
+      <table border="0" cellspacing="0"
+        style="border-color:transparent !important; width:100%;text-align:center;font-size: 12px;">
+        <tbody>
+          <tr>
+            <td style="width: 33%;">
+              <strong>Sent From</strong> </td>
+            <td style="width: 34%;"> </td>
+            <td style="width: 33%;">
+              <strong>Recieved By</strong> </td>
+          </tr>
+          <tr>
+            <td style="width: 33%;">
+              <p style="margin-top: 10px;"></p>
+              <p style="margin-top: 30px;">____________________________</p>
+            </td>
+            <td style="width: 34%;">
+
+            </td>
+            <td style="width: 33%;">
+              <p style="margin-top: 10px;"></p>
+              <p style="margin-top: 30px;">____________________________</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- <div class="row">
+  <div class="col-md-2 col-xs-12"></div>
+  <div class="col-md-2 col-xs-12"><label class="k-form-field"><span><b>Availed Short Leave</b></span>
+      <br>{{ rptAttandance.TotalSL }}</label></div>
+  <div class="col-md-2 col-xs-12"><label class="k-form-field"><span><b>Availed Sick</b></span>
+      <br>{{ rptAttandance.TotalSick }}</label></div>
+  <div class="col-md-2 col-xs-12"><label class="k-form-field"><span><b>Availed Casual</b></span>
+      <br>{{ rptAttandance.TotalCasual }}</label></div>
+  <div class="col-md-2 col-xs-12"><label class="k-form-field"><span><b>Availed Total Leaves</b></span>
+      <br>{{ rptAttandance.TotalLev }}</label></div>
+  <div class="col-md-2 col-xs-12"><label class="k-form-field"><span><b>Remaining Balance</b></span>
+      <br>{{ rptAttandance.Bal }}</label></div>
+</div>
+ -->
+  <kendo-dialog [title]="selectedEmp.EmployeeName + ' - ' + selectedEmp.Designation_Name"
+    *ngIf="EmpDialogOpened && selectedEmp" (close)="closeEmpWindow()" [minWidth]="450" [width]="550">
+    <div class="row p-3">
+      <div class="col-md-6 col-xs-12">
+        <label class="k-form-field"><span><b>Availed Total Leaves: </b></span>
+          {{ rptAttandance.TotalLev }}
+        </label>
+      </div>
+      <div class="col-md-6 col-xs-12">
+        <label class="k-form-field"><span><b>Remaining Balance: </b></span>
+          {{ rptAttandance.Bal }}
+        </label>
+      </div>
+    </div>
+    <div class="row p-3">
+      <div class="col-md-12">
+        <label class="k-form-field"><span>Availed Short Leave: </span>
+          {{ rptAttandance.TotalSL }}
+        </label>
+      </div>
+      <div class="col-md-12">
+        <label class="k-form-field"><span>Availed Sick: </span>
+          {{ rptAttandance.TotalSick }}
+        </label>
+      </div>
+      <div class="col-md-12">
+        <label class="k-form-field"><span>Availed Casual: </span>
+          {{ rptAttandance.TotalCasual }}
+        </label>
+      </div>
+    </div>
+    <kendo-dialog-actions *ngIf="EmpDialogOpened && selectedEmp" class="animated fadeIn">
+    </kendo-dialog-actions>
+  </kendo-dialog>
+
+  <kendo-dialog [title]="selectedEmp.EmployeeName + ' - ' + selectedEmp.Designation_Name"
+    *ngIf="EmpEditOpened && selectedEmp" (close)="closeEditWindow()" [minWidth]="450" [width]="550">
+    <div class="row p-3">
+      <div class="col-md-12">
+        <b>Date: </b> {{selectedEmp.LogDate | date : 'dd/MM/yyyy'}}
+      </div>
+
+      <div class="col-md-12">
+        <label class="k-form-field"><span>Status</span>
+          <!--       <kendo-dropdownlist
+      [data]="dropDowns.EmpStatusData"
+      [textField]="'Name'"
+      [valueField]="'Id'"
+      [valuePrimitive]="true"
+      [(ngModel)]="rptAttandance.LogStatus"
+      [defaultItem]="dropDowns.defultFiltersModel.EmpStatus"
+    >
+    </kendo-dropdownlist> -->
+
+          <kendo-dropdownlist [data]="dropDowns.EmpStatusData" [textField]="'Name'" [valueField]="'Id'"
+            (valueChange)="dropdownValueChanged($event, 'LogStatus')" [value]="dropDowns.selectedFiltersModel.EmpStatus"
+            [defaultItem]="dropDowns.defultFiltersModel.EmpStatus">
+          </kendo-dropdownlist>
+
+        </label>
+      </div>
+
+      <div class="col-md-12">
+        <label class="k-form-field"><span>Remarks</span>
+          <textarea kendoTextArea type="text" [(ngModel)]="this.rptAttandance.Remarks"></textarea>
+        </label>
+      </div>
+
+      <div class="col-md-12 col-xs-12">
+        <button kendoButton data-style="zoom-in" class="ml-2 btn-align-v" [primary]="true" (click)="editEmpStatus()">
+          Update
+        </button>
+        <button kendoButton data-style="zoom-in" class="ml-2 btn-align-v" [primary]="true">
+          Cancel
+        </button>
+      </div>
+    </div>
+    <kendo-dialog-actions *ngIf="EmpEditOpened && selectedEmp" class="animated fadeIn">
+    </kendo-dialog-actions>
+  </kendo-dialog>

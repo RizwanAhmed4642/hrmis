@@ -1,0 +1,22 @@
+<div class="animated fadeIn" *ngIf="profile">
+  <div class="row">
+    <div class="col-md-12 col-xs-12">
+      <div class="top-h3">
+        Documents
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12" *ngIf="currentUser.RoleName != 'HRView'">
+
+    </div>
+  </div>
+  <div class="row row-panel">
+    <div class="col-md-3" *ngFor="let doc of documents; let i = index;">
+      <label class="k-form-field">
+        <span><strong class="p-strong">{{(i + 1) + ' - ' + doc.Name}}</strong>&nbsp;<i class="fa"
+            [ngClass]="doc.attached ? 'fa-check-circle text-success' : ''"></i></span>
+        <input type="file" [ngClass]="doc.attached ? 'text-success p-strong' : ''" (change)="selectFile($event, doc)"
+          style="width: 100%;" [name]="doc.Name">
+      </label>
+    </div>
+  </div>
+</div>

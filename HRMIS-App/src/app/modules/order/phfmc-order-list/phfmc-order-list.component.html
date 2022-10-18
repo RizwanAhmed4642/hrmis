@@ -1,0 +1,74 @@
+<div class="animated fadeIn">
+    <div class="col-md-6 col-xs-12">
+        <div class="top-h3">
+            Order Requests
+        </div>
+    </div>
+    <div class="row row-panel">
+        <div class="grid-wrapper">
+            <kendo-grid [data]="gridView" [sortable]="{
+                allowUnsort: allowUnsort,
+                mode: multiple ? 'multiple' : 'single'
+                }" [selectable]="true" [sort]="sort" (sortChange)="sortChange($event)" [(pageSize)]="pageSize"
+                [skip]="skip" [pageable]="true" (pageChange)="pageChange($event)" [scrollable]="false">
+                <kendo-grid-column [width]="7" field="asd" title="No." [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        {{(rowIndex + 1)}}.
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="28" field="EmployeeName" title="Name" [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        {{dataItem.EmployeeName}}
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="35" field="Designation_Name" title="Designation"
+                    [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        {{dataItem.Designation_Name}}
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [width]="20" field="asd" title="Actions" [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        <button *ngIf="!dataItem.IsApproved && currentUser.RoleName == 'PHFMC Admin'" kendoButton
+                            primary="true" (click)="approveOrderRequest(dataItem.Id)">
+                            <i class="fa fa-check"> Approve</i>
+                        </button>
+                        <p *ngIf="dataItem.IsApproved && !dataItem.ESRId" class="mb-0 text-success">Approved</p>
+
+                        <button *ngIf="dataItem.IsApproved && dataItem.ESRId" kendoButton primary="true"
+                            (click)="openOrder(dataItem.Id, dataItem.ESRId)">
+                            <i class="fa fa-search"> View Order</i>
+                        </button>
+
+                        <button class="ml-1" *ngIf="dataItem.SignedOrderPath" kendoButton primary="true"
+                            (click)="downloadOrder(dataItem.SignedOrderPath)">
+                            <i class="fa fa-download"> Download</i>
+                        </button>
+                    </ng-template>
+                </kendo-grid-column>
+
+                <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+                    <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+                    <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+                    <kendo-pager-next-buttons></kendo-pager-next-buttons>
+                    <div class="pager-rows-number">
+                        <select #select (change)="changePagesize(select.value)">
+                            <option *ngIf="showInitialPageSize" [value]="pageSize">{{pageSize}}</option>
+                            <option *ngFor="let page of pageSizes" [value]="page"
+                                [selected]="page === pageSize ? true : undefined">
+                                {{page}}
+                            </option>
+                        </select>
+                        &nbsp; items per page
+                    </div>
+                    <kendo-pager-info></kendo-pager-info>
+                </ng-template>
+            </kendo-grid>
+            <div *ngIf="loading" class="k-i-loading"></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,166 @@
+﻿@model IEnumerable<Hrmis.Models.DbModel.PromotionJobApplication>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.RequestedAs)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CNIC)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FatherName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MobileNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DistrictOfDomicile)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HFMIS)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PromotionToCurrentScale)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SeniorityNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CertificateOfWorkingFilepath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NoEnquiryCeritificateFilepath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MatricFScMbbsDegreeFilepath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PostgraduateDegreeFilepath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PmdcFilepath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NoEnquiryCertifcateAttestedFilepath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ServiceStatementFirst)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ServiceStatementSecond)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ServiceStatementThird)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedOn)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HrDesignation.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HrProfile.EmployeeName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.RequestedAs)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CNIC)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FatherName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MobileNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DistrictOfDomicile)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.HFMIS)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PromotionToCurrentScale)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SeniorityNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CertificateOfWorkingFilepath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NoEnquiryCeritificateFilepath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MatricFScMbbsDegreeFilepath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PostgraduateDegreeFilepath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PmdcFilepath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NoEnquiryCertifcateAttestedFilepath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ServiceStatementFirst)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ServiceStatementSecond)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ServiceStatementThird)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedOn)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.HrDesignation.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.HrProfile.EmployeeName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,258 @@
+<div class="animated fadeIn">
+  <div style="height: 74vh;overflow-y: scroll;">
+    <div class="row mx-0">
+      <div class="col-md-12">
+        <div class="content-heading">
+          Profile Information
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="animated fadeIn">
+      <div *ngIf="!profile" class="k-i-loading"></div>
+      <div class="animated fadeIn" *ngIf="profile">
+        <div class="row mx-0">
+          <div class="col-md-12 col-sm-12">
+            <table class="table table-2rem view-table" style="background: transparent;">
+              <tbody>
+                <tr>
+                  <td><strong class="p-strong">Photo</strong></td>
+                  <td colspan="3">
+                    <img class="pic-shadow" width="100" height="100"
+                      [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + profile.CNIC + '_23.jpg?v=' + radnom"
+                      onError="this.src='../../../assets/img/notfound.png'" alt="">
+                  </td>
+                </tr>
+                <tr *ngIf="profile.EmployeeName">
+                  <td><strong class="p-strong">First Name</strong></td>
+                  <td>{{profile.EmployeeName}}</td>
+                  <td><strong class="p-strong">Place of Posting</strong></td>
+                  <td>{{profile.HealthFacility ? profile.HealthFacility
+                  + ', ' + (profile.Tehsil == profile.District ? profile.Tehsil : profile.Tehsil + ', ' +
+                  profile.District) : ''}}</td>
+                </tr>
+                <tr *ngIf="profile.FatherName">
+                  <td><strong class="p-strong">Last Name</strong></td>
+                  <td>{{profile.FatherName}}</td>
+                  <td><strong class="p-strong">Designation</strong></td>
+                  <td>{{profile.Designation_Name}}</td>
+                </tr>
+                <tr *ngIf="profile.CNIC">
+                  <td><strong class="p-strong">CNIC</strong></td>
+                  <td>{{dashifyCNIC(profile.CNIC)}}</td>
+                  <td><strong class="p-strong">Current Grade BPS</strong></td>
+                  <td>{{profile.CurrentGradeBPS}}</td>
+                </tr>
+                <tr *ngIf="profile.DateOfBirth">
+                  <td><strong class="p-strong">D.O.B</strong></td>
+                  <td>{{profile.DateOfBirth | date:'dd-MM-yyyy'}}</td>
+                  <td><strong class="p-strong">Status</strong></td>
+                  <td>{{profile.StatusName}}</td>
+                </tr>
+                <tr *ngIf="profile.Gender">
+                  <td><strong class="p-strong">Gender</strong></td>
+                  <td>{{profile.Gender}}</td>
+                  <td><strong class="p-strong">Seniority Number</strong></td>
+                  <td>{{profile.SeniorityNo}}</td>
+
+                </tr>
+                <tr *ngIf="profile.Domicile_Name">
+                  <td><strong class="p-strong">Domicile</strong></td>
+                  <td>{{profile.Domicile_Name}}</td>
+                  <td><strong class="p-strong">Cadre</strong></td>
+                  <td>{{profile.Cadre_Name}}</td>
+
+                </tr>
+                <tr *ngIf="profile.MaritalStatus">
+                  <td><strong class="p-strong">Marital Status</strong></td>
+                  <td>{{profile.MaritalStatus}}</td>
+                  <td><strong class="p-strong">Employment Mode</strong></td>
+                  <td>{{profile.EmpMode_Name}}</td>
+
+
+                </tr>
+                <tr *ngIf="profile.BloodGroup">
+                  <td><strong class="p-strong">Bloodgroup</strong></td>
+                  <td>{{profile.BloodGroup}}</td>
+                  <td><strong class="p-strong">Length of Service</strong></td>
+                  <td>{{profile.LengthOfService}}</td>
+
+                </tr>
+                <tr *ngIf="profile.Religion_Name">
+                  <td><strong class="p-strong">Religion</strong></td>
+                  <td>{{profile.Religion_Name}}</td>
+                  <td><strong class="p-strong">Qualification</strong></td>
+                  <td>{{profile.QualificationName}}</td>
+
+                </tr>
+                <tr *ngIf="profile.Language_Name">
+                  <td><strong class="p-strong">Mother Tongue</strong></td>
+                  <td>{{profile.Language_Name}}</td>
+                  <td><strong class="p-strong">Additional Qualification</strong></td>
+                  <td>{{profile.AdditionalQualification}}</td>
+
+                </tr>
+                <tr *ngIf="profile.MobileNo">
+                  <td><strong class="p-strong">Mobile Number</strong></td>
+                  <td>{{profile.MobileNo}}</td>
+                  <td><strong class="p-strong">Date of First Appointment</strong></td>
+                  <td>{{profile.DateOfFirstAppointment | date:'dd-MM-yyyy'}}</td>
+
+                </tr>
+                <tr *ngIf="profile.EMaiL">
+                  <td><strong class="p-strong">E-mail</strong></td>
+                  <td>{{profile.EMaiL}}</td>
+                  <td><strong class="p-strong">Date of Regularization</strong></td>
+                  <td>{{profile.DateOfRegularization | date:'dd-MM-yyyy'}}</td>
+
+                </tr>
+                <!--   <tr *ngIf="profile.LandlineNo">
+                    <td><strong class="p-strong">Landline Number</strong></td>
+                    <td>{{profile.LandlineNo}}</td>
+                  </tr>
+                   <tr *ngIf="profile.Faxno">
+                    <td><strong class="p-strong">Fax Number</strong></td>
+                    <td>{{profile.Faxno}}</td>
+                  </tr> -->
+                <tr *ngIf="profile.PermanentAddress">
+                  <td><strong class="p-strong">Permanent Address</strong></td>
+                  <td>{{profile.PermanentAddress}}</td>
+                  <td><strong class="p-strong">Superannuation Date</strong></td>
+                  <td>{{profile.SuperAnnuationDate | date:'dd-MM-yyyy'}}</td>
+                </tr>
+                <tr>
+
+                  <td><strong class="p-strong">Present Posting Order Date</strong></td>
+                  <td>{{profile.PresentPostingDate | date:'dd-MM-yyyy'}}</td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+          <!--  <div class="col-md-6 col-sm-12 control-col-end">
+              <app-profile-departmental-info [profile]="profile"></app-profile-departmental-info>
+            </div> -->
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="row mx-0">
+      <div class="col-md-12">
+        <div class="content-heading">
+          Leave Record
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="animated fadeIn">
+      <kendo-grid [data]="leaveRecord">
+        <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-custom'"
+          [class]="{ 'grid-cell-custom': true }">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="m-0">{{(rowIndex + 1)}}.
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="Name" [title]="'Leave Information'" width="40" [headerClass]="'grid-header-custom'"
+          [class]="{ 'grid-cell-custom': true }">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <div class="row mx-0">
+              <div class="col-md-4" [ngClass]="dataItem.OrderFilePath ? 'cursor-p' : ''"
+                (click)="dataItem.OrderFilePath && openInNewTab('/' + dataItem.OrderFilePath)">
+                <img *ngIf="dataItem.OrderFilePath" width="50px"
+                  [src]="dataItem.OrderFilePath?.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : '/' + dataItem.OrderFilePath"
+                  draggable="false" alt="">
+              </div>
+              <div class="col-md-8">
+                <p class="m-0">{{dataItem.FullName}}
+                </p>
+                <p class="m-0">{{dataItem.LeaveType}}</p>
+                <p class="m-0"><strong class="p-strong">Order Number:</strong> {{dataItem.OrderNumber}}</p>
+              </div>
+            </div>
+
+
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="FromDate" [title]="'Period'" width="40" [headerClass]="'grid-header-custom'"
+          [class]="{ 'grid-cell-custom': true }">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="m-0"><strong class="p-strong">From</strong> {{dataItem.FromDate | date:'dd/MM/yyyy'}} - <strong
+                class="p-strong">To</strong> {{dataItem.ToDate | date:'dd/MM/yyyy'}}</p>
+            <p class="m-0">{{dataItem.TotalDays}} Day<span *ngIf="dataItem.TotalDays && dataItem.TotalDays > 1">s</span>
+            </p>
+
+          </ng-template>
+        </kendo-grid-column>
+      </kendo-grid>
+    </div>
+    <hr>
+    <div class="row mx-0">
+      <div class="col-md-12">
+        <div class="content-heading">
+          Service History
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="animated fadeIn">
+      <kendo-grid [data]="serviceHistories">
+        <kendo-grid-column field="asd" [title]="'Sr.'" width="5" [headerClass]="'grid-header-custom'"
+          [class]="{ 'grid-cell-custom': true }">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <p class="m-0">{{(rowIndex + 1)}}.
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="Name" [title]="'Place of Posting'" width="55
+      " [headerClass]="'grid-header-custom'" [class]="{ 'grid-cell-custom': true }">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+            <div class="row mx-0">
+              <div class="col-md-3" style="overflow: hidden;" [ngClass]="dataItem.OrderFilePath ? 'cursor-p' : ''"
+                (click)="dataItem.OrderFilePath && openInNewTab(dataItem.OrderFilePath.toLowerCase().startsWith('http') ? dataItem.OrderFilePath : '/' + dataItem.OrderFilePath)">
+                <img *ngIf="dataItem.OrderFilePath" width="50px"
+                  [src]="dataItem.OrderFilePath?.toLowerCase().endsWith('.pdf') ? '../../../../../../assets/img/icons/pdf-icon.png' : dataItem.OrderFilePath?.toLowerCase().startsWith('http') ? dataItem.OrderFilePath : '/' + dataItem.OrderFilePath"
+                  draggable="false" alt="">
+              </div>
+              <div class="col-md-9">
+                <p class="m-0">{{dataItem.FullName}}
+                </p>
+                <p class="m-0" *ngIf="dataItem.DesignationName">{{dataItem.DesignationName}}<span
+                    *ngIf="dataItem.EmpModeName">{{' - ' + dataItem.EmpModeName}}</span></p>
+                <p class="m-0"><strong class="p-strong">Order Number:</strong>
+                  {{dataItem.OrderNumber ? dataItem.OrderNumber : 'N/A'}} - <strong class="p-strong">Dated:</strong>
+                  {{dataItem.OrderDate ? (dataItem.OrderDate |  date:'dd/MM/yyyy') : 'N/A'}}</p>
+              </div>
+            </div>
+
+
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="FromDate" [title]="'Period'" width="25" [headerClass]="'grid-header-custom'"
+          [class]="{ 'grid-cell-custom': true }">
+          <ng-template kendoGridCellTemplate let-column="column" let-dataItem let-rowIndex="rowIndex">
+
+            <div class="animated fadeIn">
+              <p class="m-0"><strong class="p-strong">From</strong>
+                {{dataItem.From_Date | date:'dd/MM/yyyy'}}<span *ngIf="dataItem.Continued"> - <span
+                    class="text-success cursor-p" (click)="dataItem.contEdit = true">Continue</span></span></p>
+              <p class="m-0" *ngIf="dataItem.To_Date && !dataItem.Continued"><strong class="p-strong">Date To</strong>
+                {{dataItem.To_Date | date:'dd/MM/yyyy'}}</p>
+              <p class="m-0" *ngIf="dataItem.TotalDays">{{dataItem.TotalDays}} Day<span
+                  *ngIf="dataItem.TotalDays > 1">s</span>
+              </p>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+
+      </kendo-grid>
+    </div>
+  </div>
+
+  <hr>
+
+  <button kendoButton [primary]="true" look="outline" class="btn-block btn-lg"
+    [routerLink]="'/retirement-application/verify/' + profile.CNIC + '/' + profile.Id"><i
+      class="fa fa-check-circle-o"></i>&nbsp;Proceed for Documents</button>
+</div>

@@ -1,0 +1,63 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-6 col-xs-12">
+            <div class="top-h3">
+                Senority List
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row row-panel">
+    <div class="col-md-12">
+        <div class="grid-top-header-custom animated fadeIn" *ngIf="totalRecords">
+            <!-- <div class="pager-rows-number">
+                <span>
+                    {{(skip + 1) + ' - ' + (pageSize <= totalRecords ? (pageSize + skip) : totalRecords) + ' of ' +
+                numberWithCommas(totalRecords) + ' items ' }} </span> <span class="pull-right">
+                    Show &nbsp; <select #select (change)="changePagesize(select.value)">
+                        <option *ngIf="showInitialPageSize" [value]="pageSize">{{pageSize}}</option>
+                        <option *ngFor="let page of pageSizes" [value]="page"
+                            [selected]="page === pageSize ? true : undefined">
+                            {{page}}
+                        </option>
+                    </select>
+                    &nbsp; items per page
+                </span>
+            </div> -->
+        </div>
+        <div class="grid-wrapper">
+            <kendo-grid [data]="gridView" [sortable]="{
+              allowUnsort: allowUnsort,
+              mode: multiple ? 'multiple' : 'single'
+              }" [selectable]="true" [sort]="sort" (sortChange)="sortChange($event)" [(pageSize)]="pageSize"
+                [skip]="skip" [pageable]="true" (pageChange)="pageChange($event)" [scrollable]="false">
+                <kendo-grid-column [width]="7" field="asd" title="Sr." [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        {{(rowIndex + 1)}}.
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column
+                    [width]="30" field="EmployeeName" title="Name" [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                </kendo-grid-column>
+                <kendo-grid-column
+                    [width]="30" field="FatherName" title="Father Name" [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                </kendo-grid-column>
+                <kendo-grid-column
+                    [width]="20" field="CNIC" title="CNIC" [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                </kendo-grid-column>
+                <kendo-grid-column
+                    [width]="20" field="Designation_Name" title="Designation" [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                </kendo-grid-column>
+                <kendo-grid-column
+                    [width]="10" field="Seniority" title="Senority No." [headerClass]="'grid-header-custom'"
+                    [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                </kendo-grid-column>
+            </kendo-grid>
+        </div>
+    </div>
+</div>

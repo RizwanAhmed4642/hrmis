@@ -1,0 +1,435 @@
+<hr *ngIf="file && 2 + 2 == 6">
+<div class="row animated fadeIn" *ngIf="!loadingDDsFile && 2 + 2 == 6">
+  <div class="col-md-6 offset-md-1 col-sm-6 pb-2">
+    <div class="row">
+      <div [ngClass]="conflicts.name ? 'col-md-6 control-col-st' : 'col-md-12'">
+        <label class="k-form-field" id="generalInfo">
+          <span>Name / Subject <span *ngIf="!dds.F_Name" class="text-warning fa fa-exclamation-circle"></span><span
+              *ngIf="dds.F_Name" class="text-success"><i class="fa fa-check-circle"></i></span> <span
+              *ngIf="conflicts.name && dds.F_Name" class="pull-right text-warning" style="cursor: pointer;">
+              <i class="fa fa-exclamation-circle"></i>
+              correct
+              name</span></span>
+          <input kendoTextBox type="text" [(ngModel)]="dds.F_Name" required />
+        </label>
+      </div>
+      <div class="col-md-6 control-col-end" *ngIf="conflicts.name">
+        <label class="k-form-field" id="generalInfo">
+          <span>Subject / Name <span *ngIf="!dds.Subject" class="text-warning fa fa-exclamation-circle"></span><span
+              *ngIf="dds.Subject" class="text-success"><i class="fa fa-check-circle"></i></span> <span
+              *ngIf="dds.Subject" class="pull-right text-warning" style="cursor: pointer;"><i
+                class="fa fa-exclamation-circle"></i>
+              correct
+              name</span></span>
+          <input kendoTextBox type="text" [(ngModel)]="dds.Subject" required />
+        </label>
+      </div>
+    </div>
+    <div class="row">
+      <div [ngClass]="conflicts.number ? 'col-md-6 control-col-st' : 'col-md-12'">
+        <label class="k-form-field" id="generalInfo">
+          <span>File Number
+            <span *ngIf="!dds.F_FileNumber" class="text-warning fa fa-exclamation-circle"></span><span
+              *ngIf="dds.F_FileNumber" class="text-success"><i class="fa fa-check-circle"></i></span>
+            <span *ngIf="conflicts.number && dds.F_FileNumber" class="pull-right text-warning"
+              style="cursor: pointer;"><i class="fa fa-exclamation-circle"></i>
+              correct
+              number</span>
+          </span>
+          <input kendoTextBox type="text" [(ngModel)]="dds.F_FileNumber" required />
+        </label>
+      </div>
+      <div class="col-md-6 control-col-end" *ngIf="conflicts.number">
+        <label class="k-form-field" id="generalInfo">
+          <span>File Number <span *ngIf="!dds.DiaryNo" class="text-warning fa fa-exclamation-circle"></span><span
+              *ngIf="dds.DiaryNo" class="text-success"><i class="fa fa-check-circle"></i></span> <span
+              *ngIf="dds.DiaryNo" class="pull-right text-warning" style="cursor: pointer;"><i
+                class="fa fa-exclamation-circle"></i>
+              correct
+              number</span></span>
+          <input kendoTextBox type="text" [(ngModel)]="dds.DiaryNo" required />
+        </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 control-col-st">
+        <label class="k-form-field" id="generalInfo">
+          <span>Rack <span *ngIf="dds.F_Rack" class="text-success"><i class="fa fa-check-circle"></i></span></span>
+          <input kendoTextBox type="text" [(ngModel)]="dds.F_Rack" />
+        </label>
+      </div>
+      <div class="col-md-6 control-col-end">
+        <label class="k-form-field" id="generalInfo">
+          <span>Shelf <span *ngIf="dds.F_Shelf" class="text-success"><i class="fa fa-check-circle"></i></span></span>
+          <input kendoTextBox type="text" [(ngModel)]="dds.F_Shelf" />
+        </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 control-col-st">
+        <label class="k-form-field">
+          <span>CNIC <span *ngIf="dds.F_CNIC" class="text-success"><i class="fa fa-check-circle"></i></span> <span
+              *ngIf="conflicts.cnic && dds.F_CNIC" class="pull-right text-warning" style="cursor: pointer;"><i
+                class="fa fa-exclamation-circle"></i>
+              correct
+              cnic</span></span>
+          <kendo-maskedtextbox [mask]="cnicMask" [(ngModel)]="dds.F_CNIC"></kendo-maskedtextbox>
+        </label>
+      </div>
+      <div class="col-md-6 control-col-end">
+        <label class="k-form-field">
+          <span>NIC </span>
+          <kendo-maskedtextbox [mask]="nicMask" [(ngModel)]="dds.F_NIC"></kendo-maskedtextbox>
+        </label>
+      </div>
+    </div>
+    <div class="row" *ngIf="conflicts.cnic">
+      <div class="col-md-6 control-col-st">
+        <label class="k-form-field">
+          <span>CNIC <span *ngIf="dds.FileType" class="text-success"><i class="fa fa-check-circle"></i></span> <span
+              *ngIf="dds.FileType" class="pull-right text-warning" style="cursor: pointer;"><i
+                class="fa fa-exclamation-circle"></i>
+              correct
+              cnic</span></span>
+          <kendo-maskedtextbox [mask]="cnicMask" [(ngModel)]="dds.FileType"></kendo-maskedtextbox>
+        </label>
+      </div>
+      <div class="col-md-6 control-col-end">
+        <label class="k-form-field">
+          <span>NIC </span>
+          <kendo-maskedtextbox [mask]="nicMask" [(ngModel)]="dds.FileNIC"></kendo-maskedtextbox>
+        </label>
+      </div>
+    </div>
+    <label class="k-form-field"> <span>Date of Birth <span *ngIf="dds.F_DateOfBirth" class="text-success"><i
+            class="fa fa-check-circle"></i></span></span>
+      <kendo-datepicker placeholder="D.O.B" [format]="'dd/MM/yyyy'" [max]="maxDate" [(ngModel)]="dds.F_DateOfBirth">
+      </kendo-datepicker>
+    </label>
+    <div class="row">
+      <div class="col-md-9 control-col-st">
+        <label class="k-form-field">
+          <span>Designation <span *ngIf="dds.F_Designation_Id" class="text-success"><i
+                class="fa fa-check-circle"></i></span></span>
+          <kendo-dropdownlist [data]="dropDowns.designationsData" [textField]="'Name'" [valueField]="'Id'"
+            [(ngModel)]="dds.F_Designation_Id" [valuePrimitive]="true" [value]="0"
+            [defaultItem]="dropDowns.defultFiltersModel.designation">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="col-md-3 control-col-end">
+        <label class="k-form-field">
+          <span>BPS <span *ngIf="dds.F_BPS" class="text-success"><i class="fa fa-check-circle"></i></span></span>
+          <kendo-dropdownlist [data]="dropDowns.scaleData" [(ngModel)]="dds.F_BPS" [textField]="'text'"
+            [valueField]="'value'" [defaultItem]="dropDowns.defultFiltersModel.scaleDefault" [valuePrimitive]="true">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-9 control-col-st">
+        <label class="k-form-field"> <span>Date of Joining <span *ngIf="dds.F_DateOfJoining" class="text-success"><i
+                class="fa fa-check-circle"></i></span></span>
+          <kendo-datepicker placeholder="Date of Joining" [format]="'dd/MM/yyyy'" [(ngModel)]="dds.F_DateOfJoining">
+          </kendo-datepicker>
+        </label>
+      </div>
+      <div class="col-md-3 control-col-end">
+        <label class="k-form-field">
+          <span>Batch <span *ngIf="dds.F_BatchNo" class="text-success"><i class="fa fa-check-circle"></i></span></span>
+          <kendo-maskedtextbox [mask]="batchMask" [(ngModel)]="dds.F_BatchNo"></kendo-maskedtextbox>
+        </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 control-col-st">
+        <label class="k-form-field" id="generalInfo">
+          <span>Seniority No.</span>
+          <input kendoTextBox type="text" [(ngModel)]="dds.Receiver" />
+        </label>
+      </div>
+      <div class="col-md-6 control-col-end">
+        <label class="k-form-field" id="generalInfo">
+          <span>Seniority Year</span>
+          <kendo-maskedtextbox [mask]="batchMask" [(ngModel)]="dds.Status"></kendo-maskedtextbox>
+        </label>
+      </div>
+    </div>
+    <label class="k-form-field">
+      <span>Section <span *ngIf="dds.F_Section_Id" class="text-success"><i class="fa fa-check-circle"></i></span></span>
+      <kendo-dropdownlist [data]="sectionOfficers" [textField]="'DesignationName'" [valuePrimitive]="true"
+        [valueField]="'Id'" [(ngModel)]="dds.F_Section_Id" [value]="0"
+        [defaultItem]="dropDowns.selectedFiltersModel.sectionOfficer">
+      </kendo-dropdownlist>
+    </label>
+    <div class="row">
+      <div class="col-md-6 control-col-st">
+        <label class="k-form-field">
+          <span>Scanned File <span *ngIf="!photoSrc" class="text-warning fa fa-exclamation-circle"></span><span
+              *ngIf="photoSrc" class="text-success"><i class="fa fa-check-circle"></i></span></span>
+          <div>
+            <img *ngIf="photoSrc" class="animated fadeIn" style="width:100px;height:100px;border:1px solid;"
+              [src]="photoSrc" alt="">
+            <input #photoRef type="file" accept="image/jpg, image/jpeg, image/png" (change)="readUrl($event)" hidden>
+            <button kendoButton type="button" [primary]="true" [look]="'outline'" (click)="uploadBtn()"
+              class="btn-sm btn-block mt-1" [ngClass]="photoFile.length == 0 ? 'mt-0' : 'mt-2'" style="cursor:pointer;">
+              <i class="fa fa-upload"></i> {{photoFile.length == 0 ? 'Choose File' : 'Choose Other File'}}</button>
+          </div>
+        </label>
+      </div>
+
+    </div>
+    <div class="row animated fadeIn" *ngIf="barcodeImgSrc">
+      <div class="col-md-4">
+        <label class="k-form-field">
+          <span>Barcode <span class="text-success"><i class="fa fa-check-circle"></i></span></span>
+          <div style="width:100%;">
+            <img [src]="barcodeSrc()" class="animated fadeIn" *ngIf="barcodeImgSrc" alt="">
+            <label style="display: block;margin-top:4px;width:77px;text-align: center;">* {{dds.RequestId}} *</label>
+          </div>
+        </label>
+        <div id="barcodeFileBars" hidden>
+          <img [src]="barcodeSrc()" *ngIf="barcodeImgSrc" alt="">
+          <label style="display: block;margin-top:4px;width:77px;text-align: center;">* {{dds.RequestId}} *</label>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div>
+      <p class="animated fadeIn text-danger" *ngIf="hasError">fill all required fields</p>
+      <p class="m-0 animated fadeIn text-danger" *ngIf="conflicts.name || conflicts.number || conflicts.cnic">remove
+        data conflicts</p>
+      <p class="m-0 animated fadeIn text-danger" *ngIf="conflicts.name">- file name conflict</p>
+      <p class="m-0 animated fadeIn text-danger" *ngIf="conflicts.number">- file number conflict</p>
+      <p class="m-0 animated fadeIn text-danger" *ngIf="conflicts.cnic">- cnic conflict</p>
+      <hr *ngIf="hasError || conflicts.name || conflicts.number || conflicts.cnic">
+    </div>
+
+    <!--  <div class="row">
+      <div class="col-md-6 control-col-st">
+        <button kendoButton class="btn-block" [ladda]="addingFile"
+          [disabled]="conflicts.name || conflicts.number || conflicts.cnic" data-style="zoom-in" [primary]="true"
+          (click)="submitFile()">Submit</button>
+      </div>
+      <div class="col-md-6 control-col-end">
+        <button kendoButton class="btn-block" ladda [look]="'outline'" [primary]="true"
+          routerLink="/fts/scanned-files">Go
+          Back</button>
+      </div>
+    </div> -->
+  </div>
+</div>
+
+<hr *ngIf="file && 2 + 2 == 6">
+
+<div>
+
+  <tabset>
+    <tab heading="Add Detail">
+      <div class="row">
+        <div class="col-md-6 control-col-st">
+          <label class="k-form-field">Type <span class="text-danger">*</span>
+            <kendo-dropdownlist [data]="documentTypeItems" [valuePrimitive]="true" [(ngModel)]="ddsDetail.Remarks">
+            </kendo-dropdownlist>
+          </label>
+        </div>
+        <div class="col-md-3 control-col">
+          <label class="k-form-field">Period From <span class="text-danger">*</span>
+            <kendo-datepicker placeholder="From Date" [format]="'dd/MM/yyyy'" [(ngModel)]="ddsDetail.FromPeriod">
+            </kendo-datepicker>
+          </label>
+        </div>
+        <div class="col-md-3 control-col-end">
+          <label class="k-form-field">To <span class="text-danger">*</span>
+            <kendo-datepicker placeholder="To Date" (keyup.enter)="saveDDSDetail()" [format]="'dd/MM/yyyy'"
+              [(ngModel)]="ddsDetail.ToPeriod">
+            </kendo-datepicker>
+          </label>
+        </div>
+        <div class="col-md-3 control-col-st">
+          <label class="k-form-field">Integrity <span class="text-danger">*</span>
+            <kendo-dropdownlist [data]="['Honest', 'Corrupt', 'Reported to be Corrupt']" [valuePrimitive]="true"
+              [(ngModel)]="ddsDetail.Integrity">
+            </kendo-dropdownlist>
+          </label>
+        </div>
+        <div class="col-md-3 control-col">
+          <label class="k-form-field">General Assessment <span class="text-danger">*</span>
+            <kendo-dropdownlist
+              [data]="['Outstanding', 'Very Good', 'Good', 'Average', 'Satisfactory', 'Below Average', 'Unsatisfactory', 'Poor']"
+              [valuePrimitive]="true" [(ngModel)]="ddsDetail.Assessment">
+            </kendo-dropdownlist>
+          </label>
+        </div>
+        <div class="col-md-3 control-col">
+          <label class="k-form-field">Adverse Remarks&nbsp;<span class="text-muted">(if any)</span>
+            <input type="text" kendoTextBox [(ngModel)]="ddsDetail.AdvRemarks">
+          </label>
+        </div>
+        <div class="col-md-3 control-col-end">
+          <label class="k-form-field">Fitness <span class="text-danger">*</span>
+            <kendo-dropdownlist [data]="['Fit', 'Un Fit', 'Fit for accelerated promotion', 'Not yet fit for promotion']"
+              [valuePrimitive]="true" [(ngModel)]="ddsDetail.Fitness">
+            </kendo-dropdownlist>
+          </label>
+        </div>
+        <div class="col-md-6 control-col-st">
+          <label class="k-form-field">RO Remarks <span class="text-danger">*</span>
+            <input type="text" kendoTextBox [(ngModel)]="ddsDetail.RORemarks">
+          </label>
+        </div>
+        <div class="col-md-6 control-col-end">
+          <label class="k-form-field">CO Remarks <span class="text-danger">*</span>
+            <input type="text" kendoTextBox [(ngModel)]="ddsDetail.CORemarks">
+          </label>
+        </div>
+        <div class="col-md-4 control-col-st">
+          <label class="k-form-field">Reporting Officer Name
+            <span class="text-danger">*</span>
+            <input type="text" kendoTextBox [(ngModel)]="ddsDetail.ROName">
+          </label>
+        </div>
+        <div class="col-md-4 control-col">
+          <label class="k-form-field">Reporting Officer Designation
+            <span class="text-danger">*</span>
+            <input type="text" kendoTextBox [(ngModel)]="ddsDetail.RODesignation">
+          </label>
+        </div>
+        <div class="col-md-4 control-col-end">
+          <label class="k-form-field">Reporting Officer Posting
+            <span class="text-danger">*</span>
+            <input type="text" kendoTextBox [(ngModel)]="ddsDetail.ROPosting">
+          </label>
+        </div>
+        <div class="col-md-4 control-col-st">
+          <label class="k-form-field">Counter Signing Officer Name
+            <span class="text-danger">*</span>
+            <input type="text" kendoTextBox [(ngModel)]="ddsDetail.COName">
+          </label>
+        </div>
+        <div class="col-md-4 control-col">
+          <label class="k-form-field">Counter Signing Officer Designation
+            <span class="text-danger">*</span>
+            <input type="text" kendoTextBox [(ngModel)]="ddsDetail.CODesignation">
+          </label>
+        </div>
+        <div class="col-md-4 control-col-end">
+          <label class="k-form-field">Counter Signing Officer Posting
+            <span class="text-danger">*</span>
+            <input type="text" kendoTextBox [(ngModel)]="ddsDetail.COPosting">
+          </label>
+        </div>
+        <div class="col-md-2 mt-1 offset-md-10">
+          <button class="btn-align-v btn-block" (click)="saveDDSDetail()"
+            [disabled]="!ddsDetail.FromPeriod || !ddsDetail.ToPeriod" kendoButton primary="true">Submit</button>
+        </div>
+      </div>
+    </tab>
+    <tab heading="View ACRs">
+
+      <div class="row row-panel">
+        <div class="col-md-12">
+          <div class="grid-wrapper" style="max-height:440px;">
+            <kendo-grid #grid [data]="kGrid.gridView" [sortable]="{
+                    allowUnsort: kGrid.allowUnsort,
+                    mode: 'single'
+                    }" [selectable]="false" [data]="gridView" [sort]="kGrid.sort" [(pageSize)]="kGrid.pageSize"
+              [skip]="kGrid.skip" [scrollable]="true">
+              <kendo-grid-column field="asd" title="No." [width]="'7'" [headerClass]="'grid-header-custom'"
+                [class]="{'grid-cell-custom': true}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p>{{(rowIndex + 1)}}
+                  </p>
+                </ng-template>
+              </kendo-grid-column>
+
+              <!-- <kendo-grid-column field="Name" title="Year" [width]="'8'" [headerClass]="'grid-header-custom'"
+                [class]="{'grid-cell-custom': true}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p>{{dataItem.FromPeriod | date:'yyyy'}}
+                  </p>
+                </ng-template>
+              </kendo-grid-column> -->
+
+              <kendo-grid-column field="Name" title="Period" [width]="'30'" [headerClass]="'grid-header-custom'"
+                [class]="{'grid-cell-custom': true}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p>{{dataItem.FromPeriod | date:'dd.MM.yyyy'}} - {{dataItem.ToPeriod | date:'dd.MM.yyyy'}}
+                  </p>
+                </ng-template>
+              </kendo-grid-column>
+
+              <kendo-grid-column field="Name" title="Status" [width]="'10'" [headerClass]="'grid-header-custom'"
+                [class]="{'grid-cell-custom': true}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p><span class="badge" [ngClass]="dataItem.Id == 0 ? 'badge-danger' : 'badge-success'" style="font-family: 'Roboto-Bold';
+                    font-weight: 100;">{{dataItem.Id
+                        == 0 ? 'Missing' : 'OK'}}</span>
+                  </p>
+                </ng-template>
+              </kendo-grid-column>
+
+              <kendo-grid-column field="Name" title="Document Type" [width]="'30'" [headerClass]="'grid-header-custom'"
+                [class]="{'grid-cell-custom': true}">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                  <p>{{dataItem.Remarks}}
+                  </p>
+                </ng-template>
+              </kendo-grid-column>
+            </kendo-grid>
+            <div *ngIf="kGrid.loading" class="k-i-loading"></div>
+          </div>
+        </div>
+      </div>
+    </tab>
+    <tab heading="Scan ACR">
+      <div class="content-heading" *ngIf="dds.Id">File Attachments</div>
+      <hr *ngIf="dds.Id">
+      <div class="row" *ngIf="dds.Id">
+        <div class="col-md-6 control-col-st">
+          <label class="k-form-field">
+            <span>Attach Files <span *ngIf="!photoSrc" class="text-warning fa fa-exclamation-circle"></span><span
+                *ngIf="photoSrc" class="text-success"><i class="fa fa-check-circle"></i></span></span>
+            <div>
+              <img *ngIf="photoSrc" class="animated fadeIn" style="width:100px;height:100px;border:1px solid;"
+                [src]="photoSrc" alt="">
+              <input #photoRef type="file" accept="image/jpg, image/jpeg, application/pdf" multiple="multiple"
+                (change)="readUrl($event)">
+            </div>
+            <!--    <div>
+                <button kendoButton type="button" [primary]="true" [look]="'outline'" (click)="uploadBtn()"
+                  class="btn-sm mt-1" [ngClass]="photoFile.length == 0 ? 'mt-0' : 'mt-2'" style="cursor:pointer;">
+                  <i class="fa fa-upload"></i>&nbsp;{{photoFile.length == 0 ? 'Choose File' : 'Choose Other File'}}</button>
+              </div> -->
+          </label>
+        </div>
+        <div class="col-md-6 control-col-end">
+          <label class="k-form-field">
+            <span>&nbsp;{{fileError ? '' : ''}}</span>
+            <button kendoButton class="btn-block" [ladda]="uploading" data-style="zoom-in" [primary]="true"
+              (click)="uploadFile()">Upload</button>
+          </label>
+        </div>
+      </div>
+
+      <div class="row" *ngIf="fileAttachments.length > 0">
+        <div class="col-md-12">
+          <div class="d-flex flex-wrap">
+            <div class="mx-2 mb-2" *ngFor="let doc of fileAttachments;let i = index;">
+              <img width="175px" class="border"
+                [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/Files/ACRFiles/' + doc.DDs_Url" alt="">
+              <div class="text-center mt-1">
+                <!---->
+                <strong class="p-strong">
+                  <!-- {{doc.PhotName}} -  --><i class="fa fa-times cursor-p text-danger"
+                    (click)="removeFileAttachments(doc.Id)"></i></strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </tab>
+  </tabset>
+
+</div>

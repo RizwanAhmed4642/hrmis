@@ -1,0 +1,109 @@
+<div *ngIf="!merit.Id" class="k-i-loading"></div>
+
+<div class="animated fadeIn" *ngIf="merit.Id">
+  <div class="row">
+    <div class="col-md-10 offset-md-1">
+      <!-- <div class="row">
+        <div class="col-md-8 offset-md-2">
+          <h2 class="text-success text-center">Dear Doctor <u>{{merit?.Name}}</u></h2>
+          <br />
+          <p class="text-justify">
+            P&SHD is offering the PPSC selected MO/WMO of 2020 an opportunity to apply for MCPS/Diploma in Anesthesia.
+            This
+            admission will
+            allow you to work in a teaching hospital for two years after which you will be reporting back to the
+            Department for
+            further posting. If you are interested in pursuing this course please give your willingness through the
+            following web
+            portal.
+          </p>
+        </div>
+
+      </div>
+      <div class="row" *ngIf="merit?.DiplomaOffer === null">
+        <button type="button" kendoButton primary="true" class="col-md-2 offset-md-4 btn-block"
+          [ladda]="isAcceptanceLoading" data-style="zoom-in" (click)="saveStatus(true)"><i class="fa fa-check"></i>
+          Accept</button>
+
+        <button type="button" class="btn btn-danger col-md-2 btn-block ml-1 mt-0" [ladda]="isAcceptanceLoading"
+          data-style="zoom-in" (click)="saveStatus(false)"><i class="fa fa-times"></i>
+          Reject</button>
+      </div>
+
+      <div class="jumbotron" *ngIf="merit?.DiplomaOffer !== null">
+        <h3 class="text-center">
+          <i class="fa" [ngClass]="merit.DiplomaOffer === true  ? 'fa-check text-success' : 'fa-times text-danger'"></i>
+          Offer for MCPS/Diploma in Anesthesia {{ merit.DiplomaOffer === true ? ' Accepted' : ' Rejected' }}
+        </h3>
+
+      </div>
+      <hr> -->
+      <div class="row">
+        <div class="col-md-4 col-sm-12 mt-2 control-col-st">
+          <div>
+            <img *ngIf="photoSrc" class="animated fadeIn" style="width:100px;height:100px;border:1px solid;"
+              [src]="photoSrc" onError="this.src='../../../assets/img/notfound.png'" alt="">
+          </div>
+          <hr>
+          <div>
+            <button class="text-center mt-1" kendoButton primary="true" [ladda]="downloadingOfferLetter"
+              data-style="zoom-in" (click)="getOfferLetterLink()"><i class="fa fa-download"></i>&nbsp;Download Offer
+              Letter</button>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-12 mt-2 control-col">
+          <h4 class="m-0"><span class="p-strong">Name:</span> {{ merit.Name}}</h4>
+          <p class="m-0"><span class="p-strong">Father Name:</span> {{ merit.FatherName}}</p>
+          <p class="m-0"><span class="p-strong">CNIC:</span> {{ dashifyCNIC(merit.CNIC)}}</p>
+          <p class="m-0"><span class="p-strong">Designation:</span> {{ merit.DesignationName}}</p>
+          <p class="m-0"><span class="p-strong">Contact: </span> {{ merit.MobileNumber}}</p>
+
+        </div>
+        <div class="col-md-4 col-sm-12 mt-2 control-col-end">
+          <h4 class="m-0"><span class="p-strong">Merit Number:</span> {{ merit.MeritNumber}}</h4>
+          <p class="m-0"><span class="p-strong">Application Number:</span> {{ merit.ApplicationNumber}}</p>
+          <p class="m-0"><span class="p-strong">PMDC Number:</span> {{ merit.PMDCNumber}}</p>
+          <p class="m-0"><span class="p-strong">Letter Number:</span> {{ merit.LetterNumber}}</p>
+          <p class="m-0"><span class="p-strong">Domicile:</span> {{ merit.DomicileName}}</p>
+
+        </div>
+      </div>
+      <hr *ngIf="selectedMeritPreferences.length > 0">
+      <div *ngIf="loadingPreferences" class="k-i-loading"></div>
+      <div class="row" *ngIf="selectedMeritPreferences.length > 0">
+        <div class="col-md-10 offset-md-1">
+          <h4 class="mb-2"><span class="p-strong">Preferences:</span> {{ selectedMeritPreferences.length}}</h4>
+          <kendo-grid [data]="selectedMeritPreferences">
+            <kendo-grid-column [width]="7" field="asd" title="No." [headerClass]="'grid-header-custom'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                {{(rowIndex + 1)}}.
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="93" field="FullName" title="Health Facility"
+              [headerClass]="'grid-header-custom'"
+              [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                {{dataItem.FullName}}
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+          <h4 class="m-0" *ngIf="selectedMeritPreferences.length == 0">
+            No Preferences
+          </h4>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+
+    </div>
+    <div class="col-md-3 control-col-end">
+      <button type="button" class="btn btn-secondary btn-block btn-lg" routerLink="/ppsc">Logout</button>
+    </div>
+  </div>
+</div>

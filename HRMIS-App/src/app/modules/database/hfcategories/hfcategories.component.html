@@ -1,0 +1,42 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <div class="top-h3">
+        Health Facility Categories
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <kendo-grid [data]="gridView">
+      <kendo-grid-column [width]="10" field="asd" title="No.">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+          {{(rowIndex + 1)}}
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [width]="50" field="Name" title="Name">
+
+      </kendo-grid-column>
+      <kendo-grid-column field="asd" title="Actions" [width]="'10'" [headerClass]="'grid-header-custom grid-header-actions-custom'"
+            [class]="{'grid-cell-custom grid-cell-last-custom grid-cell-min-custom-150': true}">
+     <ng-template kendoGridCellTemplate let-dataItem>
+        <a (click)="openHfCatWindow(dataItem)"><img class="icon-svg" src="../../../../assets/img/icons/edit2.svg" alt=""></a>
+      </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+  </div>
+</div>
+<kendo-dialog [title]="'Edit Health Facility Category'" *ngIf="HfCatDialogOpened && selectedHfCategory" (close)="closeHfCatWindow()" [minWidth]="450" [width]="500">
+<div class="row p-3">
+  <div class="col-md-12">
+      <label class="k-form-field">
+        <span>Health Facility Category</span>
+        <input kendoTextBox type="text" name="HfCatName" [(ngModel)]="selectedHfCategory.name" #HfCatName="ngModel">
+      </label>  
+  </div>
+</div>
+<kendo-dialog-actions *ngIf="HfCatDialogOpened && selectedHfCategory" class="animated fadeIn">
+  <button kendoButton data-style="zoom-in" (click)="editHfCategory()" primary="true">Save</button>
+  <button kendoButton (click)="closeHfCatWindow()">Cancel</button>
+
+</kendo-dialog-actions>
+</kendo-dialog>

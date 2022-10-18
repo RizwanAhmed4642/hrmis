@@ -1,0 +1,67 @@
+<div class="animated fadein">
+  <!-- <div class="animated fadeIn" *ngIf="merit.Status && (merit.Status == 'Accepted' || merit.Status == 'Completed')">
+    <div class="row mb-2">
+      <div class="col-md-4">
+        <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/ppsc/profile">1-
+          Profile</button>
+      </div>
+      <div class="col-md-4">
+        <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/ppsc/letter">2- Offer Letter &
+          Acceptance</button>
+      </div>
+      <div class="col-md-4">
+        <button kendoButton primary="true" look="outline" class="btn-block" routerLink="/ppsc/preferences">3-
+          Preferences</button>
+      </div>
+    </div>
+    <hr>
+  </div> -->
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="text-primary p-strong">1- Download Acceptance</h3>
+      <hr>
+      <p>- Download Acceptance Letter and Print It</p>
+      <p>- You must sign acceptance letter and upload in next step</p>
+    </div>
+    <div class="col-md-6">
+      <h3 class="text-primary p-strong">2- Upload Signed Acceptance</h3>
+      <hr>
+      <p>- Upload signed copy of your acceptance letter (scanned)</p>
+      <p>- File type must be JPG or JPEG</p>
+      <p>- File size must be less than 5MB</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <button style="margin: 0 auto;" class="text-center btn-block" kendoButton primary="true" (click)="getAcceptanceLetterLink()">1-&nbsp;Download
+        Acceptance
+        Letter</button>
+    </div>
+    <div class="col-md-6">
+      <label class="k-form-field">
+        <div style="width:100%;">
+          <img *ngIf="photoSrc" class="animated fadeIn" style="width:100px;height:100px;border:1px solid;"
+            [src]="photoSrc" onError="this.src='../../../assets/img/notfound.png'" alt="">
+          <input #photoRef type="file" accept="image/jpg, image/jpeg, image/png" (change)="readUrl($event, 'pic')"
+            hidden>
+          <button kendoButton type="button" [primary]="true" (click)="uploadBtn('pic')" class="btn-block btn-lg"
+            [ngClass]="photoFile.length == 0 ? 'mt-0' : 'mt-2'" style="cursor:pointer;" [ladda]="isUploading"
+            data-style="expand-right"> {{'2- Upload Acceptance Letter'}}</button>
+        </div>
+      </label>
+    </div>
+  </div>
+  <div class="animated fadeIn">
+    <hr>
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <button *ngIf="acceptanceUploaded" style="margin: 0 auto;" class="btn-block btn-lg" kendoButton primary="true"
+          look="outline" routerLink="/smo/preferences">Proceed
+          for Preferences <i class="fa fa-arrow-right-circle"></i></button>
+      </div>
+      <div class="col-md-3 control-col-end">
+        <button type="button" class="btn btn-secondary btn-block" routerLink="/smo">Logout</button>
+      </div>
+    </div>
+  </div>
+</div>

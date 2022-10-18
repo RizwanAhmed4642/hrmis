@@ -1,0 +1,156 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-6 col-xs-12">
+      <div class="top-h3">
+        Order Verification
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-12">
+      <div class="top-controls">
+        <!--   <button kendoButton [primary]="true" [look]="'outline'" class="ml-2" (click)="openWindow('')">New
+              Application</button> -->
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 col-sm-12 control-col-st">
+      <label class="k-form-field">
+        <span><strong class="p-strong">Service Record (ESR)</strong></span>
+        <input type="text" [(ngModel)]="esrNo" kendoTextBox (keyup.enter)="searchApplication(esrNo, 1)">
+      </label>
+    </div>
+    <div class="col-md-6 col-sm-12 control-col-end">
+      <label class="k-form-field">
+        <span><strong class="p-strong">Leave Record (ELR)</strong></span>
+        <input type="text" [(ngModel)]="elrNo" kendoTextBox (keyup.enter)="searchApplication(elrNo, 2)">
+      </label>
+    </div>
+  </div>
+  <div class="animated fadeIn" *ngIf="esr || leaveOrder">
+
+    <hr class="animated fadeIn" *ngIf="esr && esr.Id">
+    <div class="row row-panel animated fadeIn" *ngIf="esr && esr.Id">
+
+      <div class="col-md-4 col-xs-12 control-col-st">
+        <p class="m-0"><strong class="p-strong">Name</strong> {{esr.EmployeeName}}</p>
+        <p class="m-0"><strong class="p-strong">CNIC</strong> {{dashifyCNIC(esr.CNIC)}}</p>
+      </div>
+      <div class="col-md-8 col-xs-12 control-col-end">
+        <p class="m-0"><strong class="p-strong">File No.</strong> {{esr.EmployeeFileNO}}</p>
+        <p class="m-0"><strong class="p-strong">Signed By</strong>
+          {{esr.EsrSectionOfficerName ? esr.EsrSectionOfficerName : esr.SectionOfficer}}</p>
+      </div>
+      <div class="col-md-4 col-xs-12 control-col-st">
+        <p class="m-0"><strong class="p-strong">Type</strong> {{esr.TransferTypeName}}</p>
+        <p class="m-0"><strong class="p-strong">Date and
+            Time</strong>&nbsp;{{esr.Created_Date | date:'dd/MM/yyyy, h:mm a'}}
+        </p>
+        <p class="m-0"><strong class="p-strong">Created By</strong>&nbsp;<u>{{esr.Created_By}}</u></p>
+      </div>
+      <div class="col-md-7 col-xs-12 control-col">
+        <!-- General Transfer -->
+        <div *ngIf="esr.TransferTypeID == 4">
+          {{esr.TransferTypeName}} at
+          <!--       <strong style="font-family: Roboto-Bold !important;"
+        class="no-underline text-bold wb-break-all d-inline-block" href="">{{esr.HF_From}}</strong>
+      <div>{{esr.DesigFrom}}</div>
+      <div>to</div> -->
+          <strong style="font-family: Roboto-Bold !important;"
+            class="no-underline text-bold wb-break-all d-inline-block" href="">{{esr.HF_TO}}</strong>
+          <div>as <u>{{esr.DesigTo}}</u></div>
+        </div>
+        <!-- Adhoc Appointment -->
+        <div *ngIf="esr.TransferTypeID == 8">
+          <div>{{esr.TransferTypeName}}</div>
+          <strong style="font-family: Roboto-Bold !important;"
+            class="no-underline text-bold wb-break-all d-inline-block" href="">{{esr.HF_TO}}</strong>
+        </div>
+        <!-- Disposal -->
+        <div *ngIf="esr.TransferTypeID == 2">
+          {{esr.TransferTypeName}}
+          <strong style="font-family: Roboto-Bold !important;"
+            class="no-underline text-bold wb-break-all d-inline-block"
+            href="">{{esr.HF_TO ? esr.HF_TO : '(missing)' }}</strong>
+        </div>
+        <!-- Suspend -->
+        <div *ngIf="esr.TransferTypeID == 3">
+          <strong style="font-family: Roboto-Bold !important;"
+            class="no-underline text-bold wb-break-all d-inline-block" href=""> {{esr.TransferTypeName}}</strong>
+        </div>
+        <!-- Awaiting Posting -->
+        <div *ngIf="esr.TransferTypeID == 6">
+          {{esr.TransferTypeName}} at
+          <strong style="font-family: Roboto-Bold !important;"
+            class="no-underline text-bold wb-break-all d-inline-block"
+            href="">{{esr.HF_TO ? esr.HF_TO : '(missing)' }}</strong>
+          <div>as <u>{{esr.DesigTo}}</u></div>
+        </div>
+        <!-- Notification -->
+        <div *ngIf="esr.TransferTypeID == 7">
+          {{esr.TransferTypeName}}
+          <!--  <strong style="font-family: Roboto-Bold !important;"
+        class="no-underline text-bold wb-break-all d-inline-block"
+        href="">{{esr.HF_TO ? esr.HF_TO : '(missing)' }}</strong> -->
+        </div>
+        <!-- Termination -->
+        <div *ngIf="esr.TransferTypeID == 10">
+          <strong style="font-family: Roboto-Bold !important;"
+            class="no-underline text-bold wb-break-all d-inline-block" href=""> {{esr.TransferTypeName}}</strong>
+        </div>
+
+      </div>
+      <div class="col-md-1 col-xs-12 control-col-end">
+        <button kendoButton primary="true" (click)="viewOrder(esr)"><i class="fa fa-eye"></i></button>
+      </div>
+    </div>
+    <hr class="animated fadeIn" *ngIf="leaveOrder && leaveOrder.Id && esr.TransferTypeID == 5">
+    <div class="row row-panel animated fadeIn" *ngIf="leaveOrder && leaveOrder.Id && esr.TransferTypeID == 5">
+      <div class="col-md-4 col-xs-12 control-col-st">
+        <p class="m-0"><strong class="p-strong">Type</strong> Leave Order</p>
+        <p class="m-0"><strong class="p-strong">Date and
+            Time</strong>&nbsp;{{leaveOrder.DateTime | date:'dd/MM/yyyy, h:mm a'}}
+        </p>
+        <p class="m-0"><strong class="p-strong">Created By</strong>&nbsp;<u>{{leaveOrder.UserName}}</u></p>
+      </div>
+      <div class="col-md-7 col-xs-12 control-col">
+        <p class="m-0"><strong class="p-strong">Leave Type</strong> {{leaveOrder.LeaveTypeName}}</p>
+        <p class="m-0"><strong class="p-strong">{{ leaveOrder.FromDate | date:'dd/MM/yyyy' }}</strong> -
+          <strong class="p-strong">{{ leaveOrder.FromDate | date:'dd/MM/yyyy' }}</strong></p>
+        <p class="m-0"><strong class="p-strong">Total Days</strong>&nbsp;<u>{{leaveOrder.TotalDays}} days</u></p>
+      </div>
+      <div class="col-md-1 col-xs-12 control-col-end">
+        <button kendoButton primary="true" (click)="viewOrder(leaveOrder)"><i class="fa fa-eye"></i></button>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-md-12">
+        <label class="k-form-field">
+          <span><strong class="p-strong">Title <span class="text-danger">*</span></strong></span>
+          <textarea kendoTextArea rows="2" [(ngModel)]="esrSinged.Title"></textarea>
+        </label>
+      </div>
+      <div class="col-md-12">
+        <label class="k-form-field">
+          <span><strong class="p-strong">Link <span class="text-danger">*</span></strong></span>
+          <input type="text" kendoTextBox [(ngModel)]="esrSinged.Link">
+        </label>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="offset-md-10 col-md-2 col-sm-12 mt-1 control-col-end">
+        <label class="k-form-field">
+          <button kendoButton class="btn-block" data-style="zoom-in" [disabled]="!esrSinged.Title || !esrSinged.Link"
+            (click)="uploadOrder()" [primary]="true" [ladda]="saving" data-style="zoom-in">SAVE</button>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+<kendo-dialog [title]="selectedOrder.EmployeeName" *ngIf="selectedOrder && viewOrderWindow" [minWidth]="'450'"
+  [height]="'585'" [width]="'830'" (close)="closeViewOrderWindow()">
+  <pre>{{selectedOrder | json}}</pre>
+  <div class="order-view-div" [innerHTML]="transform(selectedOrder.OrderHTML)"></div>
+</kendo-dialog>

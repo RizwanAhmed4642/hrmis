@@ -1,0 +1,78 @@
+<!-- <div *ngIf="modules.length == 0" class="k-i-loading"></div> -->
+<!-- *ngIf="modules.length > 0" -->
+<div class="animated fadeIn">
+  <h3 class="top-h3">User Rights
+    <button kendoButton [primary]="true" routerLink="/user" class="pull-right">Back</button>
+    <button kendoButton [primary]="true" [look]="'outline'" routerLink="/user/add-claims" class="pull-right mr-1">New module</button>
+  </h3>
+  <div class="row">
+    <div class="col-md-12">
+      <input type="text" kendoTextBox style="height: 40px;" placeholder="Role Name">
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-md-12">
+      <div class="k-form-field">
+        <input type="checkbox" [(ngModel)]="checkAll" (change)="allowAll($event)" id="allow" class="k-checkbox" />
+        <label class="k-checkbox-label" for="allow">Allow All</label>
+      </div>
+    </div>
+  </div>
+  <div class="row row-panel">
+    <div class="col-md-4 col-sm-12" *ngFor="let module of modules;let i = index;">
+      <table class="table claim-table" style="background: white;">
+        <thead>
+          <tr>
+            <th><span [routerLink]="'/user/' + module.Id + '/add-claims'">{{module.Name}}</span></th>
+            <th>
+              <div class="k-form-field">
+                <input type="checkbox" [(ngModel)]="module.Value" (change)="permissionChecked(module.Id, $event)" [id]="module.Id" class="k-checkbox pull-right" />
+                <label class="k-checkbox-label pull-right" [for]="module.Id"></label>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let component of module?.erpComponents;let j = index;">
+            <td style="width:80%;">
+              <div>
+                <span *ngIf="component.Value" style="cursor: pointer;" class="pr-1"><i class="text-primary" [ngClass]="component?.showFields ? 'fa fa-caret-down' : 'fa fa-caret-right'" (click)="component.showFields = component.showFields ? false : true"></i>
+                </span>
+                {{component.Name}}
+              </div>
+              <div *ngIf="component?.showFields && (component?.showFields || component.Value)">
+                <hr>
+                <input type="text" placeholder="Field name..." kendoTextBox>
+                <ul class="fields-list list-unstyled mt-2">
+                  <li>
+                    <input type="checkbox" [(ngModel)]="component.allFields" (change)="allowAllFields($event, module.Id, component.Id)" [id]="'fieldAll:' + module.Id + component.Id" class="k-checkbox" />
+                    <label class="k-checkbox-label" [for]="'fieldAll:' + module.Id + component.Id">Allow All Fields</label>
+                  </li>
+                  <li *ngFor="let field of component?.erpFields">
+                    <input type="checkbox" [(ngModel)]="field.Value" (change)="fieldChecked(module.Id, component.Id)" [id]="module.Id + component.Id + field.Id" class="k-checkbox" />
+                    <label class="k-checkbox-label" [for]="module.Id + component.Id + field.Id">{{field.Name}}</label>
+                  </li>
+                </ul>
+              </div>
+            </td>
+            <td style="width:20%;">
+              <div class="k-form-field">
+                <input type="checkbox" [(ngModel)]="component.Value" (change)="subPermissionChecked(module.Id, component.Id, $event)" [id]="module.Id + component.Id" class="k-checkbox pull-right" />
+                <label class="k-checkbox-label pull-right" [for]="module.Id + component.Id"></label>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <hr>
+  <div class="row mt-3">
+    <div class="col-md-2 col-sm-6 col-xs-6 control-col-st">
+      <button kendoButton class="btn-block" (click)="onSave()" [primary]="true">Save</button>
+    </div>
+    <div class="col-md-2 col-sm-6 col-xs-6 control-col-end">
+      <button kendoButton [primary]="true" routerLink="/user" class="btn-block" [look]="'outline'">Back</button>
+    </div>
+  </div>
+</div>

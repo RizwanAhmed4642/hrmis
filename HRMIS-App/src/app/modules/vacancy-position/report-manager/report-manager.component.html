@@ -1,0 +1,178 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-6 col-xs-12">
+      <div class="top-h3">
+        Vacancy Report Manager
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-12">
+      <div class="top-controls">
+        <button kendoButton [primary]="true" class="ml-2" ladda (click)="switchStatus()"> <i class="fa"
+            [ngClass]="{'fa-arrow-down':!ShowFiltrer, 'fa-arrow-up':ShowFiltrer}"
+            style="color: white;white-space: pre"></i>&nbsp;
+          <span *ngIf="ShowFiltrer"> Hide Filters</span><span *ngIf="!ShowFiltrer">
+            Show Filters</span></button>
+        <button kendoButton *ngIf="currentUser.UserName == 'dpd' || currentUser.UserName.startsWith('sdp')"
+          [primary]="true" ladda [routerLink]="'/vacancy-position/quota'">Initial / Promotion
+          Quota</button>
+        <button kendoButton class="mr-2"
+          *ngIf="currentUser.UserName == 'dpd' || currentUser.UserName.startsWith('sdp') || currentUser.UserName == 'as.admin'"
+          [primary]="true" ladda [routerLink]="'/vacancy-charts'">Vacancy Chart</button>
+      </div>
+    </div>
+  </div>
+  <div class="animated fadeIn" [hidden]="!ShowFiltrer">
+    <div class="row">
+      <div class="col-md-4 control-col-st">
+        <span class="k-form-field">Columns</span>
+        <p-multiSelect [style]="{'width':'100%'}" [options]="Group" [(ngModel)]="DDTH" autoWidth="false"
+          maxSelectedLabels="5" (onChange)="resetData()">
+        </p-multiSelect>
+      </div>
+      <div class="col-md-4 control-col">
+        <span class="k-form-field">Values</span>
+        <p-multiSelect [style]="{'width':'100%'}" [options]="Vecancy" [(ngModel)]="Vecancies" maxSelectedLabels="5"
+          (onChange)="resetData()">
+        </p-multiSelect>
+      </div>
+      <div class="col-md-4 control-col-end">
+        <span class="k-form-field">Filter By</span>
+        <p-multiSelect [style]="{'width':'100%'}" [options]="Designations" [(ngModel)]="SelectedDesignation"
+          defaultLabel="Designation">
+        </p-multiSelect>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-md-3 control-col-st">
+        <span class="k-form-field">Administrative Control</span>
+        <p-multiSelect [style]="{'width':'100%'}" [options]="HFAC" [(ngModel)]="selectedHFACs"
+          defaultLabel="Administrative Control">
+        </p-multiSelect>
+      </div>
+
+      <div class="col-md-4 control-col-st">
+        <span class="k-form-field">Post Type</span>
+        <p-multiSelect [style]="{'width':'100%'}" [options]="postTypes" [(ngModel)]="selectedPostTypes"
+          defaultLabel="Post Type">
+        </p-multiSelect>
+      </div>
+      <div class="col-md-3 control-col">
+
+        <span class="k-form-field">Cadre</span>
+        <p-multiSelect [style]="{'width':'100%'}" [options]="cadres" [(ngModel)]="selectedCadres" defaultLabel="Cadre">
+        </p-multiSelect>
+
+      </div>
+      <div class="col-md-2 control-col-end">
+        <span class="k-form-field">Scale</span>
+        <p-multiSelect [style]="{'width':'100%'}" [options]="scales" [(ngModel)]="selectedScales" defaultLabel="Scale">
+        </p-multiSelect>
+      </div>
+
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-3 control-col-st">
+        <span class="k-form-field">Division</span>
+        <p-multiSelect [style]="{'width':'100%'}" [disabled]="Division.length == 1" [options]="Division"
+          [(ngModel)]="SelectedDivision" [defaultLabel]="Division.length == 1 ? Division[0].label : 'Division'">
+        </p-multiSelect>
+      </div>
+      <div class="col-md-3 control-col">
+        <span class="k-form-field">District</span>
+        <p-multiSelect [style]="{'width':'100%'}" [disabled]="District.length == 1" [options]="District"
+          [(ngModel)]="SelectedDistrict" [defaultLabel]="District.length == 1 ? District[0].label : 'District'">
+        </p-multiSelect>
+      </div>
+      <div class="col-md-3 control-col">
+        <span class="k-form-field">Tehsil</span>
+        <p-multiSelect [style]="{'width':'100%'}" [disabled]="Tehsil.length == 1" [options]="Tehsil"
+          [(ngModel)]="SelectedTehsil" [defaultLabel]="Tehsil.length == 1 ? Tehsil[0].label : 'Tehsil'">
+        </p-multiSelect>
+      </div>
+      <div class="col-md-3 control-col-end">
+        <span class="k-form-field">Health Facility Type</span>
+        <p-multiSelect [style]="{'width':'100%'}" [disabled]="HFType.length == 1" [options]="HFType"
+          [(ngModel)]="SelectedHFType" [defaultLabel]="HFType.length == 1 ? HFType[0].label : 'Health Facility Type'">
+        </p-multiSelect>
+      </div>
+    </div>
+    <div class="row mt-2" *ngIf="showHFFilter">
+      <div class="col-md-12">
+        <span class="k-form-field">Health Facility</span>
+        <p-multiSelect [style]="{'width':'100%'}" [disabled]="HF.length == 1" [options]="HF" [(ngModel)]="SelectedHF"
+          [defaultLabel]="HF.length == 1 ? HF[0].label : 'HF'">
+        </p-multiSelect>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-md-3 control-col-st">
+        <button kendoButton primary="true" [look]="'outline'" ladda class="btn-block" (click)="clear()"><i
+            class="fa fa-refresh"></i>
+          Clear</button>
+      </div>
+      <div class="col-md-3 control-col">
+        <button kendoButton primary="true" class="animated fadeIn btn-block" [look]="'outline'" (click)="print()"
+          [ladda] [disabled]="DDTH.length == 0 && Vecancies.length == 0" data-style="zoom-in"><i
+            class="fa fa-print"></i>
+          Print</button>
+      </div>
+      <!--  <div class="col-md-2 control-col">
+        <button kendoButton primary="true" class="animated fadeIn btn-block" [look]="'outline'" (click)="pdf.saveAs('vacancyReport.pdf')"
+          [disabled]="DDTH.length == 0 && Vecancies.length == 0" [ladda]="isDownloadingPDF" data-style="zoom-in"><i class="fa fa-file-pdf-o"></i>
+          Export to PDF</button>
+      </div> -->
+      <div class="col-md-3 control-col">
+        <button kendoButton primary="true" class="animated fadeIn btn-block" [look]="'outline'" (click)="download()"
+          [disabled]="DDTH.length == 0 && Vecancies.length == 0" [ladda]="isDownloading" data-style="zoom-in"><i
+            class="fa fa-file-excel-o"></i>
+          Export To Excel</button>
+      </div>
+      <div class="col-md-3 control-col-end">
+        <button kendoButton primary="true" class="btn-block" (click)="getData()" [ladda]="isLoading"
+          data-style="zoom-in" [disabled]="DDTH.length == 0 && Vecancies.length == 0">Get
+          Data</button>
+      </div>
+    </div>
+    <br />
+  </div>
+
+  <kendo-pdf-export id="printOld" #pdf paperSize="A4" margin="2cm">
+    <table class="table table-striped table-hover table-50 vpmgrtable ">
+      <thead>
+        <tr>
+          <th>Sr.</th>
+          <th *ngFor="let dim of DDTH" class="">{{dim.Display}}</th>
+
+          <th *ngFor="let mea of Vecancies" class="text-right ">{{mea.Display}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of data;let j = index;">
+          <td>
+            {{(j + 1)}}
+          </td>
+          <td *ngFor="let dim of row;let i = index;" [ngClass]="{'text-right':(i + 1) > DDTH.length}">
+            <span *ngIf="(i + 1) <= DDTH.length"><span>{{dim}}</span></span>
+            <span *ngIf="(i + 1) > DDTH.length">{{dim | number}}
+              <!-- <span *ngIf="sanctionedIndex == i || filledIndex == i || vacantIndex == i || approvalsIndex == i || profilesIndex == i || workingProfilesIndex == i" class="success-hover"
+                (click)="cellClicked(i, row)">{{dim | number}}</span>
+              <span
+                *ngIf="sanctionedIndex != i && filledIndex != i && vacantIndex != i && approvalsIndex != i && profilesIndex != i && workingProfilesIndex != i">{{dim | number}}</span> -->
+            </span>
+          </td>
+        </tr>
+        <tr style="background: #e2e2e2;" *ngIf="data?.length > 0 && totals.length > 0">
+          <td [colSpan]="DDTH.length + 1" class="text-center">
+            <span class="p-strong"><i class="fa fa-calculator"></i> Total</span>
+          </td>
+          <td *ngFor="let total of totals;" class="text-right">
+            <span class="p-strong">{{total | number}}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </kendo-pdf-export>
+</div>

@@ -1,0 +1,278 @@
+<div class="login-div">
+  <div class="animated fadeIn">
+    <hr>
+    <div class="row" *ngIf="showProfile && 2 + 2 == 5">
+      <div class="col-md-12">
+        <h4>Service History as Regular Medical Officer (BS-17)</h4>
+      </div>
+      <div class="col-md-12">
+        <div class="order-thumb mb-3">
+          <div class="order-thumb-wrap">
+            <div class="p-3">
+              <h4>Note:</h4>
+              <p class="m-0">
+                Please enter your service history as Regular Medical Officer (BS-17)
+              </p>
+              <p class="m-0">
+                If you have only worked at one place, the after entering start date please select continued
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-6 col-xs-12 mt-2 control-col">
+        <label class="k-form-field">
+          <span>Health Facility Name</span>&nbsp;
+          <input kendoTextBox type="text" [(ngModel)]="service.HFName">
+        </label>
+      </div>
+      <div class="offset-2 col-sm-8 col-xs-12 mt-2 control-col">
+        <label class="k-form-field">
+          <span>From Date</span>
+          <kendo-datepicker [format]="'dd/MM/yyyy'" [(ngModel)]="service.FromDate">
+          </kendo-datepicker>
+        </label>
+      </div>
+      <div class="offset-2 col-sm-8 col-xs-12 mt-2 control-col-end">
+        <label class="k-form-field">
+          <span>To Date</span>
+          <kendo-datepicker [format]="'dd/MM/yyyy'" [(ngModel)]="service.ToDate">
+          </kendo-datepicker>
+        </label>
+      </div>
+      <div class="col-md-2 control-col-end">
+        <div class="k-form-field">
+          <input type="checkbox" id="continued" class="k-checkbox" [(ngModel)]="service.Continued" />
+          <label class="k-checkbox-label" for="continued">Continued</label>
+        </div>
+      </div>
+      <div class="col-md-2 offset-md-10 control-col-end">
+        <label class="k-form-field
+                mt-2">
+          <span>&nbsp;</span>
+          <button class=" btn btn-so-primary btn-sm btn-block" type="button" (click)="saveServiceTemp()">Add</button>
+        </label>
+      </div>
+    </div>
+    <hr *ngIf="services.length > 0 && 2 + 2 == 5" class="animated fadeIn">
+    <div class="row mx-2" *ngFor="let ser of services">
+      <div class="col-md-6 col-sm-6 col-xs-12 mt-2 control-col">
+        <p class="m-0">{{ser.HFName}}</p>
+      </div>
+      <div class="col-md-2 col-sm-6 col-xs-12 mt-2 control-col">
+        <p class="m-0">{{ser.FromDate | date:'dd/MM/yyyy'}}</p>
+      </div>
+      <div class="col-md-2 col-sm-6 col-xs-12 mt-2 control-col">
+        <p class="m-0" *ngIf="ser.ToDate">{{ser.ToDate | date:'dd/MM/yyyy'}}
+        </p>
+        <p class="m-0" *ngIf="ser.Continued">Continued
+        </p>
+      </div>
+      <div class="col-md-2 control-col-end">
+        <button class=" btn btn-danger btn-sm btn-block" (click)="removeServiceTemp(ser.Id)"><i
+            class="fa fa-times"></i></button>
+      </div>
+    </div>
+
+    <hr *ngIf="2 + 2 == 5">
+    <div class="row">
+      <!-- <pre>
+        {{profile | json}}
+      </pre> -->
+      <div class="offset-2 col-sm-82 mt-2 control-col-st">
+        <div>
+          <img class="pic-shadow" width="100" height="100"
+            [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + profile.CNIC + '_23.jpg'"
+            onError="this.src='../../../assets/img/notfound.png'" alt="">
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12 col-sm-12 mt-2 control-col">
+      <div class="offset-2 col-sm-8 col-xs-12 mt-2 control-col">
+        <label class="k-form-field">
+          <span>Name <span class="text-danger">*</span></span>
+          <input kendoTextBox type="text" name="EmployeeName" [(ngModel)]="profile.EmployeeName" #EmployeeName="ngModel"
+            required />
+        </label>
+      </div>
+      <div class="offset-2 col-sm-8 col-xs-12 mt-2 control-col">
+        <label class="k-form-field">
+          <span>Father Name</span>&nbsp;<span class="text-danger">*</span>
+          <input kendoTextBox type="text" name="FatherName" [(ngModel)]="profile.FatherName" #FatherName="ngModel"
+            required />
+        </label>
+      </div>
+      <div class="offset-2 col-sm-8 col-xs-12 mt-2 control-col-end">
+        <label class="k-form-field">
+          <span>Domicile</span>&nbsp;<span class="text-danger">*</span>
+          <kendo-dropdownlist [data]="domiciles" [textField]="'DistrictName'" [valueField]="'Id'"
+            (valueChange)="dropdownValueChanged($event, 'domicile')" [value]="dropDowns.selectedFiltersModel.domicile"
+            [defaultItem]="dropDowns.defultFiltersModel.domicile">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="offset-2 col-sm-8 col-xs-12 mt-2 control-col">
+        <label class="k-form-field">
+          <span>CNIC</span>&nbsp;<span class="text-danger">*</span>
+          <kendo-maskedtextbox [mask]="cnicMask" name="CNIC" [(ngModel)]="profile.CNIC" #CNIC="ngModel" required>
+          </kendo-maskedtextbox>
+        </label>
+      </div>
+      <div class="offset-2 col-sm-8 col-xs-12 mt-2 control-col">
+        <label class="k-form-field">
+          <span>Date of Birth</span>&nbsp;<span class="text-danger">*</span>
+          <kendo-datepicker name="DateOfBirth" [max]="birthDateMax" [format]="'dd/MM/yyyy'"
+            [(ngModel)]="profile.DateOfBirth" #DOB="ngModel" required></kendo-datepicker>
+        </label>
+      </div>
+      <div class="offset-2 col-sm-8 col-xs-12 mt-2 control-col">
+        <label class="k-form-field
+        mt-2">
+          <span>Place of Posting</span>
+          <kendo-dropdownlist [data]="healthFacilities" [defaultItem]="dropDowns.defultFiltersModel.healthFacilityPref"
+            [textField]="'FullName'" [valueField]="'Id'" [value]="dropDowns.selectedFiltersModel.healthFacilityPref"
+            (filterChange)="handleFilter($event, 'hf')" [filterable]="true"
+            (valueChange)="dropdownValueChanged($event, 'currentHealthFacility')">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="offset-2 col-sm-8 col-xs-12 mt-2 control-col">
+        <label class="k-form-field">
+          <span>Currently Working as</span>&nbsp;<span class="text-danger">*</span>
+          <kendo-dropdownlist [data]="designations" [textField]="'Name'" [valueField]="'Id'"
+            (valueChange)="dropdownValueChanged($event, 'designation')"
+            [value]="dropDowns.selectedFiltersModel.designation"
+            [defaultItem]="dropDowns.defultFiltersModel.designation">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="offset-2 col-sm-8 col-xs-12 mt-2 control-col">
+        <label class="k-form-field">
+          <span>Status</span>&nbsp;<span class="text-danger">*</span>
+          <kendo-dropdownlist [data]="statuses" [textField]="'Name'" [valueField]="'Id'"
+            (valueChange)="dropdownValueChanged($event, 'status')"
+            [value]="dropDowns.selectedFiltersModel.currentStatus"
+            [defaultItem]="dropDowns.defultFiltersModel.currentStatus">
+          </kendo-dropdownlist>
+        </label>
+      </div>
+      <div class="offset-2 col-sm-8 col-xs-12 mt-2 control-col">
+        <label class="k-form-field">
+          <span>Date of Joining as Regular</span>&nbsp;<span class="text-danger">*</span>
+          <kendo-datepicker name="DateOfRegularization" [max]="birthDateMax" [format]="'dd/MM/yyyy'"
+            [(ngModel)]="profile.DateOfRegularization" #DateOfRegularization="ngModel" required></kendo-datepicker>
+        </label>
+      </div>
+      <div class="offset-2 col-sm-8 col-xs-12 mt-2 control-col">
+        <label class="k-form-field">
+          <span>Seniority No.</span>
+          <input kendoTextBox type="text" name="SeniorityNo" [(ngModel)]="profile.SeniorityNo" #Name="ngModel" />
+        </label>
+      </div>
+      <div class="offset-2 col-sm-8 col-xs-12 mt-2 control-col">
+        <label class="k-form-field">
+          <span>Postal Address <span class="text-danger">*</span></span>
+          <input kendoTextBox type="text" name="address" [(ngModel)]="profile.PermanentAddress" #Name="ngModel"
+            required />
+        </label>
+      </div>
+      <div class="offset-2 col-sm-8 col-xs-12 mt-2 control-col-end">
+        <label class="k-form-field">
+          <span>Contact Number</span>&nbsp;<span class="text-danger">*</span>
+          <input kendoTextBox type="text" name="MobileNo" [(ngModel)]="profile.MobileNo" #MobileNumber="ngModel">
+        </label>
+      </div>
+      <div class="offset-2 col-sm-8 col-xs-12 mt-2 control-col">
+        <label class="k-form-field">
+          <span>Email</span>&nbsp;<span class="text-danger">*</span>
+          <input kendoTextBox type="email" name="Email" [(ngModel)]="profile.EMaiL" #Email="ngModel"
+            pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+            [ngClass]="{ 'is-invalid': Email.invalid }">
+        </label>
+      </div>
+      <div class="offset-2 col-sm-8 col-xs-12 mt-2 control-col">
+        <label class="k-form-field">
+          <button
+            [disabled]="!profile.EmployeeName || !profile.FatherName || !profile.CNIC || !profile.DateOfBirth || !profile.DateOfRegularization || !profile.HF_Id || !profile.designationId"
+            [ladda]="saving" data-style="zoom-in" kendoButton primary="true" type="button"
+            (click)="saveConsultantProfile()" class="btn-block btn-lg">Save</button><i class="fa fa-check"
+            *ngIf="profileSaved"></i>
+        </label>
+      </div>
+    </div>
+    <!-- <p class="m-0"><span class="prong">Name:</span> {{ profile.Name}}</p>
+      <p class="m-0"><span class="p-strong">Father Name:</span> {{ profile.FatherName}}</p>
+      <p class="m-0"><span class="p-strong">Domicile</span> {{ profile.DistrictOfDomicile}}</p>
+      <p class="m-0"><span class="p-strong">CNIC:</span> {{ dashifyCNIC(profile.CNIC)}}</p>
+      <p class="m-0"><span class="p-strong">DOB:</span> {{ profile.DateOfBirth | date:'dd-MM-yyyy'}}</p>
+      <p class="m-0"><span class="p-strong">Place of Posting:</span> {{ profile.healthFacility}}</p>
+      <p class="m-0"><span class="p-strong">Designation:</span> {{ profile.DesignationName}}</p>
+      <p class="m-0"><span class="p-strong">Date of Regularization:</span> {{ profile.date_of_regularization}}</p>
+      <p class="m-0"><span class="p-strong">Seniority No.:</span> {{ profile.SeniorityNo}}</p>
+      <p class="m-0"><span class="p-strong">Postal Address:</span> {{ profile.Address}}</p>
+      <p class="m-0"><span class="p-strong">Contact: </span> {{ profile.MobileNumber}}</p>
+      <p class="m-0"><span class="p-strong">Email: </span> {{ profile.E}}</p> -->
+
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-10 control-col-st">
+      <!-- <p>Note: If you are working on OPS and want to posted at the same place as Consultant, then there is no need for
+        preference</p> -->
+      <label class="k-form-field
+              mt-2">
+        <span>Select Preferred Place of Posting</span>
+        <kendo-dropdownlist [data]="dropDowns.healthFacilitiesData" [defaultItem]="dropDowns.defultFiltersModel.vpPref"
+          [textField]="'HFName'" [valueField]="'HF_Id'" [value]="dropDowns.selectedFiltersModel.vpPref"
+          (filterChange)="handleFilter($event, 'healthFacility')" [filterable]="true"
+          (valueChange)="dropdownValueChanged($event, 'healthFacility')">
+        </kendo-dropdownlist>
+      </label>
+      <label *ngIf="showOther" class="animated fadeIn k-form-field
+        mt-2">
+        <span>Please Type Name of Preferred Place of Posting <span class="text-muted">(if it is not shown in
+            list)</span></span>
+        <input type="text" kendoTextBox [(ngModel)]="other">
+      </label>
+    </div>
+    <div class="col-md-2 control-col-end">
+      <label class="k-form-field
+              mt-2">
+        <span>&nbsp;</span>
+        <button class=" btn btn-so-primary btn-block" (click)="addPreference()" [ladda]="addingPrefs"
+          data-style="zoom-in" [disabled]="!hf_Id || hf_Id == 0 || (hf_Id == 232323 && !other)">Save</button>
+      </label>
+    </div>
+  </div>
+  <hr>
+  <h4 *ngIf="preferences.length > 0" class="animated fadeIn"> <i class="fa fa-check animated fadeIn text-success"
+      *ngIf="preferences.length >= 5"></i> Preferences {{preferences.length}}/5</h4>
+  <div class="row">
+    <div class="col-md-12 col-sm-12 control-col-st">
+      <table class="table view-table" style="background: transparent;">
+        <tbody>
+          <tr *ngFor="let preference of preferences;let i = index;" class="animated fadeIn">
+            <td style="border:none !important;">{{(i + 1)}}</td>
+            <td style="border:none !important;">
+              {{preference.HF_Id ? preference.FullName : preference.Other}}</td>
+            <td style="border:none !important;">
+              <button class="btn btn-danger btn-sm" (click)="removePreferences(preference.Id)"><i
+                  class="fa fa-times"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr>
+  <div class="row">
+    <div class="col-md-12">
+      <p class="text-center animated fadeIn" *ngIf="accepted"><i class="text-success"> Thankyou for submitting your
+          preferences</i></p>
+      <button kendoButton primary="true" *ngIf="!accepted" (click)="submitApplicationMO()"
+        class="btn-block btn-lg">Submit</button>
+    </div>
+  </div>
+</div>

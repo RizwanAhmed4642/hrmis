@@ -1,0 +1,879 @@
+<div *ngIf="loading" class="k-i-loading"></div>
+<div class="animated fadeIn" *ngIf="!loading">
+  <h3 class="top-h3">{{!editProfile ? 'New' : 'Edit'}} Profile<button kendoButton [primary]="true" routerLink="../"
+      class="pull-right ml-2">Back</button>
+    <!-- <button kendoButton [primary]="true" routerLink="/profile/add"
+      class="pull-right" look="outline">New Profile Form</button> -->
+  </h3>
+
+  <div class="row">
+    <div class="col-md-5 offset-md-2 col-sm-12 pb-2">
+      <label class="k-form-field" *ngIf="currentUser.RoleName == 'SDP' && 2 + 2 == 5">
+        <span>Is Focal Person IT?</span>
+        <kendo-switch [(ngModel)]="isFocalPerson" (valueChange)="focalPersonValueChange()" [onLabel]="'ON'"
+          [offLabel]="'OFF'"></kendo-switch>
+      </label>
+      <!-- <label class="k-form-field">
+        <span>Is COVID Health Worker?</span>
+        <kendo-switch [(ngModel)]="healthWorker.IsHealthWorker" (valueChange)="switchValChange()" [onLabel]="'ON'"
+          [offLabel]="'OFF'"></kendo-switch>
+      </label>
+      <div class="animated fadeIn" *ngIf="healthWorker.IsHealthWorker">
+        <label class="k-form-field">
+          <span>CNIC</span>
+          <kendo-maskedtextbox disabled [mask]="cnicMask" [(ngModel)]="healthWorker.CNIC">
+          </kendo-maskedtextbox>
+        </label>
+        <label class="k-form-field" id="generalInfo">
+          <span>First Name</span>
+          <input kendoTextBox type="text" [(ngModel)]="healthWorker.FirstName" />
+        </label>
+        <label class="k-form-field">
+          <span>Middle Name</span>
+          <input kendoTextBox type="text" [(ngModel)]="healthWorker.MiddleName" />
+        </label>
+        <label class="k-form-field">
+          <span>Last Name</span>
+          <input kendoTextBox type="text" [(ngModel)]="healthWorker.LastName" />
+        </label>
+        <label class="k-form-field">
+          <span>Date of Birth</span>
+          <kendo-datepicker [max]="birthDateMax" [format]="'dd/MM/yyyy'" [(ngModel)]="healthWorker.DOB">
+          </kendo-datepicker>
+        </label>
+        <label class="k-form-field">
+          <span>Domicile</span>
+          <kendo-dropdownlist [data]="dropDowns.domicile" [textField]="'DistrictName'" [valueField]="'Id'"
+            (valueChange)="dropdownValueChanged($event, 'domicileHW')" [value]="dropDowns.selectedFiltersModel.domicile"
+            [defaultItem]="dropDowns.defultFiltersModel.domicile">
+          </kendo-dropdownlist>
+        </label>
+        <label class="k-form-field">
+          <span>Gender</span>
+          <kendo-dropdownlist [data]="genderItems" [(ngModel)]="healthWorker.Gender" [textField]="'text'"
+            [valueField]="'value'" [valuePrimitive]="true">
+          </kendo-dropdownlist>
+        </label>
+        <label class="k-form-field">
+          <span>Religion</span>
+          <kendo-dropdownlist [data]="dropDowns.religions" [textField]="'Name'" [valueField]="'Id'"
+            (valueChange)="dropdownValueChanged($event, 'religionHW')" [value]="dropDowns.selectedFiltersModel.religion"
+            [defaultItem]="dropDowns.defultFiltersModel.religion">
+          </kendo-dropdownlist>
+        </label>
+        <label class="k-form-field">
+          <span>Mobile No</span>
+          <kendo-maskedtextbox [mask]="mobileMask" [(ngModel)]="healthWorker.MobileNo"></kendo-maskedtextbox>
+        </label>
+        <label class="k-form-field">
+          <span>Mobile Network</span>
+          <kendo-dropdownlist [data]="mobileNetworks" [(ngModel)]="healthWorker.MobileNetwork" [textField]="'Name'"
+            [valueField]="'value'" [valuePrimitive]="true">
+          </kendo-dropdownlist>
+        </label>
+        <label class="k-form-field">
+          <span>Land Line No</span>
+          <kendo-maskedtextbox [mask]="landlineMask" [(ngModel)]="healthWorker.LandlineNo"></kendo-maskedtextbox>
+        </label>
+        <label class="k-form-field">
+          <span>E-mail</span>
+          <input kendoTextBox type="text" [(ngModel)]="healthWorker.EmaiL">
+        </label>
+        <label class="k-form-field">
+          <span>Nationality</span>
+          <input kendoTextBox type="text" [(ngModel)]="healthWorker.Nationality">
+        </label>
+        <label class="k-form-field">
+          <span>Health Facility</span>
+          <kendo-autocomplete [disabled]="facilityDisabled" [data]="hfsList" [valueField]="'FullName'"
+            (valueChange)="searchClicked($event, 'hfsHW')" required [filterable]="true"
+            (filterChange)="searchEvent.next({ event: $event, filter: 'hfs'})" [value]="healthFacilityFullName"
+            placeholder="Search Health Facility" class="k-autocomplete-form">
+            <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+              <div class="search-list-item">
+                {{ dataItem.FullName }}</div>
+            </ng-template>
+          </kendo-autocomplete>
+        </label>
+        <label class="k-form-field">
+          <span>Designation / Job Title</span>
+          <kendo-dropdownlist [data]="dropDowns.designationsData" [textField]="'Name'" [valueField]="'Id'" required
+            (valueChange)="dropdownValueChanged($event, 'designationHW')"
+            [value]="dropDowns.selectedFiltersModel.designation"
+            [defaultItem]="dropDowns.defultFiltersModel.designation">
+          </kendo-dropdownlist>
+        </label>
+        <label class="k-form-field">
+          <span>Job in Covid</span>
+          <kendo-dropdownlist [data]="covidJobs" [(ngModel)]="healthWorker.CovidJob" [textField]="'Name'"
+            [valueField]="'value'" [valuePrimitive]="true">
+          </kendo-dropdownlist>
+        </label>
+        <div class="content-heading mb-2" id="deptInfo">
+          Present Address
+        </div>
+        <label class="k-form-field">
+          <span>Present Address</span>
+          <input kendoTextBox type="text" [(ngModel)]="healthWorker.PresentAddress">
+        </label>
+        <label class="k-form-field">
+          <span>UC</span>
+          <input kendoTextBox type="text" [(ngModel)]="healthWorker.UC">
+        </label>
+        <label class="k-form-field">
+          <span>Province</span>
+          <input kendoTextBox type="text" [(ngModel)]="healthWorker.PresentAddressProvince">
+        </label>
+        <label class="k-form-field">
+          <span>District</span>
+          <input type="text" kendoTextBox disabled [(ngModel)]="healthWorker.DistrictName">
+        </label>
+        <label class="k-form-field">
+          <span>Tehsil</span>
+          <kendo-dropdownlist [data]="dropDowns.tehsilsData" [defaultItem]="{Name: 'Select Tehsil', Code: '0'}"
+            [textField]="'Name'" [valueField]="'Code'" (valueChange)="dropdownValueChanged($event, 'tehsil')"
+            [value]="presentTehsil" [disabled]="dropDowns.tehsilsData?.length == 1">
+          </kendo-dropdownlist>
+        </label>
+        <label class="k-form-field">
+          <span>Present Address Latitude</span>
+          <input type="number" kendoTextBox [(ngModel)]="healthWorker.PresentAddressLat">
+        </label>
+        <label class="k-form-field">
+          <span>Present Address Longitude</span>
+          <input type="number" kendoTextBox [(ngModel)]="healthWorker.PresentAddressLong">
+        </label>
+        <div class="content-heading mb-2" id="deptInfo">
+          Permanent Address
+        </div>
+        <label class="k-form-field">
+          <span>Permanent Address</span>
+          <input kendoTextBox type="text" [(ngModel)]="healthWorker.PermanentAddress">
+        </label>
+        <label class="k-form-field">
+          <span>Province</span>
+          <input kendoTextBox type="text" [(ngModel)]="healthWorker.PermanentAddressProvince">
+        </label>
+        <label class="k-form-field">
+          <span>District</span>
+          <input type="text" kendoTextBox disabled [(ngModel)]="healthWorker.PermanentDistrictName">
+        </label>
+        <label class="k-form-field">
+          <span>Tehsil</span>
+          <kendo-dropdownlist [data]="dropDowns.tehsilsData" [defaultItem]="{Name: 'Select Tehsil', Code: '0'}"
+            [textField]="'Name'" [valueField]="'Code'" (valueChange)="dropdownValueChanged($event, 'tehsilPermanent')"
+            [value]="permanentTehsil" [disabled]="dropDowns.tehsilsData?.length == 1">
+          </kendo-dropdownlist>
+        </label>
+        <div class="content-heading mb-2" id="deptInfo">
+          Parent / Spouse / Guardian
+        </div>
+        <label class="k-form-field" id="generalInfo">
+          <span>First Name</span>
+          <input kendoTextBox type="text" [(ngModel)]="healthWorker.GuardianName" />
+        </label>
+        <label class="k-form-field">
+          <span>Middle Name</span>
+          <input kendoTextBox type="text" [(ngModel)]="healthWorker.GuardianMiddleName" />
+        </label>
+        <label class="k-form-field">
+          <span>Last Name</span>
+          <input kendoTextBox type="text" [(ngModel)]="healthWorker.GuardianLastName" />
+        </label>
+        <label class="k-form-field">
+          <span>Guardian CNIC</span>
+          <kendo-maskedtextbox [mask]="cnicMask" [(ngModel)]="healthWorker.GuardianCNIC">
+          </kendo-maskedtextbox>
+        </label>
+        <label class="k-form-field">
+          <span>Guardian Mobile No</span>
+          <kendo-maskedtextbox [mask]="mobileMask" [(ngModel)]="healthWorker.GuardianPhoneNumber"></kendo-maskedtextbox>
+        </label>
+        <label class="k-form-field">
+          <span>Present Address</span>
+          <input kendoTextBox type="text" [(ngModel)]="healthWorker.GuardianAddress">
+        </label>
+        <label class="k-form-field">
+          <span>UC</span>
+          <input kendoTextBox type="text" [(ngModel)]="healthWorker.GuardianUC">
+        </label>
+        <label class="k-form-field">
+          <span>Province</span>
+          <input kendoTextBox type="text" [(ngModel)]="healthWorker.GuardianProvince">
+        </label>
+        <label class="k-form-field">
+          <span>District</span>
+          <input type="text" kendoTextBox disabled [(ngModel)]="healthWorker.GuardianDistrictName">
+        </label>
+        <label class="k-form-field">
+          <span>Tehsil</span>
+          <kendo-dropdownlist [data]="dropDowns.tehsilsData" [defaultItem]="{Name: 'Select Tehsil', Code: '0'}"
+            [textField]="'Name'" [valueField]="'Code'" (valueChange)="dropdownValueChanged($event, 'tehsilGuardian')"
+            [value]="gaurdianTehsil" [disabled]="dropDowns.tehsilsData?.length == 1">
+          </kendo-dropdownlist>
+        </label>
+        <label class="k-form-field">
+          <span>&nbsp;</span>
+          <button kendoButton class="btn-block" type="button" (click)="saveHealthWorker()" [ladda]="savingHealthWorker"
+            data-style="zoom-in" [disabled]="!healthWorker.FirstName || 
+            !healthWorker.MiddleName || !healthWorker.LastName || 
+            !healthWorker.DOB || !healthWorker.Gender ||
+            !healthWorker.MobileNo || !healthWorker.Nationality ||
+            !healthWorker.PresentAddress || !healthWorker.UC ||
+            !healthWorker.PresentAddressProvince || !healthWorker.DistrictName ||
+            !healthWorker.PresentAddressLat || !healthWorker.PresentAddressLong ||
+            !healthWorker.PermanentAddress || !healthWorker.PermanentAddressProvince ||
+            !healthWorker.PermanentDistrictName || !healthWorker.GuardianName ||
+            !healthWorker.GuardianMiddleName || !healthWorker.GuardianLastName ||
+            !healthWorker.GuardianCNIC || !healthWorker.GuardianPhoneNumber ||
+            !healthWorker.GuardianAddress || !healthWorker.GuardianUC ||
+            !healthWorker.GuardianProvince || !healthWorker.GuardianDistrictName ||
+            !healthWorker.Domicile_Id || !healthWorker.Religion_Id || !healthWorker.MobileNetwork ||
+            !healthWorker.Designation_Id || !healthWorker.HF_Id" [primary]="true">Save</button>
+        </label>
+      </div> -->
+    </div>
+  </div>
+  <!-- <hr *ngIf="healthWorker.IsHealthWorker"> -->
+  <div class="row" *ngIf="2 + 2 == 5 && !loading && profile && (profile.Designation_Id == 362
+                                || profile.Designation_Id == 307
+                                || profile.Designation_Id == 2487
+                                || profile.Designation_Id == 1320
+                                || profile.Designation_Id == 802
+                                || profile.Designation_Id == 2404
+                                || profile.Designation_Id == 2489
+                                || profile.Designation_Id == 2490
+                                || profile.Designation_Id == 2491)">
+    <div class="col-md-5 offset-md-2 col-sm-12 pb-2">
+      <label class="k-form-field">
+        <span>Attached With</span>
+        <kendo-autocomplete [data]="profileList" [valueField]="'EmployeeName'"
+          (valueChange)="searchClicked($event, 'attachedWith')" required [filterable]="true"
+          (filterChange)="searchEvent.next({ event: $event, filter: 'attachedWith'})" [value]="attachedPersonName"
+          placeholder="Search Employee" class="k-autocomplete-form">
+          <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+            <div class="search-list-item">
+              {{ dataItem.EmployeeName }}</div>
+          </ng-template>
+        </kendo-autocomplete>
+      </label>
+      <label class="k-form-field" *ngIf="attachedPersons.length > 0">
+        <span class="text-success p-strong border-bottom">Attached Persons</span>
+      </label>
+      <div *ngFor="let p of attachedPersons;let i = index;">
+        <img class="animated fadeIn" style="width:100px;height:100px;border:1px solid;"
+          [src]="'https://hrmis.pshealthpunjab.gov.pk/Uploads/ProfilePhotos/' + p.CNIC + '_23.jpg'"
+          onError="this.src='../../../assets/img/notfound.png'" alt="">
+        <p class="p-2 bg-light"><strong class="strong">{{(i + 1)}}.</strong> {{p.EmployeeName}} - {{p.FatherName}}
+          -
+          {{p.Designation_Name}} <br>
+          <strong class="p-strong">CNIC:
+          </strong>{{dashifyCNIC(p.CNIC)}}
+          <br>
+          <span *ngIf="p.IsDiploma" class="badge badge-success">Diploma</span>
+          <span *ngIf="p.OnTraining" class="badge badge-success">Training</span>
+          <!-- {{p.IsDiploma ? 'Diploma Anaesthesia' : ''}}
+          {{p.OnTraining ? : 'On Training' : ''}} -->
+        </p>
+        <div class="row">
+          <div class="col-md-10">
+            <kendo-dropdownlist [data]="['Diploma Anaesthesia', 'On Training']"
+              (valueChange)="saveEditPerson($event, p)" [defaultItem]="'Select Qualification...'">
+            </kendo-dropdownlist>
+          </div>
+          <div class="col-md-2">
+            <button (click)="removeAttachedPerson(p.Id)" class="pull-right btn-sm btn-danger"><i
+                class="fa fa-times"></i></button>
+          </div>
+        </div>
+        <hr>
+      </div>
+    </div>
+  </div>
+  <form name="profileform" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+    <div class="animated fadeIn" *ngIf="profile">
+
+      <div class="card card-accent-success animated fadeIn">
+        <div class="card-body animated fadeIn">
+          <div class="row">
+            <div class="col-md-3">
+              <label class="k-form-field mb-0 p-strong"><span>Passport Photo</span>
+                <div style="width:100%;">
+                  <img *ngIf="photoSrc" class="animated fadeIn" style="width:100px;height:100px;border:1px solid;"
+                    [src]="photoSrc" onError="this.src='../../../assets/img/notfound.png'" alt="">
+                  <input #photoRef type="file" accept="image/jpg, image/jpeg, image/png"
+                    (change)="readUrl($event, 'pic')" hidden>
+                  <button kendoButton type="button" [primary]="true" [look]="'outline'" (click)="uploadBtn('pic')"
+                    class="btn-sm btn-block mt-2" [ngClass]="photoFile.length == 0 ? 'mt-0' : 'mt-2'"
+                    style="cursor:pointer;" [ladda]="isUploading" data-style="expand-right">
+                    <i class="fa fa-upload"></i>
+                    {{photoFile.length == 0 ? 'Passport Photo' : 'Choose other'}}</button>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-accent-success animated fadeIn">
+        <div class="card-header animated fadeIn">
+          <h5 class="m-0">PERSONAL INFORMATION</h5>
+        </div>
+        <div class="card-body animated fadeIn">
+          <div class="row">
+            <div class="col-md-4">
+              <label class="k-form-field"><span class="p-strong">Name</span>
+                <input kendoTextBox type="text" name="Name" [(ngModel)]="profile.EmployeeName" #Name="ngModel"
+                  [ngClass]="{ 'is-invalid': Name.invalid }" required /></label>
+              <label class="k-form-field"><span class="p-strong">Date of Birth</span>
+                <kendo-datepicker name="DateOfBirth" [max]="birthDateMax" [format]="'dd/MM/yyyy'"
+                  [(ngModel)]="profile.DateOfBirth" #DateOfBirth="ngModel" required></kendo-datepicker>
+              </label>
+              <label class="k-form-field"><span class="p-strong">Marital Status</span>
+                <kendo-dropdownlist name="MaritalStatus" [data]="dropDowns.maritalStatusItems"
+                  [(ngModel)]="profile.MaritalStatus" #MaritalStatus="ngModel"
+                  [defaultItem]="dropDowns.defultFiltersModel.maritalStatus" [textField]="'text'" [valueField]="'value'"
+                  [valuePrimitive]="true">
+                </kendo-dropdownlist>
+              </label>
+              <label class="k-form-field"><span class="p-strong">Mother Tongue</span>
+                <kendo-dropdownlist [data]="dropDowns.languages" [textField]="'Name'" [valueField]="'Id'"
+                  (valueChange)="dropdownValueChanged($event, 'language')"
+                  [value]="dropDowns.selectedFiltersModel.language"
+                  [defaultItem]="dropDowns.defultFiltersModel.language">
+                </kendo-dropdownlist>
+              </label>
+              <label class="k-form-field"><span class="p-strong">Landline Number <span *ngIf="profile.LandlineNo"
+                    class="text-success swirl-in-fwd"><i class="fa fa-check-circle"></i></span>
+                  <span *ngIf="profile.LandlineNo && LandlineNo.invalid" class="swirl-in-fwd text-danger"><i
+                      class="fa fa-exclamation-circle"></i></span></span>
+                <span *ngIf="profile.LandlineNo && LandlineNo.invalid"
+                  class="animated fadeIn text-danger pull-right">(only 11
+                  digit number e.g
+                  012-34567890)</span>
+                <kendo-maskedtextbox [mask]="landlineMask" name="LandlineNo" [(ngModel)]="profile.LandlineNo"
+                  #LandlineNo="ngModel" [ngClass]="{ 'is-invalid': LandlineNo.invalid }"></kendo-maskedtextbox>
+
+              </label>
+            </div>
+            <div class="col-md-4">
+              <label class="k-form-field"><span class="p-strong">Father Name</span>
+                <input kendoTextBox type="text" name="FatherName" [(ngModel)]="profile.FatherName" #FatherName="ngModel"
+                  [ngClass]="{ 'is-invalid': FatherName.invalid }" required /></label>
+              <label class="k-form-field"><span class="p-strong">Gender</span>
+                <kendo-dropdownlist name="Gender" [data]="genderItems" [(ngModel)]="profile.Gender" #Gender="ngModel"
+                  [textField]="'text'" [valueField]="'value'" [valuePrimitive]="true" required>
+                </kendo-dropdownlist>
+              </label>
+              <label class="k-form-field"><span class="p-strong">Bloodgroup</span>
+                <kendo-dropdownlist name="BloodGroup" [data]="dropDowns.bloodGroupItems"
+                  [(ngModel)]="profile.BloodGroup" #BloodGroup="ngModel"
+                  [defaultItem]="dropDowns.defultFiltersModel.bloodGroup" [textField]="'text'" [valueField]="'value'"
+                  [valuePrimitive]="true">
+                </kendo-dropdownlist>
+              </label>
+              <label class="k-form-field"><span class="p-strong">Mobile Number <span *ngIf="MobileNo.valid"
+                    class="text-success swirl-in-fwd"><i class="fa fa-check-circle"></i></span>
+                  <span *ngIf="!profile.MobileNo" class="text-danger">*</span> <span
+                    *ngIf="profile.MobileNo && MobileNo.invalid" class="swirl-in-fwd text-danger"><i
+                      class="fa fa-exclamation-circle"></i></span></span>
+                <span *ngIf="profile.MobileNo && MobileNo.invalid" class="animated fadeIn text-danger pull-right">(only
+                  11
+                  digit number e.g
+                  0321-1234567)</span>
+                <kendo-maskedtextbox [mask]="mobileMask" name="MobileNo" [(ngModel)]="profile.MobileNo"
+                  #MobileNo="ngModel" [ngClass]="{ 'is-invalid': MobileNo.invalid }" required></kendo-maskedtextbox>
+
+              </label>
+              <label class="k-form-field"><span class="p-strong">Permanent Address</span>
+                <input kendoTextBox type="text" name="PermanentAddress" [(ngModel)]="profile.PermanentAddress"
+                  #PermanentAddress="ngModel" [ngClass]="{ 'is-invalid': PermanentAddress.invalid }">
+
+              </label>
+            </div>
+            <div class="col-md-4">
+
+              <label class="k-form-field"><span class="p-strong">CNIC</span>
+                <p *ngIf="existingProfile" class="m-0 text-danger">Profile already exist. Click to <i
+                    style="color:black;cursor:pointer;" [routerLink]="'/profile/' + profile.CNIC + '/edit'">Edit</i>
+                </p>
+                <kendo-maskedtextbox [mask]="cnicMask" (input)="inputChange.next(CNIC.value)" name="CNIC"
+                  [(ngModel)]="profile.CNIC" #CNIC="ngModel" [ngClass]="{ 'is-invalid': CNIC.invalid }" required>
+                </kendo-maskedtextbox>
+
+              </label>
+
+              <label class="k-form-field"><span class="p-strong">Domicile</span>
+                <kendo-dropdownlist [data]="dropDowns.domicile" [textField]="'DistrictName'" [valueField]="'Id'"
+                  (valueChange)="dropdownValueChanged($event, 'domicile')"
+                  [value]="dropDowns.selectedFiltersModel.domicile"
+                  [defaultItem]="dropDowns.defultFiltersModel.domicile">
+                </kendo-dropdownlist>
+              </label>
+              <label class="k-form-field"><span class="p-strong">Religion</span>
+                <kendo-dropdownlist [data]="dropDowns.religions" [textField]="'Name'" [valueField]="'Id'"
+                  (valueChange)="dropdownValueChanged($event, 'religion')"
+                  [value]="dropDowns.selectedFiltersModel.religion"
+                  [defaultItem]="dropDowns.defultFiltersModel.religion">
+                </kendo-dropdownlist>
+              </label>
+              <label class="k-form-field"><span class="p-strong">E-mail <span
+                    *ngIf="profile.Postaanctionedwithscale > 15">
+                    <span *ngIf="EMaiL.valid" class="text-success swirl-in-fwd">
+                      <i class="fa fa-check-circle"></i>
+                    </span>
+                    <span *ngIf="!profile.EMaiL" class="swirl-in-fwd text-danger">*</span>
+                    <span *ngIf="profile.EMaiL && EMaiL.invalid" class="swirl-in-fwd text-danger"><i
+                        class="fa fa-exclamation-circle"></i></span>
+                  </span>
+                  <span *ngIf="profile.EMaiL && EMaiL.invalid" class="animated fadeIn text-danger pull-right"><span
+                      *ngIf="EMaiL.invalid">invalid email address</span>&nbsp;<span
+                      *ngIf="hasUpperCase(profile.EMaiL)">(<u>small
+                        alphabets
+                        only</u>)</span>
+                  </span></span>
+                <input kendoTextBox type="text" name="EMaiL" [(ngModel)]="profile.EMaiL" #EMaiL="ngModel"
+                  [ngClass]="{ 'is-invalid': EMaiL.invalid }"
+                  pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+                  [required]="profile.Postaanctionedwithscale > 15">
+              </label>
+              <label class="k-form-field"><span class="p-strong">Correspondence Address</span>
+                <input kendoTextBox type="text" name="CorrespondenceAddress" [(ngModel)]="profile.CorrespondenceAddress"
+                  #CorrespondenceAddress="ngModel" [ngClass]="{ 'is-invalid': CorrespondenceAddress.invalid }">
+
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-accent-success animated fadeIn">
+        <div class="card-header animated fadeIn">
+          <h5 class="m-0">POSTING DETAIL
+          </h5>
+        </div>
+        <div class="card-body animated fadeIn">
+          <div class="row">
+            <div class="col-md-3">
+              <label class="k-form-field"><span class="p-strong">Date of First Appointment</span>
+                <kendo-datepicker name="DateOfFirstAppointment" [format]="'dd/MM/yyyy'"
+                  [(ngModel)]="profile.DateOfFirstAppointment" [required]="profile.EmpMode_Id == 13"
+                  #DateOfFirstAppointment="ngModel" [ngClass]="{ 'is-invalid': DateOfRegularization.invalid }">
+                </kendo-datepicker>
+              </label>
+              <label class="k-form-field"><span class="p-strong">Actual Designation</span>
+                <kendo-dropdownlist [data]="dropDowns.designationsData" [textField]="'Name'" [valueField]="'Id'"
+                  required (valueChange)="dropdownValueChanged($event, 'actualDesignation')"
+                  [value]="dropDowns.selectedFiltersModel.actualDesignation"
+                  [defaultItem]="dropDowns.defultFiltersModel.actualDesignation">
+                  <ng-template kendoDropDownListItemTemplate let-dataItem>
+                    <p class="m-0">{{dataItem.Name}}<span *ngIf="dataItem.Scale"> (BS-{{dataItem.Scale}}) </span>
+                    </p>
+                  </ng-template>
+                </kendo-dropdownlist>
+              </label>
+              <label class="k-form-field"><span class="p-strong">Present Posting Order Number</span> <input kendoTextBox
+                  type="text" name="PresentPostingOrderNo" [(ngModel)]="profile.PresentPostingOrderNo"
+                  #PresentPostingOrderNo="ngModel" [required]="profile.EmpMode_Id == 13"
+                  [ngClass]="{ 'is-invalid': PresentPostingOrderNo.invalid }"></label>
+              <label class="k-form-field"><span class="p-strong">Health Facility</span>
+                <kendo-autocomplete [disabled]="facilityDisabled" [data]="hfsList" [valueField]="'FullName'"
+                  (valueChange)="searchClicked($event, 'hfs')" required [filterable]="true"
+                  (filterChange)="searchEvent.next({ event: $event, filter: 'hfs'})" [value]="healthFacilityFullName"
+                  placeholder="Search Health Facility" class="k-autocomplete-form">
+                  <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                    <div class="search-list-item">
+                      {{ dataItem.FullName }}</div>
+                  </ng-template>
+                </kendo-autocomplete>
+              </label>
+            </div>
+            <div class="col-md-3">
+              <label class="k-form-field"><span class="p-strong">First Appointment Order Number</span> <input
+                  kendoTextBox type="text" name="FirstOrderNumber" [(ngModel)]="profile.FirstOrderNumber"
+                  #FirstOrderNumber="ngModel" [ngClass]="{ 'is-invalid': FirstOrderNumber.invalid }"></label>
+              <label class="k-form-field"><span class="p-strong">Working Designation</span>
+                <kendo-dropdownlist [data]="dropDowns.designationsData" [textField]="'Name'" [valueField]="'Id'"
+                  required (valueChange)="dropdownValueChanged($event, 'workingDesignation')"
+                  [value]="dropDowns.selectedFiltersModel.workingDesignation"
+                  [defaultItem]="dropDowns.defultFiltersModel.workingDesignation">
+                  <ng-template kendoDropDownListItemTemplate let-dataItem>
+                    <p class="m-0">{{dataItem.Name}}<span *ngIf="dataItem.Scale"> (BS-{{dataItem.Scale}}) </span>
+                    </p>
+                  </ng-template>
+                </kendo-dropdownlist>
+              </label>
+              <label class="k-form-field"><span class="p-strong">Present Posting Order Date</span>
+                <kendo-datepicker name="PresentPostingDate" [format]="'dd/MM/yyyy'"
+                  [(ngModel)]="profile.PresentPostingDate" #PresentPostingDate="ngModel"
+                  [required]="profile.EmpMode_Id == 13" [ngClass]="{ 'is-invalid': PresentPostingDate.invalid }">
+                </kendo-datepicker>
+              </label>
+              <label class="k-form-field"><span class="p-strong">Working Health Facility</span>
+                <kendo-autocomplete [disabled]="facilityDisabled" [data]="hfsWList" [valueField]="'FullName'"
+                  (valueChange)="searchClicked($event, 'whfs')" required [filterable]="true"
+                  (filterChange)="searchEvent.next({ event: $event, filter: 'whfs'})"
+                  [value]="workingHealthFacilityFullName" placeholder="Search Health Facility"
+                  class="k-autocomplete-form">
+                  <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+                    <div class="search-list-item">
+                      {{ dataItem.FullName }}</div>
+                  </ng-template>
+                </kendo-autocomplete>
+              </label>
+            </div>
+            <div class="col-md-3">
+              <label class="k-form-field"><span class="p-strong">Joining Grade</span>
+                <kendo-dropdownlist name="JoiningGradeBPS" [data]="dropDowns.scaleData"
+                  [(ngModel)]="profile.JoiningGradeBPS" #JoiningGradeBPS="ngModel" [textField]="'text'"
+                  [valueField]="'value'" [defaultItem]="dropDowns.defultFiltersModel.joiningScale"
+                  [valuePrimitive]="true" required>
+                </kendo-dropdownlist>
+              </label>
+              <label class="k-form-field"><span class="p-strong">Present Joining Date</span>
+                <kendo-datepicker name="PresentJoiningDate" [format]="'dd/MM/yyyy'"
+                  [(ngModel)]="profile.PresentJoiningDate" #PresentJoiningDate="ngModel"
+                  [required]="profile.Status_Id == 2" [ngClass]="{ 'is-invalid': PresentJoiningDate.invalid }">
+                </kendo-datepicker>
+              </label>
+              <label class="k-form-field"><span class="p-strong">Parent Department</span>
+                <kendo-dropdownlist [data]="dropDowns.departmentsData" [textField]="'Name'" [valueField]="'Id'"
+                  (valueChange)="dropdownValueChanged($event, 'department')"
+                  [value]="dropDowns.selectedFiltersModel.departmentDefault"
+                  [defaultItem]="dropDowns.defultFiltersModel.department" required>
+                </kendo-dropdownlist>
+              </label>
+              <label class="k-form-field"><span class="p-strong">Status</span>
+                <kendo-dropdownlist [data]="dropDowns.statusData" [textField]="'Name'" [valueField]="'Id'"
+                  (valueChange)="dropdownValueChanged($event, 'profileStatus')"
+                  [value]="dropDowns.selectedFiltersModel.profileStatus"
+                  [defaultItem]="dropDowns.defultFiltersModel.profileStatus" required>
+                </kendo-dropdownlist>
+              </label>
+            </div>
+            <div class="col-md-3">
+              <label class="k-form-field"><span class="p-strong">Joining Designation</span>
+                <kendo-dropdownlist [data]="dropDowns.designationsData" [textField]="'Name'" [valueField]="'Id'"
+                  (valueChange)="dropdownValueChanged($event, 'joiningDesignation')"
+                  [value]="dropDowns.selectedFiltersModel.joiningDesignation"
+                  [defaultItem]="dropDowns.defultFiltersModel.joiningDesignation">
+                  <ng-template kendoDropDownListItemTemplate let-dataItem>
+                    <p class="m-0">{{dataItem.Name}}<span *ngIf="dataItem.Scale"> (BS-{{dataItem.Scale}}) </span>
+                    </p>
+                  </ng-template>
+                </kendo-dropdownlist>
+              </label>
+              <label class="k-form-field"><span class="p-strong">Additional Charge</span> <input kendoTextBox
+                  type="text" name="AdditionalCharge" [(ngModel)]="profile.AdditionalCharge" #AdditionalCharge="ngModel"
+                  [ngClass]="{ 'is-invalid': AdditionalCharge.invalid }">
+              </label>
+              <label class="k-form-field"><span class="p-strong">Current Grade</span>
+                <kendo-dropdownlist name="CurrentGradeBPS" [data]="dropDowns.scaleData"
+                  [(ngModel)]="profile.CurrentGradeBPS" #CurrentGradeBPS="ngModel" [textField]="'text'"
+                  [valueField]="'value'" [defaultItem]="dropDowns.defultFiltersModel.currentScale"
+                  [valuePrimitive]="true" required>
+                </kendo-dropdownlist>
+              </label>
+              <label class="k-form-field"><span class="p-strong">Post Type</span>
+                <kendo-dropdownlist [data]="dropDowns.postTypesData" [textField]="'Name'" [valueField]="'Id'"
+                  (valueChange)="dropdownValueChanged($event, 'postType')"
+                  [value]="dropDowns.selectedFiltersModel.postType"
+                  [defaultItem]="dropDowns.defultFiltersModel.postType">
+                </kendo-dropdownlist>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-accent-success animated fadeIn">
+        <div class="card-header animated fadeIn">
+          <h5 class="m-0">MODE OF APPOINTMENT
+          </h5>
+        </div>
+        <div class="card-body animated fadeIn">
+          <div class="row">
+            <div class="col-md-6">
+              <label class="k-form-field"><span class="p-strong">Entry in Government as</span>
+                <kendo-dropdownlist [data]="dropDowns.employementModesData" [textField]="'Name'" [valueField]="'Id'"
+                  required (valueChange)="dropdownValueChanged($event, 'employementMode')"
+                  [value]="dropDowns.selectedFiltersModel.employementMode"
+                  [defaultItem]="dropDowns.defultFiltersModel.employementMode">
+                </kendo-dropdownlist>
+              </label>
+            </div>
+            <div class="col-md-6">
+              <label class="k-form-field"><span class="p-strong">Mode</span>
+                <kendo-dropdownlist [data]="dropDowns.postingModes" [textField]="'Name'" [valueField]="'Id'"
+                  (valueChange)="dropdownValueChanged($event, 'postingMode')"
+                  [value]="dropDowns.selectedFiltersModel.postingMode"
+                  [defaultItem]="dropDowns.defultFiltersModel.postingMode">
+                </kendo-dropdownlist>
+              </label>
+            </div>
+          </div>
+          <hr>
+          <div class="row animated fadeIn" *ngIf="profile.EmpMode_Id == 3 
+          || profile.EmpMode_Id == 6
+          || profile.EmpMode_Id == 8
+          || profile.EmpMode_Id == 12
+          || profile.EmpMode_Id == 15
+          || profile.EmpMode_Id == 16
+          || profile.EmpMode_Id == 18
+          || profile.EmpMode_Id == 19
+          || profile.ModeId == 3
+          || profile.ModeId == 6
+          || profile.ModeId == 7
+          || profile.ModeId == 8
+          || profile.ModeId == 9
+          || profile.ModeId == 10
+          || profile.ModeId == 11
+          || profile.ModeId == 12
+          || profile.ModeId == 3">
+            <div class="col-md-3 animated fadeIn" *ngIf="profile.ModeId == 10">
+              <label class="k-form-field"><span class="p-strong animated fadeIn">Other Contract Type </span><input
+                  kendoTextBox type="text" name="OtherContract" [(ngModel)]="profile.OtherContract"
+                  #OtherContract="ngModel" [ngClass]="{ 'is-invalid': OtherContract.invalid }"></label>
+            </div>
+            <div class="col-md-3 animated fadeIn">
+              <label class="k-form-field"><span class="p-strong animated fadeIn">Contract Order Number </span><input
+                  kendoTextBox type="text" name="ContractOrderNumber" [(ngModel)]="profile.ContractOrderNumber"
+                  #ContractOrderNumber="ngModel" [ngClass]="{ 'is-invalid': ContractOrderNumber.invalid }"></label>
+            </div>
+            <div class="col-md-3 animated fadeIn">
+              <label class="k-form-field"><span class="p-strong animated fadeIn">Contract Order Date</span>
+                <kendo-datepicker name="ContractStartDate" [format]="'dd/MM/yyyy'"
+                  [(ngModel)]="profile.ContractStartDate" #ContractStartDate="ngModel"
+                  [ngClass]="{ 'is-invalid': ContractStartDate.invalid }">
+                </kendo-datepicker>
+              </label>
+            </div>
+            <div class="col-md-3 animated fadeIn">
+              <label class="k-form-field"><span class="p-strong animated fadeIn">Contract Joining date</span>
+                <kendo-datepicker name="ContractOrderDate" [format]="'dd/MM/yyyy'"
+                  [(ngModel)]="profile.ContractOrderDate" #ContractOrderDate="ngModel"></kendo-datepicker>
+              </label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3 animated fadeIn" *ngIf="profile.ModeId == 2">
+              <label class="k-form-field"><span class="p-strong">PPSC Merit Number</span> <input kendoTextBox
+                  type="number" name="PPSCMeritNumber" [(ngModel)]="profile.PPSCMeritNumber" #PPSCMeritNumber="ngModel"
+                  [ngClass]="{ 'is-invalid': PPSCMeritNumber.invalid }">
+              </label>
+            </div>
+            <div class="col-md-3">
+              <label class="k-form-field"><span class="p-strong">{{
+                profile.ModeId == 3 ? 'Posting Order Number of Regularization' : 'Posting Order Number'}}
+                </span><input kendoTextBox type="text" name="RegularOrderNumber"
+                  [(ngModel)]="profile.RegularOrderNumber" #RegularOrderNumber="ngModel"
+                  [ngClass]="{ 'is-invalid': RegularOrderNumber.invalid }"></label>
+            </div>
+            <div class="col-md-3">
+              <label class="k-form-field"><span class="p-strong">{{
+                profile.ModeId == 3 ? 'Posting Order Date of Regularization' : 'Posting Order Date'}}</span>
+                <kendo-datepicker name="DateOfRegularization" [format]="'dd/MM/yyyy'"
+                  [(ngModel)]="profile.DateOfRegularization" #DateOfRegularization="ngModel"
+                  [ngClass]="{ 'is-invalid': DateOfRegularization.invalid }">
+                </kendo-datepicker>
+              </label>
+            </div>
+            <div class="col-md-3">
+              <label class="k-form-field"><span class="p-strong">Joining date</span>
+                <kendo-datepicker name="FirstJoiningDate" [format]="'dd/MM/yyyy'" [(ngModel)]="profile.FirstJoiningDate"
+                  #FirstJoiningDate="ngModel"></kendo-datepicker>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card card-accent-success animated fadeIn">
+        <div class="card-header animated fadeIn">
+          <h5 class="m-0">PROMOTION STATUS
+          </h5>
+        </div>
+        <div class="card-body animated fadeIn">
+          <div class="row">
+            <div class="col-md-3">
+              <label class="k-form-field"><span class="p-strong">Promotion Order Date</span>
+                <kendo-datepicker name="LastPromotionDate" [format]="'dd/MM/yyyy'"
+                  [(ngModel)]="profile.LastPromotionDate" #LastPromotionDate="ngModel"></kendo-datepicker>
+              </label>
+            </div>
+            <div class="col-md-3">
+              <label class="k-form-field"><span class="p-strong">Promotion Order Number</span><input kendoTextBox
+                  type="text" name="PromotionOrderNumber" [(ngModel)]="profile.PromotionOrderNumber"
+                  #PromotionOrderNumber="ngModel" [ngClass]="{ 'is-invalid': PromotionOrderNumber.invalid }"></label>
+            </div>
+            <div class="col-md-3">
+              <label class="k-form-field"><span class="p-strong">Seniority Number</span>
+                <input kendoTextBox type="text" name="SeniorityNo" [(ngModel)]="profile.SeniorityNo"
+                  #SeniorityNo="ngModel" [ngClass]="{ 'is-invalid': SeniorityNo.invalid }">
+              </label>
+            </div>
+            <div class="col-md-3">
+              <label class="k-form-field"><span class="p-strong">Joining Date after Promotion</span>
+                <kendo-datepicker name="PromotionJoiningDate" [format]="'dd/MM/yyyy'"
+                  [(ngModel)]="profile.PromotionJoiningDate" #PromotionJoiningDate="ngModel"></kendo-datepicker>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="card card-accent-success animated fadeIn">
+        <div class="card-body animated fadeIn">
+          <div class="row mt-2" *ngIf="!userRight || (userRight && userRight.AddVacancy)">
+            <div class="col-md-3 col-sm-6 col-xs-6 control-col-st">
+              <button kendoButton class="btn-block btn-lg" type="submit" [ladda]="savingProfile" data-style="zoom-in"
+                [primary]="true"
+                [disabled]="existingProfile || !profile.Department_Id || !profile.HealthFacility_Id || !profile.Designation_Id || !profile.EmpMode_Id || !profile.Status_Id">Save</button>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-6 control-col-end">
+              <button kendoButton [primary]="true" routerLink="../" class="btn-block btn-lg" ladda
+                [look]="'outline'">Back</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="userAccount" class="card card-accent-success animated fadeIn">
+        <div class="card-header animated fadeIn">
+          <h5 class="m-0">Change Password
+          </h5>
+        </div>
+        <div class="card-body animated fadeIn">
+          <div class="row animated fadeIn">
+            <div class="col-md-3">
+              <label class="k-form-field">
+                <span>Old Password <span class="text-danger">*</span></span>
+                <input kendoTextBox type="password" name="oldPass" [(ngModel)]="oldPass" />
+              </label>
+            </div>
+            <div class="col-md-3">
+              <label class="k-form-field">
+                <span>New Password <span class="text-danger">*</span> <small> &nbsp;(minimum 6
+                    characters)</small></span>
+                <input kendoTextBox type="password" name="newPass" [(ngModel)]="newPass" />
+              </label>
+            </div>
+            <div class="col-md-3">
+              <label class="k-form-field">
+                <span>Confirm Password <span class="text-danger">*</span><small> &nbsp;(type new password
+                    again)</small></span>
+                <input kendoTextBox type="password" name="confirmPass" [(ngModel)]="confirmPass" />
+              </label>
+            </div>
+            <div class="col-md-3">
+              <button kendoButton class="btn-block mt-2" type="button" (click)="changePassword()"
+                [ladda]="changingPassword" data-style="zoom-in" [primary]="true"
+                [disabled]="newPass != confirmPass || newPass.length < 6">Change
+                Password</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-accent-success animated fadeIn">
+       <!--  <div class="card-header animated fadeIn">
+          <h5 class="m-0">Change Password
+          </h5>
+        </div> -->
+        <div class="card-body animated fadeIn">
+          <div class="row animated fadeIn">
+            <div class="col-md-3">
+              <label class="k-form-field">
+                <span class="p-strong">Disability</span>
+                <kendo-dropdownlist name="Disability_Id" [data]="dropDowns.disabilityTypes"
+                  [(ngModel)]="profile.Disability_Id" #Disability_Id="ngModel"
+                  [defaultItem]="dropDowns.defultFiltersModel.disability" [textField]="'Name'" [valueField]="'Id'"
+                  [valuePrimitive]="true">
+                </kendo-dropdownlist>
+              </label>
+            </div>
+            <div class="col-md-3">
+              <label class="k-form-field animated fadeIn" *ngIf="profile.Disability_Id">
+                <span class="p-strong">Disability Remarks</span>
+                <input kendoTextBox type="text" name="Disability" [(ngModel)]="profile.Disability" #Disability="ngModel"
+                  required />
+              </label>
+            </div>
+          </div>
+          <div class="row animated fadeIn">
+            <div class="col-md-3">
+              <label class="k-form-field animated fadeIn">
+                <span class="p-strong">Personnel Number</span>
+                <input kendoTextBox type="text" name="PersonnelNo" [(ngModel)]="profile.PersonnelNo"
+                  #PersonnelNo="ngModel" [ngClass]="{ 'is-invalid': PersonnelNo.invalid }">
+              </label>
+            </div>
+            <div class="col-md-3">
+              <label class="k-form-field animated fadeIn">
+                <span class="p-strong">PMDC Number</span>
+                <input kendoTextBox type="text" name="PmdcNo" [(ngModel)]="profile.PmdcNo" #PmdcNo="ngModel"
+                  [ngClass]="{ 'is-invalid': PmdcNo.invalid }">
+              </label>
+            </div>
+            <div class="col-md-3">
+              <label class="k-form-field animated fadeIn">
+                <span class="p-strong">Administrative Control of Post</span>
+                <kendo-dropdownlist [data]="dropDowns.hfacData" [textField]="'Name'" [valueField]="'Id'"
+                  (valueChange)="dropdownValueChanged($event, 'hfac')" [value]="dropDowns.selectedFiltersModel.hfac"
+                  [defaultItem]="dropDowns.defultFiltersModel.hfac">
+                </kendo-dropdownlist>
+              </label>
+            </div>
+            <div class="col-md-3">
+              <label class="k-form-field animated fadeIn">
+                <span class="p-strong">Head of Department</span>
+                <kendo-dropdownlist [data]="dropDowns.hodItems" [textField]="'Name'" [valueField]="'Id'"
+                  [valuePrimitive]="true" name="HoD" [(ngModel)]="profile.HoD" #HoD="ngModel"
+                  [value]="dropDowns.selectedFiltersModel.headOfDepartment"
+                  [defaultItem]="dropDowns.defultFiltersModel.headOfDepartment">
+                </kendo-dropdownlist>
+              </label>
+            </div>
+            <div class="col-md-3">
+              <label class="k-form-field animated fadeIn">
+                <span class="p-strong">Highest Qualification</span>
+                <kendo-dropdownlist [data]="dropDowns.qualificationsData" [textField]="'qualificationname'"
+                  [valueField]="'Id'" (valueChange)="dropdownValueChanged($event, 'qualification')"
+                  [value]="dropDowns.selectedFiltersModel.qualification"
+                  [defaultItem]="dropDowns.defultFiltersModel.qualification">
+                </kendo-dropdownlist>
+              </label>
+            </div>
+            <div class="col-md-3">
+              <label class="k-form-field animated fadeIn">
+                <span class="p-strong">Specialization</span>
+                <kendo-dropdownlist [data]="dropDowns.specializationData" [textField]="'Name'" [valueField]="'Id'"
+                  (valueChange)="dropdownValueChanged($event, 'specialization')"
+                  [value]="dropDowns.selectedFiltersModel.specialization"
+                  [defaultItem]="dropDowns.defultFiltersModel.specialization">
+                </kendo-dropdownlist>
+              </label>
+            </div>
+            <div class="col-md-3">
+              <label class="k-form-field animated fadeIn">
+                <span class="p-strong">Additional Qualification <span class="text-muted">(if
+                    any)</span></span>
+                <input kendoTextBox type="text" name="AdditionalQualification"
+                  [(ngModel)]="profile.AdditionalQualification" #AdditionalQualification="ngModel"
+                  [ngClass]="{ 'is-invalid': AdditionalQualification.invalid }">
+
+              </label>
+            </div>
+            <div class="col-md-3">
+              <label class="k-form-field animated fadeIn">
+                <span class="p-strong">Private Practice</span>
+                <kendo-dropdownlist name="PrivatePractice" [data]="dropDowns.privatePractiveItems" [textField]="'text'"
+                  [valueField]="'value'" [valuePrimitive]="true" [(ngModel)]="profile.PrivatePractice"
+                  #PrivatePractice="ngModel" [defaultItem]="dropDowns.defultFiltersModel.privatePractive">
+                </kendo-dropdownlist>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

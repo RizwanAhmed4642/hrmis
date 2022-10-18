@@ -1,0 +1,202 @@
+<div class="animated fadeIn">
+  <div class="content-heading mb-2">
+    New Ward
+  </div>
+  <div class="row">
+    <div class="col-md-3 col-sm-6 pb-2 control-col-st">
+      <label class="k-form-field">
+        <span>Ward Name</span>
+        <kendo-dropdownlist [data]="dropDowns.wards" [textField]="'Name'" [valueField]="'Id'"
+          [defaultItem]="dropDowns.defultFiltersModel.wards" [disabled]="loadingWards"
+          (valueChange)="dropdownValueChanged($event, 'WardName')" [valuePrimitive]="true"
+          [(ngModel)]="newWard.Ward_Id">
+        </kendo-dropdownlist>
+      </label>
+    </div>
+    <div class="col-md-2 col-sm-6 pb-2 control-col">
+      <label class="k-form-field">
+        <span>Sanctioned Beds</span>
+        <input type="number" kendoTextBox [disabled]="loadingWards" [(ngModel)]="newWard.TotalSanctioned">
+      </label>
+    </div>
+    <div class="col-md-2 col-sm-6 pb-2 control-col">
+      <label class="k-form-field">
+        <span>General Beds</span>
+        <input type="number" kendoTextBox [disabled]="loadingWards" [(ngModel)]="newWard.TotalGB">
+      </label>
+    </div>
+    <div class="col-md-2 col-sm-6 pb-2 control-col">
+      <label class="k-form-field">
+        <span>Special Beds</span>
+        <input type="number" kendoTextBox [disabled]="loadingWards" [(ngModel)]="newWard.TotalSB">
+      </label>
+    </div>
+    <div class="col-md-2 col-sm-6 pb-2 control-col">
+      <label class="k-form-field">
+        <span>Donated Beds</span>
+        <input type="number" kendoTextBox [disabled]="loadingWards" [(ngModel)]="newWard.TotalDonated">
+      </label>
+    </div>
+    <div class="col-md-1 col-sm-6 pb-2 control-col-end">
+      <label class="k-form-field mt-1">
+        <button kendoButton data-style="zoom-in" (click)="addHFWard()" [ladda]="addingWard"
+          [disabled]="!newWard.Ward_Id || loadingWards" class="btn-block btn-align-v" type="button"
+          [primary]="true">Add</button>
+      </label>
+    </div>
+  </div>
+  <kendo-grid *ngIf="!loadingWards" [data]="gridView" [sortable]="{
+  allowUnsort: allowUnsort,
+  mode: multiple ? 'multiple' : 'single'
+  }" [sort]="sort" (sortChange)="sortChange($event)">
+    <kendo-grid-column field="asd" title="No." [width]="5" [headerClass]="'grid-header-custom'"
+      [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+      <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+        <p style="margin: 0;">{{(rowIndex + 1)}}.</p>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Name" title="Ward" [width]="35" [headerClass]="'grid-header-custom'"
+      [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+      <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+        <p style="margin: 0;">{{dataItem.Name}}</p>
+      </ng-template>
+      <ng-template kendoGridFooterTemplate let-column="column">
+        <p class="p-strong" style="font-size: 14px !important;padding: 8px 12px;">Total
+        </p>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="TotalGB" title="Sanctioned Beds" [width]="15" [headerClass]="'grid-header-custom'"
+      [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+      <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+        <p style="margin: 0;">{{dataItem.TotalSanctioned}}</p>
+      </ng-template>
+      <ng-template kendoGridFooterTemplate let-column="column">
+        <p class="p-strong" style="font-size: 14px !important;padding: 8px 12px;">
+          {{totalSums["TotalSanctioned"] ? (totalSums["TotalSanctioned"].sum | number) : 0}}
+        </p>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="TotalGB" title="General Beds" [width]="15" [headerClass]="'grid-header-custom'"
+      [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+      <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+        <p style="margin: 0;">{{dataItem.TotalGB}}</p>
+      </ng-template>
+      <ng-template kendoGridFooterTemplate let-column="column">
+        <p class="p-strong" style="font-size: 14px !important;padding: 8px 12px;">
+          {{totalSums["TotalGB"] ? (totalSums["TotalGB"].sum | number) : 0}}
+        </p>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="TotalSB" title="Special Beds" [width]="15" [headerClass]="'grid-header-custom'"
+      [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+      <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+        <p style="margin: 0;">{{dataItem.TotalSB}}
+        </p>
+      </ng-template>
+
+      <ng-template kendoGridFooterTemplate let-column="column">
+        <p class="p-strong" style="font-size: 14px !important;padding: 8px 12px;">
+          {{totalSums["TotalSB"] ? (totalSums["TotalSB"].sum | number) : 0}}
+        </p>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="TotalDonated" title="Donated Beds" [width]="15" [headerClass]="'grid-header-custom'"
+      [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+      <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+        <p style="margin: 0;">{{dataItem.TotalDonated}}
+        </p>
+      </ng-template>
+      <ng-template kendoGridFooterTemplate let-column="column">
+        <p class="p-strong" style="font-size: 14px !important;padding: 8px 12px;">
+          {{totalSums["TotalDonated"] ? (totalSums["TotalDonated"].sum | number) : 0}}
+        </p>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Total" title="Total Beds" [width]="15" [headerClass]="'grid-header-custom'"
+      [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+      <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+        <p style="margin: 0;" class="p-strong">
+          {{(dataItem.Total ? dataItem.Total : 0)}}</p>
+      </ng-template>
+      <ng-template kendoGridFooterTemplate let-column="column">
+        <p class="p-strong" style="font-size: 14px !important;padding: 8px 12px;">
+          {{totalSums["Total"] ? (totalSums["Total"].sum | number) : 0}}
+        </p>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="asd" title="Action" [width]="15"
+      *ngIf="currentUser.UserName.toLowerCase().startsWith('ceo.') && hfTypeCode != '011' && hfTypeCode != '012'"
+      [headerClass]="'grid-header-custom'"
+      [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <a (click)="openWardWindow(dataItem)"> <img class=" icon-svg" src="../../../assets/img/icons/edit2.svg"
+            alt=""></a>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="asd" title="Action" [width]="15"
+      *ngIf="!currentUser.UserName.toLowerCase().startsWith('ceo.') && currentUser.RoleName != 'Deputy Secretary' && currentUser.RoleName != 'HRView'"
+      [headerClass]="'grid-header-custom'"
+      [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <button kendoButton data-style="zoom-in" (click)="openWardWindow(dataItem)" type="button" class="btn btn-sm"
+          [primary]="true" look="outline">edit</button>
+        <button (click)="removeWard(dataItem.Id,dataItem.Name)" type="button" class="ml-2 btn btn-sm btn-danger"><i
+            class="fa fa-times"></i></button>
+      </ng-template>
+    </kendo-grid-column>
+
+  </kendo-grid>
+</div>
+<div *ngIf="loadingWards" class="k-i-loading"></div>
+
+
+
+<kendo-dialog [title]="selectedWard.Name + ' - Edit'" *ngIf="wardDialogOpened && selectedWard"
+  (close)="closeWardWindow()" [minWidth]="450" [width]="'450'">
+  <div class="p-2">
+    <div class="row">
+      <div class="col-md-12">
+        <h3 class="text-center">{{selectedWard.Name}}
+        </h3>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-md-3 control-col-st">
+        <label class="k-form-field">
+          <span><strong class="p-strong">Sanctioned Beds</strong></span>
+          <input type="number" kendoTextBox name="TotalGB" [(ngModel)]="selectedWard.TotalSanctioned" min="0">
+        </label>
+      </div>
+      <div class="col-md-3 control-col">
+        <label class="k-form-field">
+          <span><strong class="p-strong">General Beds</strong></span>
+          <input type="number" kendoTextBox name="TotalSB" [(ngModel)]="selectedWard.TotalGB" min="0">
+        </label>
+      </div>
+      <div class="col-md-3 control-col">
+        <label class="k-form-field">
+          <span><strong class="p-strong">Special Beds</strong></span>
+          <input type="number" kendoTextBox name="TotalSB" [(ngModel)]="selectedWard.TotalSB" min="0">
+        </label>
+      </div>
+      <div class="col-md-3 control-col-end">
+        <label class="k-form-field">
+          <span><strong class="p-strong">Donated Beds</strong></span>
+          <input type="number" kendoTextBox name="TotalSB" [(ngModel)]="selectedWard.TotalDonated" min="0">
+        </label>
+      </div>
+    </div>
+    <hr>
+    <div *ngIf="wardDialogOpened && selectedWard" class="row animated fadeIn">
+      <div class="col-md-6 control-col-st">
+        <button kendoButton [ladda]="savingWard" data-style="zoom-in" [disabled]="oldValGB == selectedWard.TotalGB && oldValSB == selectedWard.TotalSB 
+          && oldValSanctioned == selectedWard.TotalSanctioned && oldValDonated == selectedWard.TotalDonated"
+          (click)="editWard()" primary="true" class="btn-block">Save</button>
+      </div>
+      <div class="col-md-6 control-col-end">
+        <button kendoButton primary="true" look="outline" class="btn-block" (click)="closeWardWindow()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</kendo-dialog>
