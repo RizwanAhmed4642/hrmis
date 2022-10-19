@@ -4,6 +4,7 @@ using Hrmis.Models.Common;
 using Hrmis.Models.DbModel;
 using Hrmis.Models.Dto;
 using log4net;
+using Microsoft.Exchange.WebServices.Data;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -2804,6 +2805,9 @@ Primary and Secondary Healthcare Department";
                     _db.Configuration.ProxyCreationEnabled = false;
                     _db.Database.CommandTimeout = 60 * 4;
                     IQueryable<ProfileListView> query = _db.ProfileListViews.Where(x => x.Status_Id != 16).AsQueryable();
+
+                    
+
                     if (filters.roleName == "PHFMC Admin")
                     {
                         var hfIds = _db.HealthFacilities.Where(x => x.HFAC == 2).Select(k => k.Id).ToList();
@@ -2851,12 +2855,26 @@ Primary and Secondary Healthcare Department";
                         var alertedProfileIds = _db.HrSMSEmployees.Where(x => x.Profile_Id > 0).Select(k => k.Profile_Id).ToList();
                         if (filters.retirementInOneYear == true)
                         {
-                            DateTime mydate = DateTime.UtcNow.AddHours(5).AddYears(-3);
-                            DateTime dateAfterOneYear = DateTime.UtcNow.AddHours(5).AddYears(1);
-                            query = query.Where(x => DbFunctions.TruncateTime(x.SuperAnnuationDate) >= DbFunctions.TruncateTime(mydate) &&
-                            DbFunctions.TruncateTime(x.SuperAnnuationDate) <= DbFunctions.TruncateTime(dateAfterOneYear)
-                            && x.CurrentGradeBPS > 15 && x.EmpMode_Id == 13 && x.Status_Id != 25 && !alertedProfileIds.Contains(x.Id)
-                            ).AsQueryable();
+                            if (filters.UserName == "so.pension")
+                            {
+                                DateTime mydates = DateTime.UtcNow.AddHours(5).AddYears(-3);
+                                DateTime dateAfterOneYears = DateTime.UtcNow.AddHours(5).AddYears(1);
+                                query = query.Where(x => x.CurrentGradeBPS > 16).AsQueryable();
+                                //query = query.Where(x => DbFunctions.TruncateTime(x.SuperAnnuationDate) >= DbFunctions.TruncateTime(mydates) &&
+                                //DbFunctions.TruncateTime(x.SuperAnnuationDate) <= DbFunctions.TruncateTime(dateAfterOneYears)
+                                //&& x.CurrentGradeBPS > 16 && x.EmpMode_Id == 13 && x.Status_Id != 25 && !alertedProfileIds.Contains(x.Id)
+                                //).AsQueryable();
+                            }
+                            else
+                            {
+                                DateTime mydate = DateTime.UtcNow.AddHours(5).AddYears(-3);
+                                DateTime dateAfterOneYear = DateTime.UtcNow.AddHours(5).AddYears(1);
+                                query = query.Where(x => DbFunctions.TruncateTime(x.SuperAnnuationDate) >= DbFunctions.TruncateTime(mydate) &&
+                                DbFunctions.TruncateTime(x.SuperAnnuationDate) <= DbFunctions.TruncateTime(dateAfterOneYear)
+                                && x.CurrentGradeBPS > 15 && x.EmpMode_Id == 13 && x.Status_Id != 25 && !alertedProfileIds.Contains(x.Id)
+                                ).AsQueryable();
+                            }
+                            
                         }
                         if (filters.retirementAlerted == true)
                         {
@@ -3766,6 +3784,8 @@ Primary and Secondary Healthcare Department";
         public List<int?> designations;
         public List<int?> statuses;
         public string roleName { get; set; }
+        public string UserId { get; set; }
+        public string UserName { get; set; }
     }
     public class SeniorityApplicantDto
     {

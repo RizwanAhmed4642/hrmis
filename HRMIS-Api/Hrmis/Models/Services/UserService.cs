@@ -205,7 +205,7 @@ namespace Hrmis.Models.Services
                     allowedRoutes.Add((int)AngularRoutesNav.PPSCCANDIDATES);
                     allowedRoutes.Add((int)AngularRoutesNav.PROMOTIONAPPLICATION);
                 }
-                else if (userName.Equals("dpd"))
+                else if (userName.Equals("dpd") || userName.Equals("admin"))
                 {
                     allowedRoutes.Add((int)AngularRoutesNav.DASHBAORD);
                     allowedRoutes.Add((int)AngularRoutesNav.HEALTHFACILITY);
@@ -347,7 +347,7 @@ namespace Hrmis.Models.Services
                     allowedRoutes.Add((int)AngularRoutesNav.PROMOTIONAPPLICATION);
                     //allowedRoutes.Add((int)AngularRoutesNav.PPSCCANDIDATES);
                 }
-                else if (userName.StartsWith("crr.") || roleName.Equals("ACR Room"))
+                else if (userName.StartsWith("crr.") || roleName.Equals("ACR Room") || roleName.Equals("ACR Cell"))
                 {
                     allowedRoutes.Add((int)AngularRoutesNav.DASHBAORD);
                     allowedRoutes.Add((int)AngularRoutesNav.FILE);

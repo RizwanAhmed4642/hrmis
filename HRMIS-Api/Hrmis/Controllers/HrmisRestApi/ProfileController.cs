@@ -827,6 +827,8 @@ namespace Hrmis.Controllers.HrmisRestApi
         {
             try
             {
+                filters.UserId = User.Identity.GetUserId();
+                filters.UserName = User.Identity.GetUserName();
                 if (User.IsInRole("PHFMC Admin") || User.IsInRole("PHFMC"))
                 {
                     filters.roleName = "PHFMC Admin";
