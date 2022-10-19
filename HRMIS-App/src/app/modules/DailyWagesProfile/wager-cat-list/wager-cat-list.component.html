@@ -1,0 +1,211 @@
+<div *ngIf="loading" class="k-i-loading"></div>
+<tabset class="tab-container">
+    <ul class="nav nav-tabs">
+        <li  class="nav-item active"><a  class="nav-link active"  [routerLink]="'/wagesmap/'"><span>Wager Map</span></a></li>
+        <li  class="nav-item "><a  class="nav-link " [routerLink]="'/dailywagerlist/'"><span>Daily Wager List</span></a></li>
+        <li  class="nav-item"><a  class="nav-link"  [routerLink]="'/daily-wages-count/'"><span>Wager Count</span></a></li>
+        
+    </ul>
+</tabset>
+            <div class="row row-panel">
+                <div class="col-md-12">
+                    
+            
+                    <div class="grid-wrapper">
+                        <kendo-grid [data]="gridView" [sortable]="{
+                          allowUnsort: allowUnsort,
+                          mode: multiple ? 'multiple' : 'single'
+                          }" [selectable]="true" [sort]="sort" (sortChange)="sortChange($event)" [(pageSize)]="pageSize"
+                            [skip]="skip" [pageable]="true" (pageChange)="pageChange($event)" [scrollable]="false">
+                            <kendo-grid-column [width]="15" field="Id" title="No." [headerClass]="'grid-header-custom'"
+                                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    {{(rowIndex + 1)}}.
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column [width]="28" field="Name" title="Name" [headerClass]="'grid-header-custom'"
+                                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="grid-list-item">
+                                                <p class="m-0 mb-1"
+                                                    style="font-family: 'Roboto-Regular'; color: darkslategray ; font-weight: 100;">
+                                                    <span>{{dataItem.Name}}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column [width]="30" field="Name" title="CNIC" [headerClass]="'grid-header-custom'"
+                                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="grid-list-item">
+                                                <p class="m-0 mb-1"
+                                                    style="font-family: 'Roboto-Regular'; color: darkslategray ; font-weight: 100;">
+                                                    <span>{{dataItem.CNIC}}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column [width]="28" field="Name" title="Designation" [headerClass]="'grid-header-custom'"
+                                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="grid-list-item">
+                                                <p class="m-0 mb-1"
+                                                    style="font-family: 'Roboto-Regular'; color: darkslategray ; font-weight: 100;">
+                                                    <span>{{dataItem.Designation}}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column [width]="28" field="Division" title="Division" [headerClass]="'grid-header-custom'"
+                            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="grid-list-item">
+                                            <p class="m-0 mb-1"
+                                                style="font-family: 'Roboto-Regular'; color: darkslategray ; font-weight: 100;">
+                                                <span>{{dataItem.Division}}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column [width]="28" field="Division" title="District" [headerClass]="'grid-header-custom'"
+                            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="grid-list-item">
+                                            <p class="m-0 mb-1"
+                                                style="font-family: 'Roboto-Regular'; color: darkslategray ; font-weight: 100;">
+                                                <span>{{dataItem.District}}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column [width]="28" field="Division" title="Tehsil" [headerClass]="'grid-header-custom'"
+                            [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="grid-list-item">
+                                            <p class="m-0 mb-1"
+                                                style="font-family: 'Roboto-Regular'; color: darkslategray ; font-weight: 100;">
+                                                <span>{{dataItem.Tehsil}}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </kendo-grid-column>
+                            <kendo-grid-column [width]="28" field="Name" title="ContractFrom" [headerClass]="'grid-header-custom'"
+                                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="grid-list-item">
+                                                <p class="m-0 mb-1"
+                                                    style="font-family: 'Roboto-Regular'; color: darkslategray ; font-weight: 100;">
+                                                    <span>{{dataItem.ContractStartDate | date
+                                                        }}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column [width]="28" field="Name" title="ContractTo" [headerClass]="'grid-header-custom'"
+                                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="grid-list-item">
+                                                <p class="m-0 mb-1"
+                                                    style="font-family: 'Roboto-Regular'; color: darkslategray ; font-weight: 100;">
+                                                    <span>{{dataItem.ContractEndDate |
+                                                        date}}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column [width]="28" field="Name" title="ContractFile" [headerClass]="'grid-header-custom'"
+                                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="grid-list-item">
+                                                <p class="m-0 mb-1"
+                                                    style="font-family: 'Roboto-Regular'; color: darkslategray ; font-weight: 100;">
+                                                    <img *ngIf="dataItem.ContractImagePath != null" 
+                                                    [src]="dataItem.ContractImagePath" />
+                                                    <span *ngIf="dataItem.ContractImagePath == null">
+                                                        <div class="upload-btn-wrapper">
+                                                            <!--default html file upload button-->
+                                                            <input type="file" #file type="file" accept='image/*' id="actual-btn"
+                                                                (change)="CustomerImagePreview(file.files,dataItem.ContractId)"
+                                                                hidden />
+            
+                                                            <!--our custom file upload button-->
+                                                            <label for="actual-btn" class="filelabel">Upload
+                                                                File</label>
+                                                            <!-- <input #file type="file" accept='image/*' class="custom-file-input" (change)="CustomerImagePreview(file.files,dataItem.dailyWagesContractDetail.Id)" /> -->
+                                                        </div>
+                                                    </span>
+                                                </p>
+            
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column [width]="28" field="Name" title="Action" [headerClass]="'grid-header-custom'"
+                                [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="grid-list-item">
+                                                <a type="butoon" class="btn btn-secondary"
+                                                [routerLink]="['/dailywagerprofile', dataItem.Id]">Edit</a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="grid-list-item">
+                                                <a type="butoon" class="btn btn-secondary"
+                                                [routerLink]="['/wagerprofileview', dataItem.Id]">Detail</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </kendo-grid-column>
+            
+                            <!--   <ng-template kendoGridDetailTemplate let-dataItem>
+                            <section>
+                              <p><strong>On Order:</strong> {{dataItem.FullName}}</p>
+                              <p><strong>Reorder Level:</strong> xItem.Reorderl}} units</p>
+                              <p><strong>Discontinued:</strong>aItem.Discontinued}}</p>
+                              <p><strong>Category:</strong> tem.Category?.CategoryName}} - {{dataItem.CDescription}}</p>
+                            </section>
+                          </ng-template> -->
+                          
+                        </kendo-grid>
+            
+                    </div>
+                </div>
+            </div>

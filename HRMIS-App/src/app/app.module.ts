@@ -95,7 +95,7 @@ import {DailywagerlistComponent} from './modules/DailyWagesProfile/dailywagerlis
 import {DailywagerCountComponent} from './modules/DailyWagesProfile/dailywager-count/dailywager-count.component'
 import { DailyWagesMapComponent } from './modules/DailyWagesProfile/daily-wages-map/daily-wages-map.component';
 import { WagerProfileViewComponent } from './modules/DailyWagesProfile/wager-profile-view/wager-profile-view.component';
-
+import { WagerCatListComponent } from './modules/DailyWagesProfile/wager-cat-list/wager-cat-list.component';
 import { PUCDetailComponent } from './_directives/puc-dashboard/puc-detail/puc-detail.component';
 import { PUCDashboardComponent } from './_directives/puc-dashboard/puc-dashboard.component';
 import { VacancyChartsMapComponent } from './modules/dashboard/vacancy-charts-map/vacancy-charts-map.component';
@@ -160,6 +160,7 @@ import { FileComponent } from './modules/profile/view/components/file/file.compo
     DailywagerlistComponent,
     DailyWagesMapComponent,
     WagerProfileViewComponent,
+    WagerCatListComponent,
     DailywagerCountComponent,
     DepartmentFTSReportComponent,
     PUCDashboardComponent,

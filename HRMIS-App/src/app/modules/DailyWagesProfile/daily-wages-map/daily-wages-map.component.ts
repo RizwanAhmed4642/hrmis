@@ -7,7 +7,8 @@ import { RootService } from '../../../_services/root.service';
 import { AuthenticationService } from '../../../_services/authentication.service';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import {CoordinatesViewModel} from '../../../_models/_db/daily-wages.model'
-
+import { Router, ActivatedRoute } from '@angular/router';
+import { DailyWagerService } from '../../../_services/daily-wager.service';
 @Component({
   selector: 'app-daily-wages-map',
   templateUrl: './daily-wages-map.component.html',
@@ -15,7 +16,7 @@ import {CoordinatesViewModel} from '../../../_models/_db/daily-wages.model'
 })
 export class DailyWagesMapComponent implements OnInit {
 
-  constructor(private _rootService: RootService, private _dashboardService: DashboardService, private _authenticationService: AuthenticationService) { }
+  constructor(private _rootService: RootService, private _dashboardService: DashboardService,private route:ActivatedRoute,private router:Router, private _authenticationService: AuthenticationService) { }
 
   @ViewChild('mapContainer', { static: false }) gmap: ElementRef;
   @ViewChild('hfTypeList', { static: false }) hfTypeList;
@@ -514,6 +515,7 @@ export class DailyWagesMapComponent implements OnInit {
     return this.vpMapsData.filter(x => x.Code.substring(0, 6) == code);
   }
   clicked(clickEvent) {
+    debugger
     console.log(clickEvent);
 
     let dis = this.districts.find(x => x.Name == clickEvent.feature.i.districts);
@@ -643,45 +645,51 @@ export class DailyWagesMapComponent implements OnInit {
   }
   public selectMarker(event: any, window) {
     debugger
-    console.log(event);
+    console.log(this.hfmisCode) 
+    //console.log(this.hfmisCode) 
+    console.log(event.Category);
+    this.router.navigate(['wagercatlist'], { queryParams: { Category: event.Category, Type: this.hfmisCode } });
+    
+    // debugger
+    // console.log(event);
 
-    this.setVpTechnologist();
-    let codeMap = this.hfCodesMap.filter(x => x.HrHfId == event.HF_Id);
-    this.surgeries = [];
-    if (codeMap[0]) {
-      this.dhisCode = codeMap[0].DHISHfCode;
-      this.dhisFiltetType = 'facility';
-      this.getSurgeries();
-    }
+    // this.setVpTechnologist();
+    // let codeMap = this.hfCodesMap.filter(x => x.HrHfId == event.HF_Id);
+    // this.surgeries = [];
+    // if (codeMap[0]) {
+    //   this.dhisCode = codeMap[0].DHISHfCode;
+    //   this.dhisFiltetType = 'facility';
+    //   this.getSurgeries();
+    // }
  
-    this.showMap = true;
-    this.openedWindow = event.Code;
-    this.pauseShow = true;
-    /* if (this.previous) {
-      this.previous.close();
-    }
-    this.previous = window; */
+    // this.showMap = true;
+    // this.openedWindow = event.Code;
+    // this.pauseShow = true;
+    // /* if (this.previous) {
+    //   this.previous.close();
+    // }
+    // this.previous = window; */
 
 
-    this.zoom = 9;
-    this.facilityProfilesData = {};
-    let obj: any = {
-      DesignationIds: this.selectedDesignations,
-      HFTypeCodes: this.hfTypeCodes,
+    // this.zoom = 9;
+    // this.facilityProfilesData = {};
+    // let obj: any = {
+    //   DesignationIds: this.selectedDesignations,
+    //   HFTypeCodes: this.hfTypeCodes,
 
-      HfmisCode: event.Code,
-      showProfileViewId: this.showProfileViewId
-    };
-     this._dashboardService.getEmployeePersons(obj).subscribe((response: any) => {
-      if (response) {
-        this.personProfiles = response.Persons;
-        this.loadingMap = false;
-        this.loadingVpMaster = false;
-      }
-    }, err2 => {
-      this.loadingVpMaster = false;
-      this.loadingMap = false;
-    });
+    //   HfmisCode: event.Code,
+    //   showProfileViewId: this.showProfileViewId
+    // };
+    //  this._dashboardService.getEmployeePersons(obj).subscribe((response: any) => {
+    //   if (response) {
+    //     this.personProfiles = response.Persons;
+    //     this.loadingMap = false;
+    //     this.loadingVpMaster = false;
+    //   }
+    // }, err2 => {
+    //   this.loadingVpMaster = false;
+    //   this.loadingMap = false;
+    // });
   }
   public infoWindowClosed() {
     this.pauseShow = false;

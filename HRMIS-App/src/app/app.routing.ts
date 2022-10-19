@@ -52,6 +52,7 @@ import { DailywagerlistComponent } from './modules/DailyWagesProfile/dailywagerl
 import { DailywagerCountComponent } from './modules/DailyWagesProfile/dailywager-count/dailywager-count.component';
 import { DailyWagesMapComponent } from './modules/DailyWagesProfile/daily-wages-map/daily-wages-map.component';
 import { WagerProfileViewComponent } from './modules/DailyWagesProfile/wager-profile-view/wager-profile-view.component';
+import { WagerCatListComponent } from './modules/DailyWagesProfile/wager-cat-list/wager-cat-list.component';
 
 export const routes: Routes = [
   {
@@ -221,6 +222,10 @@ export const routes: Routes = [
       {
         path: 'wagerprofileview/:Id',
         data: { title: 'Daily Wager Profile View' }, canActivate: [AuthGuard], component: WagerProfileViewComponent
+      },
+      {
+        path: 'wagercatlist',
+        data: { title: 'Daily Wager Category View' }, canActivate: [AuthGuard], component: WagerCatListComponent
       },  
             
       { path: 'application-report', component: ReportingApplicationComponent, canActivate: [AuthGuard], data: { title: 'Online Transfer' } },

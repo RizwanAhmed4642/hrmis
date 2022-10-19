@@ -1311,7 +1311,7 @@ namespace Hrmis.Models.Services
 					}
                     else if (filters.hfmisCode == "0" && string.IsNullOrEmpty(filters.Category))   //All null
                     {
-                        query = query.AsQueryable();
+                        query = query.Where(x=>x.UserName !=null && x.UserName!="" && x.EmployementMode != null && x.EmployementMode != "").AsQueryable();
                         var Tehsilandcategory = query.ToList();
                         // var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
                         //var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	

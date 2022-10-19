@@ -13,6 +13,7 @@ import { ExcelExportModule } from '@progress/kendo-angular-excel-export';
 import { SharedModule } from '../../shared.module';
 import { LaddaModule } from 'angular2-ladda';
 import { DialogModule } from '@progress/kendo-angular-dialog';
+import { WagerCatListComponent } from './wager-cat-list/wager-cat-list.component';
 // import { DailyWagesMapComponent } from './daily-wages-map/daily-wages-map.component';
 // import { WagerProfileViewComponent } from './wager-profile-view/wager-profile-view.component';
 // import { DailywagerCountComponent } from './dailywager-count/dailywager-count.component';
@@ -36,7 +37,7 @@ import { DialogModule } from '@progress/kendo-angular-dialog';
     ExcelExportModule,
     TabsModule
   ],
-  declarations: [ ],
+  declarations: [ WagerCatListComponent],
   exports:[],
   providers: []
 })
