@@ -923,6 +923,7 @@ namespace Hrmis.Controllers.HrmisRestApi
         [HttpGet]
         public async Task<List<TransferType>> GetOrderTypes()
         {
+            
             using (var db = new HR_System())
             {
                 db.Configuration.ProxyCreationEnabled = false;

@@ -56,18 +56,47 @@ namespace Hrmis.Controllers.HrmisRestApi
             cnic = cnic.Replace("-", string.Empty);
             try
             {
-                using (var db = new HR_System())
+                using (var _db = new HR_System())
                 {
+                    var userId = User.Identity.GetUserId();
+                    var name = User.Identity.GetUserName();
+                    var user = db.C_User.FirstOrDefault(x => x.Id.Equals(userId));
 
-                    db.Configuration.ProxyCreationEnabled = false;
-                    ProfileDetailsView profileDetailsView = db.ProfileDetailsViews.FirstOrDefault(x => x.CNIC.Equals(cnic));
-                    if (profileDetailsView != null)
+                    var district = db.Districts.FirstOrDefault(x => x.Code == user.DistrictID);
+
+                    if (name.StartsWith("ceo") && user.DistrictID != null)
                     {
-                        return Ok(profileDetailsView);
+
+                        _db.Configuration.ProxyCreationEnabled = false;
+                        var findprofile = _db.ProfileDetailsViews.Where(x => x.District == district.Name).ToList();
+                        var profile = findprofile.FirstOrDefault(x => x.CNIC.Equals(cnic));
+                        if (profile != null)
+                        {
+                            return Ok(profile);
+                        }
+                        else
+                        {
+                            return Ok(false);
+                            //return Ok(new { Status = false, Message = "Profile Does Not Exist In Ditrict", Data = "" });
+                        }
+
+
+
                     }
                     else
                     {
-                        return Ok(false);
+
+                        db.Configuration.ProxyCreationEnabled = false;
+                        ProfileDetailsView profileDetailsView = db.ProfileDetailsViews.FirstOrDefault(x => x.CNIC.Equals(cnic));
+                        if (profileDetailsView != null)
+                        {
+
+                            return Ok(profileDetailsView);
+                        }
+                        else
+                        {
+                            return Ok(false);
+                        }
                     }
                 }
 

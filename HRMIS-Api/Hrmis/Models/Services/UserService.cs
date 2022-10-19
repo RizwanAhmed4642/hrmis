@@ -585,7 +585,7 @@ namespace Hrmis.Models.Services
                     //allowedRoutes.Add((int)AngularRoutesNav.RETIREMENTEMPLOYEE);
                     //allowedRoutes.Add((int)AngularRoutesNav.IMPORTANT);
                     allowedRoutes.Add((int)AngularRoutesNav.FILEREQUISITION);
-                    allowedRoutes.Add((int)AngularRoutesNav.SUMMARIES);
+                    //allowedRoutes.Add((int)AngularRoutesNav.SUMMARIES);
                     //allowedRoutes.Add((int)AngularRoutesNav.FILEREQUEST);
                     //allowedRoutes.Add((int)AngularRoutesNav.SENDRECIEVEFILES);
                     //allowedRoutes.Add((int)AngularRoutesNav.NEWFILEREQUEST);

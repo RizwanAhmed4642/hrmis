@@ -13,7 +13,7 @@ export class RiBranchGuard implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         let userName: string = this._authService.getUser().UserName.toLowerCase();
         let roleName: string = this._authService.getUser().RoleName;
-        if (userName && (roleName == 'RI Branch' || userName == 'dpd' || roleName == 'Administrative Office' || roleName == 'Deputy Secretary' || roleName == 'Law wing' || userName == 'pshd')) {
+        if (userName && (roleName == 'RI Branch' || roleName == 'Online Dairy Cell' || userName == 'dpd' || roleName == 'Administrative Office' || roleName == 'Deputy Secretary' || roleName == 'Law wing' || userName == 'pshd')) {
             return true;
         } else {
             this._authService.unauthorizedPage();

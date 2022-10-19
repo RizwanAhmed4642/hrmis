@@ -27,7 +27,7 @@
   <app-hrmis-facilitationdashboard
     *ngIf="(currentUser?.UserName == 'managerfc' || currentUser?.UserName.startsWith('fdo') && currentUser?.RoleName != 'Facilitation Centre South')">
   </app-hrmis-facilitationdashboard>
-  <app-hrmis-ri-branchdashboard *ngIf="currentUser?.RoleName == 'RI Branch'">
+  <app-hrmis-ri-branchdashboard *ngIf="currentUser?.RoleName == 'RI Branch' || currentUser?.RoleName == 'Online Dairy Cell' ">
   </app-hrmis-ri-branchdashboard>
   <app-hrmis-law-wingdashboard *ngIf="currentUser?.RoleName == 'Law wing'">
   </app-hrmis-law-wingdashboard>

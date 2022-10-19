@@ -119,8 +119,13 @@
                 <kendo-grid-column width="85" field="EmployeeName" title="Name" [headerClass]="'grid-header-custom'"
                   [style]="{'background-color': '#fff','color': '#000', 'border-bottom' : '1px solid #c8ced3'}">
                   <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                    <div class="row employee-info-grid-box" style="cursor: pointer;"
-                      (click)="openInNewTab('profile/' + dataItem.CNIC)">
+
+                    <!-- commented by adnan 18-10-2022 -->
+
+                    <!-- <div class="row employee-info-grid-box" style="cursor: pointer;"
+                      (click)="openInNewTab('profile/' + dataItem.CNIC)"> -->
+
+                    <div class="row employee-info-grid-box" style="cursor: pointer;">
                       <div class="col-md-12">
                         <div class="grid-list-item">
                           <h5 class="m-0 mb-1" style="font-family: Roboto-Medium; font-weight: 100;">
