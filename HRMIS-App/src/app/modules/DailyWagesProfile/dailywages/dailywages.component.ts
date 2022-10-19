@@ -175,43 +175,69 @@ public wagerId = 0;
       this.GetWagerInfoById(this.wagerId);
     }
   }
+  FillDailyWagesFormOnLoad(obj:any){
+          if(obj != null){
+            if(obj.PersonImage != null){
+              this.PersonImageURL = "https://hrmis.pshealthpunjab.gov.pk/DailywagerUploads/"+obj.PersonImage;
+              this.imageURL = this.PersonImageURL;
+            }
+            this.dailyWagerProfileForm.patchValue({
+              id : obj.Id,
+              UserId : obj.UserId,
+              UserName : obj.UserName,
+              name : obj.Name,
+              cnic : obj.CNIC,
+              gender : obj.Gender,
+              fatherName : obj.FatherName,
+              mobileNumber : obj.MobileNumber,
+              Category : obj.Category,
+              designation : obj.Designation,
+              EmployementMode : obj.EmployementMode,
+            })
+            if(obj.dailyWagesAccountDetail != null){
+              this.dailyWagerProfileForm.get("dailyWagesAccountDetails").patchValue({
+                id : obj.dailyWagesAccountDetail.Id,
+                accountTitle : obj.dailyWagesAccountDetail.AccountTitle,
+                accountNumber : obj.dailyWagesAccountDetail.AccountNumber,
+                bankId : obj.dailyWagesAccountDetail.BankId,
+              })
+            }
+            if(obj.dailyWagesContractDetail != null){
+              this.dailyWagerProfileForm.get("dailyWagesContractDetail").patchValue({
+                id:obj.dailyWagesContractDetail.Id
+              })
+              this.ContractStartValue = new Date(obj.dailyWagesContractDetail.ContractStartDate)
+              this.ContractEndValue = new Date(obj.dailyWagesContractDetail.ContractEndDate)
+              if(obj.dailyWagesContractDetail.ContractImagePath != null){
+                this.contractImageURL = "https://hrmis.pshealthpunjab.gov.pk/DailywagerUploads/"+obj.dailyWagesContractDetail.ContractImagePath;
+                this.contractImage = this.contractImageURL;
+              }
+            }
+          }
+  }
   GetWagerInfoById(WagerId:any){
     this.loading = true;
     this._DailyWagerService.GetDailyWagerbyId(this.wagerId).subscribe((res: any) => {
       if (res.Status) {
-         
         this.IsUpdate = true;
         var date = Date();
-        if(res.List.DateOfBirth != null){
-          date = formatDate(res.List.DateOfBirth, 'dd/MM/yyyy', 'en-PST')
-        }
+
         if(res.List.Category != null){
           this.GetDesignationByNameOnLoad(res.List.Category)
         }
+
+        this.FillDailyWagesFormOnLoad(res.List);
+        
+       
         if(res.List.TehsilCode != null){
           this.getUCByTehsilCode(res.List.TehsilCode);
           this.getHealthFacilitiesOnLoad(res.List.TehsilCode);
         }
         this.dailyWagerProfileForm.get("UcCode").setValue(Number(res.List.UcCode));
         this.dailyWagerProfileForm.get("HfmisCode").setValue(Number(res.List.HfmisCode));
-
-        this.dailyWagerProfileForm.controls
-        this.dailyWagerProfileForm.get("id").setValue(res.List.Id);
-        this.dailyWagerProfileForm.get("UserId").setValue(res.List.UserId);
-        this.dailyWagerProfileForm.get("UserName").setValue(res.List.UserName);
-        this.dailyWagerProfileForm.get("name").setValue(res.List.Name);
-        this.dailyWagerProfileForm.get("cnic").setValue(res.List.CNIC);
-        this.dailyWagerProfileForm.get("gender").setValue(res.List.Gender);
-        this.dailyWagerProfileForm.get("fatherName").setValue(res.List.FatherName);
-        this.dailyWagerProfileForm.get("Category").setValue(res.List.Category);
-        this.dailyWagerProfileForm.get("designation").setValue(res.List.Designation);
-        this.dailyWagerProfileForm.get("EmployementMode").setValue(res.List.EmployementMode);
-        
         this.divisionsDataForEdit = this.divisionsData;
         this.districtDataForEdit = this.districtsData;
         this.tehsilDataForEdit   = this.tehsilsData;
-        this.ucDataForEdit = this.ucData;
-      
 
         //================ Show/Hide UC and HF on basis of Designation ==========//
         if(res.List.Category == 'Dengue' ||
@@ -223,46 +249,23 @@ public wagerId = 0;
        else{
          this.isShowUC = false;
          this.isShowHF = true;
-   
        }
         //========================== End ==============================//
-
-
         if(res.List.DateOfBirth != null){
         this.DOBValue=new Date(res.List.DateOfBirth);
         }
-        this.dailyWagerProfileForm.get("mobileNumber").setValue(res.List.MobileNumber);
-        // this.dailyWagerProfileForm.get("dailyWagesContractDetail").patchValue(res.List.dailyWagesContractDetail);
-        // this.dailyWagerProfileForm.get("dailyWagesAccountDetails").patchValue(res.List.dailyWagesAccountDetail);
-        this.dailyWagerProfileForm.get("dailyWagesAccountDetails").get("id").setValue(res.List.dailyWagesAccountDetail.Id)
-        this.dailyWagerProfileForm.get("dailyWagesAccountDetails").get("accountTitle").setValue(res.List.dailyWagesAccountDetail.AccountTitle)
-        this.dailyWagerProfileForm.get("dailyWagesAccountDetails").get("accountNumber").setValue(res.List.dailyWagesAccountDetail.AccountNumber)
-        this.dailyWagerProfileForm.get("dailyWagesAccountDetails").get("bankId").setValue(res.List.dailyWagesAccountDetail.BankId)
-        this.dailyWagerProfileForm.get("dailyWagesContractDetail").get("id").setValue(res.List.dailyWagesContractDetail.Id)
-
-        this.ContractStartValue = new Date(res.List.dailyWagesContractDetail.ContractStartDate)
-        this.ContractEndValue = new Date(res.List.dailyWagesContractDetail.ContractEndDate)
-        if(res.List.dailyWagesContractDetail.ContractImagePath != null){
-          this.contractImageURL = "https://hrmis.pshealthpunjab.gov.pk/DailywagerUploads/"+res.List.dailyWagesContractDetail.ContractImagePath;
-          this.contractImage = this.contractImageURL;
-        }
-        if(res.List.PersonImage != null){
-          this.PersonImageURL = "https://hrmis.pshealthpunjab.gov.pk/DailywagerUploads/"+res.List.PersonImage;
-          this.imageURL = this.PersonImageURL;
-        }
+       
           //================= Division ===========================//
           var divisionName = this.divisionsDataForEdit.find(x=>{
             return x.Code == res.List.DivisionCode
           });
           this.selectedFiltersModel.division = { Code: res.List.DivisionCode, Name: divisionName.Name };
           //================= District ===========================//
-  
           var districtName = this.districtDataForEdit.find(x=>{
             return x.Code == res.List.DistirctCode
           });
           this.selectedFiltersModel.district = { Code: res.List.DistirctCode, Name: districtName.Name };
           //================= Tehsil ===========================//
-  
           var tehsilName = this.tehsilDataForEdit.find(x=>{
             return x.Code == res.List.TehsilCode
           });
@@ -270,16 +273,7 @@ public wagerId = 0;
           this.districtCode = res.List.DistirctCode
           this.divisionCode = res.List.DivisionCode
           this.tehsilCode = res.List.TehsilCode
-
-          //================= UC  =================================//
-  
-          this.ucData = this.allUCData.filter(x=>{
-            return x.TehsilCode == res.List.TehsilCode
-          });
-         
-          this.dailyWagerProfileForm.get("designation").setValue(res.List.Designation);
-          // this.dailyWagerProfileForm.reset();
-this.loading = false;
+          this.loading = false;
       }
       else{
     this.loading = false;

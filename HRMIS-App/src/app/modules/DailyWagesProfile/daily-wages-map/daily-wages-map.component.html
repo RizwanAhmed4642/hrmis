@@ -180,7 +180,7 @@
                         </td>
                         
                         <td>
-                            <p class="m-0 cursor-p hover-success text-medium" (click)="selectMarker(vp, vp.Code, 'dailywages')">
+                            <p class="m-0 cursor-p hover-success text-medium" (click)="selectMarker(vp, vp.Code, 'Daily Wages')">
                                 {{vp.dailywages}} 
                             </p> 
                         </td>
@@ -190,7 +190,7 @@
                             </p> 
                         </td>
                         <td>
-                            <p class="m-0 cursor-p hover-success text-medium" (click)="selectMarker(vp, vp.Code, 'Contracts')">
+                            <p class="m-0 cursor-p hover-success text-medium" (click)="selectMarker(vp, vp.Code, 'Contract')">
                                   {{vp.Contracts}} 
                             </p> 
                         </td>
@@ -212,6 +212,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
+                <div *ngIf="loading" class="k-i-loading"></div>
                     <div #mapContainer id="map"></div>
             </div>
             
@@ -535,7 +536,7 @@
             <div class="animated fadeIn">
                 <div class="animated fadeIn"
                     *ngIf="showProfileViewId == 0 && profilesData.ConsultantAnaesthetists?.length > 0">
-                    <kendo-grid [data]="profilesData.ConsultantAnaesthetists" [scrollable]="true"
+                    <kendo-grid [filterable]="true" [data]="profilesData.ConsultantAnaesthetists" [scrollable]="true"
                         style="height: 508px; width: 100%;">
                         <kendo-grid-column width="5" field="asd" title="Sr." [headerClass]="'grid-header-custom'"
                             [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">

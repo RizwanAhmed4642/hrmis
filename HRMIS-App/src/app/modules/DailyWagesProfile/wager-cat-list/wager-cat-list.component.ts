@@ -49,6 +49,7 @@ public pageSizes = [50, 100, 200, 500];
         console.log(this.value)
         this._DailyWagerService.getProfilesForMap(this.skip, this.pageSize, this.hfmisCode, this.searchTerm, this.selectedCadres, this.selectedDesignations, this.selectedStatuses, this.retirementInOneYear, this.retirementAlerted, this.designationStr, this.value).subscribe((res: any) => {
           this.profiles = res.List.List;
+          debugger
           this.totalRecords = res.List.Count;
           this.gridView = { data: this.profiles, total: this.totalRecords };
           this.loading = false;

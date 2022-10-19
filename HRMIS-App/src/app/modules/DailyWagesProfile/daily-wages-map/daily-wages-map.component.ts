@@ -25,7 +25,7 @@ export class DailyWagesMapComponent implements OnInit {
   public coordinatesViewModelObj : CoordinatesViewModel[];
   public skip = 0;
   public searchTerm: string = '';
-
+  public loading = true;
   public showCounter = 35;
   public zoom = 7;
   public red = 0;
@@ -1483,6 +1483,7 @@ if(list != null){
       });
     });
   }
+  this.loading = false
     // Show polyogon array
     console.log('polygonArray', polygonArray);
   }

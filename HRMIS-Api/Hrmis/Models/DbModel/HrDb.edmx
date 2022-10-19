@@ -1795,6 +1795,7 @@ warning 6002: The table/view 'HR_System.dbo.Courses' does not have a primary key
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="250" />
           <Property Name="UpdationDate" Type="nvarchar" MaxLength="50" />
           <Property Name="PersonImage" Type="nvarchar" MaxLength="500" />
+          <Property Name="RecordStatus" Type="bit" />
         </EntityType>
         <EntityType Name="DDS_Attachments">
           <Key>
@@ -4541,11 +4542,6 @@ warning 6002: The table/view 'HR_System.dbo.HrProfile6feb18' does not have a pri
           <Property Name="Username" Type="nvarchar" MaxLength="550" />
           <Property Name="UserId" Type="nvarchar" MaxLength="150" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'HR_System.dbo.HWData' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="HWData">
-          <Property Name="CNIC" Type="varchar" MaxLength="13" />
-        </EntityType>-->
         <EntityType Name="InquiryStatus">
           <Key>
             <PropertyRef Name="Id" />
@@ -4673,16 +4669,6 @@ warning 6013: The table/view 'HR_System.dbo.HWData' does not have a primary key 
           <Property Name="UserId" Type="nvarchar" MaxLength="150" />
           <Property Name="CreatedBy" Type="nvarchar" MaxLength="150" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'HR_System.dbo.JobApplicationStatus' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="JobApplicationStatus">
-          <Property Name="Id" Type="nchar" MaxLength="10" />
-          <Property Name="Name" Type="nvarchar" MaxLength="150" />
-          <Property Name="IsActive" Type="bit" />
-          <Property Name="CreatedDate" Type="datetime2" Precision="7" />
-          <Property Name="UserId" Type="nvarchar" MaxLength="150" />
-          <Property Name="CreatedBy" Type="nvarchar" MaxLength="150" />
-        </EntityType>-->
         <EntityType Name="JobDescription">
           <Key>
             <PropertyRef Name="Id" />
@@ -6282,20 +6268,6 @@ warning 6002: The table/view 'HR_System.dbo.MeritPreferencesFinal_10_12_2019' do
           <Property Name="DestinationId" Type="int" />
           <Property Name="Distance" Type="float" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'HR_System.dbo.temp' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="temp">
-          <Property Name="date" Type="datetime" />
-          <Property Name="category" Type="varchar" MaxLength="3" />
-          <Property Name="amount" Type="money" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'HR_System.dbo.TEMP_LAT' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="TEMP_LAT">
-          <Property Name="LATITUDE" Type="float" />
-          <Property Name="LONGITUDE" Type="float" />
-          <Property Name="Id" Type="int" />
-        </EntityType>-->
         <EntityType Name="TempProfilePhoto">
           <Key>
             <PropertyRef Name="ID" />
@@ -8557,15 +8529,10 @@ warning 6002: The table/view 'HR_System.dbo.DailyWagerDetailView' does not have 
           <Property Name="DistirctCode" Type="nvarchar" MaxLength="50" />
           <Property Name="Tehsil" Type="nvarchar(max)" Nullable="false" />
           <Property Name="TehsilCode" Type="nvarchar" MaxLength="50" />
-          <Property Name="UcCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="UcCode" Type="nvarchar" MaxLength="500" />
           <Property Name="HfmisCode" Type="nvarchar" MaxLength="50" />
           <Property Name="ContractId" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'HR_System.dbo.DailywagesCategory' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="DailywagesCategory">
-          <Property Name="Category" Type="nvarchar" MaxLength="50" />
-        </EntityType>-->
         <!--Errors Found During Generation:
 warning 6002: The table/view 'HR_System.dbo.DDSDetailsView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="DDSDetailsView">
@@ -9988,23 +9955,6 @@ warning 6002: The table/view 'HR_System.dbo.HisduEmpMonthelyLeaveSummery' does n
           <Property Name="TotalCasual" Type="decimal" Precision="38" Scale="1" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6013: The table/view 'HR_System.dbo.HisduEmpMonthleySummery1' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="HisduEmpMonthleySummery1">
-          <Property Name="Id" Type="bigint" />
-          <Property Name="HrId" Type="int" />
-          <Property Name="EmployeeName" Type="nvarchar" MaxLength="250" />
-          <Property Name="Year" Type="int" />
-          <Property Name="Month" Type="int" />
-          <Property Name="TotalLateDay" Type="int" />
-          <Property Name="AvailedLate" Type="decimal" Precision="10" Scale="2" />
-          <Property Name="PrasentDay" Type="int" />
-          <Property Name="Designation_Name" Type="nvarchar" MaxLength="100" />
-          <Property Name="SubDept_ID" Type="int" />
-          <Property Name="DName" Type="varchar" MaxLength="500" />
-          <Property Name="AbsentCount" Type="numeric" Precision="38" Scale="1" />
-          <Property Name="IsHOD" Type="int" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
 warning 6002: The table/view 'HR_System.dbo.HisduMonthelyEmpReport1' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="HisduMonthelyEmpReport1">
           <Key>
@@ -11184,131 +11134,6 @@ warning 6002: The table/view 'HR_System.dbo.HrSeniorityDCPharmacistApplicationVi
           <Property Name="Language_Name" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6013: The table/view 'HR_System.dbo.HrSeniorityView' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="HrSeniorityView">
-          <Property Name="Id" Type="int" />
-          <Property Name="Category_Id" Type="int" />
-          <Property Name="Profile_Id" Type="int" />
-          <Property Name="SeniorityNumber" Type="int" />
-          <Property Name="OldSeniorityNumber" Type="int" />
-          <Property Name="Merit_Id" Type="int" />
-          <Property Name="IsActive" Type="bit" />
-          <Property Name="CreatedDate" Type="datetime2" Precision="7" />
-          <Property Name="UserId" Type="nvarchar" MaxLength="150" />
-          <Property Name="CreatedBy" Type="nvarchar" MaxLength="150" />
-          <Property Name="Srno" Type="bigint" />
-          <Property Name="EmployeeName" Type="nvarchar" MaxLength="250" />
-          <Property Name="FatherName" Type="nvarchar" MaxLength="250" />
-          <Property Name="CNIC" Type="nvarchar" MaxLength="15" />
-          <Property Name="DateOfBirth" Type="date" />
-          <Property Name="Gender" Type="nvarchar" MaxLength="15" />
-          <Property Name="Province" Type="nvarchar" MaxLength="20" />
-          <Property Name="MaritalStatus" Type="nvarchar" MaxLength="50" />
-          <Property Name="BloodGroup" Type="nvarchar" MaxLength="10" />
-          <Property Name="SeniorityNo" Type="nvarchar" MaxLength="50" />
-          <Property Name="PersonnelNo" Type="nvarchar" MaxLength="50" />
-          <Property Name="JoiningGradeBPS" Type="int" />
-          <Property Name="CurrentGradeBPS" Type="int" />
-          <Property Name="PresentPostingOrderNo" Type="nvarchar" MaxLength="100" />
-          <Property Name="PresentPostingDate" Type="date" />
-          <Property Name="AdditionalQualification" Type="nvarchar" MaxLength="100" />
-          <Property Name="Status" Type="nvarchar" MaxLength="50" />
-          <Property Name="DateOfFirstAppointment" Type="date" />
-          <Property Name="LengthOfService" Type="int" />
-          <Property Name="SuperAnnuationDate" Type="date" />
-          <Property Name="ContractStartDate" Type="date" />
-          <Property Name="ContractEndDate" Type="date" />
-          <Property Name="LastPromotionDate" Type="date" />
-          <Property Name="PermanentAddress" Type="nvarchar" MaxLength="350" />
-          <Property Name="CorrespondenceAddress" Type="nvarchar" MaxLength="350" />
-          <Property Name="LandlineNo" Type="nvarchar" MaxLength="50" />
-          <Property Name="MobileNo" Type="nvarchar" MaxLength="50" />
-          <Property Name="EMaiL" Type="nvarchar" MaxLength="150" />
-          <Property Name="PrivatePractice" Type="nvarchar" MaxLength="50" />
-          <Property Name="PresentStationLengthOfService" Type="nvarchar" MaxLength="50" />
-          <Property Name="HfmisCode" Type="nvarchar" MaxLength="50" />
-          <Property Name="Tenure" Type="nvarchar" MaxLength="50" />
-          <Property Name="AdditionalCharge" Type="nvarchar" MaxLength="100" />
-          <Property Name="Remarks" Type="nvarchar" MaxLength="500" />
-          <Property Name="Photo" Type="image" />
-          <Property Name="Cadre_Id" Type="int" />
-          <Property Name="HighestQualification" Type="nvarchar" MaxLength="100" />
-          <Property Name="MobileNoOfficial" Type="nvarchar" MaxLength="50" />
-          <Property Name="Postaanctionedwithscale" Type="int" />
-          <Property Name="Faxno" Type="nvarchar" MaxLength="50" />
-          <Property Name="HoD" Type="varchar" MaxLength="2" />
-          <Property Name="Fp" Type="varchar" MaxLength="1" />
-          <Property Name="Hfac" Type="nvarchar" MaxLength="50" />
-          <Property Name="DateOfRegularization" Type="date" />
-          <Property Name="Tbydeo" Type="nvarchar" MaxLength="50" />
-          <Property Name="DateOfCourse" Type="nvarchar" MaxLength="50" />
-          <Property Name="RtmcNo" Type="nvarchar" MaxLength="250" />
-          <Property Name="PmdcNo" Type="nvarchar" MaxLength="250" />
-          <Property Name="CourseDuration" Type="nvarchar" MaxLength="50" />
-          <Property Name="PgSpecialization" Type="nvarchar" MaxLength="250" />
-          <Property Name="Category" Type="nvarchar" MaxLength="150" />
-          <Property Name="RemunerationStatus" Type="nvarchar" MaxLength="150" />
-          <Property Name="PgFlag" Type="nvarchar" MaxLength="5" />
-          <Property Name="CourseName" Type="nvarchar" MaxLength="250" />
-          <Property Name="AddToEmployeePool" Type="bit" />
-          <Property Name="EntityLifecycle_Id" Type="bigint" />
-          <Property Name="ProfilePhoto" Type="nvarchar" MaxLength="250" />
-          <Property Name="Disability_Id" Type="int" />
-          <Property Name="DisablityType" Type="nvarchar" MaxLength="2050" />
-          <Property Name="Disability" Type="nvarchar" MaxLength="2050" />
-          <Property Name="FileNumber" Type="nvarchar" MaxLength="2050" />
-          <Property Name="AttachedWith" Type="nvarchar" MaxLength="2050" />
-          <Property Name="AttachedWith_Id" Type="int" />
-          <Property Name="PresentJoiningDate" Type="datetime2" Precision="7" />
-          <Property Name="VacCertificate" Type="nvarchar" MaxLength="3050" />
-          <Property Name="PPSCMeritNumber" Type="int" />
-          <Property Name="ModeId" Type="int" />
-          <Property Name="Division" Type="nvarchar(max)" />
-          <Property Name="District" Type="nvarchar(max)" />
-          <Property Name="Tehsil" Type="nvarchar(max)" />
-          <Property Name="FirstJoiningDate" Type="datetime2" Precision="7" />
-          <Property Name="WorkingDivision" Type="nvarchar(max)" />
-          <Property Name="WorkingDistrict" Type="nvarchar(max)" />
-          <Property Name="WorkingTehsil" Type="nvarchar(max)" />
-          <Property Name="DivisionOld" Type="nvarchar(max)" />
-          <Property Name="DistrictOld" Type="nvarchar(max)" />
-          <Property Name="TehsilOld" Type="nvarchar(max)" />
-          <Property Name="HealthFacility" Type="nvarchar(max)" />
-          <Property Name="HFTypeCode" Type="nvarchar(max)" />
-          <Property Name="HFTypeName" Type="nvarchar(max)" />
-          <Property Name="HealthFacility_Id" Type="int" />
-          <Property Name="WorkingHealthFacility" Type="nvarchar(max)" />
-          <Property Name="WHFTypeCode" Type="nvarchar(max)" />
-          <Property Name="WHFTypeName" Type="nvarchar(max)" />
-          <Property Name="WorkingHealthFacility_Id" Type="int" />
-          <Property Name="WorkingHFMISCode" Type="nvarchar" MaxLength="50" />
-          <Property Name="StatusName" Type="nvarchar" MaxLength="50" />
-          <Property Name="Status_Id" Type="int" />
-          <Property Name="QualificationName" Type="nvarchar" MaxLength="100" />
-          <Property Name="Qualification_Id" Type="int" />
-          <Property Name="SpecializationName" Type="nvarchar" MaxLength="200" />
-          <Property Name="Specialization_Id" Type="int" />
-          <Property Name="Designation_Id" Type="int" />
-          <Property Name="Designation_Name" Type="nvarchar" MaxLength="500" />
-          <Property Name="Designation_HrScale_Id" Type="int" />
-          <Property Name="Cadre_Name" Type="nvarchar" MaxLength="100" />
-          <Property Name="WDesignation_Id" Type="int" />
-          <Property Name="WDesignation_Name" Type="nvarchar" MaxLength="500" />
-          <Property Name="WDesignation_HrScale_Id" Type="int" />
-          <Property Name="Department_Id" Type="int" />
-          <Property Name="Department_Name" Type="nvarchar" MaxLength="150" />
-          <Property Name="EmpMode_Id" Type="int" />
-          <Property Name="EmpMode_Name" Type="nvarchar" MaxLength="250" />
-          <Property Name="Domicile_Id" Type="int" />
-          <Property Name="Domicile_Name" Type="nvarchar" MaxLength="50" />
-          <Property Name="Posttype_Id" Type="int" />
-          <Property Name="PostType_Name" Type="nvarchar" MaxLength="50" />
-          <Property Name="Religion_Id" Type="int" />
-          <Property Name="Religion_Name" Type="nvarchar" MaxLength="50" />
-          <Property Name="Language_Id" Type="int" />
-          <Property Name="Language_Name" Type="nvarchar" MaxLength="50" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
 warning 6002: The table/view 'HR_System.dbo.HrServiceHistoryView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="HrServiceHistoryView">
           <Key>
@@ -11856,17 +11681,6 @@ warning 6002: The table/view 'HR_System.dbo.MeritPGView' does not have a primary
           <Property Name="HealthFacilityName" Type="nvarchar" MaxLength="500" />
           <Property Name="SpecializationName" Type="nvarchar" MaxLength="200" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'HR_System.dbo.MeritPostingChargeNurse' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="MeritPostingChargeNurse">
-          <Property Name="Name" Type="nvarchar" MaxLength="200" />
-          <Property Name="FatherName" Type="nvarchar" MaxLength="200" />
-          <Property Name="CNIC" Type="nvarchar" MaxLength="13" />
-          <Property Name="MeritNumber" Type="int" />
-          <Property Name="PostingHFName" Type="nvarchar(max)" />
-          <Property Name="PostingHFSeatNumber" Type="int" />
-          <Property Name="PreferencesNumber" Type="int" />
-        </EntityType>-->
         <!--Errors Found During Generation:
 warning 6002: The table/view 'HR_System.dbo.MeritPostingView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="MeritPostingView">
@@ -13303,18 +13117,6 @@ warning 6002: The table/view 'HR_System.dbo.ServiceTempView' does not have a pri
           <Property Name="DateTime" Type="datetime2" Precision="7" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6013: The table/view 'HR_System.dbo.SheetTemp' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="SheetTemp">
-          <Property Name="TrackingNumber" Type="int" />
-          <Property Name="MeritNumber" Type="int" />
-          <Property Name="EmployeeName" Type="nvarchar" MaxLength="250" />
-          <Property Name="FatherName" Type="nvarchar" MaxLength="250" />
-          <Property Name="CNIC" Type="nvarchar" MaxLength="15" />
-          <Property Name="designationName" Type="nvarchar" MaxLength="100" />
-          <Property Name="Remarks" Type="nvarchar" MaxLength="2000" />
-          <Property Name="Created_Date" Type="nvarchar" MaxLength="4000" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
 warning 6002: The table/view 'HR_System.dbo.TehsilView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="TehsilView">
           <Key>
@@ -13746,13 +13548,6 @@ warning 6002: The table/view 'HR_System.dbo.View_HF_test' does not have a primar
           <Property Name="district_id" Type="int" />
           <Property Name="facility_id" Type="varchar" MaxLength="12" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'HR_System.dbo.View_hf_vp_profile' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="View_hf_vp_profile">
-          <Property Name="FullName" Type="nvarchar(max)" />
-          <Property Name="TotalFilled" Type="int" />
-          <Property Name="TotalProfiles" Type="int" />
-        </EntityType>-->
         <!--Errors Found During Generation:
 warning 6002: The table/view 'HR_System.dbo.View_HISDUProfileDetailsView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="View_HISDUProfileDetailsView">
@@ -14236,22 +14031,6 @@ warning 6002: The table/view 'HR_System.dbo.View_TotalLeaves' does not have a pr
           <Property Name="WorkingHFMISCode" Type="nvarchar" MaxLength="50" />
           <Property Name="HfmisCode" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'HR_System.dbo.View_Years' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="View_Years">
-          <Property Name="Id" Type="int" />
-          <Property Name="Name" Type="int" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'HR_System.dbo.ViewESRSummary' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="ViewESRSummary">
-          <Property Name="DISTRICT" Type="nvarchar(max)" />
-          <Property Name="1" Type="int" />
-          <Property Name="2" Type="int" />
-          <Property Name="3" Type="int" />
-          <Property Name="4" Type="int" />
-          <Property Name="5" Type="int" />
-        </EntityType>-->
         <!--Errors Found During Generation:
 warning 6002: The table/view 'HR_System.dbo.ViewESRSummaryTotal' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ViewESRSummaryTotal">
@@ -46660,6 +46439,7 @@ warning 6002: The table/view 'HR_System.dbo.VPProfileView' does not have a prima
           <Property Name="UserName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="EmployementMode" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="RecordStatus" Type="Boolean" />
         </EntityType>
         <EntityType Name="hc_hfbankdetails">
           <Key>
@@ -46739,7 +46519,7 @@ warning 6002: The table/view 'HR_System.dbo.VPProfileView' does not have a prima
           <Property Name="Division" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="District" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Tehsil" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="UcCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UcCode" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="DivisionCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DistirctCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TehsilCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -62825,6 +62605,7 @@ warning 6002: The table/view 'HR_System.dbo.VPProfileView' does not have a prima
           <EntitySetMapping Name="DailyWagesProfiles">
             <EntityTypeMapping TypeName="HR_SystemModel.DailyWagesProfile">
               <MappingFragment StoreEntitySet="DailyWagesProfiles">
+                <ScalarProperty Name="RecordStatus" ColumnName="RecordStatus" />
                 <ScalarProperty Name="EmployementMode" ColumnName="EmployementMode" />
                 <ScalarProperty Name="Category" ColumnName="Category" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />

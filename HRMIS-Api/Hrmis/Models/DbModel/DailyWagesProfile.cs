@@ -64,6 +64,8 @@ public partial class DailyWagesProfile
 
     public string EmployementMode { get; set; }
 
+    public Nullable<bool> RecordStatus { get; set; }
+
 }
 
 }

@@ -75,6 +75,12 @@ export class DailywagerlistComponent implements OnInit {
     district: { Name: 'Select District', Code: '0' },
     tehsil: { Name: 'Select Tehsil', Code: '0' }
   };
+
+  public CategoryList : string[]=[
+    'Dengue','Madadgaar','PMIS','Polio' ,'Other' 
+   
+   
+   ]
   public DesignationList: string[]= [
     'Dengue',
     'Dengue/Regular',
