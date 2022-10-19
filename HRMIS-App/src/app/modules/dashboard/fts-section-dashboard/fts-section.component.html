@@ -890,7 +890,7 @@
     </div>
 
   </tab>
-  <tab heading="Department Report">
+  <tab heading="Department Report"  *ngIf="currentUser?.RoleName != 'Section Officer'">
     <app-department-report></app-department-report>
   </tab>
 
