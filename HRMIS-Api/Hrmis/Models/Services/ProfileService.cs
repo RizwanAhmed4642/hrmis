@@ -3765,6 +3765,7 @@ Primary and Secondary Healthcare Department";
         public List<int?> cadres;
         public List<int?> designations;
         public List<int?> statuses;
+        public string value;
         public string roleName { get; set; }
     }
     public class SeniorityApplicantDto

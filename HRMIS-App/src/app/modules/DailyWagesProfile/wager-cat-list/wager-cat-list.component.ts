@@ -13,7 +13,7 @@ public Category : any
 public paramsObject : any
 public Type : any
 public hfmisCode : any
-
+public value : any
 public loading = false;
 searchTerm: any
 selectedCadres: any
@@ -43,9 +43,11 @@ public pageSizes = [50, 100, 200, 500];
         //console.log(this.paramsObject);
         this.designationStr = this.paramsObject.params.Category
         this.hfmisCode = this.paramsObject.params.Type
+        this.value = this.paramsObject.params.value
         console.log(this.Category);
         console.log(this.Type);
-        this._DailyWagerService.getProfiles(this.skip, this.pageSize, this.hfmisCode, this.searchTerm, this.selectedCadres, this.selectedDesignations, this.selectedStatuses, this.retirementInOneYear, this.retirementAlerted, this.designationStr).subscribe((res: any) => {
+        console.log(this.value)
+        this._DailyWagerService.getProfilesForMap(this.skip, this.pageSize, this.hfmisCode, this.searchTerm, this.selectedCadres, this.selectedDesignations, this.selectedStatuses, this.retirementInOneYear, this.retirementAlerted, this.designationStr, this.value).subscribe((res: any) => {
           this.profiles = res.List.List;
           this.totalRecords = res.List.Count;
           this.gridView = { data: this.profiles, total: this.totalRecords };

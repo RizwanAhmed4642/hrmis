@@ -643,12 +643,12 @@ export class DailyWagesMapComponent implements OnInit {
       }, 5000);
     }); */
   }
-  public selectMarker(event: any, window) {
+  public selectMarker(event: any, window, val) {
     debugger
     console.log(this.hfmisCode) 
     //console.log(this.hfmisCode) 
     console.log(event.Category);
-    this.router.navigate(['wagercatlist'], { queryParams: { Category: event.Category, Type: this.hfmisCode } });
+    this.router.navigate(['wagercatlist'], { queryParams: { Category: event.Category, Type: this.hfmisCode, value: val } });
     
     // debugger
     // console.log(event);

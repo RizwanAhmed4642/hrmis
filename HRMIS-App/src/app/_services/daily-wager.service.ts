@@ -50,6 +50,17 @@ export class DailyWagerService {
       );
   }
 
+  public getProfilesForMap(skip: number, pageSize: number, hfmisCode: string, searchTerm: string, cadres: any[], designations: any[], selectedStatuses?: any[], retirementInOneYear?: boolean, retirementAlerted?: boolean, designationStr?: String, value?: any) {
+    debugger
+    return this.http
+      .post(
+        `${Config.getControllerUrl('DailyWagesProfile', 'GetDailyWages')}`,
+        { skip: skip, pageSize: pageSize, hfmisCode: hfmisCode, searchTerm: searchTerm, cadres: cadres, designations: designations, statuses: selectedStatuses, retirementInOneYear: retirementInOneYear, retirementAlerted: retirementAlerted, Designation:designationStr, value:value }
+      );
+  }
+
+
+
   public GetDailyWagesCount(skip: number, pageSize: number, hfmisCode: string,divisionCode:string, designations:any,districtCode:string,tehsilCode:string ) {
     console.log('aaaaaaaaaaaaaa');
     debugger
