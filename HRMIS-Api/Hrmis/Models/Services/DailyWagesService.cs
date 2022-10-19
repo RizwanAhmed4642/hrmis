@@ -418,7 +418,7 @@ namespace Hrmis.Models.Services
                     else if (filters.hfmisCode.Length == 9) //For Tehsil
                     {
                         query = query.Where(x => x.TehsilCode == filters.hfmisCode).AsQueryable();
-                    }
+                    } 
                     if (!string.IsNullOrEmpty(filters.Designation))
                     {
                         query = query.Where(x => x.Designation == filters.Designation).AsQueryable();
