@@ -159,7 +159,7 @@
                     </tr>
                     <tr class="cursor-p" *ngFor="let vp of vpMaps">
                         <td>
-                            <p class="m-0 cursor-p hover-success text-medium" (click)="selectMarker(vp, vp.Code)">
+                            <p class="m-0 cursor-p hover-success text-medium" (click)="selectMarker(vp, vp.Code, 'id')">
                                 {{vp.$id}}
                             </p>
                         </td>
@@ -169,38 +169,38 @@
                             </p>
                         </td>                            -->
                         <td>
-                            <p class="m-0 cursor-p hover-success text-medium" (click)="selectMarker(vp, vp.Code)">
+                            <p class="m-0 cursor-p hover-success text-medium" (click)="selectMarker(vp, vp.Code, 'Category')">
                                 {{vp.Category}}
                             </p>
                         </td>
                         <td>
-                            <p class="m-0 cursor-p hover-success text-medium" (click)="selectMarker(vp, vp.Code)">
+                            <p class="m-0 cursor-p hover-success text-medium" (click)="selectMarker(vp, vp.Code, 'Count')">
                                 {{vp.Count}}
                             </p>
                         </td>
                         
                         <td>
-                            <p class="m-0 cursor-p hover-success text-medium" (click)="selectMarker(vp, vp.Code)">
+                            <p class="m-0 cursor-p hover-success text-medium" (click)="selectMarker(vp, vp.Code, 'Daily Wages')">
                                 {{vp.dailywages}} 
                             </p> 
                         </td>
                         <td>
-                            <p class="m-0 cursor-p hover-success text-medium" (click)="selectMarker(vp, vp.Code)">
+                            <p class="m-0 cursor-p hover-success text-medium" (click)="selectMarker(vp, vp.Code, 'Regular')">
                                  {{vp.Regular}} 
                             </p> 
                         </td>
                         <td>
-                            <p class="m-0 cursor-p hover-success text-medium" (click)="selectMarker(vp, vp.Code)">
+                            <p class="m-0 cursor-p hover-success text-medium" (click)="selectMarker(vp, vp.Code, 'Contract')">
                                   {{vp.Contracts}} 
                             </p> 
                         </td>
                         <td>
-                            <p class="m-0 cursor-p hover-success text-medium" (click)="selectMarker(vp, vp.Code)">
+                            <p class="m-0 cursor-p hover-success text-medium" (click)="selectMarker(vp, vp.Code, 'Withlogin')">
                                  {{vp.Withlogin}} 
                             </p> 
                         </td>
                         <td>
-                            <p class="m-0 cursor-p hover-success text-medium" (click)="selectMarker(vp, vp.Code)">
+                            <p class="m-0 cursor-p hover-success text-medium" (click)="selectMarker(vp, vp.Code, 'Withoutlogin')">
                                  {{vp.Withoutlogin}} 
                             </p> 
                         </td>
@@ -212,6 +212,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
+                
                     <div #mapContainer id="map"></div>
             </div>
             
@@ -535,7 +536,7 @@
             <div class="animated fadeIn">
                 <div class="animated fadeIn"
                     *ngIf="showProfileViewId == 0 && profilesData.ConsultantAnaesthetists?.length > 0">
-                    <kendo-grid [data]="profilesData.ConsultantAnaesthetists" [scrollable]="true"
+                    <kendo-grid [filterable]="true" [data]="profilesData.ConsultantAnaesthetists" [scrollable]="true"
                         style="height: 508px; width: 100%;">
                         <kendo-grid-column width="5" field="asd" title="Sr." [headerClass]="'grid-header-custom'"
                             [style]="{'color': '#000', 'border-bottom' : '1px solid #c8ced3'}">

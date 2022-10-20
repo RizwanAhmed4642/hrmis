@@ -722,7 +722,11 @@ namespace Hrmis.Models.Services
                 {
                     _db.Configuration.ProxyCreationEnabled = false;
                     _db.Database.CommandTimeout = 60 * 4;
+
                     IQueryable<DailyWagerDetailView> query = _db.DailyWagerDetailViews.AsQueryable();
+
+
+
 
                     if (filters.searchTerm != null && filters.searchTerm.Length >= 2)
                     {
@@ -738,7 +742,59 @@ namespace Hrmis.Models.Services
                             x.Category.ToLower().Contains(filters.searchTerm.ToLower())).AsQueryable();
                         }
                     }
-                    if (filters.hfmisCode.Length == 3 && !string.IsNullOrEmpty(filters.Category)) //For Division and  with Category
+                    if (filters.hfmisCode == "0" && string.IsNullOrEmpty(filters.Category))   //All null
+                    {
+                        query = _db.DailyWagerDetailViews.AsQueryable();
+                        //var countttt = query.Count();
+                        query = query.Where(x => (x.EmployementMode != null && x.EmployementMode != "")).AsQueryable();
+                        var Tehsilandcategory = query.ToList();
+                        var countt = query.Count();
+
+                        // var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
+                        //var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
+                        //var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
+                        //	 .Select(g => new {
+                        //		 g.Key.Division,
+                        //		 g.Key.District)}).ToList();
+
+
+                        var Tehsilandcategoryresults = Tehsilandcategory.GroupBy(n => new { n.Category })
+                          .Select(g => new
+                          {
+
+                              // g.Key.District,
+                              //g.Key.Tehsil,
+                              g.Key.Category,
+                              Count = g.Count(),
+                              dailywages = (int?)g.Sum(e => e.EmployementMode.Equals("Daily Wages") ? 1 : 0),
+                              Regular = (int?)g.Sum(e => e.EmployementMode.Equals("Regular") ? 1 : 0),
+                              Contracts = (int?)g.Sum(c => c.EmployementMode.Equals("Contract") ? 1 : 0),
+                              WithLogin = (int?)g.Sum(e => e.UserName != "NA" && !string.IsNullOrEmpty(e.UserName) ? 1 : 0),
+                              Withoutlogin = (int?)g.Sum(c => c.UserName == "NA" || string.IsNullOrEmpty(c.UserName) ? 1 : 0)
+                          }).ToList();
+
+                        List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
+                        foreach (var item in Tehsilandcategoryresults)
+                        {
+                            DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
+
+                            // model.District = item.District;
+                            //model.Tehsil = item.Tehsil;
+                            model.Category = item.Category;
+                            model.Count = item.Count;
+                            model.Regular = item.Regular;
+                            model.Contracts = item.Contracts;
+                            model.Withlogin = item.WithLogin;
+                            model.Withoutlogin = item.Withoutlogin;
+                            model.dailywages = item.dailywages;
+                            TehsilandcategoryDailyWagesCountList.Add(model);
+
+                        }
+
+                        return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
+
+                    }
+                    else if (filters.hfmisCode.Length == 3 && !string.IsNullOrEmpty(filters.Category)) //For Division and  with Category
                     {
                         query = query.Where(x => x.DivisionCode == filters.hfmisCode && x.Category == filters.Category).AsQueryable();
 
@@ -747,479 +803,144 @@ namespace Hrmis.Models.Services
                     {
                         query = query.Where(x => x.DistirctCode == filters.hfmisCode).AsQueryable();
                         var Tehsilandcategoryout = query.ToList();
-						// var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
-						//var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
-						//var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
-						//	 .Select(g => new {
-						//		 g.Key.Division,
-						//		 g.Key.District)}).ToList();
+                        // var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
+                        //var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
+                        //var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
+                        //	 .Select(g => new {
+                        //		 g.Key.Division,
+                        //		 g.Key.District)}).ToList();
 
-						var Tehsilandcategoryresults = Tehsilandcategoryout.GroupBy(n => new { n.Category })
-					  .Select(g => new {
+                        var Tehsilandcategoryresults = Tehsilandcategoryout.GroupBy(n => new { n.Category })
+                      .Select(g => new
+                      {
 
-						  // g.Key.District,
-						  //g.Key.Tehsil,
-						  g.Key.Category,
-						  Count = g.Count(),
-						  dailywages = g.Sum(e => e.EmployementMode.Equals("Daily Wages") ? 1 : 0),
-						  Regular = g.Sum(e => e.EmployementMode.Equals("Regular") ? 1 : 0),
-						  Contracts = g.Sum(c => c.EmployementMode.Equals("Contract") ? 1 : 0),
-						  WithLogin = g.Sum(e => e.UserName.Contains("NA") ? 0 : 1),
-						  Withoutlogin = g.Sum(c => c.UserName.Contains("NA") ? 1 : 0)
-					  }).ToList();
+                          // g.Key.District,
+                          //g.Key.Tehsil,
+                          g.Key.Category,
+                          Count = g.Count(),
+                          dailywages = g.Sum(e => e.EmployementMode.Equals("Daily Wages") ? 1 : 0),
+                          Regular = g.Sum(e => e.EmployementMode.Equals("Regular") ? 1 : 0),
+                          Contracts = g.Sum(c => c.EmployementMode.Equals("Contract") ? 1 : 0),
+                          WithLogin = (int?)g.Sum(e => e.UserName != "NA" && !string.IsNullOrEmpty(e.UserName) ? 1 : 0),
+                          Withoutlogin = g.Sum(c => c.UserName.Contains("NA") ? 1 : 0)
+                      }).ToList();
 
-						List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
-						foreach (var item in Tehsilandcategoryresults)
-						{
-							DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
+                        List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
+                        foreach (var item in Tehsilandcategoryresults)
+                        {
+                            DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
 
-							// model.District = item.District;
-							//model.Tehsil = item.Tehsil;
-							model.Category = item.Category;
-							model.Count = item.Count;
-							model.Regular = item.Regular;
-							model.Contracts = item.Contracts;
-							model.Withlogin = item.WithLogin;
-							model.Withoutlogin = item.Withoutlogin;
-							model.dailywages = item.dailywages;
-							TehsilandcategoryDailyWagesCountList.Add(model);
+                            // model.District = item.District;
+                            //model.Tehsil = item.Tehsil;
+                            model.Category = item.Category;
+                            model.Count = item.Count;
+                            model.Regular = item.Regular;
+                            model.Contracts = item.Contracts;
+                            model.Withlogin = item.WithLogin;
+                            model.Withoutlogin = item.Withoutlogin;
+                            model.dailywages = item.dailywages;
+                            TehsilandcategoryDailyWagesCountList.Add(model);
 
-						}
+                        }
 
-						return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
-					}
-					else if (filters.hfmisCode.Length == 9 && !string.IsNullOrEmpty(filters.Category)) //For Tehsil with Category
-					{
-						query = query.Where(x => x.TehsilCode == filters.hfmisCode).AsQueryable();
-						query = query.Where(x => x.TehsilCode == filters.hfmisCode && x.Category == filters.Category).AsQueryable();
-						var Tehsilandcategoryout = query.ToList();
-						// var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
-						//var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
-						//var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
-						//	 .Select(g => new {
-						//		 g.Key.Division,
-						//		 g.Key.District)}).ToList();
+                        return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
+                    }
+                    else if (filters.hfmisCode.Length == 9 && !string.IsNullOrEmpty(filters.Category)) //For Tehsil with Category
+                    {
+                        query = query.Where(x => x.TehsilCode == filters.hfmisCode).AsQueryable();
+                        query = query.Where(x => x.TehsilCode == filters.hfmisCode && x.Category == filters.Category).AsQueryable();
+                        var Tehsilandcategoryout = query.ToList();
+                        // var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
+                        //var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
+                        //var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
+                        //	 .Select(g => new {
+                        //		 g.Key.Division,
+                        //		 g.Key.District)}).ToList();
 
-						List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
+                        List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
 
-						var Tehsilandcategoryresults = Tehsilandcategoryout.GroupBy(n => new { n.Category })
-											  .Select(g => new {
+                        var Tehsilandcategoryresults = Tehsilandcategoryout.GroupBy(n => new { n.Category })
+                                              .Select(g => new
+                                              {
 
-												  // g.Key.District,
-												  //g.Key.Tehsil,
-												  g.Key.Category,
-												  Count = g.Count(),
-												  dailywages = g.Sum(e => e.EmployementMode.Equals("Daily Wages") ? 1 : 0),
-												  Regular = g.Sum(e => e.EmployementMode.Equals("Regular") ? 1 : 0),
-												  Contracts = g.Sum(c => c.EmployementMode.Equals("Contract") ? 1 : 0),
-												  WithLogin = g.Sum(e => e.UserName.Contains("NA") ? 0 : 1),
-												  Withoutlogin = g.Sum(c => c.UserName.Contains("NA") ? 1 : 0)
-											  }).ToList();
+                                                  // g.Key.District,
+                                                  //g.Key.Tehsil,
+                                                  g.Key.Category,
+                                                  Count = g.Count(),
+                                                  dailywages = g.Sum(e => e.EmployementMode.Equals("Daily Wages") ? 1 : 0),
+                                                  Regular = g.Sum(e => e.EmployementMode.Equals("Regular") ? 1 : 0),
+                                                  Contracts = g.Sum(c => c.EmployementMode.Equals("Contract") ? 1 : 0),
+                                                  WithLogin = (int?)g.Sum(e => e.UserName != "NA" && !string.IsNullOrEmpty(e.UserName) ? 1 : 0),
+                                                  Withoutlogin = g.Sum(c => c.UserName.Contains("NA") ? 1 : 0)
+                                              }).ToList();
 
-						foreach (var item in Tehsilandcategoryresults)
-						{
-							DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
+                        foreach (var item in Tehsilandcategoryresults)
+                        {
+                            DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
 
-							// model.District = item.District;
-							//model.Tehsil = item.Tehsil;
-							model.Category = item.Category;
-							model.Count = item.Count;
-							model.Regular = item.Regular;
-							model.Contracts = item.Contracts;
-							model.Withlogin = item.WithLogin;
-							model.Withoutlogin = item.Withoutlogin;
-							model.dailywages = item.dailywages;
-							TehsilandcategoryDailyWagesCountList.Add(model);
+                            // model.District = item.District;
+                            //model.Tehsil = item.Tehsil;
+                            model.Category = item.Category;
+                            model.Count = item.Count;
+                            model.Regular = item.Regular;
+                            model.Contracts = item.Contracts;
+                            model.Withlogin = item.WithLogin;
+                            model.Withoutlogin = item.Withoutlogin;
+                            model.dailywages = item.dailywages;
+                            TehsilandcategoryDailyWagesCountList.Add(model);
 
-						}
+                        }
 
-						return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
-					}
+                        return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
+                    }
                     else if ((filters.hfmisCode.Length == 5 || filters.hfmisCode.Length == 6) && filters.hfmisCode.StartsWith("0") && !string.IsNullOrEmpty(filters.Category)) //For District without Category
                     {
                         query = query.Where(x => x.DistirctCode == filters.hfmisCode && x.Category == filters.Category).AsQueryable();
                         var Tehsilandcategoryout = query.ToList();
-						// var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
-						//var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
-						//var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
-						//	 .Select(g => new {
-						//		 g.Key.Division,
-						//		 g.Key.District)}).ToList();
+                        // var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
+                        //var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
+                        //var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
+                        //	 .Select(g => new {
+                        //		 g.Key.Division,
+                        //		 g.Key.District)}).ToList();
 
 
 
-						var Tehsilandcategoryresults = Tehsilandcategoryout.GroupBy(n => new { n.Category })
-					  .Select(g => new {
+                        var Tehsilandcategoryresults = Tehsilandcategoryout.GroupBy(n => new { n.Category })
+                      .Select(g => new
+                      {
 
-						  // g.Key.District,
-						  //g.Key.Tehsil,
-						  g.Key.Category,
-						  Count = g.Count(),
-						  dailywages = g.Sum(e => e.EmployementMode.Equals("Daily Wages") ? 1 : 0),
-						  Regular = g.Sum(e => e.EmployementMode.Equals("Regular") ? 1 : 0),
-						  Contracts = g.Sum(c => c.EmployementMode.Equals("Contract") ? 1 : 0),
-						  WithLogin = g.Sum(e => e.UserName.Contains("NA") ? 0 : 1),
-						  Withoutlogin = g.Sum(c => c.UserName.Contains("NA") ? 1 : 0)
-					  }).ToList();
+                          // g.Key.District,
+                          //g.Key.Tehsil,
+                          g.Key.Category,
+                          Count = g.Count(),
+                          dailywages = g.Sum(e => e.EmployementMode.Equals("Daily Wages") ? 1 : 0),
+                          Regular = g.Sum(e => e.EmployementMode.Equals("Regular") ? 1 : 0),
+                          Contracts = g.Sum(c => c.EmployementMode.Equals("Contract") ? 1 : 0),
+                          WithLogin = (int?)g.Sum(e => e.UserName != "NA" && !string.IsNullOrEmpty(e.UserName) ? 1 : 0),
+                          Withoutlogin = g.Sum(c => c.UserName.Contains("NA") ? 1 : 0)
+                      }).ToList();
 
-						List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
-						foreach (var item in Tehsilandcategoryresults)
-						{
-							DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
+                        List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
+                        foreach (var item in Tehsilandcategoryresults)
+                        {
+                            DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
 
-							// model.District = item.District;
-							//model.Tehsil = item.Tehsil;
-							model.Category = item.Category;
-							model.Count = item.Count;
-							model.Regular = item.Regular;
-							model.Contracts = item.Contracts;
-							model.Withlogin = item.WithLogin;
-							model.Withoutlogin = item.Withoutlogin;
-							model.dailywages = item.dailywages;
-							TehsilandcategoryDailyWagesCountList.Add(model);
+                            // model.District = item.District;
+                            //model.Tehsil = item.Tehsil;
+                            model.Category = item.Category;
+                            model.Count = item.Count;
+                            model.Regular = item.Regular;
+                            model.Contracts = item.Contracts;
+                            model.Withlogin = item.WithLogin;
+                            model.Withoutlogin = item.Withoutlogin;
+                            model.dailywages = item.dailywages;
+                            TehsilandcategoryDailyWagesCountList.Add(model);
 
-						}
+                        }
 
-						return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
-					}
-					else if (filters.hfmisCode.Length == 9 && !string.IsNullOrEmpty(filters.Category)) //For Tehsil with Category
-					{
-						query = query.Where(x => x.TehsilCode == filters.hfmisCode).AsQueryable();
-						query = query.Where(x => x.TehsilCode == filters.hfmisCode && x.Category == filters.Category).AsQueryable();
-						var Tehsilandcategoryout = query.ToList();
-						// var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
-						//var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
-						//var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
-						//	 .Select(g => new {
-						//		 g.Key.Division,
-						//		 g.Key.District)}).ToList();
-
-
-						var Tehsilandcategoryresults = Tehsilandcategoryout.GroupBy(n => new { n.District, n.Tehsil, n.Category })
-						  .Select(g => new {
-
-							  g.Key.District,
-							  g.Key.Tehsil,
-							  g.Key.Category,
-							  Count = g.Count(),
-							  Regular = g.Sum(e => e.Designation.Contains("Regular") ? 1 : 0),
-							  Contracts = g.Sum(c => c.Designation.Contains("Contract") ? 1 : 0)
-						  }).ToList();
-
-						List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
-						foreach (var item in Tehsilandcategoryresults)
-						{
-							DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
-
-							model.District = item.District;
-							model.Tehsil = item.Tehsil;
-							model.Category = item.Category;
-							model.Count = item.Count;
-							model.Regular = item.Regular;
-							model.Contracts = item.Contracts;
-							TehsilandcategoryDailyWagesCountList.Add(model);
-
-						}
-
-						return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
-					}
-                    else if (filters.hfmisCode.Length == 5 && !string.IsNullOrEmpty(filters.Category)) //For HFMIS or UC
-                    {
-                        query = query.Where(x => (x.HfmisCode == filters.hfmisCode || x.UcCode == filters.hfmisCode)
-                        && x.Category == filters.Category).AsQueryable();
+                        return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
                     }
-                    else if (filters.hfmisCode.Length == 9 && !string.IsNullOrEmpty(filters.Category)) //For Tehsil and category
-                    {
-                        query = query.Where(x => x.TehsilCode == filters.hfmisCode && x.Category == filters.Category).AsQueryable();
-                        var Tehsilandcategory = query.ToList();
-						// var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
-						//var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
-						//var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
-						//	 .Select(g => new {
-						//		 g.Key.Division,
-						//		 g.Key.District)}).ToList();
-
-
-						var Tehsilandcategoryresults = Tehsilandcategory.GroupBy(n => new { n.Category })
-					  .Select(g => new {
-
-						  // g.Key.District,
-						  //g.Key.Tehsil,
-						  g.Key.Category,
-						  Count = g.Count(),
-						  dailywages = g.Sum(e => e.EmployementMode.Equals("Daily Wages") ? 1 : 0),
-						  Regular = g.Sum(e => e.EmployementMode.Equals("Regular") ? 1 : 0),
-						  Contracts = g.Sum(c => c.EmployementMode.Equals("Contract") ? 1 : 0),
-						  WithLogin = g.Sum(e => e.UserName.Contains("NA") ? 0 : 1),
-						  Withoutlogin = g.Sum(c => c.UserName.Contains("NA") ? 1 : 0)
-					  }).ToList();
-
-						List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
-						foreach (var item in Tehsilandcategoryresults)
-						{
-							DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
-
-							// model.District = item.District;
-							//model.Tehsil = item.Tehsil;
-							model.Category = item.Category;
-							model.Count = item.Count;
-							model.Regular = item.Regular;
-							model.Contracts = item.Contracts;
-							model.Withlogin = item.WithLogin;
-							model.Withoutlogin = item.Withoutlogin;
-							model.dailywages = item.dailywages;
-							TehsilandcategoryDailyWagesCountList.Add(model);
-
-						}
-
-						return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
-					}
-					else if (filters.hfmisCode.Length == 9 && !string.IsNullOrEmpty(filters.Category)) //For Tehsil with Category
-					{
-						query = query.Where(x => x.TehsilCode == filters.hfmisCode).AsQueryable();
-						query = query.Where(x => x.TehsilCode == filters.hfmisCode && x.Category == filters.Category).AsQueryable();
-						var Tehsilandcategoryout = query.ToList();
-						// var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
-						//var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
-						//var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
-						//	 .Select(g => new {
-						//		 g.Key.Division,
-						//		 g.Key.District)}).ToList();
-
-
-
-						var Tehsilandcategoryresults = Tehsilandcategoryout.GroupBy(n => new { n.Category })
-					  .Select(g => new {
-
-						  // g.Key.District,
-						  //g.Key.Tehsil,
-						  g.Key.Category,
-						  Count = g.Count(),
-						  dailywages = g.Sum(e => e.EmployementMode.Equals("Daily Wages") ? 1 : 0),
-						  Regular = g.Sum(e => e.EmployementMode.Equals("Regular") ? 1 : 0),
-						  Contracts = g.Sum(c => c.EmployementMode.Equals("Contract") ? 1 : 0),
-						  WithLogin = g.Sum(e => e.UserName.Contains("NA") ? 0 : 1),
-						  Withoutlogin = g.Sum(c => c.UserName.Contains("NA") ? 1 : 0)
-					  }).ToList();
-
-						List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
-						foreach (var item in Tehsilandcategoryresults)
-						{
-							DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
-
-							// model.District = item.District;
-							//model.Tehsil = item.Tehsil;
-							model.Category = item.Category;
-							model.Count = item.Count;
-							model.Regular = item.Regular;
-							model.Contracts = item.Contracts;
-							model.Withlogin = item.WithLogin;
-							model.Withoutlogin = item.Withoutlogin;
-							model.dailywages = item.dailywages;
-							TehsilandcategoryDailyWagesCountList.Add(model);
-
-						}
-
-						return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
-					}
-					else if (filters.hfmisCode.Length == 9 && !string.IsNullOrEmpty(filters.Category)) //For Tehsil with Category
-					{
-						query = query.Where(x => x.TehsilCode == filters.hfmisCode).AsQueryable();
-						query = query.Where(x => x.TehsilCode == filters.hfmisCode && x.Category == filters.Category).AsQueryable();
-						var Tehsilandcategoryout = query.ToList();
-						// var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
-						//var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
-						//var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
-						//	 .Select(g => new {
-						//		 g.Key.Division,
-						//		 g.Key.District)}).ToList();
-
-
-						var Tehsilandcategoryresults = Tehsilandcategoryout.GroupBy(n => new { n.Category })
-						  .Select(g => new {
-
-							  // g.Key.District,
-							  //g.Key.Tehsil,
-							  g.Key.Category,
-							  Count = g.Count(),
-							  dailywages = g.Sum(e => e.EmployementMode.Equals("Daily Wages") ? 1 : 0),
-							  Regular = g.Sum(e => e.EmployementMode.Equals("Regular") ? 1 : 0),
-							  Contracts = g.Sum(c => c.EmployementMode.Equals("Contract") ? 1 : 0),
-							  WithLogin = g.Sum(e => e.UserName.Contains("NA") ? 0 : 1),
-							  Withoutlogin = g.Sum(c => c.UserName.Contains("NA") ? 1 : 0)
-						  }).ToList();
-
-						List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
-						foreach (var item in Tehsilandcategoryresults)
-						{
-							DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
-
-							// model.District = item.District;
-							//model.Tehsil = item.Tehsil;
-							model.Category = item.Category;
-							model.Count = item.Count;
-							model.Regular = item.Regular;
-							model.Contracts = item.Contracts;
-							model.Withlogin = item.WithLogin;
-							model.Withoutlogin = item.Withoutlogin;
-							model.dailywages = item.dailywages;
-							TehsilandcategoryDailyWagesCountList.Add(model);
-
-						}
-
-						return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
-					}
-
-
-                    else if (filters.hfmisCode.Length == 3 && string.IsNullOrEmpty(filters.Category)) //For Division with outCateGory
-                    {
-                        query = query.Where(x => x.DivisionCode == filters.hfmisCode).AsQueryable();
-                    }
-                    else if ((filters.hfmisCode.Length == 5 || filters.hfmisCode.Length == 6) && filters.hfmisCode.StartsWith("0")) //only For District
-                    {
-                        query = query.Where(x => x.DistirctCode == filters.hfmisCode).AsQueryable();
-                        var Tehsilandcategory = query.ToList();
-						// var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
-						//var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
-						//var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
-						//	 .Select(g => new {
-						//		 g.Key.Division,
-						//		 g.Key.District)}).ToList();
-
-
-						var Tehsilandcategoryresults = Tehsilandcategory.GroupBy(n => new { n.Category })
-					  .Select(g => new {
-
-						  // g.Key.District,
-						  //g.Key.Tehsil,
-						  g.Key.Category,
-						  Count = g.Count(),
-						  dailywages = g.Sum(e => e.EmployementMode.Equals("Daily Wages") ? 1 : 0),
-						  Regular = g.Sum(e => e.EmployementMode.Equals("Regular") ? 1 : 0),
-						  Contracts = g.Sum(c => c.EmployementMode.Equals("Contract") ? 1 : 0),
-						  WithLogin = g.Sum(e => e.UserName.Contains("NA") ? 0 : 1),
-						  Withoutlogin = g.Sum(c => c.UserName.Contains("NA") ? 1 : 0)
-					  }).ToList();
-
-						List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
-						foreach (var item in Tehsilandcategoryresults)
-						{
-							DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
-
-							// model.District = item.District;
-							//model.Tehsil = item.Tehsil;
-							model.Category = item.Category;
-							model.Count = item.Count;
-							model.Regular = item.Regular;
-							model.Contracts = item.Contracts;
-							model.Withlogin = item.WithLogin;
-							model.Withoutlogin = item.Withoutlogin;
-							model.dailywages = item.dailywages;
-							TehsilandcategoryDailyWagesCountList.Add(model);
-
-						}
-
-						return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
-					}
-					else if (filters.hfmisCode.Length == 9 && !string.IsNullOrEmpty(filters.Category)) //For Tehsil with Category
-					{
-						query = query.Where(x => x.TehsilCode == filters.hfmisCode).AsQueryable();
-						query = query.Where(x => x.TehsilCode == filters.hfmisCode && x.Category == filters.Category).AsQueryable();
-						var Tehsilandcategoryout = query.ToList();
-						// var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
-						//var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
-						//var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
-						//	 .Select(g => new {
-						//		 g.Key.Division,
-						//		 g.Key.District)}).ToList();
-
-
-						var Tehsilandcategoryresults = Tehsilandcategoryout.GroupBy(n => new { n.Category })
-					  .Select(g => new {
-
-						  // g.Key.District,
-						  //g.Key.Tehsil,
-						  g.Key.Category,
-						  Count = g.Count(),
-						  dailywages = g.Sum(e => e.EmployementMode.Equals("Daily Wages") ? 1 : 0),
-						  Regular = g.Sum(e => e.EmployementMode.Equals("Regular") ? 1 : 0),
-						  Contracts = g.Sum(c => c.EmployementMode.Equals("Contract") ? 1 : 0),
-						  WithLogin = g.Sum(e => e.UserName.Contains("NA") ? 0 : 1),
-						  Withoutlogin = g.Sum(c => c.UserName.Contains("NA") ? 1 : 0)
-					  }).ToList();
-
-						List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
-						foreach (var item in Tehsilandcategoryresults)
-						{
-							DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
-
-							// model.District = item.District;
-							//model.Tehsil = item.Tehsil;
-							model.Category = item.Category;
-							model.Count = item.Count;
-							model.Regular = item.Regular;
-							model.Contracts = item.Contracts;
-							model.Withlogin = item.WithLogin;
-							model.Withoutlogin = item.Withoutlogin;
-							model.dailywages = item.dailywages;
-							TehsilandcategoryDailyWagesCountList.Add(model);
-
-						}
-
-						return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
-
-					}
-                    else if (filters.hfmisCode.Length == 5 && string.IsNullOrEmpty(filters.Category)) //For HFMIS or UC
-                    {
-                        query = query.Where(x => x.HfmisCode == filters.hfmisCode || x.UcCode == filters.hfmisCode).AsQueryable();
-                    }
-                    else if (filters.hfmisCode.Length == 9 && string.IsNullOrEmpty(filters.Category)) //For Tehsil without Category
-                    {
-                        query = query.Where(x => x.TehsilCode == filters.hfmisCode).AsQueryable();
-                
-                        var Tehsilandcategoryout = query.ToList();
-						// var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
-						//var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
-						//var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
-						//	 .Select(g => new {
-						//		 g.Key.Division,
-						//		 g.Key.District)}).ToList();
-
-
-						var Tehsilandcategoryresults = Tehsilandcategoryout.GroupBy(n => new { n.Category })
-							  .Select(g => new {
-
-								  // g.Key.District,
-								  //g.Key.Tehsil,
-								  g.Key.Category,
-								  Count = g.Count(),
-								  dailywages = g.Sum(e => e.EmployementMode.Equals("Daily Wages") ? 1 : 0),
-								  Regular = g.Sum(e => e.EmployementMode.Equals("Regular") ? 1 : 0),
-								  Contracts = g.Sum(c => c.EmployementMode.Equals("Contract") ? 1 : 0),
-								  WithLogin = g.Sum(e => e.UserName.Contains("NA") ? 0 : 1),
-								  Withoutlogin = g.Sum(c => c.UserName.Contains("NA") ? 1 : 0)
-							  }).ToList();
-
-						List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
-						foreach (var item in Tehsilandcategoryresults)
-						{
-							DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
-
-							// model.District = item.District;
-							//model.Tehsil = item.Tehsil;
-							model.Category = item.Category;
-							model.Count = item.Count;
-							model.Regular = item.Regular;
-							model.Contracts = item.Contracts;
-							model.Withlogin = item.WithLogin;
-							model.Withoutlogin = item.Withoutlogin;
-							model.dailywages = item.dailywages;
-							TehsilandcategoryDailyWagesCountList.Add(model);
-
-						}
-
-						return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
-					}
                     else if (filters.hfmisCode.Length == 9 && !string.IsNullOrEmpty(filters.Category)) //For Tehsil with Category
                     {
                         query = query.Where(x => x.TehsilCode == filters.hfmisCode).AsQueryable();
@@ -1234,7 +955,353 @@ namespace Hrmis.Models.Services
 
 
                         var Tehsilandcategoryresults = Tehsilandcategoryout.GroupBy(n => new { n.District, n.Tehsil, n.Category })
-                          .Select(g => new {
+                          .Select(g => new
+                          {
+
+                              g.Key.District,
+                              g.Key.Tehsil,
+                              g.Key.Category,
+                              Count = g.Count(),
+                              Regular = g.Sum(e => e.Designation.Contains("Regular") ? 1 : 0),
+                              Contracts = g.Sum(c => c.Designation.Contains("Contract") ? 1 : 0)
+                          }).ToList();
+
+                        List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
+                        foreach (var item in Tehsilandcategoryresults)
+                        {
+                            DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
+
+                            model.District = item.District;
+                            model.Tehsil = item.Tehsil;
+                            model.Category = item.Category;
+                            model.Count = item.Count;
+                            model.Regular = item.Regular;
+                            model.Contracts = item.Contracts;
+                            TehsilandcategoryDailyWagesCountList.Add(model);
+
+                        }
+
+                        return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
+                    }
+                    else if (filters.hfmisCode.Length == 5 && !string.IsNullOrEmpty(filters.Category)) //For HFMIS or UC
+                    {
+                        query = query.Where(x => (x.HfmisCode == filters.hfmisCode || x.UcCode == filters.hfmisCode)
+                        && x.Category == filters.Category).AsQueryable();
+                    }
+                    else if (filters.hfmisCode.Length == 9 && !string.IsNullOrEmpty(filters.Category)) //For Tehsil and category
+                    {
+                        query = query.Where(x => x.TehsilCode == filters.hfmisCode && x.Category == filters.Category).AsQueryable();
+                        var Tehsilandcategory = query.ToList();
+                        // var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
+                        //var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
+                        //var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
+                        //	 .Select(g => new {
+                        //		 g.Key.Division,
+                        //		 g.Key.District)}).ToList();
+
+
+                        var Tehsilandcategoryresults = Tehsilandcategory.GroupBy(n => new { n.Category })
+                      .Select(g => new
+                      {
+
+                          // g.Key.District,
+                          //g.Key.Tehsil,
+                          g.Key.Category,
+                          Count = g.Count(),
+                          dailywages = g.Sum(e => e.EmployementMode.Equals("Daily Wages") ? 1 : 0),
+                          Regular = g.Sum(e => e.EmployementMode.Equals("Regular") ? 1 : 0),
+                          Contracts = g.Sum(c => c.EmployementMode.Equals("Contract") ? 1 : 0),
+                          WithLogin = (int?)g.Sum(e => e.UserName != "NA" && !string.IsNullOrEmpty(e.UserName) ? 1 : 0),
+                          Withoutlogin = g.Sum(c => c.UserName.Contains("NA") ? 1 : 0)
+                      }).ToList();
+
+                        List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
+                        foreach (var item in Tehsilandcategoryresults)
+                        {
+                            DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
+
+                            // model.District = item.District;
+                            //model.Tehsil = item.Tehsil;
+                            model.Category = item.Category;
+                            model.Count = item.Count;
+                            model.Regular = item.Regular;
+                            model.Contracts = item.Contracts;
+                            model.Withlogin = item.WithLogin;
+                            model.Withoutlogin = item.Withoutlogin;
+                            model.dailywages = item.dailywages;
+                            TehsilandcategoryDailyWagesCountList.Add(model);
+
+                        }
+
+                        return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
+                    }
+                    else if (filters.hfmisCode.Length == 9 && !string.IsNullOrEmpty(filters.Category)) //For Tehsil with Category
+                    {
+                        query = query.Where(x => x.TehsilCode == filters.hfmisCode).AsQueryable();
+                        query = query.Where(x => x.TehsilCode == filters.hfmisCode && x.Category == filters.Category).AsQueryable();
+                        var Tehsilandcategoryout = query.ToList();
+                        // var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
+                        //var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
+                        //var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
+                        //	 .Select(g => new {
+                        //		 g.Key.Division,
+                        //		 g.Key.District)}).ToList();
+
+
+
+                        var Tehsilandcategoryresults = Tehsilandcategoryout.GroupBy(n => new { n.Category })
+                      .Select(g => new
+                      {
+
+                          // g.Key.District,
+                          //g.Key.Tehsil,
+                          g.Key.Category,
+                          Count = g.Count(),
+                          dailywages = g.Sum(e => e.EmployementMode.Equals("Daily Wages") ? 1 : 0),
+                          Regular = g.Sum(e => e.EmployementMode.Equals("Regular") ? 1 : 0),
+                          Contracts = g.Sum(c => c.EmployementMode.Equals("Contract") ? 1 : 0),
+                          WithLogin = (int?)g.Sum(e => e.UserName != "NA" && !string.IsNullOrEmpty(e.UserName) ? 1 : 0),
+                          Withoutlogin = g.Sum(c => c.UserName.Contains("NA") ? 1 : 0)
+                      }).ToList();
+
+                        List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
+                        foreach (var item in Tehsilandcategoryresults)
+                        {
+                            DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
+
+                            // model.District = item.District;
+                            //model.Tehsil = item.Tehsil;
+                            model.Category = item.Category;
+                            model.Count = item.Count;
+                            model.Regular = item.Regular;
+                            model.Contracts = item.Contracts;
+                            model.Withlogin = item.WithLogin;
+                            model.Withoutlogin = item.Withoutlogin;
+                            model.dailywages = item.dailywages;
+                            TehsilandcategoryDailyWagesCountList.Add(model);
+
+                        }
+
+                        return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
+                    }
+                    else if (filters.hfmisCode.Length == 9 && !string.IsNullOrEmpty(filters.Category)) //For Tehsil with Category
+                    {
+                        query = query.Where(x => x.TehsilCode == filters.hfmisCode).AsQueryable();
+                        query = query.Where(x => x.TehsilCode == filters.hfmisCode && x.Category == filters.Category).AsQueryable();
+                        var Tehsilandcategoryout = query.ToList();
+                        // var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
+                        //var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
+                        //var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
+                        //	 .Select(g => new {
+                        //		 g.Key.Division,
+                        //		 g.Key.District)}).ToList();
+
+
+                        var Tehsilandcategoryresults = Tehsilandcategoryout.GroupBy(n => new { n.Category })
+                          .Select(g => new
+                          {
+
+                              // g.Key.District,
+                              //g.Key.Tehsil,
+                              g.Key.Category,
+                              Count = g.Count(),
+                              dailywages = g.Sum(e => e.EmployementMode.Equals("Daily Wages") ? 1 : 0),
+                              Regular = g.Sum(e => e.EmployementMode.Equals("Regular") ? 1 : 0),
+                              Contracts = g.Sum(c => c.EmployementMode.Equals("Contract") ? 1 : 0),
+                              WithLogin = (int?)g.Sum(e => e.UserName != "NA" && !string.IsNullOrEmpty(e.UserName) ? 1 : 0),
+                              Withoutlogin = g.Sum(c => c.UserName.Contains("NA") ? 1 : 0)
+                          }).ToList();
+
+                        List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
+                        foreach (var item in Tehsilandcategoryresults)
+                        {
+                            DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
+
+                            // model.District = item.District;
+                            //model.Tehsil = item.Tehsil;
+                            model.Category = item.Category;
+                            model.Count = item.Count;
+                            model.Regular = item.Regular;
+                            model.Contracts = item.Contracts;
+                            model.Withlogin = item.WithLogin;
+                            model.Withoutlogin = item.Withoutlogin;
+                            model.dailywages = item.dailywages;
+                            TehsilandcategoryDailyWagesCountList.Add(model);
+
+                        }
+
+                        return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
+                    }
+
+
+                    else if (filters.hfmisCode.Length == 3 && string.IsNullOrEmpty(filters.Category)) //For Division with outCateGory
+                    {
+                        query = query.Where(x => x.DivisionCode == filters.hfmisCode).AsQueryable();
+                    }
+                    else if ((filters.hfmisCode.Length == 5 || filters.hfmisCode.Length == 6) && filters.hfmisCode.StartsWith("0")) //only For District
+                    {
+                        query = query.Where(x => x.DistirctCode == filters.hfmisCode).AsQueryable();
+                        var Tehsilandcategory = query.ToList();
+                        // var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
+                        //var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
+                        //var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
+                        //	 .Select(g => new {
+                        //		 g.Key.Division,
+                        //		 g.Key.District)}).ToList();
+
+
+                        var Tehsilandcategoryresults = Tehsilandcategory.GroupBy(n => new { n.Category })
+                      .Select(g => new
+                      {
+
+                          // g.Key.District,
+                          //g.Key.Tehsil,
+                          g.Key.Category,
+                          Count = g.Count(),
+                          dailywages = g.Sum(e => e.EmployementMode.Equals("Daily Wages") ? 1 : 0),
+                          Regular = g.Sum(e => e.EmployementMode.Equals("Regular") ? 1 : 0),
+                          Contracts = g.Sum(c => c.EmployementMode.Equals("Contract") ? 1 : 0),
+                          WithLogin = (int?)g.Sum(e => e.UserName != "NA" && !string.IsNullOrEmpty(e.UserName) ? 1 : 0),
+                          Withoutlogin = g.Sum(c => c.UserName.Contains("NA") ? 1 : 0)
+                      }).ToList();
+
+                        List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
+                        foreach (var item in Tehsilandcategoryresults)
+                        {
+                            DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
+
+                            // model.District = item.District;
+                            //model.Tehsil = item.Tehsil;
+                            model.Category = item.Category;
+                            model.Count = item.Count;
+                            model.Regular = item.Regular;
+                            model.Contracts = item.Contracts;
+                            model.Withlogin = item.WithLogin;
+                            model.Withoutlogin = item.Withoutlogin;
+                            model.dailywages = item.dailywages;
+                            TehsilandcategoryDailyWagesCountList.Add(model);
+
+                        }
+
+                        return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
+                    }
+                    else if (filters.hfmisCode.Length == 9 && !string.IsNullOrEmpty(filters.Category)) //For Tehsil with Category
+                    {
+                        query = query.Where(x => x.TehsilCode == filters.hfmisCode).AsQueryable();
+                        query = query.Where(x => x.TehsilCode == filters.hfmisCode && x.Category == filters.Category).AsQueryable();
+                        var Tehsilandcategoryout = query.ToList();
+                        // var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
+                        //var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
+                        //var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
+                        //	 .Select(g => new {
+                        //		 g.Key.Division,
+                        //		 g.Key.District)}).ToList();
+
+
+                        var Tehsilandcategoryresults = Tehsilandcategoryout.GroupBy(n => new { n.Category })
+                      .Select(g => new
+                      {
+
+                          // g.Key.District,
+                          //g.Key.Tehsil,
+                          g.Key.Category,
+                          Count = g.Count(),
+                          dailywages = g.Sum(e => e.EmployementMode.Equals("Daily Wages") ? 1 : 0),
+                          Regular = g.Sum(e => e.EmployementMode.Equals("Regular") ? 1 : 0),
+                          Contracts = g.Sum(c => c.EmployementMode.Equals("Contract") ? 1 : 0),
+                          WithLogin = (int?)g.Sum(e => e.UserName != "NA" && !string.IsNullOrEmpty(e.UserName) ? 1 : 0),
+                          Withoutlogin = g.Sum(c => c.UserName.Contains("NA") ? 1 : 0)
+                      }).ToList();
+
+                        List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
+                        foreach (var item in Tehsilandcategoryresults)
+                        {
+                            DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
+
+                            // model.District = item.District;
+                            //model.Tehsil = item.Tehsil;
+                            model.Category = item.Category;
+                            model.Count = item.Count;
+                            model.Regular = item.Regular;
+                            model.Contracts = item.Contracts;
+                            model.Withlogin = item.WithLogin;
+                            model.Withoutlogin = item.Withoutlogin;
+                            model.dailywages = item.dailywages;
+                            TehsilandcategoryDailyWagesCountList.Add(model);
+
+                        }
+
+                        return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
+
+                    }
+                    else if (filters.hfmisCode.Length == 5 && string.IsNullOrEmpty(filters.Category)) //For HFMIS or UC
+                    {
+                        query = query.Where(x => x.HfmisCode == filters.hfmisCode || x.UcCode == filters.hfmisCode).AsQueryable();
+                    }
+                    else if (filters.hfmisCode.Length == 9 && string.IsNullOrEmpty(filters.Category)) //For Tehsil without Category
+                    {
+                        query = query.Where(x => x.TehsilCode == filters.hfmisCode).AsQueryable();
+
+                        var Tehsilandcategoryout = query.ToList();
+                        // var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
+                        //var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
+                        //var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
+                        //	 .Select(g => new {
+                        //		 g.Key.Division,
+                        //		 g.Key.District)}).ToList();
+
+
+                        var Tehsilandcategoryresults = Tehsilandcategoryout.GroupBy(n => new { n.Category })
+                              .Select(g => new
+                              {
+
+                                  // g.Key.District,
+                                  //g.Key.Tehsil,
+                                  g.Key.Category,
+                                  Count = g.Count(),
+                                  dailywages = g.Sum(e => e.EmployementMode.Equals("Daily Wages") ? 1 : 0),
+                                  Regular = g.Sum(e => e.EmployementMode.Equals("Regular") ? 1 : 0),
+                                  Contracts = g.Sum(c => c.EmployementMode.Equals("Contract") ? 1 : 0),
+                                  WithLogin = (int?)g.Sum(e => e.UserName != "NA" && !string.IsNullOrEmpty(e.UserName) ? 1 : 0),
+                                  Withoutlogin = g.Sum(c => c.UserName.Contains("NA") ? 1 : 0)
+                              }).ToList();
+
+                        List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
+                        foreach (var item in Tehsilandcategoryresults)
+                        {
+                            DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
+
+                            // model.District = item.District;
+                            //model.Tehsil = item.Tehsil;
+                            model.Category = item.Category;
+                            model.Count = item.Count;
+                            model.Regular = item.Regular;
+                            model.Contracts = item.Contracts;
+                            model.Withlogin = item.WithLogin;
+                            model.Withoutlogin = item.Withoutlogin;
+                            model.dailywages = item.dailywages;
+                            TehsilandcategoryDailyWagesCountList.Add(model);
+
+                        }
+
+                        return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
+                    }
+                    else if (filters.hfmisCode.Length == 9 && !string.IsNullOrEmpty(filters.Category)) //For Tehsil with Category
+                    {
+                        query = query.Where(x => x.TehsilCode == filters.hfmisCode).AsQueryable();
+                        query = query.Where(x => x.TehsilCode == filters.hfmisCode && x.Category == filters.Category).AsQueryable();
+                        var Tehsilandcategoryout = query.ToList();
+                        // var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
+                        //var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
+                        //var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
+                        //	 .Select(g => new {
+                        //		 g.Key.Division,
+                        //		 g.Key.District)}).ToList();
+
+
+                        var Tehsilandcategoryresults = Tehsilandcategoryout.GroupBy(n => new { n.District, n.Tehsil, n.Category })
+                          .Select(g => new
+                          {
 
                               g.Key.District,
                               g.Key.Tehsil,
@@ -1266,53 +1333,6 @@ namespace Hrmis.Models.Services
                     {
                         query = query.Where(x => x.Category == filters.Category).AsQueryable();
                         var Tehsilandcategory = query.ToList();
-						// var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
-						//var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
-						//var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
-						//	 .Select(g => new {
-						//		 g.Key.Division,
-						//		 g.Key.District)}).ToList();
-
-
-						var Tehsilandcategoryresults = Tehsilandcategory.GroupBy(n => new { n.Category })
-						 .Select(g => new {
-
-							 // g.Key.District,
-							 //g.Key.Tehsil,
-							 g.Key.Category,
-							 Count = g.Count(),
-							 dailywages = g.Sum(e => e.EmployementMode.Equals("Daily Wages") ? 1 : 0),
-							 Regular = g.Sum(e => e.EmployementMode.Equals("Regular") ? 1 : 0),
-							 Contracts = g.Sum(c => c.EmployementMode.Equals("Contract") ? 1 : 0),
-							 WithLogin = g.Sum(e => e.UserName.Contains("NA") ? 0 : 1),
-							 Withoutlogin = g.Sum(c => c.UserName.Contains("NA") ? 1 : 0)
-						 }).ToList();
-
-						List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
-						foreach (var item in Tehsilandcategoryresults)
-						{
-							DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
-
-							// model.District = item.District;
-							//model.Tehsil = item.Tehsil;
-							model.Category = item.Category;
-							model.Count = item.Count;
-							model.Regular = item.Regular;
-							model.Contracts = item.Contracts;
-							model.Withlogin = item.WithLogin;
-							model.Withoutlogin = item.Withoutlogin;
-							model.dailywages = item.dailywages;
-							TehsilandcategoryDailyWagesCountList.Add(model);
-
-						}
-
-						return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
-
-					}
-                    else if (filters.hfmisCode == "0" && string.IsNullOrEmpty(filters.Category))   //All null
-                    {
-                        query = query.AsQueryable();
-                        var Tehsilandcategory = query.ToList();
                         // var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
                         //var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
                         //var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
@@ -1321,26 +1341,27 @@ namespace Hrmis.Models.Services
                         //		 g.Key.District)}).ToList();
 
 
-                        var Tehsilandcategoryresults = Tehsilandcategory.GroupBy(n => new {n.Category })
-                          .Select(g => new {
+                        var Tehsilandcategoryresults = Tehsilandcategory.GroupBy(n => new { n.Category })
+                         .Select(g => new
+                         {
 
                              // g.Key.District,
-                              //g.Key.Tehsil,
-                              g.Key.Category,
-                              Count = g.Count(),
-									  dailywages = (int?)g.Sum(e => e.EmployementMode.Equals("Daily Wages") ? 1 : 0),
-									  Regular = (int?)g.Sum(e => e.EmployementMode.Equals("Regular") ? 1 : 0),
-                              Contracts = (int?)g.Sum(c => c.EmployementMode.Equals("Contract") ? 1 : 0),
-                            WithLogin = (int?)g.Sum(e => e.UserName.Contains("NA") ? 0 : 1),
-									  Withoutlogin = (int?)g.Sum(c =>c.UserName.Contains("NA") ? 1 : 0)
-								  }).ToList();
+                             //g.Key.Tehsil,
+                             g.Key.Category,
+                             Count = g.Count(),
+                             dailywages = g.Sum(e => e.EmployementMode.Equals("Daily Wages") ? 1 : 0),
+                             Regular = g.Sum(e => e.EmployementMode.Equals("Regular") ? 1 : 0),
+                             Contracts = g.Sum(c => c.EmployementMode.Equals("Contract") ? 1 : 0),
+                             WithLogin = g.Sum(e => e.UserName.Contains("NA") ? 0 : 1),
+                             Withoutlogin = g.Sum(c => c.UserName.Contains("NA") ? 1 : 0)
+                         }).ToList();
 
                         List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
                         foreach (var item in Tehsilandcategoryresults)
                         {
                             DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
 
-                           // model.District = item.District;
+                            // model.District = item.District;
                             //model.Tehsil = item.Tehsil;
                             model.Category = item.Category;
                             model.Count = item.Count;
@@ -1356,6 +1377,55 @@ namespace Hrmis.Models.Services
                         return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
 
                     }
+                    //          else if (filters.hfmisCode == "0" && string.IsNullOrEmpty(filters.Category))   //All null
+                    //          {
+                    //              query = query.Where(x=>(x.UserName !=null && x.UserName!="") && (x.EmployementMode != null && x.EmployementMode != "")).AsQueryable();
+                    //              var Tehsilandcategory = query.ToList();
+                    //        var countt = query.Count();
+
+                    //              // var lis = list.Where(x => x.Designation.Contains("Regular")).ToList();
+                    //              //var results = list.GroupBy(p => p.Division, p => p.District,p => p.Tehsil)	
+                    //              //var results = list.GroupBy(n => new { n.Division, n.District,n.Tehsil}
+                    //              //	 .Select(g => new {
+                    //              //		 g.Key.Division,
+                    //              //		 g.Key.District)}).ToList();
+
+
+                    //              var Tehsilandcategoryresults = Tehsilandcategory.GroupBy(n => new {n.Category })
+                    //                .Select(g => new {
+
+                    //                   // g.Key.District,
+                    //                    //g.Key.Tehsil,
+                    //                    g.Key.Category,
+                    //                    Count = g.Count(),
+                    // dailywages = (int?)g.Sum(e => e.EmployementMode.Equals("Daily Wages") ? 1 : 0),
+                    // Regular = (int?)g.Sum(e => e.EmployementMode.Equals("Regular") ? 1 : 0),
+                    //                    Contracts = (int?)g.Sum(c => c.EmployementMode.Equals("Contract") ? 1 : 0),
+                    //                  WithLogin = (int?)g.Sum(e => e.UserName.Contains("NA") ? 0 : 1),
+                    // Withoutlogin = (int?)g.Sum(c =>c.UserName.Contains("NA") ? 1 : 0)
+                    //}).ToList();
+
+                    //              List<DailyWagesMapCountViewModel> TehsilandcategoryDailyWagesCountList = new List<DailyWagesMapCountViewModel>();
+                    //              foreach (var item in Tehsilandcategoryresults)
+                    //              {
+                    //                  DailyWagesMapCountViewModel model = new DailyWagesMapCountViewModel();
+
+                    //                 // model.District = item.District;
+                    //                  //model.Tehsil = item.Tehsil;
+                    //                  model.Category = item.Category;
+                    //                  model.Count = item.Count;
+                    //                  model.Regular = item.Regular;
+                    //                  model.Contracts = item.Contracts;
+                    //                  model.Withlogin = item.WithLogin;
+                    //                  model.Withoutlogin = item.Withoutlogin;
+                    //                  model.dailywages = item.dailywages;
+                    //                  TehsilandcategoryDailyWagesCountList.Add(model);
+
+                    //              }
+
+                    //              return new TableResponse<DailyWagesMapCountViewModel> { List = TehsilandcategoryDailyWagesCountList, Count = 1 };
+
+                    //          }
 
 
                     var dailyWagesAccountDetail = _db.DailyWagerBankDetails.ToList();
@@ -1373,7 +1443,8 @@ namespace Hrmis.Models.Services
 
 
                     var results = list.GroupBy(n => new { n.Division, n.District, n.Tehsil, n.Designation, n.Category })
-                      .Select(g => new {
+                      .Select(g => new
+                      {
                           g.Key.Division,
                           g.Key.District,
                           g.Key.Tehsil,
